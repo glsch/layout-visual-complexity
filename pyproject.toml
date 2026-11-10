@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "layout-visual-complexity"
+version = "0.1.0"
+description = "Quantifying visual complexity of medieval manuscript page layouts."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Gleb Schmidt" }, { name = "Daria Korop" }, { name = "Martin Roček" }, { name = "Jan Hajič jr." }, { name = "Lucie Doležalová" }]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest==9.2.0", "ruff==0.17.3"]
+
+[project.urls]
+Repository = "https://github.com/glsch/layout-visual-complexity"
+
+[project.scripts]
+layout-visual-complexity = "layout_visual_complexity.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["layout_visual_complexity*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]

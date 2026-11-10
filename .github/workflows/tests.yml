@@ -1,0 +1,23 @@
+name: tests
+
+# Started by hand from the Actions tab while the repository is private, to save minutes. Add push and pull_request
+# triggers when it's public.
+on:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e '.[dev]'
+      - name: Lint
+        run: |
+          ruff check
+          ruff format --check
+      - name: Tests
+        run: pytest
