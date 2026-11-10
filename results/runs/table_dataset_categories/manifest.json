@@ -1,0 +1,189 @@
+{
+  "command": "judgments report",
+  "started": "2026-11-10T16:08:53+00:00",
+  "ended": "2026-11-10T16:08:53+00:00",
+  "inputs": [
+    {
+      "path": "build/dataset/judgments.tsv",
+      "sha256": "d778b37b08283287db2af7044d81c772e714241242fea4b96480cc1b7856d194",
+      "bytes": 612753
+    },
+    {
+      "path": "build/dataset/images.tsv",
+      "sha256": "30ac1814a3877f7ec53f6c971ce22f91df3825ded2da77d6438e2e1f32eee98f",
+      "bytes": 141027
+    },
+    {
+      "path": "build/dataset/manuscripts.tsv",
+      "sha256": "24eae76f8f446eca36962778c30f4a453b848ab9e1ffac901cc80d77ca8f64e9",
+      "bytes": 39281
+    },
+    {
+      "path": "build/ranking/scores.tsv",
+      "sha256": "afdf8120d84f9ec1c83eed00d45e226ca8e4589c3b5070cc5db73a8c2e5a00f9",
+      "bytes": 46282
+    },
+    {
+      "path": "build/ranking/score_distributions.npz",
+      "sha256": "d1c7021d64fd1929fc124a2369c998c2175f82551a47426095140ba4084e54d9",
+      "bytes": 2987878
+    },
+    {
+      "path": "build/ranking/config.yaml",
+      "sha256": "a60e2581725f0d0ec200949804091b64c731ec6186e5fc05e5a1b7c36db035f5",
+      "bytes": 167
+    }
+  ],
+  "outputs": [
+    "results/tables/dataset_categories.tsv",
+    "results/tables/dataset_categories.tex"
+  ],
+  "configuration": {
+    "dataset": "build/dataset",
+    "ranking": "build/ranking",
+    "output": "results",
+    "outputs": [
+      "dataset_categories"
+    ],
+    "name": "table_dataset_categories",
+    "gap_edges": [
+      100.0,
+      200.0,
+      300.0,
+      400.0
+    ],
+    "folds": {
+      "k": 10,
+      "repeats": 3,
+      "seed": 20260629
+    },
+    "split_half": {
+      "repeats": 100,
+      "permutations": 100,
+      "seed": 20260629,
+      "balance": "judgments"
+    },
+    "category_labels": {
+      "A": "Handbooks & manuals",
+      "B": "Religious/theological",
+      "C": "Other scholarly",
+      "D": "Legal",
+      "E": "Secular/literary",
+      "F": "Administrative"
+    },
+    "position_bias_min_judgments": 100,
+    "graph_seed": 20260629,
+    "thumbnails": 10,
+    "thumbnail_size": 200,
+    "image_credit": "",
+    "cache": "~/.cache/layout-visual-complexity",
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    },
+    "jobs": 0
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.5.4",
+    "pandas": "3.1.1",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0"
+  },
+  "commit": "dc86b12c01622b5e370951005dffc9fc9f7390fb",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "dataset_categories": {
+      "categories": [
+        {
+          "category": "A",
+          "label": "Handbooks & manuals",
+          "manuscripts": 33,
+          "images": 114,
+          "share": 28.5,
+          "mean": 3.4545454545454546,
+          "median": 3.0,
+          "min": 1,
+          "max": 11
+        },
+        {
+          "category": "B",
+          "label": "Religious/theological",
+          "manuscripts": 54,
+          "images": 148,
+          "share": 37.0,
+          "mean": 2.740740740740741,
+          "median": 2.0,
+          "min": 1,
+          "max": 6
+        },
+        {
+          "category": "C",
+          "label": "Other scholarly",
+          "manuscripts": 26,
+          "images": 96,
+          "share": 24.0,
+          "mean": 3.6923076923076925,
+          "median": 3.0,
+          "min": 1,
+          "max": 9
+        },
+        {
+          "category": "D",
+          "label": "Legal",
+          "manuscripts": 9,
+          "images": 26,
+          "share": 6.5,
+          "mean": 2.888888888888889,
+          "median": 2.0,
+          "min": 1,
+          "max": 7
+        },
+        {
+          "category": "E",
+          "label": "Secular/literary",
+          "manuscripts": 5,
+          "images": 13,
+          "share": 3.25,
+          "mean": 2.6,
+          "median": 2.0,
+          "min": 1,
+          "max": 4
+        },
+        {
+          "category": "F",
+          "label": "Administrative",
+          "manuscripts": 1,
+          "images": 3,
+          "share": 0.75,
+          "mean": 3.0,
+          "median": 3.0,
+          "min": 3,
+          "max": 3
+        },
+        {
+          "category": "total",
+          "label": "Total",
+          "manuscripts": 128,
+          "images": 400,
+          "share": 100.0,
+          "mean": 3.125,
+          "median": 3.0,
+          "min": 1,
+          "max": 11
+        }
+      ]
+    },
+    "seconds": {
+      "dataset_categories": 0.004
+    }
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "command": "judgments report",
+  "started": "2026-11-10T16:08:57+00:00",
+  "ended": "2026-11-10T16:08:58+00:00",
+  "inputs": [
+    {
+      "path": "build/dataset/judgments.tsv",
+      "sha256": "d778b37b08283287db2af7044d81c772e714241242fea4b96480cc1b7856d194",
+      "bytes": 612753
+    },
+    {
+      "path": "build/dataset/images.tsv",
+      "sha256": "30ac1814a3877f7ec53f6c971ce22f91df3825ded2da77d6438e2e1f32eee98f",
+      "bytes": 141027
+    },
+    {
+      "path": "build/dataset/manuscripts.tsv",
+      "sha256": "24eae76f8f446eca36962778c30f4a453b848ab9e1ffac901cc80d77ca8f64e9",
+      "bytes": 39281
+    },
+    {
+      "path": "build/ranking/scores.tsv",
+      "sha256": "afdf8120d84f9ec1c83eed00d45e226ca8e4589c3b5070cc5db73a8c2e5a00f9",
+      "bytes": 46282
+    },
+    {
+      "path": "build/ranking/score_distributions.npz",
+      "sha256": "d1c7021d64fd1929fc124a2369c998c2175f82551a47426095140ba4084e54d9",
+      "bytes": 2987878
+    },
+    {
+      "path": "build/ranking/config.yaml",
+      "sha256": "a60e2581725f0d0ec200949804091b64c731ec6186e5fc05e5a1b7c36db035f5",
+      "bytes": 167
+    }
+  ],
+  "outputs": [
+    "results/figures/comparison_graph.svg",
+    "results/figures/comparison_graph.png",
+    "results/figures/comparison_graph.tex",
+    "results/tables/comparison_graph.tsv",
+    "results/tables/comparison_graph.tex"
+  ],
+  "configuration": {
+    "dataset": "build/dataset",
+    "ranking": "build/ranking",
+    "output": "results",
+    "outputs": [
+      "comparison_graph"
+    ],
+    "name": "figure_comparison_graph",
+    "gap_edges": [
+      100.0,
+      200.0,
+      300.0,
+      400.0
+    ],
+    "folds": {
+      "k": 10,
+      "repeats": 3,
+      "seed": 20260629
+    },
+    "split_half": {
+      "repeats": 100,
+      "permutations": 100,
+      "seed": 20260629,
+      "balance": "judgments"
+    },
+    "category_labels": {},
+    "position_bias_min_judgments": 100,
+    "graph_seed": 20260629,
+    "thumbnails": 10,
+    "thumbnail_size": 200,
+    "image_credit": "",
+    "cache": "~/.cache/layout-visual-complexity",
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    },
+    "jobs": 0
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.5.4",
+    "pandas": "3.1.1",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0"
+  },
+  "commit": "dc86b12c01622b5e370951005dffc9fc9f7390fb",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "comparison_graph": {
+      "images": 400,
+      "judgments": 5562,
+      "judged pairs": 3787,
+      "density": 0.047456140350877196,
+      "connected components": 1,
+      "largest component": 400,
+      "comparisons per image, minimum": 12,
+      "comparisons per image, median": 18.0,
+      "comparisons per image, mean": 27.81,
+      "comparisons per image, maximum": 122,
+      "anchors": 45
+    },
+    "seconds": {
+      "comparison_graph": 1.391
+    }
+  }
+}

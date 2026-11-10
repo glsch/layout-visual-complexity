@@ -1,0 +1,3 @@
+measure	median	q05	q95	repeats	permutations	balance
+split-half correlation	0.656317	0.612306	0.709690	100	100	judgments
+Spearman-Brown corrected	0.792501	0.759540	0.830197	100	100	judgments
