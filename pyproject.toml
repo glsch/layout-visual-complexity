@@ -14,13 +14,13 @@ requires-python = ">=3.12"
 dependencies = [
     "docstring-parser>=0.16,<1",
     "httpx2[http2]>=2.16,<3",
-    "jsonargparse>=4.32,<5",
+    "jsonargparse>=4.35,<5",
     "matplotlib>=3.8,<4",
     "numpy>=1.26,<3",
-    "pandas>=2.1,<4",
-    "PyYAML>=6.0,<7",
-    "scikit-learn>=1.3,<2",
-    "scipy>=1.11,<2",
+    "pandas>=2.1.1,<4",
+    "PyYAML>=6.0.1,<7",
+    "scikit-learn>=1.3.1,<2",
+    "scipy>=1.11.2,<2",
 ]
 
 [project.optional-dependencies]

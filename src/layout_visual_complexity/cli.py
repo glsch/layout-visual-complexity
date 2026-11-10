@@ -11,20 +11,25 @@ from jsonargparse import ActionConfigFile, ArgumentParser, Namespace
 
 import layout_visual_complexity
 from layout_visual_complexity import logs
-from layout_visual_complexity.judgments import (
-    ImportSettings,
-    RankSettings,
-    ReportSettings,
-    run_import,
-    run_rank,
-    run_report,
-)
 
-JUDGMENTS: dict[str, tuple[type, Callable[..., object]]] = {
-    "import": (ImportSettings, run_import),
-    "rank": (RankSettings, run_rank),
-    "report": (ReportSettings, run_report),
-}
+
+def judgment_commands() -> dict[str, tuple[type, Callable[..., object]]]:
+    """The judgments commands, by name: their settings and what runs them. Imported here, not at the top, so that
+    worker processes, which import this module again, start quickly."""
+    from layout_visual_complexity.judgments import (
+        ImportSettings,
+        RankSettings,
+        ReportSettings,
+        run_import,
+        run_rank,
+        run_report,
+    )
+
+    return {
+        "import": (ImportSettings, run_import),
+        "rank": (RankSettings, run_rank),
+        "report": (ReportSettings, run_report),
+    }
 
 
 def first_paragraph(text: str | None) -> str:
@@ -49,7 +54,7 @@ def parser() -> ArgumentParser:
     judgments = ArgumentParser(description="Pairwise judgments: import them, rank the images, report on them.")
     commands.add_subcommand("judgments", judgments, help="Pairwise judgments: import, rank, report.")
     actions = judgments.add_subcommands(dest="action", required=True)
-    for name, (settings, _) in JUDGMENTS.items():
+    for name, (settings, _) in judgment_commands().items():
         actions.add_subcommand(name, settings_parser(settings), help=first_paragraph(settings.__doc__))
     return top
 
@@ -73,7 +78,7 @@ def main(argv: list[str] | None = None) -> int:
     arguments = parser().parse_args(argv)
     logs.setup(logging.WARNING if arguments.quiet else logging.INFO)
     action = arguments.judgments.action
-    settings, run = JUDGMENTS[action]
+    settings, run = judgment_commands()[action]
     try:
         run(build(settings, arguments.judgments[action]))
     except (OSError, ValueError, RuntimeError) as error:
