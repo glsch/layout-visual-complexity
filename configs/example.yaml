@@ -1,0 +1,11 @@
+# An example configuration for `lvc judgments rank`. Copy it, change it, and pass it with --config; any setting can
+# also be given as an option (--permutations 100). `lvc judgments rank --help` lists them all.
+dataset: build/dataset
+output: build/ranking
+permutations: 1000
+seed: 1
+elo:
+  k: 100
+  start: 1500
+  scale: 400
+jobs: 0  # worker processes; 0 means all cores

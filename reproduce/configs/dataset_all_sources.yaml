@@ -1,0 +1,5 @@
+# Every source kept, the exhibition sessions included, as the article's numbers were computed. Given after
+# dataset.yaml, whose other settings it keeps. Its outputs stay in build/.
+output: build/all_sources/dataset
+exclude_sources: []
+unresolved: build/all_sources/unresolved_canvases.tsv

@@ -1,0 +1,16 @@
+# Shared by the tables and figures: where the dataset and the ranking are, where the outputs go, and the seeds.
+# Each table or figure adds its own configuration after this one.
+dataset: build/dataset
+ranking: build/ranking
+output: results
+gap_edges: [100, 200, 300, 400]
+folds:
+  k: 10
+  repeats: 3
+  seed: 20260629
+split_half:
+  repeats: 100
+  permutations: 100
+  seed: 20260629
+  balance: judgments
+graph_seed: 20260629

@@ -1,0 +1,10 @@
+# Table 1: the dataset by text category.
+name: table_dataset_categories
+outputs: [dataset_categories]
+category_labels:
+  A: Handbooks & manuals
+  B: Religious/theological
+  C: Other scholarly
+  D: Legal
+  E: Secular/literary
+  F: Administrative

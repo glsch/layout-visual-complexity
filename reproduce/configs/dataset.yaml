@@ -1,0 +1,11 @@
+# The reference dataset: the 2026-06-29 export of the annotation app, without the exhibition sessions (their
+# annotators were mostly not experts) and without the calibration judgments. Paths are relative to the working
+# folder.
+export: data/judgments/sessions_2026-06-29.json
+mapping: data/dataset/selected_image_shelfmark_mapping.json
+metadata: data/dataset/selected_manuscript_metadata_categorized.jsonl
+merges: data/annotator_merges.tsv
+output: build/dataset
+exclude_calibration: true
+exclude_sources: [exhibition-colophons]
+canvases: true
