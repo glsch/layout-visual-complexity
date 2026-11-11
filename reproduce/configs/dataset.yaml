@@ -1,18 +1,5 @@
-# The reference dataset: the 2026-06-29 export of the annotation app, without the exhibition sessions (their
-# annotators were mostly not experts) and without the calibration judgments. Paths are relative to the working
-# folder.
-export: data/judgments/sessions_2026-06-29.json
-mapping: data/dataset/selected_image_shelfmark_mapping.json
-metadata: data/dataset/selected_manuscript_metadata_categorized.jsonl
-merges: data/annotator_merges.tsv
+# The dataset of pairwise judgments, in its published structure: judgments, pages and manuscripts. Read from a folder
+# holding its files, or from its Zenodo record by DOI (10.5281/zenodo.<record>), checked against the record's
+# checksums. Paths are relative to the working folder.
+source: build/snapshot
 output: build/dataset
-exclude_calibration: true
-exclude_sources: [exhibition-colophons]
-canvases: true
-notes:
-  - "The categories were assigned automatically from the manuscripts' catalogue metadata by a language model, then
-    checked by an expert; `category_confidence` is the model's own confidence in its category."
-# Records and canvases checked by hand: two manuscripts whose shelfmarks the automatic lookup matched to other works,
-# and pages whose folio label matched no canvas, several, or a canvas that isn't the page.
-# manuscript_overrides: data/manuscript_overrides.tsv
-# canvas_overrides: data/canvas_overrides.tsv
