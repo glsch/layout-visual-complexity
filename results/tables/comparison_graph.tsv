@@ -1,12 +1,12 @@
 measure	value
-images	400
+images	397
 judgments	5562
 judged pairs	3787
-density	0.047456140350877196
+density	0.04817698394524591
 connected components	1
-largest component	400
+largest component	397
 comparisons per image, minimum	12
 comparisons per image, median	18.0
-comparisons per image, mean	27.81
+comparisons per image, mean	28.02015113350126
 comparisons per image, maximum	122
 anchors	45

@@ -1,32 +1,32 @@
 {
   "command": "judgments report",
-  "started": "2026-11-11T09:35:35+00:00",
-  "ended": "2026-11-11T09:35:36+00:00",
+  "started": "2026-11-11T18:20:24+00:00",
+  "ended": "2026-11-11T18:20:25+00:00",
   "inputs": [
     {
       "path": "build/dataset/judgments.tsv",
-      "sha256": "d778b37b08283287db2af7044d81c772e714241242fea4b96480cc1b7856d194",
-      "bytes": 612753
+      "sha256": "1f7bec0935ace0c316a94cb8b161cccb42cfe2a4f5f46f4c790f4e5a585b0c07",
+      "bytes": 526359
     },
     {
       "path": "build/dataset/images.tsv",
-      "sha256": "69ad1c267fb563ade4142e8ef417719775f1e633043a79a45ab8d9115d8d2d18",
-      "bytes": 141015
+      "sha256": "a6986b39a8e10f9ecd1e0ea5fe24982a7cb303aee957a4cb90b29dcb424aa583",
+      "bytes": 163870
     },
     {
       "path": "build/dataset/manuscripts.tsv",
-      "sha256": "226ddde0e606a0957ed9a9ea337cdf502dec6e5975c6a23f1c86342be445fae0",
-      "bytes": 39934
+      "sha256": "96fc15e7c27a685f936955a53caae8fb352a8e1f68c4e2ac0b8fcf5137083a90",
+      "bytes": 63153
     },
     {
       "path": "build/ranking/scores.tsv",
-      "sha256": "afdf8120d84f9ec1c83eed00d45e226ca8e4589c3b5070cc5db73a8c2e5a00f9",
-      "bytes": 46282
+      "sha256": "f27050a5b0039c31a3c2bce6766501b6320f14e735602fc02419f40cce9ce684",
+      "bytes": 43825
     },
     {
       "path": "build/ranking/score_distributions.npz",
-      "sha256": "d1c7021d64fd1929fc124a2369c998c2175f82551a47426095140ba4084e54d9",
-      "bytes": 2987878
+      "sha256": "93ff3b8285164660730a119a7c94dfd67d840f58a567aef4acf820f77b1c36a1",
+      "bytes": 2965118
     },
     {
       "path": "build/ranking/config.yaml",
@@ -94,24 +94,24 @@
     "PyYAML": "6.0.3",
     "httpx2": "2.16.0"
   },
-  "commit": "f01b3e485173c1eb085d33f8f131e45eec096446",
+  "commit": "e3fb4d8746344355d578a721e88d2c6f1038a81c",
   "platform": "macOS-26.5.1",
   "summary": {
     "comparison_graph": {
-      "images": 400,
+      "images": 397,
       "judgments": 5562,
       "judged pairs": 3787,
-      "density": 0.047456140350877196,
+      "density": 0.04817698394524591,
       "connected components": 1,
-      "largest component": 400,
+      "largest component": 397,
       "comparisons per image, minimum": 12,
       "comparisons per image, median": 18.0,
-      "comparisons per image, mean": 27.81,
+      "comparisons per image, mean": 28.02015113350126,
       "comparisons per image, maximum": 122,
       "anchors": 45
     },
     "seconds": {
-      "comparison_graph": 1.433
+      "comparison_graph": 1.375
     }
   }
 }

@@ -1,32 +1,32 @@
 {
   "command": "judgments report",
-  "started": "2026-11-11T09:35:30+00:00",
-  "ended": "2026-11-11T09:35:30+00:00",
+  "started": "2026-11-11T18:20:20+00:00",
+  "ended": "2026-11-11T18:20:20+00:00",
   "inputs": [
     {
       "path": "build/dataset/judgments.tsv",
-      "sha256": "d778b37b08283287db2af7044d81c772e714241242fea4b96480cc1b7856d194",
-      "bytes": 612753
+      "sha256": "1f7bec0935ace0c316a94cb8b161cccb42cfe2a4f5f46f4c790f4e5a585b0c07",
+      "bytes": 526359
     },
     {
       "path": "build/dataset/images.tsv",
-      "sha256": "69ad1c267fb563ade4142e8ef417719775f1e633043a79a45ab8d9115d8d2d18",
-      "bytes": 141015
+      "sha256": "a6986b39a8e10f9ecd1e0ea5fe24982a7cb303aee957a4cb90b29dcb424aa583",
+      "bytes": 163870
     },
     {
       "path": "build/dataset/manuscripts.tsv",
-      "sha256": "226ddde0e606a0957ed9a9ea337cdf502dec6e5975c6a23f1c86342be445fae0",
-      "bytes": 39934
+      "sha256": "96fc15e7c27a685f936955a53caae8fb352a8e1f68c4e2ac0b8fcf5137083a90",
+      "bytes": 63153
     },
     {
       "path": "build/ranking/scores.tsv",
-      "sha256": "afdf8120d84f9ec1c83eed00d45e226ca8e4589c3b5070cc5db73a8c2e5a00f9",
-      "bytes": 46282
+      "sha256": "f27050a5b0039c31a3c2bce6766501b6320f14e735602fc02419f40cce9ce684",
+      "bytes": 43825
     },
     {
       "path": "build/ranking/score_distributions.npz",
-      "sha256": "d1c7021d64fd1929fc124a2369c998c2175f82551a47426095140ba4084e54d9",
-      "bytes": 2987878
+      "sha256": "93ff3b8285164660730a119a7c94dfd67d840f58a567aef4acf820f77b1c36a1",
+      "bytes": 2965118
     },
     {
       "path": "build/ranking/config.yaml",
@@ -98,7 +98,7 @@
     "PyYAML": "6.0.3",
     "httpx2": "2.16.0"
   },
-  "commit": "f01b3e485173c1eb085d33f8f131e45eec096446",
+  "commit": "e3fb4d8746344355d578a721e88d2c6f1038a81c",
   "platform": "macOS-26.5.1",
   "summary": {
     "dataset_categories": {
@@ -106,21 +106,21 @@
         {
           "category": "A",
           "label": "Handbooks & manuals",
-          "manuscripts": 33,
-          "images": 114,
-          "share": 28.5,
-          "mean": 3.4545454545454546,
-          "median": 3.0,
+          "manuscripts": 27,
+          "images": 78,
+          "share": 19.64735516372796,
+          "mean": 2.888888888888889,
+          "median": 2.0,
           "min": 1,
-          "max": 11
+          "max": 8
         },
         {
           "category": "B",
           "label": "Religious/theological",
-          "manuscripts": 54,
-          "images": 148,
-          "share": 37.0,
-          "mean": 2.740740740740741,
+          "manuscripts": 61,
+          "images": 171,
+          "share": 43.07304785894207,
+          "mean": 2.80327868852459,
           "median": 2.0,
           "min": 1,
           "max": 6
@@ -128,32 +128,32 @@
         {
           "category": "C",
           "label": "Other scholarly",
-          "manuscripts": 26,
-          "images": 96,
-          "share": 24.0,
-          "mean": 3.6923076923076925,
-          "median": 3.0,
+          "manuscripts": 25,
+          "images": 109,
+          "share": 27.455919395465994,
+          "mean": 4.36,
+          "median": 4.0,
           "min": 1,
-          "max": 9
+          "max": 11
         },
         {
           "category": "D",
           "label": "Legal",
-          "manuscripts": 9,
-          "images": 26,
-          "share": 6.5,
-          "mean": 2.888888888888889,
+          "manuscripts": 5,
+          "images": 12,
+          "share": 3.022670025188917,
+          "mean": 2.4,
           "median": 2.0,
           "min": 1,
-          "max": 7
+          "max": 6
         },
         {
           "category": "E",
           "label": "Secular/literary",
-          "manuscripts": 5,
-          "images": 13,
-          "share": 3.25,
-          "mean": 2.6,
+          "manuscripts": 8,
+          "images": 17,
+          "share": 4.282115869017632,
+          "mean": 2.125,
           "median": 2.0,
           "min": 1,
           "max": 4
@@ -161,21 +161,21 @@
         {
           "category": "F",
           "label": "Administrative",
-          "manuscripts": 1,
-          "images": 3,
-          "share": 0.75,
-          "mean": 3.0,
-          "median": 3.0,
+          "manuscripts": 2,
+          "images": 10,
+          "share": 2.5188916876574305,
+          "mean": 5.0,
+          "median": 5.0,
           "min": 3,
-          "max": 3
+          "max": 7
         },
         {
           "category": "total",
           "label": "Total",
           "manuscripts": 128,
-          "images": 400,
+          "images": 397,
           "share": 100.0,
-          "mean": 3.125,
+          "mean": 3.1015625,
           "median": 3.0,
           "min": 1,
           "max": 11

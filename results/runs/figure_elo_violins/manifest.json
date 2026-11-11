@@ -1,32 +1,32 @@
 {
   "command": "judgments report",
-  "started": "2026-11-11T09:35:37+00:00",
-  "ended": "2026-11-11T09:35:38+00:00",
+  "started": "2026-11-11T18:20:26+00:00",
+  "ended": "2026-11-11T18:20:27+00:00",
   "inputs": [
     {
       "path": "build/dataset/judgments.tsv",
-      "sha256": "d778b37b08283287db2af7044d81c772e714241242fea4b96480cc1b7856d194",
-      "bytes": 612753
+      "sha256": "1f7bec0935ace0c316a94cb8b161cccb42cfe2a4f5f46f4c790f4e5a585b0c07",
+      "bytes": 526359
     },
     {
       "path": "build/dataset/images.tsv",
-      "sha256": "69ad1c267fb563ade4142e8ef417719775f1e633043a79a45ab8d9115d8d2d18",
-      "bytes": 141015
+      "sha256": "a6986b39a8e10f9ecd1e0ea5fe24982a7cb303aee957a4cb90b29dcb424aa583",
+      "bytes": 163870
     },
     {
       "path": "build/dataset/manuscripts.tsv",
-      "sha256": "226ddde0e606a0957ed9a9ea337cdf502dec6e5975c6a23f1c86342be445fae0",
-      "bytes": 39934
+      "sha256": "96fc15e7c27a685f936955a53caae8fb352a8e1f68c4e2ac0b8fcf5137083a90",
+      "bytes": 63153
     },
     {
       "path": "build/ranking/scores.tsv",
-      "sha256": "afdf8120d84f9ec1c83eed00d45e226ca8e4589c3b5070cc5db73a8c2e5a00f9",
-      "bytes": 46282
+      "sha256": "f27050a5b0039c31a3c2bce6766501b6320f14e735602fc02419f40cce9ce684",
+      "bytes": 43825
     },
     {
       "path": "build/ranking/score_distributions.npz",
-      "sha256": "d1c7021d64fd1929fc124a2369c998c2175f82551a47426095140ba4084e54d9",
-      "bytes": 2987878
+      "sha256": "93ff3b8285164660730a119a7c94dfd67d840f58a567aef4acf820f77b1c36a1",
+      "bytes": 2965118
     },
     {
       "path": "build/ranking/config.yaml",
@@ -92,7 +92,7 @@
     "PyYAML": "6.0.3",
     "httpx2": "2.16.0"
   },
-  "commit": "f01b3e485173c1eb085d33f8f131e45eec096446",
+  "commit": "e3fb4d8746344355d578a721e88d2c6f1038a81c",
   "platform": "macOS-26.5.1",
   "summary": {
     "elo_score_distributions": {
@@ -100,48 +100,48 @@
       "thumbnails": [
         {
           "rank": 1,
-          "image": "NKCR__XIII_G_10-00076-ID0036V"
+          "image": "xiiig10_36v"
         },
         {
           "rank": 45,
-          "image": "XI.E.5_0159r"
+          "image": "xie5_159r"
         },
         {
-          "rank": 90,
-          "image": "VI._G._6._173v"
+          "rank": 89,
+          "image": "if11_20v"
         },
         {
-          "rank": 134,
-          "image": "VI._B._21._0099v"
+          "rank": 133,
+          "image": "id27_234v"
         },
         {
-          "rank": 178,
-          "image": "XVII.E.15_0001r"
+          "rank": 177,
+          "image": "xviie15_1r"
         },
         {
-          "rank": 223,
-          "image": "XVII._G._9._0006v"
+          "rank": 221,
+          "image": "if49_6v"
         },
         {
-          "rank": 267,
-          "image": "V.E.13_0110r"
+          "rank": 265,
+          "image": "vig6_259v"
         },
         {
-          "rank": 311,
-          "image": "Tepl_MS._C_6_0150r"
+          "rank": 309,
+          "image": "teplamsc6_150r"
         },
         {
-          "rank": 356,
-          "image": "XI.E.5_0032v"
+          "rank": 353,
+          "image": "xvic15_171v"
         },
         {
-          "rank": 400,
-          "image": "Tepl_MS._D_16_0038r"
+          "rank": 397,
+          "image": "teplamsd16_38r"
         }
       ]
     },
     "seconds": {
-      "elo_score_distributions": 1.177
+      "elo_score_distributions": 1.041
     }
   }
 }
