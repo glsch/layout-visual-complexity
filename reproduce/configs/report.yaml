@@ -6,7 +6,7 @@ output: results
 gap_edges: [100, 200, 300, 400]
 folds:
   k: 10
-  repeats: 3
+  repeats: 10
   seed: 20260629
 split_half:
   repeats: 100

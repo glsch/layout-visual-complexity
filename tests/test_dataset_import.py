@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from conftest import MERGES, PERSONS, SPELLINGS, Study
 from layout_visual_complexity.download import HttpSettings
@@ -91,3 +92,43 @@ def test_manifests_are_fetched_once(study: Study, tmp_path: Path, server) -> Non
     run_import(settings(study, tmp_path / "first"), transport=server.transport())
     run_import(settings(study, tmp_path / "second"), transport=server.transport())
     assert len(server.requests) == 4
+
+
+def test_overrides_give_canvases_before_labels(study: Study, tmp_path: Path, server) -> None:
+    overrides = tmp_path / "overrides.tsv"
+    overrides.write_text(
+        "image\tcanvas\tmanifest\tnote\n"
+        "MS_D_0002r\thttps://iiif.example.org/msd/canvas/4\t\ttwo carry 2r; the second\n"
+        "MS_A_0001r\t\t\tleft empty: matched by label\n",
+        encoding="utf-8",
+    )
+    output = tmp_path / "dataset"
+    summary = run_import(
+        settings(study, output, canvas_overrides=overrides, notes=["Categories were checked by hand."]),
+        transport=server.transport(),
+    )
+    images = read_dataset(output).images.set_index("image")
+    assert images.loc["MS_D_0002r", "canvas"] == "https://iiif.example.org/msd/canvas/4"
+    assert images["canvas"].notna().all()
+    assert summary["canvases"]["overrides"] == 1 and summary["canvases"]["unresolved"] == 0
+    assert (output / "README.md").read_text().rstrip().endswith("Categories were checked by hand.")
+
+
+def test_overrides_may_move_a_page_to_another_manifest(study: Study, tmp_path: Path, server) -> None:
+    overrides = tmp_path / "overrides.tsv"
+    overrides.write_text(
+        "image\tcanvas\tmanifest\nMS_D_0002r\thttps://iiif.example.org/msc/canvas/3\thttps://iiif.example.org/msc/manifest\n",
+        encoding="utf-8",
+    )
+    output = tmp_path / "dataset"
+    run_import(settings(study, output, canvas_overrides=overrides), transport=server.transport())
+    image = read_dataset(output).images.set_index("image").loc["MS_D_0002r"]
+    assert image["iiif_manifest"] == "https://iiif.example.org/msc/manifest"
+    assert image["image_service"] == "https://iiif.example.org/images/msc/3"
+
+
+def test_an_override_naming_a_canvas_not_in_the_manifest_is_refused(study: Study, tmp_path: Path, server) -> None:
+    overrides = tmp_path / "overrides.tsv"
+    overrides.write_text("image\tcanvas\nMS_D_0002r\thttps://iiif.example.org/msd/canvas/99\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="isn't in"):
+        run_import(settings(study, tmp_path / "dataset", canvas_overrides=overrides), transport=server.transport())

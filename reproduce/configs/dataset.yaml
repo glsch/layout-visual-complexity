@@ -9,3 +9,8 @@ output: build/dataset
 exclude_calibration: true
 exclude_sources: [exhibition-colophons]
 canvases: true
+notes:
+  - "The categories were assigned automatically from the manuscripts' catalogue metadata by a language model, then
+    checked by an expert; `category_confidence` is the model's own confidence in its category."
+# Canvases checked by hand, for the pages whose folio label matched no canvas or several:
+# canvas_overrides: data/canvas_overrides.tsv

@@ -37,6 +37,7 @@ MANUSCRIPT_FIELDS = {
     "category": "category",
     "category_name": "category_name",
     "secondary_categories": "secondary_categories",
+    "category_confidence": "category_confidence",
     "canvas_count": "canvases",
     "title": "title",
     "date": "date",
@@ -54,6 +55,7 @@ MANUSCRIPT_COLUMNS = [
     "category",
     "category_name",
     "secondary_categories",
+    "category_confidence",
     "pages",
     "canvases",
     "title",
@@ -334,6 +336,7 @@ def readme(dataset: Dataset, rules: Rules, counts: pd.DataFrame, notes: list[str
         "| `category`, `category_name` | The text category: A, handbooks and manuals; B, religious and theological; "
         "C, other scholarly; D, legal; E, secular and literary; F, administrative. |",
         "| `secondary_categories` | Further categories that apply, comma-separated. |",
+        "| `category_confidence` | Where categories were assigned automatically, how confident that was (0 to 1). |",
         "| `pages` | The number of its images in the dataset. |",
         "| `canvases` | The number of canvases in its IIIF manifest. |",
         "| `title`, `date`, `location`, `material` | From the catalogue record. |",

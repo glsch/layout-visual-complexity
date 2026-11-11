@@ -4,11 +4,15 @@ Labels are compared normalised: case, spaces and leading zeros ignored, and a le
 (with or without the dot) dropped before a digit; `r` and `v` are kept. So `0008v` matches `8v`, `fol. 8v`,
 `f. 8 v` and `008v`. Exactly one canvas must match; pages with none or several are left unresolved, with the
 nearest labels listed for review.
+
+A table of overrides gives the canvas of a page by its id, and its manifest when it isn't the one listed: checked
+by people, it comes before the labels.
 """
 
 import difflib
 import re
 from dataclasses import dataclass
+from pathlib import Path
 
 import pandas as pd
 
@@ -65,14 +69,38 @@ def describe_canvases(found: tuple[Canvas, ...]) -> str:
     return "; ".join(f"{canvas.label} (canvas {canvas.position})" for canvas in found)
 
 
+def read_overrides(path: Path) -> pd.DataFrame:
+    """The overrides table: `image` and `canvas` (a canvas id), and optionally `manifest` (when the page is in
+    another manifest than the one listed). Other columns are ignored, and so are rows without a canvas."""
+    table = pd.read_csv(path, sep="\t", dtype=str, keep_default_na=False)
+    missing = {"image", "canvas"} - set(table.columns)
+    if missing:
+        raise ValueError(f"{path}: the overrides table has no column {', '.join(sorted(missing))}")
+    if "manifest" not in table.columns:
+        table["manifest"] = ""
+    table = table[table["canvas"].str.strip() != ""][["image", "canvas", "manifest"]].map(str.strip)
+    if table["image"].duplicated().any():
+        raise ValueError(f"{path}: an image is given two canvases")
+    return table.reset_index(drop=True)
+
+
 def resolve_canvases(
-    images: pd.DataFrame, client: HttpClient, cache: Cache
+    images: pd.DataFrame, client: HttpClient, cache: Cache, overrides: pd.DataFrame | None = None
 ) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, object]]:
-    """Fill `canvas`, `image_service`, `width` and `height` of the images whose label matches one canvas.
+    """Fill `canvas`, `image_service`, `width` and `height` of the images whose canvas the overrides give, or whose
+    label matches one canvas.
 
     Returns the images, the unresolved ones (image, manifest, label, matches, nearest labels), and counts.
     """
     images = images.copy()
+    overrides = overrides if overrides is not None else pd.DataFrame(columns=["image", "canvas", "manifest"])
+    unknown = set(overrides["image"]) - set(images["image"])
+    if unknown:
+        raise ValueError(f"the overrides name {len(unknown)} images that aren't in the image list")
+    given = overrides.set_index("image")
+    for image, manifest in given["manifest"].items():
+        if manifest:
+            images.loc[images["image"] == image, "iiif_manifest"] = manifest
     unresolved = []
     manifests: dict[str, list[Canvas]] = {}
     licences: dict[str, str] = {}
@@ -83,7 +111,15 @@ def resolve_canvases(
         licence = manifest.get("license") or manifest.get("rights") or ""
         licences[url] = licence if isinstance(licence, str) else ";".join(map(str, licence))
     for position, row in images.iterrows():
-        match = match_label(str(row["folio_label"]), manifests[row["iiif_manifest"]])
+        found = manifests[row["iiif_manifest"]]
+        if row["image"] in given.index:
+            wanted = given.at[row["image"], "canvas"]
+            canvas = next((c for c in found if c.id == wanted), None)
+            if canvas is None:
+                raise ValueError(f"{row['image']}: the overrides' canvas {wanted} isn't in {row['iiif_manifest']}")
+            match = CanvasMatch(str(row["folio_label"]), (canvas,), ())
+        else:
+            match = match_label(str(row["folio_label"]), found)
         canvas = match.canvas
         if canvas is None:
             unresolved.append(
@@ -104,6 +140,7 @@ def resolve_canvases(
     licence_counts = pd.Series(licences).value_counts().to_dict()
     counts = {
         "manifests": len(manifests),
+        "overrides": len(overrides),
         "manifests_downloaded": len(client.records) - fetched_before,
         "canvases_found": int(images["canvas"].notna().sum()),
         "unresolved": len(unresolved_table),

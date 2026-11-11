@@ -10,7 +10,7 @@ import yaml
 
 from layout_visual_complexity import judgment_reports
 from layout_visual_complexity.download import DEFAULT_CACHE, Cache, HttpClient, HttpSettings
-from layout_visual_complexity.inputs.canvases import resolve_canvases
+from layout_visual_complexity.inputs.canvases import read_overrides, resolve_canvases
 from layout_visual_complexity.logs import logger
 from layout_visual_complexity.ranking import graph
 from layout_visual_complexity.ranking.annotators import read_merge_table
@@ -56,8 +56,11 @@ class ImportSettings:
         exclude_calibration: Drop the calibration judgments.
         exclude_sources: Drop the sessions of these sources, by name.
         canvases: Find each page's canvas in its IIIF manifest.
+        canvas_overrides: A table giving some pages' canvases (TSV with `image`, `canvas`, and optionally
+            `manifest`), checked by people; it comes before matching by folio label.
         unresolved: Where the pages whose canvas wasn't found are listed; by default `unresolved_canvases.tsv` in
             the output folder.
+        notes: Paragraphs added at the end of the dataset's README, such as how the categories were assigned.
         cache: The download cache; manifests are kept in its `manifests` folder.
         http: How to fetch from servers.
     """
@@ -70,7 +73,9 @@ class ImportSettings:
     exclude_calibration: bool = True
     exclude_sources: list[str] = field(default_factory=list)
     canvases: bool = True
+    canvas_overrides: Path | None = None
     unresolved: Path | None = None
+    notes: list[str] = field(default_factory=list)
     cache: Path = DEFAULT_CACHE
     http: HttpSettings = field(default_factory=HttpSettings)
 
@@ -106,12 +111,12 @@ class FoldSettings:
 
     Args:
         k: Folds per repeat.
-        repeats: How many times the folds are drawn.
+        repeats: How many times the folds are drawn, each time with other groups.
         seed: The seed of the folds.
     """
 
     k: int = 10
-    repeats: int = 3
+    repeats: int = 10
     seed: int = 1
 
 
@@ -177,7 +182,8 @@ def run_import(settings: ImportSettings, transport: httpx2.BaseTransport | None 
         began = time.perf_counter()
         cache = Cache(Path(settings.cache) / "manifests", ".json")
         with HttpClient(settings.http, transport) as client:
-            filled, unresolved, counts = resolve_canvases(dataset.images, client, cache)
+            overrides = read_overrides(run.read(settings.canvas_overrides)) if settings.canvas_overrides else None
+            filled, unresolved, counts = resolve_canvases(dataset.images, client, cache, overrides)
         dataset.images = filled[IMAGE_COLUMNS]
         unresolved_path = Path(settings.unresolved or Path(settings.output) / "unresolved_canvases.tsv")
         unresolved_path.parent.mkdir(parents=True, exist_ok=True)
@@ -196,6 +202,7 @@ def run_import(settings: ImportSettings, transport: httpx2.BaseTransport | None 
         notes.append(
             f"The page images are served by the libraries under their own terms. The manifests' licences: {licences}."
         )
+    notes += list(settings.notes)
     written = write_dataset(dataset, settings.output, readme(dataset, rules, judgments.counts, notes))
     run.wrote(written)
     run.summary.update(

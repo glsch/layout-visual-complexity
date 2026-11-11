@@ -60,7 +60,7 @@ def _page_fold(
 
 
 def manuscript_folds(
-    pages: list[str], manuscripts: pd.Series, judgments: pd.DataFrame, k: int = 10, repeats: int = 3, seed: int = 1
+    pages: list[str], manuscripts: pd.Series, judgments: pd.DataFrame, k: int = 10, repeats: int = 10, seed: int = 1
 ) -> list[Fold]:
     """Repeated k-fold over pages, each manuscript in one fold, balanced by pages. `manuscripts` maps page → id."""
     pages_array = np.asarray(pages, dtype=object)
