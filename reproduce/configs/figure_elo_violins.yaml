@@ -1,0 +1,7 @@
+# Figure 3: the Elo scores' distributions over the permutations, with about ten pages at evenly spaced ranks,
+# fetched through their IIIF image services.
+name: figure_elo_violins
+outputs: [elo_score_distributions]
+thumbnails: 10
+thumbnail_size: 200
+image_credit: "Page images provided by Manuscriptorium (CC BY-NC 4.0)."

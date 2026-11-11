@@ -1,0 +1,5 @@
+# The dataset of pairwise judgments, in its published structure: judgments, pages and manuscripts. Read from a folder
+# holding its files, or from its Zenodo record by DOI (10.5281/zenodo.<record>), checked against the record's
+# checksums. Paths are relative to the working folder.
+source: build/snapshot
+output: build/dataset

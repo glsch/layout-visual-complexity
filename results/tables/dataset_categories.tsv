@@ -1,0 +1,8 @@
+category	label	manuscripts	images	share	mean	median	min	max
+A	Handbooks & manuals	27	78	19.6474	2.8889	2.0000	1	8
+B	Religious/theological	61	171	43.0730	2.8033	2.0000	1	6
+C	Other scholarly	25	109	27.4559	4.3600	4.0000	1	11
+D	Legal	5	12	3.0227	2.4000	2.0000	1	6
+E	Secular/literary	8	17	4.2821	2.1250	2.0000	1	4
+F	Administrative	2	10	2.5189	5.0000	5.0000	3	7
+total	Total	128	397	100.0000	3.1016	3.0000	1	11

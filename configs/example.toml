@@ -1,5 +1,0 @@
-# An example configuration, read with tomllib. Copy it, change it, and pass the copy to the code.
-
-[run]
-jobs = 0  # worker processes; 0 means all cores
-seed = 1

@@ -1,0 +1,3 @@
+# Figure 2: the comparison graph, and a table describing it.
+name: figure_comparison_graph
+outputs: [comparison_graph]

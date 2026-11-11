@@ -1,0 +1,12 @@
+# Elo over 1,000 seeded permutations of the judgments' order (K = 100, start 1500, scale 400, as in the article's
+# equation 1), and Bradley-Terry beside it.
+dataset: build/dataset
+output: build/ranking
+permutations: 1000
+seed: 20260629
+elo:
+  k: 100
+  start: 1500
+  scale: 400
+bt_prior: 1.0
+anchor_factor: 3.0
