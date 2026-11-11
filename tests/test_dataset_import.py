@@ -99,7 +99,8 @@ def test_overrides_give_canvases_before_labels(study: Study, tmp_path: Path, ser
     overrides.write_text(
         "image\tcanvas\tmanifest\tnote\n"
         "MS_D_0002r\thttps://iiif.example.org/msd/canvas/4\t\ttwo carry 2r; the second\n"
-        "MS_A_0001r\t\t\tleft empty: matched by label\n",
+        "MS_A_0001r\t\t\tleft empty: matched by label\n"
+        "MS_B_0001v\tnone\t\tthe label matches, but the page isn't in this manifest\n",
         encoding="utf-8",
     )
     output = tmp_path / "dataset"
@@ -109,8 +110,9 @@ def test_overrides_give_canvases_before_labels(study: Study, tmp_path: Path, ser
     )
     images = read_dataset(output).images.set_index("image")
     assert images.loc["MS_D_0002r", "canvas"] == "https://iiif.example.org/msd/canvas/4"
-    assert images["canvas"].notna().all()
-    assert summary["canvases"]["overrides"] == 1 and summary["canvases"]["unresolved"] == 0
+    assert images.loc["MS_A_0001r", "canvas"] == "https://iiif.example.org/msa/canvas/1"
+    assert images["canvas"].isna().sum() == 1 and pd.isna(images.loc["MS_B_0001v", "canvas"])
+    assert summary["canvases"]["overrides"] == 2 and summary["canvases"]["unresolved"] == 1
     assert (output / "README.md").read_text().rstrip().endswith("Categories were checked by hand.")
 
 

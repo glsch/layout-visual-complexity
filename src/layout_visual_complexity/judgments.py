@@ -57,7 +57,8 @@ class ImportSettings:
         exclude_sources: Drop the sessions of these sources, by name.
         canvases: Find each page's canvas in its IIIF manifest.
         canvas_overrides: A table giving some pages' canvases (TSV with `image`, `canvas`, and optionally
-            `manifest`), checked by people; it comes before matching by folio label.
+            `manifest`), checked by people; it comes before matching by folio label. `none` as the canvas leaves a
+            page without one.
         unresolved: Where the pages whose canvas wasn't found are listed; by default `unresolved_canvases.tsv` in
             the output folder.
         notes: Paragraphs added at the end of the dataset's README, such as how the categories were assigned.

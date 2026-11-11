@@ -6,7 +6,6 @@ days.
 """
 
 import json
-import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -68,8 +67,6 @@ MANUSCRIPT_COLUMNS = [
     "city",
     "iiif_manifest",
 ]
-# A label inside a sequence number, as some file names have it: `00055-ID0025r` is folio 25r.
-SEQUENCE_AND_LABEL = re.compile(r"^\d+-ID(?P<label>.+)$")
 
 
 @dataclass(frozen=True)
@@ -162,12 +159,6 @@ def build_judgments(combinations: pd.DataFrame, merges: dict[str, str], rules: R
     return Judgments(table=table, counts=counts, sessions=len(session_order), persons=len(names))
 
 
-def folio_label(file_label: str) -> str:
-    """The folio label in an image's file name: `0008v` as it is, `00055-ID0025r` as `0025r`."""
-    match = SEQUENCE_AND_LABEL.match(file_label)
-    return match["label"] if match else file_label
-
-
 def read_image_mapping(path: Path) -> pd.DataFrame:
     """Images from the mapping of image files to shelfmarks and IIIF manifests, one row per image.
 
@@ -183,7 +174,7 @@ def read_image_mapping(path: Path) -> pd.DataFrame:
                 "image": stem if dot else name,
                 "manuscript": record["normalized_shelfmark"],
                 "shelfmark": record["shelfmark"],
-                "folio_label": folio_label(str(record["folio_or_page_from_filename"])),
+                "folio_label": str(record["folio_or_page_from_filename"]),
                 "iiif_manifest": record["iiif_manifest_url"],
             }
         )
@@ -320,7 +311,8 @@ def readme(dataset: Dataset, rules: Rules, counts: pd.DataFrame, notes: list[str
         "| `image` | The image's id. |",
         "| `manuscript` | The manuscript's id (from `manuscripts.tsv`). |",
         "| `shelfmark` | The manuscript's shelfmark. |",
-        "| `folio_label` | The folio or page, as the image's file name gives it. |",
+        "| `folio_label` | The folio or page: as the image's file name gives it, or the canvas's label where the file "
+        "name gives the canvas's identifier instead. |",
         "| `iiif_manifest` | The manuscript's IIIF manifest. |",
         "| `canvas` | The page's canvas in that manifest; empty where the label didn't match exactly one canvas. |",
         "| `image_service` | The canvas's IIIF image service, from which the page can be fetched at any size. |",

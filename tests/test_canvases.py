@@ -7,7 +7,6 @@ from conftest import manifest
 from layout_visual_complexity.download import Cache, DownloadError, HttpClient, HttpSettings, cached_json, user_agent
 from layout_visual_complexity.inputs.canvases import match_label, normalise_label
 from layout_visual_complexity.inputs.iiif import Canvas, canvases
-from layout_visual_complexity.ranking.dataset import folio_label
 
 
 def canvas(position: int, label: str) -> Canvas:
@@ -40,9 +39,14 @@ def test_two_matches_are_reported_not_chosen() -> None:
     assert [c.position for c in match.matches] == [4, 372]
 
 
-def test_labels_inside_sequence_numbers() -> None:
-    assert folio_label("00055-ID0025r") == "0025r"
-    assert folio_label("0037bisr") == "0037bisr"
+def test_a_canvas_named_by_its_identifier() -> None:
+    found = [
+        Canvas(1, "https://x/m/canvas/ID0025r/", "23r", "s1", None, 10, 20),
+        Canvas(2, "https://x/m/canvas/ID0027r/", "25r", "s2", None, 10, 20),
+    ]
+    match = match_label("00055-ID0025r", found)
+    assert match.canvas == found[0] and match.by_identifier
+    assert match_label("00055-ID0099r", found).canvas is None
 
 
 def test_canvases_of_a_presentation_2_manifest() -> None:
@@ -119,3 +123,32 @@ def test_the_contact_comes_from_the_environment(monkeypatch: pytest.MonkeyPatch)
     assert user_agent().endswith("; lab@example.org)")
     monkeypatch.delenv("LVC_CONTACT")
     assert user_agent().startswith("layout-visual-complexity/")
+
+
+def test_a_page_named_by_its_canvas_identifier_gets_the_canvas_label(tmp_path: Path) -> None:
+    import pandas as pd
+
+    from layout_visual_complexity.inputs.canvases import resolve_canvases
+
+    def handler(request: httpx2.Request) -> httpx2.Response:
+        data = manifest("msa")
+        for number, item in enumerate(data["sequences"][0]["canvases"]):
+            item["@id"] = f"https://iiif.example.org/msa/canvas/ID{number + 2:04d}r/"
+        return httpx2.Response(200, json=data)
+
+    images = pd.DataFrame(
+        {
+            "image": ["MS_A-00003-ID0003r"],
+            "folio_label": ["00003-ID0003r"],
+            "iiif_manifest": ["https://iiif.example.org/msa/manifest"],
+            "canvas": [None],
+            "image_service": [None],
+            "width": pd.array([pd.NA], dtype="Int64"),
+            "height": pd.array([pd.NA], dtype="Int64"),
+        }
+    )
+    with HttpClient(HttpSettings(interval=0.0), httpx2.MockTransport(handler)) as client:
+        filled, unresolved, _ = resolve_canvases(images, client, Cache(tmp_path))
+    # The canvas whose id ends in ID0003r is the second, labelled 1r.
+    assert filled.loc[0, "canvas"] == "https://iiif.example.org/msa/canvas/ID0003r/"
+    assert filled.loc[0, "folio_label"] == "1r" and unresolved.empty

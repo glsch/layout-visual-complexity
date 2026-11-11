@@ -5,6 +5,9 @@ Labels are compared normalised: case, spaces and leading zeros ignored, and a le
 `f. 8 v` and `008v`. Exactly one canvas must match; pages with none or several are left unresolved, with the
 nearest labels listed for review.
 
+Some file names give the canvas's identifier instead of a label: `00055-ID0025r` (a sequence number, then the last
+part of the canvas's id) names the canvas whose id ends in `ID0025r`, labelled `23r`.
+
 A table of overrides gives the canvas of a page by its id, and its manifest when it isn't the one listed: checked
 by people, it comes before the labels.
 """
@@ -21,6 +24,7 @@ from layout_visual_complexity.inputs.iiif import Canvas, canvases
 from layout_visual_complexity.logs import logger
 
 PREFIX = re.compile(r"^(folio|fol\.?|f\.?|p\.?)(?=\d)")
+CANVAS_IDENTIFIER = re.compile(r"^\d+-(?P<identifier>ID\w+)$")
 LEADING_ZEROS = re.compile(r"^0+(?=\d)")
 NEAREST = 5
 
@@ -39,6 +43,7 @@ class CanvasMatch:
     label: str
     matches: tuple[Canvas, ...]
     nearest: tuple[Canvas, ...]
+    by_identifier: bool = False
 
     @property
     def canvas(self) -> Canvas | None:
@@ -46,7 +51,13 @@ class CanvasMatch:
 
 
 def match_label(label: str, found: list[Canvas], nearest: int = NEAREST) -> CanvasMatch:
-    """The canvases labelled `label`; when there isn't exactly one, the `nearest` closest labels too."""
+    """The canvases labelled `label` (or, for a label like `00055-ID0025r`, the canvas whose id ends in `ID0025r`);
+    when there isn't exactly one, the `nearest` closest labels too."""
+    named = CANVAS_IDENTIFIER.match(label)
+    if named:
+        wanted_id = named["identifier"].casefold()
+        matches = tuple(c for c in found if c.id and c.id.rstrip("/").rsplit("/", 1)[-1].casefold() == wanted_id)
+        return CanvasMatch(label, matches, matches if len(matches) > 1 else (), by_identifier=True)
     wanted = normalise_label(label)
     matches = tuple(canvas for canvas in found if canvas.label and normalise_label(canvas.label) == wanted)
     if len(matches) == 1:
@@ -70,8 +81,9 @@ def describe_canvases(found: tuple[Canvas, ...]) -> str:
 
 
 def read_overrides(path: Path) -> pd.DataFrame:
-    """The overrides table: `image` and `canvas` (a canvas id), and optionally `manifest` (when the page is in
-    another manifest than the one listed). Other columns are ignored, and so are rows without a canvas."""
+    """The overrides table: `image` and `canvas` (a canvas id, or `none` when the page has no canvas in its manifest
+    although a label matches), and optionally `manifest` (when the page is in another manifest than the one listed).
+    Other columns are ignored, and so are rows without a canvas."""
     table = pd.read_csv(path, sep="\t", dtype=str, keep_default_na=False)
     missing = {"image", "canvas"} - set(table.columns)
     if missing:
@@ -112,7 +124,9 @@ def resolve_canvases(
         licences[url] = licence if isinstance(licence, str) else ";".join(map(str, licence))
     for position, row in images.iterrows():
         found = manifests[row["iiif_manifest"]]
-        if row["image"] in given.index:
+        if row["image"] in given.index and given.at[row["image"], "canvas"].casefold() == "none":
+            match = CanvasMatch(str(row["folio_label"]), (), ())
+        elif row["image"] in given.index:
             wanted = given.at[row["image"], "canvas"]
             canvas = next((c for c in found if c.id == wanted), None)
             if canvas is None:
@@ -132,6 +146,8 @@ def resolve_canvases(
                 }
             )
             continue
+        if match.by_identifier and canvas.label:
+            images.at[position, "folio_label"] = canvas.label
         images.at[position, "canvas"] = canvas.id
         images.at[position, "image_service"] = canvas.image_service
         images.at[position, "width"] = canvas.width
