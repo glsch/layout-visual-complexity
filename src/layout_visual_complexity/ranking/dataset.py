@@ -352,5 +352,6 @@ def readme(dataset: Dataset, rules: Rules, counts: pd.DataFrame, notes: list[str
     for row in counts.itertuples(index=False):
         name = row.source if row.source else "(default campaign)"
         lines.append(f"| {name} | {row.rated:,} | {row.skipped:,} | {row.calibration:,} | {row.kept:,} |")
-    lines += ["", *(notes or [])]
+    for note in notes or []:
+        lines += ["", note]
     return "\n".join(lines).rstrip() + "\n"
