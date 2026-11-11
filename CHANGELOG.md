@@ -15,4 +15,5 @@
 - The evaluation protocol: folds by manuscript (10 × 10 by default), annotator or category; the pairwise logistic
   model on any table of page features; accuracy by Elo gap, SROCC, log-loss and calibration, bootstrap intervals over
   manuscripts, paired comparisons and learning curves.
-- `reproduce/` regenerates the article's Table 1, Table 2 and Figures 2 and 3.
+- `reproduce/` regenerates the article's Table 1, Table 2 and Figures 2 and 3, and imports the dataset again when the
+  folder it reads from changes.

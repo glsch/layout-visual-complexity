@@ -25,9 +25,10 @@ REPORT := $(RUN) judgments report --config $(CONFIGS)/report.yaml --config $(CON
 all: table-dataset-categories table-reliability figure-comparison-graph figure-elo-violins
 
 # The dataset comes from configs/dataset.yaml's source: a folder in the published structure, or the Zenodo
-# record's DOI.
+# record's DOI. When it is a folder, a change to its files makes the dataset again.
+SOURCE := $(shell sed -n 's/^source:[[:space:]]*//p' configs/dataset.yaml | tr -d "\"'")
 dataset: $(DATASET)
-$(DATASET): configs/dataset.yaml
+$(DATASET): configs/dataset.yaml $(wildcard $(TOP)/$(SOURCE)/*.tsv $(TOP)/$(SOURCE)/README.md)
 	$(RUN) judgments import --config $(CONFIGS)/dataset.yaml
 
 ranking: $(RANKING)
