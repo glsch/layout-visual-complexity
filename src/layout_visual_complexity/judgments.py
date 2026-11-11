@@ -204,8 +204,10 @@ def run_import(settings: ImportSettings, transport: httpx2.BaseTransport | None 
         run.summary["canvases"] = counts
         run.summary["canvas_seconds"] = round(time.perf_counter() - began, 3)
         notes.append(
-            f"Canvases: {counts['canvases_found']:,} of {len(dataset.images):,} pages matched exactly one canvas "
-            f"of their manifest by folio label; the other {counts['unresolved']:,} have no canvas here."
+            f"Canvases: {counts['canvases_found']:,} of {len(dataset.images):,} pages have one in their manifest, "
+            "found by folio label (or by the canvas's identifier, where the file name gives it)"
+            + (f", or given by hand for {counts['overrides']:,}" if counts["overrides"] else "")
+            + f"; the other {counts['unresolved']:,} have none here."
         )
         licences = "; ".join(
             f"{name or 'none given'} ({n:,} manifest{'' if n == 1 else 's'})"
