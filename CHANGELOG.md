@@ -13,3 +13,8 @@
   page features; accuracy by Elo gap, SROCC, log-loss and calibration, bootstrap intervals over manuscripts, paired
   comparisons and learning curves.
 - `reproduce/` regenerates the article's Table 1, Table 2 and Figures 2 and 3.
+- `lvc judgments import` takes a table of canvases checked by hand (`canvas_overrides`), finds a page whose file
+  name gives its canvas's identifier (`00055-ID0025r`) by that identifier, and adds `notes` to the dataset's README;
+  `manuscripts.tsv` has a `category_confidence` column.
+- The folds by manuscript are drawn ten times by default (10 × 10), so the consistency reference depends less on
+  the seed.
