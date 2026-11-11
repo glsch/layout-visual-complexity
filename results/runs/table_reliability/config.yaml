@@ -13,7 +13,7 @@ gap_edges:
 - 400.0
 folds:
   k: 10
-  repeats: 3
+  repeats: 10
   seed: 20260629
 split_half:
   repeats: 100

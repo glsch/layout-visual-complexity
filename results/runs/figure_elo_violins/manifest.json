@@ -1,7 +1,7 @@
 {
   "command": "judgments report",
-  "started": "2026-11-10T16:08:59+00:00",
-  "ended": "2026-11-10T16:09:00+00:00",
+  "started": "2026-11-11T09:34:17+00:00",
+  "ended": "2026-11-11T09:34:18+00:00",
   "inputs": [
     {
       "path": "build/dataset/judgments.tsv",
@@ -10,13 +10,13 @@
     },
     {
       "path": "build/dataset/images.tsv",
-      "sha256": "30ac1814a3877f7ec53f6c971ce22f91df3825ded2da77d6438e2e1f32eee98f",
-      "bytes": 141027
+      "sha256": "69ad1c267fb563ade4142e8ef417719775f1e633043a79a45ab8d9115d8d2d18",
+      "bytes": 141015
     },
     {
       "path": "build/dataset/manuscripts.tsv",
-      "sha256": "24eae76f8f446eca36962778c30f4a453b848ab9e1ffac901cc80d77ca8f64e9",
-      "bytes": 39281
+      "sha256": "226ddde0e606a0957ed9a9ea337cdf502dec6e5975c6a23f1c86342be445fae0",
+      "bytes": 39934
     },
     {
       "path": "build/ranking/scores.tsv",
@@ -55,7 +55,7 @@
     ],
     "folds": {
       "k": 10,
-      "repeats": 3,
+      "repeats": 10,
       "seed": 20260629
     },
     "split_half": {
@@ -92,7 +92,7 @@
     "PyYAML": "6.0.3",
     "httpx2": "2.16.0"
   },
-  "commit": "dc86b12c01622b5e370951005dffc9fc9f7390fb",
+  "commit": "445011de83eb0441f9127d02a6c0ed9c37c6d8d6-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "elo_score_distributions": {
@@ -141,7 +141,7 @@
       ]
     },
     "seconds": {
-      "elo_score_distributions": 1.126
+      "elo_score_distributions": 1.116
     }
   }
 }
