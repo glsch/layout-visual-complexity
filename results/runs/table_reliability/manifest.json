@@ -1,7 +1,7 @@
 {
   "command": "judgments report",
-  "started": "2026-11-11T09:34:12+00:00",
-  "ended": "2026-11-11T09:34:13+00:00",
+  "started": "2026-11-11T09:35:31+00:00",
+  "ended": "2026-11-11T09:35:34+00:00",
   "inputs": [
     {
       "path": "build/dataset/judgments.tsv",
@@ -99,7 +99,7 @@
     "PyYAML": "6.0.3",
     "httpx2": "2.16.0"
   },
-  "commit": "445011de83eb0441f9127d02a6c0ed9c37c6d8d6-dirty",
+  "commit": "f01b3e485173c1eb085d33f8f131e45eec096446",
   "platform": "macOS-26.5.1",
   "summary": {
     "reliability_by_elo_gap": {
@@ -224,9 +224,9 @@
       "images_median": 400.0
     },
     "seconds": {
-      "reliability_by_elo_gap": 0.033,
-      "consistency_reference_by_fold": 0.076,
-      "split_half_ceiling": 1.483
+      "reliability_by_elo_gap": 0.037,
+      "consistency_reference_by_fold": 0.084,
+      "split_half_ceiling": 2.123
     }
   }
 }

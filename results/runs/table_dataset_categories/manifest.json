@@ -1,7 +1,7 @@
 {
   "command": "judgments report",
-  "started": "2026-11-11T09:34:10+00:00",
-  "ended": "2026-11-11T09:34:11+00:00",
+  "started": "2026-11-11T09:35:30+00:00",
+  "ended": "2026-11-11T09:35:30+00:00",
   "inputs": [
     {
       "path": "build/dataset/judgments.tsv",
@@ -98,7 +98,7 @@
     "PyYAML": "6.0.3",
     "httpx2": "2.16.0"
   },
-  "commit": "445011de83eb0441f9127d02a6c0ed9c37c6d8d6-dirty",
+  "commit": "f01b3e485173c1eb085d33f8f131e45eec096446",
   "platform": "macOS-26.5.1",
   "summary": {
     "dataset_categories": {
@@ -183,7 +183,7 @@
       ]
     },
     "seconds": {
-      "dataset_categories": 0.005
+      "dataset_categories": 0.004
     }
   }
 }
