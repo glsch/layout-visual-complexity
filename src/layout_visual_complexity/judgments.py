@@ -1,4 +1,4 @@
-"""The `lvc judgments` commands: import the annotation app's export, rank the images, report on the judgments."""
+"""The `lvc judgments` commands: import a published dataset, rank its pages, report on the judgments."""
 
 import time
 from dataclasses import dataclass, field
@@ -10,29 +10,15 @@ import yaml
 
 from layout_visual_complexity import judgment_reports
 from layout_visual_complexity.download import DEFAULT_CACHE, Cache, HttpClient, HttpSettings
-from layout_visual_complexity.inputs.canvases import read_overrides, resolve_canvases
 from layout_visual_complexity.logs import logger
 from layout_visual_complexity.ranking import graph
-from layout_visual_complexity.ranking.annotators import read_merge_table
-from layout_visual_complexity.ranking.dataset import (
-    IMAGE_COLUMNS,
-    Rules,
-    apply_manuscript_overrides,
-    build_dataset,
-    build_judgments,
-    read_dataset,
-    read_image_mapping,
-    read_manuscript_metadata,
-    read_manuscript_overrides,
-    readme,
-    write_dataset,
-)
+from layout_visual_complexity.ranking.dataset import copy_dataset, read_dataset, validate_dataset
 from layout_visual_complexity.ranking.elo import BLOCK, EloSettings, workers
-from layout_visual_complexity.ranking.export import read_export
 from layout_visual_complexity.ranking.reliability import DEFAULT_GAP_EDGES, spearman
 from layout_visual_complexity.ranking.scores import compute_scores, read_scores, write_scores
 from layout_visual_complexity.ranking.split_half import SplitHalfSettings
 from layout_visual_complexity.runs import Run
+from layout_visual_complexity.zenodo import fetch_record, record_of
 
 Output = Literal[
     "dataset_categories",
@@ -47,41 +33,18 @@ ALL_OUTPUTS: list[Output] = list(get_args(Output))
 
 @dataclass(frozen=True)
 class ImportSettings:
-    """Turn the annotation app's export into the anonymised dataset.
+    """Read a published dataset, check it, and copy it into the working folder.
 
     Args:
-        export: The app's export (JSON).
-        mapping: The images: each file's shelfmark and IIIF manifest (JSON).
-        metadata: The manuscripts' categorised metadata (JSON lines).
-        output: The dataset folder to write.
-        merges: The merge table (TSV with `spelling` and `person` columns). Without one, spellings are only folded.
-        exclude_calibration: Drop the calibration judgments.
-        exclude_sources: Drop the sessions of these sources, by name.
-        canvases: Find each page's canvas in its IIIF manifest.
-        manuscript_overrides: A table of manuscript records corrected by hand (TSV with `manuscript` and the columns
-            to replace); a corrected manifest carries the manuscript's pages with it.
-        canvas_overrides: A table giving some pages' canvases (TSV with `image`, `canvas`, and optionally
-            `manifest`), checked by people; it comes before matching by folio label. `none` as the canvas leaves a
-            page without one.
-        unresolved: Where the pages whose canvas wasn't found are listed; by default `unresolved_canvases.tsv` in
-            the output folder.
-        notes: Paragraphs added at the end of the dataset's README, such as how the categories were assigned.
-        cache: The download cache; manifests are kept in its `manifests` folder.
+        source: A folder holding the dataset's files (`README.md`, `judgments.tsv`, `images.tsv`,
+            `manuscripts.tsv`), or the DOI of its Zenodo record (`10.5281/zenodo.…`).
+        output: The folder the dataset is copied into.
+        cache: The download cache; a Zenodo record's files are kept in its `zenodo` folder.
         http: How to fetch from servers.
     """
 
-    export: Path
-    mapping: Path
-    metadata: Path
+    source: str
     output: Path
-    merges: Path | None = None
-    exclude_calibration: bool = True
-    exclude_sources: list[str] = field(default_factory=list)
-    canvases: bool = True
-    manuscript_overrides: Path | None = None
-    canvas_overrides: Path | None = None
-    unresolved: Path | None = None
-    notes: list[str] = field(default_factory=list)
     cache: Path = DEFAULT_CACHE
     http: HttpSettings = field(default_factory=HttpSettings)
 
@@ -139,7 +102,7 @@ class ReportSettings:
         gap_edges: The edges of the bins of the final Elo gap.
         folds: The folds of the consistency reference.
         split_half: The split-half ceiling.
-        category_labels: Short names of the categories for the tables, by letter; by default their full names.
+        category_labels: Names of the categories for the tables, by letter; by default the letters alone.
         position_bias_min_judgments: The annotators the position-bias table shows by name have at least this many
             judgments.
         graph_seed: The seed of the comparison graph's layout.
@@ -171,70 +134,39 @@ class ReportSettings:
 
 
 def run_import(settings: ImportSettings, transport: httpx2.BaseTransport | None = None) -> dict[str, object]:
-    """Write the dataset: `judgments.tsv`, `images.tsv`, `manuscripts.tsv`, a README, the configuration and a
-    manifest. Returns the run's summary."""
+    """Check the dataset at `source` and copy it into `output`, with the configuration and a manifest. A DOI's
+    files are fetched first, each checked against the record's MD5. Returns the run's summary."""
     run = Run("judgments import", settings)
     began = time.perf_counter()
-    combinations = read_export(run.read(settings.export))
-    merges = read_merge_table(run.read(settings.merges)) if settings.merges else {}
-    rules = Rules(settings.exclude_calibration, list(settings.exclude_sources))
-    judgments = build_judgments(combinations, merges, rules)
-    images = read_image_mapping(run.read(settings.mapping))
-    manuscripts = read_manuscript_metadata(run.read(settings.metadata))
-    notes = []
-    if settings.manuscript_overrides:
-        corrections = read_manuscript_overrides(run.read(settings.manuscript_overrides))
-        manuscripts, images = apply_manuscript_overrides(manuscripts, images, corrections)
-        run.summary["manuscript_overrides"] = len(corrections)
-        which = "1 manuscript was" if len(corrections) == 1 else f"{len(corrections)} manuscripts were"
-        notes.append(f"The records of {which} corrected by hand after the automatic lookup.")
-    dataset = build_dataset(judgments.table, images, manuscripts)
-    run.summary["import_seconds"] = round(time.perf_counter() - began, 3)
-    if settings.canvases:
-        began = time.perf_counter()
-        cache = Cache(Path(settings.cache) / "manifests", ".json")
+    source = str(settings.source)
+    if record_of(source):
         with HttpClient(settings.http, transport) as client:
-            overrides = read_overrides(run.read(settings.canvas_overrides)) if settings.canvas_overrides else None
-            filled, unresolved, counts = resolve_canvases(dataset.images, client, cache, overrides)
-        dataset.images = filled[IMAGE_COLUMNS]
-        unresolved_path = Path(settings.unresolved or Path(settings.output) / "unresolved_canvases.tsv")
-        unresolved_path.parent.mkdir(parents=True, exist_ok=True)
-        unresolved.to_csv(unresolved_path, sep="\t", index=False, lineterminator="\n")
-        run.wrote(unresolved_path)
-        run.summary["canvases"] = counts
-        run.summary["canvas_seconds"] = round(time.perf_counter() - began, 3)
-        notes.append(
-            f"Canvases: {counts['canvases_found']:,} of {len(dataset.images):,} pages have one in their manifest, "
-            "found by folio label (or by the canvas's identifier, where the file name gives it)"
-            + (f", or given by hand for {counts['overrides']:,}" if counts["overrides"] else "")
-            + f"; the other {counts['unresolved']:,} have none here."
-        )
-        licences = "; ".join(
-            f"{name or 'none given'} ({n:,} manifest{'' if n == 1 else 's'})"
-            for name, n in counts["manifest_licences"].items()
-        )
-        notes.append(
-            f"The page images are served by the libraries under their own terms. The manifests' licences: {licences}."
-        )
-    notes += list(settings.notes)
-    written = write_dataset(dataset, settings.output, readme(dataset, rules, judgments.counts, notes))
-    run.wrote(written)
+            folder = fetch_record(source, client, Path(settings.cache) / "zenodo")
+        run.summary["doi"] = source
+    elif Path(source).is_dir():
+        folder = Path(source)
+    else:
+        raise ValueError(f"{source} is neither a folder nor a Zenodo DOI")
+    dataset = read_dataset(folder)
+    validate_dataset(dataset)
+    for name in ("README.md", "judgments.tsv", "images.tsv", "manuscripts.tsv"):
+        run.read(folder / name)
+    run.wrote(copy_dataset(folder, settings.output))
+    judgments = dataset.judgments
     run.summary.update(
-        judgments=len(judgments.table),
-        sessions=judgments.sessions,
-        annotators=judgments.persons,
+        judgments=len(judgments),
+        sessions=int(judgments["session"].nunique()),
+        annotators=int(judgments["annotator"].nunique()),
         images=len(dataset.images),
         manuscripts=len(dataset.manuscripts),
-        counts_by_rule=judgments.counts.to_dict("records"),
+        seconds=round(time.perf_counter() - began, 3),
     )
     run.wrote(run.finish(settings.output))
     print(
-        f"{len(judgments.table):,} judgments in {judgments.sessions:,} sessions by {judgments.persons:,} annotators; "
-        f"{len(dataset.images):,} images from {len(dataset.manuscripts):,} manuscripts -> {settings.output}"
+        f"{len(judgments):,} judgments in {judgments['session'].nunique():,} sessions by "
+        f"{judgments['annotator'].nunique():,} annotators; {len(dataset.images):,} pages from "
+        f"{len(dataset.manuscripts):,} manuscripts -> {settings.output}"
     )
-    if "canvases" in run.summary:
-        counts = run.summary["canvases"]
-        print(f"canvases: {counts['canvases_found']:,} found, {counts['unresolved']:,} unresolved")
     return run.summary
 
 

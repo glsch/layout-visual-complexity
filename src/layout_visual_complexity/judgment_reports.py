@@ -40,15 +40,15 @@ def decimal(value: float, digits: int = 3) -> str:
 def dataset_categories(dataset: Dataset, labels: dict[str, str], folder: Path) -> Written:
     """Manuscripts and images per category, each category's share of the images, and images per manuscript."""
     manuscripts = dataset.manuscripts
-    names = manuscripts.groupby("category")["category_name"].agg(lambda values: values.mode().iloc[0])
     rows = []
-    groups = [(category, manuscripts[manuscripts["category"] == category]) for category in sorted(names.index)]
+    categories = sorted(manuscripts["category"].unique())
+    groups = [(category, manuscripts[manuscripts["category"] == category]) for category in categories]
     for category, group in [*groups, ("total", manuscripts)]:
         pages = group["pages"]
         rows.append(
             {
                 "category": category,
-                "label": labels.get(category, names.get(category, "")) if category != "total" else "Total",
+                "label": labels.get(category, category) if category != "total" else "Total",
                 "manuscripts": len(group),
                 "images": int(pages.sum()),
                 "share": 100 * pages.sum() / manuscripts["pages"].sum(),
@@ -61,7 +61,12 @@ def dataset_categories(dataset: Dataset, labels: dict[str, str], folder: Path) -
     table = pd.DataFrame(rows)
     latex_rows = []
     for row in table.itertuples(index=False):
-        name = "Total" if row.category == "total" else f"{row.category} --- {escape(row.label)}"
+        if row.category == "total":
+            name = "Total"
+        elif row.label != row.category:
+            name = f"{row.category} --- {escape(row.label)}"
+        else:
+            name = escape(row.category)
         median = f"{row.median:g} [{row.min}--{row.max}]"
         cells = [name, integer(row.manuscripts), integer(row.images), f"{row.share:.1f}", f"{row.mean:.1f}", median]
         latex_rows.append(cells)

@@ -5,7 +5,6 @@ import pytest
 import yaml
 
 import layout_visual_complexity
-from conftest import Study
 from layout_visual_complexity import cli
 
 
@@ -23,26 +22,12 @@ def test_help(arguments: list[str], capsys: pytest.CaptureFixture[str]) -> None:
     assert "usage: lvc" in capsys.readouterr().out
 
 
-def test_import_rank_and_report_on_a_tiny_dataset(study: Study, tmp_path: Path) -> None:
+def test_import_rank_and_report_on_a_tiny_dataset(dataset_folder: Path, tmp_path: Path) -> None:
     dataset, ranking, results = tmp_path / "dataset", tmp_path / "ranking", tmp_path / "results"
     config = tmp_path / "dataset.yaml"
-    config.write_text(
-        yaml.safe_dump(
-            {
-                "export": str(study.export),
-                "mapping": str(study.mapping),
-                "metadata": str(study.metadata),
-                "merges": str(study.merges),
-                "output": str(dataset),
-                "canvases": False,
-            }
-        )
-    )
-    overrides = tmp_path / "sources.yaml"
-    overrides.write_text("exclude_sources: [exhibition]\n")
-    assert cli.main(["--quiet", "judgments", "import", "--config", str(config), "--config", str(overrides)]) == 0
-    written = yaml.safe_load((dataset / "config.yaml").read_text())
-    assert written["exclude_sources"] == ["exhibition"] and written["canvases"] is False
+    config.write_text(yaml.safe_dump({"source": str(dataset_folder), "output": str(dataset)}))
+    assert cli.main(["--quiet", "judgments", "import", "--config", str(config)]) == 0
+    assert yaml.safe_load((dataset / "config.yaml").read_text())["source"] == str(dataset_folder)
 
     rank = ["judgments", "rank", "--dataset", str(dataset), "--output", str(ranking)]
     assert cli.main(["--quiet", *rank, "--permutations", "30", "--seed", "4", "--jobs", "1"]) == 0
@@ -51,7 +36,8 @@ def test_import_rank_and_report_on_a_tiny_dataset(study: Study, tmp_path: Path) 
 
     report = ["judgments", "report", "--dataset", str(dataset), "--ranking", str(ranking), "--output", str(results)]
     small = ["--folds.k", "2", "--folds.repeats", "1", "--split_half.repeats", "3", "--split_half.permutations", "5"]
-    assert cli.main(["--quiet", *report, *small, "--thumbnails", "0", "--jobs", "1", "--name", "tiny"]) == 0
+    labels = ["--category_labels", "{A: Handbooks, B: Religious}"]
+    assert cli.main(["--quiet", *report, *small, *labels, "--thumbnails", "0", "--jobs", "1", "--name", "tiny"]) == 0
     for stem in [
         "tables/dataset_categories",
         "tables/reliability_by_elo_gap",
@@ -66,6 +52,7 @@ def test_import_rank_and_report_on_a_tiny_dataset(study: Study, tmp_path: Path) 
             assert (results / f"{stem}{suffix}").is_file()
     assert (results / "runs" / "tiny" / "manifest.json").is_file()
     assert r"\caption" in (results / "tables" / "reliability_by_elo_gap.tex").read_text()
+    assert "A --- Handbooks" in (results / "tables" / "dataset_categories.tex").read_text()
 
 
 def test_errors_are_reported_without_a_traceback(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
