@@ -63,9 +63,10 @@ INTEGERS = {
     "images": ["width", "height"],
     "manuscripts": ["date_not_before", "date_not_after", "height_mm", "width_mm", "texts", "pages", "canvases"],
 }
-# The forms of EDTF (ISO 8601-2) the dataset uses: a year, approximate (~), uncertain (?) or both (%); a range of
-# years; open at one end.
-EDTF = re.compile(r"^(\d{4}[~?%]?|\d{4}/\d{4}|\d{4}/\.\.|\.\./\d{4})$")
+# The forms of EDTF (ISO 8601-2, level 1) the dataset uses: a year, approximate (~), uncertain (?) or both (%); a
+# range of years, either end qualified the same ways; a range open at one end.
+_YEAR = r"\d{4}[~?%]?"
+EDTF = re.compile(rf"^({_YEAR}|{_YEAR}/{_YEAR}|{_YEAR}/\.\.|\.\./{_YEAR})$")
 LANGUAGES = re.compile(r"^[a-z]{3}( [a-z]{3})*$")
 
 

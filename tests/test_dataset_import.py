@@ -54,6 +54,14 @@ def test_a_malformed_date_is_refused(tmp_path: Path) -> None:
     refused(tmp_path, lambda d: d.manuscripts.loc.__setitem__((0, "date_edtf"), "about 1450"), "EDTF")
 
 
+@pytest.mark.parametrize("date", ["1450~~", "~1450", "1450/1460/1470", "../..", "145?", "1450-1460"])
+def test_dates_outside_the_forms_used_are_refused(date: str) -> None:
+    dataset = published()
+    dataset.manuscripts.loc[0, "date_edtf"] = date
+    with pytest.raises(DatasetError, match="EDTF"):
+        validate_dataset(dataset)
+
+
 def test_other_inconsistencies_are_refused() -> None:
     dataset = published()
     dataset.judgments.loc[0, "right"] = dataset.judgments.loc[0, "left"]
@@ -68,7 +76,22 @@ def test_other_inconsistencies_are_refused() -> None:
         assert part in message
 
 
-@pytest.mark.parametrize("date", ["1461", "1505~", "1450?", "1450%", "1434/1466", "1450/..", "../1480", ""])
+@pytest.mark.parametrize(
+    "date",
+    [
+        "1461",
+        "1505~",
+        "1450?",
+        "1450%",
+        "1434/1466",
+        "1428~/1429~",
+        "1381?/1500",
+        "1450/..",
+        "1485~/..",
+        "../1480%",
+        "",
+    ],
+)
 def test_the_edtf_forms_used_are_accepted(date: str) -> None:
     dataset = published()
     dataset.manuscripts.loc[0, "date_edtf"] = date
