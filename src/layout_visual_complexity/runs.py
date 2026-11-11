@@ -76,14 +76,16 @@ def versions() -> dict[str, str]:
 
 
 def commit() -> str | None:
-    """The repository's commit, with `-dirty` when files differ from it, if the code runs from a clone."""
+    """The repository's commit, with `-dirty` when the package's own files differ from it, if it runs from a clone.
+
+    Only the package counts: a run's outputs may be tracked files that the run itself rewrites."""
     folder = Path(__file__).resolve().parent
     try:
         head = subprocess.run(
             ["git", "-C", str(folder), "rev-parse", "HEAD"], capture_output=True, text=True, timeout=10, check=True
         ).stdout.strip()
         dirty = subprocess.run(
-            ["git", "-C", str(folder), "status", "--porcelain", "--untracked-files=no"],
+            ["git", "-C", str(folder), "status", "--porcelain", "--untracked-files=no", "--", "."],
             capture_output=True,
             text=True,
             timeout=10,
