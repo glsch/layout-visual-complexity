@@ -82,15 +82,17 @@ def describe_canvases(found: tuple[Canvas, ...]) -> str:
 
 def read_overrides(path: Path) -> pd.DataFrame:
     """The overrides table: `image` and `canvas` (a canvas id, or `none` when the page has no canvas in its manifest
-    although a label matches), and optionally `manifest` (when the page is in another manifest than the one listed).
-    Other columns are ignored, and so are rows without a canvas."""
+    although a label matches), and optionally `manifest` (when the page is in another manifest than the one listed;
+    without a canvas, its canvas is then found by label there). Other columns are ignored, and so are rows with
+    neither a canvas nor a manifest."""
     table = pd.read_csv(path, sep="\t", dtype=str, keep_default_na=False)
     missing = {"image", "canvas"} - set(table.columns)
     if missing:
         raise ValueError(f"{path}: the overrides table has no column {', '.join(sorted(missing))}")
     if "manifest" not in table.columns:
         table["manifest"] = ""
-    table = table[table["canvas"].str.strip() != ""][["image", "canvas", "manifest"]].map(str.strip)
+    table = table[["image", "canvas", "manifest"]].map(str.strip)
+    table = table[(table["canvas"] != "") | (table["manifest"] != "")]
     if table["image"].duplicated().any():
         raise ValueError(f"{path}: an image is given two canvases")
     return table.reset_index(drop=True)
@@ -124,10 +126,10 @@ def resolve_canvases(
         licences[url] = licence if isinstance(licence, str) else ";".join(map(str, licence))
     for position, row in images.iterrows():
         found = manifests[row["iiif_manifest"]]
-        if row["image"] in given.index and given.at[row["image"], "canvas"].casefold() == "none":
+        wanted = given.at[row["image"], "canvas"] if row["image"] in given.index else ""
+        if wanted.casefold() == "none":
             match = CanvasMatch(str(row["folio_label"]), (), ())
-        elif row["image"] in given.index:
-            wanted = given.at[row["image"], "canvas"]
+        elif wanted:
             canvas = next((c for c in found if c.id == wanted), None)
             if canvas is None:
                 raise ValueError(f"{row['image']}: the overrides' canvas {wanted} isn't in {row['iiif_manifest']}")

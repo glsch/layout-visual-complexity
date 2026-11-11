@@ -17,11 +17,13 @@ from layout_visual_complexity.ranking.annotators import read_merge_table
 from layout_visual_complexity.ranking.dataset import (
     IMAGE_COLUMNS,
     Rules,
+    apply_manuscript_overrides,
     build_dataset,
     build_judgments,
     read_dataset,
     read_image_mapping,
     read_manuscript_metadata,
+    read_manuscript_overrides,
     readme,
     write_dataset,
 )
@@ -56,6 +58,8 @@ class ImportSettings:
         exclude_calibration: Drop the calibration judgments.
         exclude_sources: Drop the sessions of these sources, by name.
         canvases: Find each page's canvas in its IIIF manifest.
+        manuscript_overrides: A table of manuscript records corrected by hand (TSV with `manuscript` and the columns
+            to replace); a corrected manifest carries the manuscript's pages with it.
         canvas_overrides: A table giving some pages' canvases (TSV with `image`, `canvas`, and optionally
             `manifest`), checked by people; it comes before matching by folio label. `none` as the canvas leaves a
             page without one.
@@ -74,6 +78,7 @@ class ImportSettings:
     exclude_calibration: bool = True
     exclude_sources: list[str] = field(default_factory=list)
     canvases: bool = True
+    manuscript_overrides: Path | None = None
     canvas_overrides: Path | None = None
     unresolved: Path | None = None
     notes: list[str] = field(default_factory=list)
@@ -176,9 +181,15 @@ def run_import(settings: ImportSettings, transport: httpx2.BaseTransport | None 
     judgments = build_judgments(combinations, merges, rules)
     images = read_image_mapping(run.read(settings.mapping))
     manuscripts = read_manuscript_metadata(run.read(settings.metadata))
+    notes = []
+    if settings.manuscript_overrides:
+        corrections = read_manuscript_overrides(run.read(settings.manuscript_overrides))
+        manuscripts, images = apply_manuscript_overrides(manuscripts, images, corrections)
+        run.summary["manuscript_overrides"] = len(corrections)
+        which = "1 manuscript was" if len(corrections) == 1 else f"{len(corrections)} manuscripts were"
+        notes.append(f"The records of {which} corrected by hand after the automatic lookup.")
     dataset = build_dataset(judgments.table, images, manuscripts)
     run.summary["import_seconds"] = round(time.perf_counter() - began, 3)
-    notes = []
     if settings.canvases:
         began = time.perf_counter()
         cache = Cache(Path(settings.cache) / "manifests", ".json")

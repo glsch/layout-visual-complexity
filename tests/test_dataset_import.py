@@ -134,3 +134,46 @@ def test_an_override_naming_a_canvas_not_in_the_manifest_is_refused(study: Study
     overrides.write_text("image\tcanvas\nMS_D_0002r\thttps://iiif.example.org/msd/canvas/99\n", encoding="utf-8")
     with pytest.raises(ValueError, match="isn't in"):
         run_import(settings(study, tmp_path / "dataset", canvas_overrides=overrides), transport=server.transport())
+
+
+def test_manuscript_overrides_correct_records_and_move_pages(study: Study, tmp_path: Path, server) -> None:
+    overrides = tmp_path / "manuscripts.tsv"
+    overrides.write_text(
+        "manuscript\ttitle\tdate\theight_mm\tcategory\tiiif_manifest\tnote\n"
+        "msd\tThe right book\t\t\tA\thttps://iiif.example.org/msc/manifest\tthe lookup had found another work\n",
+        encoding="utf-8",
+    )
+    output = tmp_path / "dataset"
+    summary = run_import(settings(study, output, manuscript_overrides=overrides), transport=server.transport())
+    dataset = read_dataset(output)
+    record = dataset.manuscripts.set_index("manuscript").loc["msd"]
+    assert (record["title"], record["category"]) == ("The right book", "A")
+    assert pd.isna(record["date"]) and pd.isna(record["height_mm"])
+    assert record["material"] == "paper"
+    # The pages follow the corrected manifest, where their labels match one canvas each.
+    pages = dataset.images[dataset.images["manuscript"] == "msd"]
+    assert (pages["iiif_manifest"] == "https://iiif.example.org/msc/manifest").all()
+    assert pages["canvas"].str.startswith("https://iiif.example.org/msc/canvas/").all()
+    assert dataset.images.set_index("image").loc["MS_D_0001r", "category"] == "A"
+    assert summary["manuscript_overrides"] == 1
+    assert "corrected by hand" in (output / "README.md").read_text()
+
+
+def test_manuscript_overrides_refuse_unknown_manuscripts_and_columns(study: Study, tmp_path: Path, server) -> None:
+    for content, message in [
+        ("manuscript\ttitle\nnope\tX\n", "aren't in the metadata"),
+        ("manuscript\tpages\nmsa\t9\n", "can't be overridden"),
+    ]:
+        overrides = tmp_path / "manuscripts.tsv"
+        overrides.write_text(content, encoding="utf-8")
+        with pytest.raises(ValueError, match=message):
+            run_import(settings(study, tmp_path / "out", manuscript_overrides=overrides), transport=server.transport())
+
+
+def test_a_canvas_override_may_give_only_a_manifest(study: Study, tmp_path: Path, server) -> None:
+    overrides = tmp_path / "overrides.tsv"
+    overrides.write_text("image\tcanvas\tmanifest\nMS_D_0002r\t\thttps://iiif.example.org/msc/manifest\n", "utf-8")
+    output = tmp_path / "dataset"
+    run_import(settings(study, output, canvas_overrides=overrides), transport=server.transport())
+    image = read_dataset(output).images.set_index("image").loc["MS_D_0002r"]
+    assert image["canvas"] == "https://iiif.example.org/msc/canvas/3"

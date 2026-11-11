@@ -204,11 +204,61 @@ def read_manuscript_metadata(path: Path) -> pd.DataFrame:
             row[name] = value
         rows.append(row)
     manuscripts = pd.DataFrame(rows)
-    for column in ["canvases", "height_mm", "width_mm"]:
+    for column in INTEGER_COLUMNS:
         manuscripts[column] = pd.to_numeric(manuscripts[column], errors="coerce").round().astype("Int64")
     if manuscripts["category"].isna().any():
         raise ValueError(f"{path}: {int(manuscripts['category'].isna().sum())} manuscripts have no category")
     return manuscripts
+
+
+INTEGER_COLUMNS = ("canvases", "height_mm", "width_mm")
+
+
+def read_manuscript_overrides(path: Path) -> pd.DataFrame:
+    """Manuscript records corrected by hand: a `manuscript` column, then any of the published columns but `pages`.
+
+    A row replaces the manuscript's values in every column the table has; an empty cell leaves the value missing. A
+    `note` column is ignored.
+    """
+    table = pd.read_csv(path, sep="\t", dtype=str, keep_default_na=False).drop(columns="note", errors="ignore")
+    if "manuscript" not in table.columns:
+        raise ValueError(f"{path}: the overrides table has no column manuscript")
+    unknown = set(table.columns) - set(MANUSCRIPT_COLUMNS) - {"manuscript"}
+    if unknown or "pages" in table.columns:
+        raise ValueError(
+            f"{path}: columns that can't be overridden: {', '.join(sorted(unknown | {'pages'} & set(table.columns)))}"
+        )
+    if table["manuscript"].duplicated().any():
+        raise ValueError(f"{path}: a manuscript appears twice")
+    return table
+
+
+def apply_manuscript_overrides(
+    manuscripts: pd.DataFrame, images: pd.DataFrame, overrides: pd.DataFrame
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """The manuscripts with their corrected records, and the images, whose manifest follows their manuscript's when
+    the overrides give one."""
+    manuscripts, images = manuscripts.copy(), images.copy()
+    unknown = set(overrides["manuscript"]) - set(manuscripts["manuscript"])
+    if unknown:
+        raise ValueError(f"the overrides name {len(unknown)} manuscripts that aren't in the metadata")
+    for row in overrides.to_dict("records"):
+        where = manuscripts["manuscript"] == row["manuscript"]
+        for column, value in row.items():
+            if column == "manuscript":
+                continue
+            value = value.strip() or None
+            if column in INTEGER_COLUMNS:
+                manuscripts[column] = manuscripts[column].astype("Int64")
+                manuscripts.loc[where, column] = pd.NA if value is None else int(float(value))
+            elif column == "category_confidence":
+                manuscripts.loc[where, column] = float("nan") if value is None else float(value)
+            else:
+                manuscripts[column] = manuscripts[column].astype(object)
+                manuscripts.loc[where, column] = value
+        if (row.get("iiif_manifest") or "").strip():
+            images.loc[images["manuscript"] == row["manuscript"], "iiif_manifest"] = row["iiif_manifest"].strip()
+    return manuscripts, images
 
 
 def build_dataset(judgments: pd.DataFrame, images: pd.DataFrame, manuscripts: pd.DataFrame) -> Dataset:
