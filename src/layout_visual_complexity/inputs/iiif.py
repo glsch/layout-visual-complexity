@@ -17,7 +17,8 @@ class ManifestError(ValueError):
 
 @dataclass(frozen=True)
 class Canvas:
-    """One canvas of a manifest: its position (from 1), id, label, image service and the full image's size."""
+    """One canvas of a manifest: its position (from 1), id, label, image service (with its Image API version) and the
+    full image's size."""
 
     position: int
     id: str | None
@@ -26,6 +27,7 @@ class Canvas:
     image_url: str | None
     width: int | None
     height: int | None
+    image_api: int = 2
 
 
 def _list(value: Any) -> list[Any]:
@@ -136,6 +138,33 @@ def _service(resource: JSON, base: str) -> tuple[str | None, JSON]:
     return None, {}
 
 
+def image_api_version(service: JSON) -> int:
+    """3 for an Image API 3 service, by its type or context; 2 otherwise."""
+    kinds = " ".join(str(value) for value in _list(service.get("type") or service.get("@type")))
+    contexts = " ".join(str(value) for value in _list(service.get("@context")))
+    return 3 if "ImageService3" in kinds or "iiif.io/api/image/3" in contexts else 2
+
+
+def metadata_value(manifest: JSON, labels: Sequence[str], languages: Sequence[str] = ("en",)) -> str | None:
+    """The value of the first metadata entry whose label contains one of `labels`, without case."""
+    wanted = [label.casefold() for label in labels]
+    for entry in _list(manifest.get("metadata")):
+        if not isinstance(entry, dict):
+            continue
+        label = (text(entry.get("label"), languages) or "").casefold()
+        if any(key in label for key in wanted):
+            return text(entry.get("value"), languages)
+    return None
+
+
+SHELFMARK_LABELS = ("shelfmark", "shelf mark", "signatur", "call number", "cote", "segnatura")
+
+
+def shelfmark(manifest: JSON, languages: Sequence[str] = ("en",)) -> str | None:
+    """The manuscript's shelfmark, from the manifest's metadata (`Shelfmark/Identifier`, `Signatur`, `Cote`…)."""
+    return metadata_value(manifest, SHELFMARK_LABELS, languages)
+
+
 def _size(value: Any) -> int | None:
     try:
         number = int(value)
@@ -168,6 +197,7 @@ def canvases(manifest: JSON, base: str = "", languages: Sequence[str] = ("en",))
                 image_url=image_url,
                 width=_size(sized.get("width")),
                 height=_size(sized.get("height")),
+                image_api=image_api_version(described) if described else 2,
             )
         )
     return found
