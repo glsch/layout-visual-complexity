@@ -1,0 +1,30 @@
+\begin{table}[htbp]
+  \centering
+  \caption{The features: each feature's family, its code name (columns are named \texttt{Family\_\_Feature\_\_Flavour}), its number of flavours $n$, and their definitions. ``Range'' (\texttt{max\_dev}) is the maximum minus the minimum. Lengths and offsets are relative to the zone's width, interlinear distances to the folio's diagonal, areas to the folio's area. The Layout family adapts Kyle--Davidson's dimensions of scene complexity to the page.}
+  \label{tab:geometry_feature_hierarchy}
+  \begin{tabular}{lcccp{0.38\linewidth}}
+    \toprule
+    Family & Feature & Code name & $n$ & Definition and flavours \\
+    \midrule
+    Area & Written space & \texttt{AreaFeature\_\_\allowbreak{}WrittenSpaceRatio} & 2 & Line-polygon union relative to folio area; union relative to its convex hull. \\
+    Area & Rectangularity & \texttt{AreaFeature\_\_\allowbreak{}WrittenSpaceRectangularity} & 2 & Area outside an equal-area ideal rectangle; ideal-rectangle perimeter relative to convex-hull perimeter. \\
+    Area & Line similarity & \texttt{AreaFeature\_\_\allowbreak{}LineSimilarity} & 8 & Pairwise IoU and Dice similarity of centroid-aligned line polygons, each by mean, median, SD and range. \\
+    Area & Graphic zones & \texttt{AreaFeature\_\_\allowbreak{}GraphicZoneArea} & 7 & Total area ratio, component count, and mean, minimum, maximum, SD and range of component-area ratios. \\
+    Area & Drop capitals & \texttt{AreaFeature\_\_\allowbreak{}DropCapitalArea} & 7 & The same seven quantities for drop-capital zones. \\
+    \midrule
+    Line & Line length & \texttt{LineFeature\_\_\allowbreak{}LineLength} & 7 & Baseline length relative to zone width: mean, median, minimum, maximum, SD, range and coefficient of variation. \\
+    Line & Interlinear distance & \texttt{LineFeature\_\_\allowbreak{}InterlinearDistance} & 24 & Six distance definitions, each by mean, median, SD and range over consecutive lines. \\
+    Line & Zigzag score & \texttt{LineFeature\_\_\allowbreak{}ZigzagScore} & 18 & Left- and right-margin offsets, significant shifts, direction reversals, and their normalised proportions. \\
+    Line & Parallelism & \texttt{LineFeature\_\_\allowbreak{}LineParallelism} & 8 & Line angles and absolute pairwise angle differences, each by mean, median, SD and range. \\
+    \midrule
+    Layout & Clutter & \texttt{Layout\_\_\allowbreak{}Clutter} & 3 & Number of zones on the folio, of zone types, and of YOLO's line types. \\
+    Layout & Symmetry & \texttt{Layout\_\_\allowbreak{}Symmetry} & 4 & Overlap of the written mass (or the ink) with its mirror image about the text block's vertical and horizontal axes. \\
+    Layout & Regularity & \texttt{Layout\_\_\allowbreak{}Regularity} & 4 & Highest autocorrelation peak of the mass beyond the central lobe, vertically and horizontally. \\
+    Layout & Balance & \texttt{Layout\_\_\allowbreak{}Balance} & 4 & Distance of the mass's centre from the text block's and the folio's centres, relative to the folio's diagonal. \\
+    Layout & Entropy & \texttt{Layout\_\_\allowbreak{}Entropy} & 1 & Shannon entropy of the zone types' shares of the zones' area. \\
+    Layout & Blank space & \texttt{Layout\_\_\allowbreak{}BlankSpace} & 6 & Unwritten share of the folio; largest empty rectangle; the margins around the text block. \\
+    \midrule
+    \textbf{Total} &  &  & \textbf{83 + 22} &  \\
+    \bottomrule
+  \end{tabular}
+\end{table}

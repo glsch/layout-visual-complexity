@@ -1,0 +1,3 @@
+# The geometry ranker: the pairwise logistic model on the 83 geometric features.
+families: geometry
+output: build/evaluate/geometry

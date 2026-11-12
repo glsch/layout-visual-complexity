@@ -1,0 +1,106 @@
+column	family	feature	rho	low	high	pages	best	words
+AreaFeature__DropCapitalArea__drop_capital_area_ratio_max	geometry	AreaFeature__DropCapitalArea	-0.180132	-0.281990	-0.068430	397	False	the maximum area of the drop capitals, each relative to the folio's
+AreaFeature__DropCapitalArea__drop_capital_area_ratio_max_dev	geometry	AreaFeature__DropCapitalArea	-0.151634	-0.263266	-0.041644	397	False	the range area of the drop capitals, each relative to the folio's
+AreaFeature__DropCapitalArea__drop_capital_area_ratio_mean	geometry	AreaFeature__DropCapitalArea	-0.177568	-0.280738	-0.066306	397	False	the mean area of the drop capitals, each relative to the folio's
+AreaFeature__DropCapitalArea__drop_capital_area_ratio_min	geometry	AreaFeature__DropCapitalArea	-0.174350	-0.278096	-0.063674	397	False	the minimum area of the drop capitals, each relative to the folio's
+AreaFeature__DropCapitalArea__drop_capital_area_ratio_std	geometry	AreaFeature__DropCapitalArea	-0.151019	-0.261655	-0.039874	397	False	the standard deviation area of the drop capitals, each relative to the folio's
+AreaFeature__DropCapitalArea__drop_capital_num_isolated_instances	geometry	AreaFeature__DropCapitalArea	-0.202955	-0.310106	-0.087449	397	True	the number of separate drop capitals
+AreaFeature__DropCapitalArea__drop_capital_total_area_ratio	geometry	AreaFeature__DropCapitalArea	-0.186552	-0.289803	-0.076093	397	False	the drop capitals' area relative to the folio's
+AreaFeature__GraphicZoneArea__graphic_area_ratio_max	geometry	AreaFeature__GraphicZoneArea	0.081810	-0.013060	0.174408	397	False	the maximum area of the graphic zones, each relative to the folio's
+AreaFeature__GraphicZoneArea__graphic_area_ratio_max_dev	geometry	AreaFeature__GraphicZoneArea	0.128049	0.062977	0.179105	397	False	the range area of the graphic zones, each relative to the folio's
+AreaFeature__GraphicZoneArea__graphic_area_ratio_mean	geometry	AreaFeature__GraphicZoneArea	0.081122	-0.013085	0.173416	397	False	the mean area of the graphic zones, each relative to the folio's
+AreaFeature__GraphicZoneArea__graphic_area_ratio_min	geometry	AreaFeature__GraphicZoneArea	0.078425	-0.014928	0.170887	397	False	the minimum area of the graphic zones, each relative to the folio's
+AreaFeature__GraphicZoneArea__graphic_area_ratio_std	geometry	AreaFeature__GraphicZoneArea	0.128072	0.062977	0.179111	397	True	the standard deviation area of the graphic zones, each relative to the folio's
+AreaFeature__GraphicZoneArea__graphic_num_isolated_instances	geometry	AreaFeature__GraphicZoneArea	0.079215	-0.016167	0.172304	397	False	the number of separate graphic zones
+AreaFeature__GraphicZoneArea__graphic_total_area_ratio	geometry	AreaFeature__GraphicZoneArea	0.081811	-0.013089	0.174424	397	False	the graphic zones' area relative to the folio's
+AreaFeature__LineSimilarity__dice_max_dev	geometry	AreaFeature__LineSimilarity	0.227887	0.112772	0.332846	397	False	the range Dice similarity of two line polygons centred on each other
+AreaFeature__LineSimilarity__dice_mean	geometry	AreaFeature__LineSimilarity	-0.560443	-0.637562	-0.464022	397	False	the mean Dice similarity of two line polygons centred on each other
+AreaFeature__LineSimilarity__dice_median	geometry	AreaFeature__LineSimilarity	-0.630699	-0.703654	-0.543837	397	False	the median Dice similarity of two line polygons centred on each other
+AreaFeature__LineSimilarity__dice_std	geometry	AreaFeature__LineSimilarity	0.061812	-0.057700	0.174841	397	False	the standard deviation Dice similarity of two line polygons centred on each other
+AreaFeature__LineSimilarity__iou_max_dev	geometry	AreaFeature__LineSimilarity	0.145063	0.030590	0.251950	397	False	the range IoU similarity of two line polygons centred on each other
+AreaFeature__LineSimilarity__iou_mean	geometry	AreaFeature__LineSimilarity	-0.609937	-0.679949	-0.519534	397	False	the mean IoU similarity of two line polygons centred on each other
+AreaFeature__LineSimilarity__iou_median	geometry	AreaFeature__LineSimilarity	-0.630699	-0.703654	-0.543837	397	True	the median IoU similarity of two line polygons centred on each other
+AreaFeature__LineSimilarity__iou_std	geometry	AreaFeature__LineSimilarity	0.009892	-0.110839	0.123952	397	False	the standard deviation IoU similarity of two line polygons centred on each other
+AreaFeature__WrittenSpaceRatio__convexity	geometry	AreaFeature__WrittenSpaceRatio	-0.296578	-0.391881	-0.199392	397	True	the area of the union of the line polygons relative to its convex hull's
+AreaFeature__WrittenSpaceRatio__folio_ratio	geometry	AreaFeature__WrittenSpaceRatio	0.244161	0.109569	0.360544	397	False	the area of the union of the line polygons relative to the folio's
+AreaFeature__WrittenSpaceRectangularity__outside_ratio	geometry	AreaFeature__WrittenSpaceRectangularity	0.366418	0.264928	0.464915	397	True	the share of the written space outside a rectangle of its area and the folio's proportions
+AreaFeature__WrittenSpaceRectangularity__perimeter_efficiency	geometry	AreaFeature__WrittenSpaceRectangularity	-0.225607	-0.319143	-0.127904	397	False	the perimeter of a rectangle of the written space's area and the folio's proportions relative to the written space's convex hull
+LineFeature__InterlinearDistance__max_gap_max_dev	geometry	LineFeature__InterlinearDistance	0.517997	0.422278	0.598007	397	False	the range of the longest distance between consecutive baselines
+LineFeature__InterlinearDistance__max_gap_mean	geometry	LineFeature__InterlinearDistance	-0.090624	-0.209112	0.034749	397	False	the mean of the longest distance between consecutive baselines
+LineFeature__InterlinearDistance__max_gap_median	geometry	LineFeature__InterlinearDistance	-0.033739	-0.168804	0.099256	397	False	the median of the longest distance between consecutive baselines
+LineFeature__InterlinearDistance__max_gap_std	geometry	LineFeature__InterlinearDistance	0.549723	0.460600	0.625874	397	False	the standard deviation of the longest distance between consecutive baselines
+LineFeature__InterlinearDistance__mean_gap_max_dev	geometry	LineFeature__InterlinearDistance	0.555331	0.473025	0.625230	397	False	the range of the mean vertical distance between consecutive baselines
+LineFeature__InterlinearDistance__mean_gap_mean	geometry	LineFeature__InterlinearDistance	0.058551	-0.060205	0.178872	397	False	the mean of the mean vertical distance between consecutive baselines
+LineFeature__InterlinearDistance__mean_gap_median	geometry	LineFeature__InterlinearDistance	-0.193336	-0.323130	-0.055796	397	False	the median of the mean vertical distance between consecutive baselines
+LineFeature__InterlinearDistance__mean_gap_std	geometry	LineFeature__InterlinearDistance	0.562412	0.483906	0.633246	397	False	the standard deviation of the mean vertical distance between consecutive baselines
+LineFeature__InterlinearDistance__midpoint_max_dev	geometry	LineFeature__InterlinearDistance	0.555579	0.473228	0.625442	397	False	the range of the vertical distance of the mean points between consecutive baselines
+LineFeature__InterlinearDistance__midpoint_mean	geometry	LineFeature__InterlinearDistance	0.058159	-0.060457	0.178562	397	False	the mean of the vertical distance of the mean points between consecutive baselines
+LineFeature__InterlinearDistance__midpoint_median	geometry	LineFeature__InterlinearDistance	-0.193336	-0.323130	-0.055796	397	False	the median of the vertical distance of the mean points between consecutive baselines
+LineFeature__InterlinearDistance__midpoint_std	geometry	LineFeature__InterlinearDistance	0.562661	0.484013	0.633415	397	False	the standard deviation of the vertical distance of the mean points between consecutive baselines
+LineFeature__InterlinearDistance__min_gap_max_dev	geometry	LineFeature__InterlinearDistance	0.579225	0.493339	0.652301	397	False	the range of the shortest distance between consecutive baselines
+LineFeature__InterlinearDistance__min_gap_mean	geometry	LineFeature__InterlinearDistance	0.200680	0.079261	0.319772	397	False	the mean of the shortest distance between consecutive baselines
+LineFeature__InterlinearDistance__min_gap_median	geometry	LineFeature__InterlinearDistance	-0.181466	-0.314307	-0.044198	397	False	the median of the shortest distance between consecutive baselines
+LineFeature__InterlinearDistance__min_gap_std	geometry	LineFeature__InterlinearDistance	0.590630	0.508401	0.659429	397	True	the standard deviation of the shortest distance between consecutive baselines
+LineFeature__InterlinearDistance__percentile25_max_dev	geometry	LineFeature__InterlinearDistance	0.556662	0.473776	0.627805	397	False	the range of the 25th percentile of the vertical distances between consecutive baselines
+LineFeature__InterlinearDistance__percentile25_mean	geometry	LineFeature__InterlinearDistance	0.044476	-0.073134	0.167508	397	False	the mean of the 25th percentile of the vertical distances between consecutive baselines
+LineFeature__InterlinearDistance__percentile25_median	geometry	LineFeature__InterlinearDistance	-0.212241	-0.342417	-0.071808	397	False	the median of the 25th percentile of the vertical distances between consecutive baselines
+LineFeature__InterlinearDistance__percentile25_std	geometry	LineFeature__InterlinearDistance	0.568370	0.490060	0.636369	397	False	the standard deviation of the 25th percentile of the vertical distances between consecutive baselines
+LineFeature__InterlinearDistance__projection_gap_max_dev	geometry	LineFeature__InterlinearDistance	0.555304	0.472972	0.625239	397	False	the range of the slope-adjusted vertical distance between consecutive baselines
+LineFeature__InterlinearDistance__projection_gap_mean	geometry	LineFeature__InterlinearDistance	0.058676	-0.060234	0.178926	397	False	the mean of the slope-adjusted vertical distance between consecutive baselines
+LineFeature__InterlinearDistance__projection_gap_median	geometry	LineFeature__InterlinearDistance	-0.194899	-0.325372	-0.056968	397	False	the median of the slope-adjusted vertical distance between consecutive baselines
+LineFeature__InterlinearDistance__projection_gap_std	geometry	LineFeature__InterlinearDistance	0.562378	0.483905	0.633152	397	False	the standard deviation of the slope-adjusted vertical distance between consecutive baselines
+LineFeature__LineLength__max	geometry	LineFeature__LineLength	0.007477	-0.097464	0.118214	397	False	the maximum of the baselines' lengths relative to their zone's width
+LineFeature__LineLength__max_dev	geometry	LineFeature__LineLength	0.451420	0.352350	0.528893	397	False	the range of the baselines' lengths relative to their zone's width
+LineFeature__LineLength__mean	geometry	LineFeature__LineLength	-0.591546	-0.663515	-0.507441	397	False	the mean of the baselines' lengths relative to their zone's width
+LineFeature__LineLength__median	geometry	LineFeature__LineLength	-0.428960	-0.518431	-0.335256	397	False	the median of the baselines' lengths relative to their zone's width
+LineFeature__LineLength__min	geometry	LineFeature__LineLength	-0.523205	-0.607942	-0.424789	397	False	the minimum of the baselines' lengths relative to their zone's width
+LineFeature__LineLength__std	geometry	LineFeature__LineLength	0.595543	0.507463	0.663499	397	False	the standard deviation of the baselines' lengths relative to their zone's width
+LineFeature__LineLength__var_coef	geometry	LineFeature__LineLength	0.649045	0.573225	0.706270	397	True	the coefficient of variation of the baselines' lengths relative to their zone's width
+LineFeature__LineParallelism__angle_max_dev	geometry	LineFeature__LineParallelism	0.512421	0.414903	0.604564	397	False	the range of the baselines' angles
+LineFeature__LineParallelism__angle_mean	geometry	LineFeature__LineParallelism	0.166276	0.047208	0.279349	397	False	the mean of the baselines' angles
+LineFeature__LineParallelism__angle_median	geometry	LineFeature__LineParallelism	0.146691	0.029737	0.264204	397	False	the median of the baselines' angles
+LineFeature__LineParallelism__angle_std	geometry	LineFeature__LineParallelism	0.545989	0.458454	0.623616	397	False	the standard deviation of the baselines' angles
+LineFeature__LineParallelism__pairwise_angle_diff_max_dev	geometry	LineFeature__LineParallelism	0.507492	0.406872	0.602940	397	False	the range of the absolute differences between two baselines' angles
+LineFeature__LineParallelism__pairwise_angle_diff_mean	geometry	LineFeature__LineParallelism	0.552601	0.469450	0.628326	397	True	the mean of the absolute differences between two baselines' angles
+LineFeature__LineParallelism__pairwise_angle_diff_median	geometry	LineFeature__LineParallelism	0.545319	0.466512	0.619153	397	False	the median of the absolute differences between two baselines' angles
+LineFeature__LineParallelism__pairwise_angle_diff_std	geometry	LineFeature__LineParallelism	0.544576	0.457892	0.623665	397	False	the standard deviation of the absolute differences between two baselines' angles
+LineFeature__ZigzagScore__coord_shift_left	geometry	LineFeature__ZigzagScore	0.269208	0.145463	0.382892	397	False	the number of reversals of the left line ends' shifts
+LineFeature__ZigzagScore__coord_shift_prop_left	geometry	LineFeature__ZigzagScore	0.296093	0.189950	0.396455	397	False	the share of possible shifts of the left line ends that reverse
+LineFeature__ZigzagScore__coord_shift_prop_right	geometry	LineFeature__ZigzagScore	-0.072766	-0.177586	0.038562	397	False	the share of possible shifts of the right line ends that reverse
+LineFeature__ZigzagScore__coord_shift_right	geometry	LineFeature__ZigzagScore	0.104080	-0.023916	0.227243	397	False	the number of reversals of the right line ends' shifts
+LineFeature__ZigzagScore__max_dev_left	geometry	LineFeature__ZigzagScore	0.420634	0.324279	0.503853	397	False	the range of the lines' left offsets from their zone's edge
+LineFeature__ZigzagScore__max_dev_right	geometry	LineFeature__ZigzagScore	0.510336	0.420681	0.589511	397	False	the range of the lines' right offsets from their zone's edge
+LineFeature__ZigzagScore__max_possible_left	geometry	LineFeature__ZigzagScore	0.126111	-0.001131	0.251588	397	False	the number of possible shifts (lines less two) at the left margin
+LineFeature__ZigzagScore__max_possible_right	geometry	LineFeature__ZigzagScore	0.126111	-0.001131	0.251588	397	False	the number of possible shifts (lines less two) at the right margin
+LineFeature__ZigzagScore__mean_left	geometry	LineFeature__ZigzagScore	0.469913	0.368847	0.556257	397	False	the mean of the lines' left offsets from their zone's edge
+LineFeature__ZigzagScore__mean_right	geometry	LineFeature__ZigzagScore	0.547682	0.464303	0.618335	397	False	the mean of the lines' right offsets from their zone's edge
+LineFeature__ZigzagScore__median_left	geometry	LineFeature__ZigzagScore	0.237900	0.145768	0.323575	397	False	the median of the lines' left offsets from their zone's edge
+LineFeature__ZigzagScore__median_right	geometry	LineFeature__ZigzagScore	0.317551	0.217770	0.424256	397	False	the median of the lines' right offsets from their zone's edge
+LineFeature__ZigzagScore__std_left	geometry	LineFeature__ZigzagScore	0.494678	0.400663	0.576629	397	False	the standard deviation of the lines' left offsets from their zone's edge
+LineFeature__ZigzagScore__std_right	geometry	LineFeature__ZigzagScore	0.574550	0.488806	0.643525	397	True	the standard deviation of the lines' right offsets from their zone's edge
+LineFeature__ZigzagScore__zigzag_left	geometry	LineFeature__ZigzagScore	0.288105	0.173007	0.391830	397	False	the number of significant shifts of the left line ends
+LineFeature__ZigzagScore__zigzag_prop_left	geometry	LineFeature__ZigzagScore	0.371397	0.275932	0.457293	397	False	the share of possible shifts of the left line ends that are significant
+LineFeature__ZigzagScore__zigzag_prop_right	geometry	LineFeature__ZigzagScore	0.171459	0.064998	0.273077	397	False	the share of possible shifts of the right line ends that are significant
+LineFeature__ZigzagScore__zigzag_right	geometry	LineFeature__ZigzagScore	0.144413	0.017424	0.264643	397	False	the number of significant shifts of the right line ends
+Layout__Balance__folio_ink	layout	Layout__Balance	-0.115162	-0.227340	-0.000692	397	False	the distance of the ink's centre from the folio's centre
+Layout__Balance__folio_mass	layout	Layout__Balance	-0.078736	-0.202628	0.037149	397	False	the distance of the written mass's centre from the folio's centre
+Layout__Balance__text_block_ink	layout	Layout__Balance	-0.077050	-0.180795	0.029326	397	False	the distance of the ink's centre from the text block's centre
+Layout__Balance__text_block_mass	layout	Layout__Balance	0.317970	0.220317	0.411337	397	True	the distance of the written mass's centre from the text block's centre
+Layout__BlankSpace__largest_empty	layout	Layout__BlankSpace	-0.418291	-0.526931	-0.293503	397	True	the largest empty rectangle relative to the folio
+Layout__BlankSpace__margin_bottom	layout	Layout__BlankSpace	-0.398035	-0.509794	-0.279812	397	False	the bottom margin relative to the folio's height
+Layout__BlankSpace__margin_left	layout	Layout__BlankSpace	-0.330361	-0.427753	-0.217549	397	False	the left margin relative to the folio's width
+Layout__BlankSpace__margin_right	layout	Layout__BlankSpace	-0.364182	-0.460132	-0.261814	397	False	the right margin relative to the folio's width
+Layout__BlankSpace__margin_top	layout	Layout__BlankSpace	-0.372713	-0.468671	-0.269365	397	False	the top margin relative to the folio's height
+Layout__BlankSpace__share	layout	Layout__BlankSpace	-0.242774	-0.351170	-0.113849	397	False	the folio's unwritten share
+Layout__Clutter__line_types	layout	Layout__Clutter	0.083185	-0.027329	0.201405	397	False	the number of YOLO's line types on the folio
+Layout__Clutter__zone_types	layout	Layout__Clutter	0.080403	-0.043075	0.199081	397	False	the number of zone types on the folio
+Layout__Clutter__zones	layout	Layout__Clutter	0.112416	-0.019911	0.240154	397	True	the number of zones on the folio
+Layout__Entropy__zone_types	layout	Layout__Entropy	0.145396	0.020207	0.273389	397	True	the entropy of the zone types' shares of the zones' area
+Layout__Regularity__horizontal_ink	layout	Layout__Regularity	-0.170660	-0.287742	-0.055526	397	False	the highest horizontal autocorrelation peak of the ink
+Layout__Regularity__horizontal_mass	layout	Layout__Regularity	-0.121668	-0.232785	-0.006381	397	False	the highest horizontal autocorrelation peak of the written mass
+Layout__Regularity__vertical_ink	layout	Layout__Regularity	-0.482943	-0.565329	-0.392622	397	True	the highest vertical autocorrelation peak of the ink
+Layout__Regularity__vertical_mass	layout	Layout__Regularity	-0.368546	-0.463568	-0.252387	397	False	the highest vertical autocorrelation peak of the written mass
+Layout__Symmetry__left_right_ink	layout	Layout__Symmetry	-0.175939	-0.282823	-0.057600	397	False	the mirror symmetry of the ink about the text block's vertical axis
+Layout__Symmetry__left_right_mass	layout	Layout__Symmetry	-0.402964	-0.503289	-0.296899	397	False	the mirror symmetry of the written mass about the text block's vertical axis
+Layout__Symmetry__top_bottom_ink	layout	Layout__Symmetry	-0.172227	-0.281852	-0.054214	397	False	the mirror symmetry of the ink about the text block's horizontal axis
+Layout__Symmetry__top_bottom_mass	layout	Layout__Symmetry	-0.522312	-0.608480	-0.425941	397	True	the mirror symmetry of the written mass about the text block's horizontal axis

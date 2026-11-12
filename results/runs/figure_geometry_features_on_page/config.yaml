@@ -1,0 +1,34 @@
+output: results
+outputs:
+- geometry_features_on_page
+name: figure_geometry_features_on_page
+dataset: build/dataset
+scores: build/ranking/scores.tsv
+features: build/features/dataset/features.parquet
+layout: build/segment/dataset
+evaluations: {}
+labels: {}
+families:
+- geometry
+- layout
+pages:
+  AreaFeature__WrittenSpaceRatio: vif5_128v
+  AreaFeature__WrittenSpaceRectangularity: vif23_12r
+  AreaFeature__LineSimilarity: ig26_38r
+  AreaFeature__GraphicZoneArea: xviih14_134v
+  AreaFeature__DropCapitalArea: if11_53v
+  LineFeature__LineLength: vib6_189v
+  LineFeature__InterlinearDistance: xiif2_134v
+  LineFeature__ZigzagScore: ve6_240v
+  LineFeature__LineParallelism: xvic15_338r
+bootstrap: 1000
+seed: 20260629
+image_credit: Page images provided by Manuscriptorium (CC BY-NC 4.0).
+cache: null
+http:
+  contact: null
+  interval: 0.5
+  connections: 2
+  retries: 5
+  backoff: 1.0
+  timeout: 60.0

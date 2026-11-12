@@ -1,0 +1,3 @@
+# The plate of the features: the nine geometric groups and the Layout family's four measures, with their code names.
+name: figure_geometry_feature_families
+outputs: [geometry_feature_families]

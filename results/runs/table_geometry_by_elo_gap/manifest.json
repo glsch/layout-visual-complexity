@@ -1,0 +1,198 @@
+{
+  "command": "report",
+  "started": "2026-11-12T18:09:07+00:00",
+  "ended": "2026-11-12T18:09:07+00:00",
+  "inputs": [
+    {
+      "path": "build/evaluate/geometry/by_elo_gap.tsv",
+      "sha256": "9e04f75742e1a514238fb2f8b3cf72790f43146f6d6b35e27b88a20d904771f3",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/geometry/metrics.tsv",
+      "sha256": "4cd6e66b93435b7e66aa07ad7ab4ca373985153cc8136a451befa363ff0e2983",
+      "bytes": 218
+    },
+    {
+      "path": "build/evaluate/geometry/manifest.json",
+      "sha256": "337e0699f843aca9e1e697d5ae51ceaf1c2fba00eefc57fd8670e43f16c6d63a",
+      "bytes": 6412
+    },
+    {
+      "path": "build/evaluate/geometry_layout/by_elo_gap.tsv",
+      "sha256": "2c70a8fe3f25309e6e27b7a382a045407e457594734793c6c526334f4ef10c31",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/geometry_layout/metrics.tsv",
+      "sha256": "3090a1364006d5b7ac6fef7b118e1335e12a6294577092fe3ccacc96b82c41e8",
+      "bytes": 218
+    },
+    {
+      "path": "build/evaluate/geometry_layout/manifest.json",
+      "sha256": "f7479817d34218834304eef99a0d1e5150f8c90de028ac423dc12e490ef429bd",
+      "bytes": 6494
+    }
+  ],
+  "outputs": [
+    "results/tables/geometry_by_elo_gap.tsv",
+    "results/tables/geometry_by_elo_gap.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "geometry_by_elo_gap"
+    ],
+    "name": "table_geometry_by_elo_gap",
+    "dataset": "build/dataset",
+    "scores": "build/ranking/scores.tsv",
+    "features": "build/features/dataset/features.parquet",
+    "layout": "build/segment/dataset",
+    "evaluations": {
+      "geometry": "build/evaluate/geometry",
+      "geometry_layout": "build/evaluate/geometry_layout"
+    },
+    "labels": {
+      "geometry": "Geometry",
+      "geometry_layout": "Geometry + Layout"
+    },
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    }
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "526cfd56ba9977b897a949001845fb612602deaf-dirty",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "geometry_by_elo_gap": {
+      "by_elo_gap": [
+        {
+          "gap": "<100",
+          "judgments_per_fold": 15.82,
+          "consistency": 0.61133,
+          "consistency_low": 0.544552,
+          "consistency_high": 0.688471,
+          "geometry": 0.551481,
+          "geometry_low": 0.482948,
+          "geometry_high": 0.63751,
+          "geometry_layout": 0.534263,
+          "geometry_layout_low": 0.467117,
+          "geometry_layout_high": 0.621856
+        },
+        {
+          "gap": "100-200",
+          "judgments_per_fold": 15.29,
+          "consistency": 0.796688,
+          "consistency_low": 0.757196,
+          "consistency_high": 0.856913,
+          "geometry": 0.626432,
+          "geometry_low": 0.565866,
+          "geometry_high": 0.711857,
+          "geometry_layout": 0.634915,
+          "geometry_layout_low": 0.576568,
+          "geometry_layout_high": 0.71742
+        },
+        {
+          "gap": "200-300",
+          "judgments_per_fold": 12.58,
+          "consistency": 0.915344,
+          "consistency_low": 0.897945,
+          "consistency_high": 0.956601,
+          "geometry": 0.787292,
+          "geometry_low": 0.717069,
+          "geometry_high": 0.851039,
+          "geometry_layout": 0.770649,
+          "geometry_layout_low": 0.698079,
+          "geometry_layout_high": 0.843231
+        },
+        {
+          "gap": "300-400",
+          "judgments_per_fold": 9.36,
+          "consistency": 0.908824,
+          "consistency_low": 0.818663,
+          "consistency_high": 0.949019,
+          "geometry": 0.853169,
+          "geometry_low": 0.728677,
+          "geometry_high": 0.905527,
+          "geometry_layout": 0.846609,
+          "geometry_layout_low": 0.718769,
+          "geometry_layout_high": 0.902027
+        },
+        {
+          "gap": ">=400",
+          "judgments_per_fold": 12.84,
+          "consistency": 0.953114,
+          "consistency_low": 0.937925,
+          "consistency_high": 0.980778,
+          "geometry": 0.940802,
+          "geometry_low": 0.921278,
+          "geometry_high": 0.973352,
+          "geometry_layout": 0.924267,
+          "geometry_layout_low": 0.901205,
+          "geometry_layout_high": 0.965938
+        },
+        {
+          "gap": "overall",
+          "judgments_per_fold": 65.89,
+          "consistency": 0.812007,
+          "consistency_low": 0.771897,
+          "consistency_high": 0.840909,
+          "geometry": 0.723675,
+          "geometry_low": 0.657621,
+          "geometry_high": 0.756035,
+          "geometry_layout": 0.714445,
+          "geometry_layout_low": 0.652096,
+          "geometry_layout_high": 0.749702
+        },
+        {
+          "gap": "srocc",
+          "judgments_per_fold": NaN,
+          "consistency": 0.793053,
+          "consistency_low": NaN,
+          "consistency_high": NaN,
+          "geometry": 0.751235,
+          "geometry_low": 0.677634,
+          "geometry_high": 0.803791,
+          "geometry_layout": 0.735137,
+          "geometry_layout_low": 0.664044,
+          "geometry_layout_high": 0.789211
+        }
+      ]
+    },
+    "seconds": {
+      "geometry_by_elo_gap": 0.006
+    }
+  }
+}

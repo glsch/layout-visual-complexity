@@ -1,0 +1,26 @@
+\begin{table}[htbp]
+  \centering
+  \caption{Spearman's correlation between each feature's best flavour and the pages' Elo scores, with 95\% intervals from 1,000 resamples of the manuscripts. The TSV gives every flavour's.}
+  \label{tab:geometry_feature_correlations}
+  \begin{tabular}{lcc}
+    \toprule
+    Feature & $\rho$ & 95\% interval \\
+    \midrule
+    \texttt{LineFeature\_\_\allowbreak{}LineLength\_\_\allowbreak{}var\_coef} & 0.649 & [0.573, 0.706] \\
+    \texttt{AreaFeature\_\_\allowbreak{}LineSimilarity\_\_\allowbreak{}iou\_median} & -0.631 & [-0.704, -0.544] \\
+    \texttt{LineFeature\_\_\allowbreak{}InterlinearDistance\_\_\allowbreak{}min\_gap\_std} & 0.591 & [0.508, 0.659] \\
+    \texttt{LineFeature\_\_\allowbreak{}ZigzagScore\_\_\allowbreak{}std\_right} & 0.575 & [0.489, 0.644] \\
+    \texttt{LineFeature\_\_\allowbreak{}LineParallelism\_\_\allowbreak{}pairwise\_angle\_diff\_mean} & 0.553 & [0.469, 0.628] \\
+    \texttt{Layout\_\_\allowbreak{}Symmetry\_\_\allowbreak{}top\_bottom\_mass} & -0.522 & [-0.608, -0.426] \\
+    \texttt{Layout\_\_\allowbreak{}Regularity\_\_\allowbreak{}vertical\_ink} & -0.483 & [-0.565, -0.393] \\
+    \texttt{Layout\_\_\allowbreak{}BlankSpace\_\_\allowbreak{}largest\_empty} & -0.418 & [-0.527, -0.294] \\
+    \texttt{AreaFeature\_\_\allowbreak{}WrittenSpaceRectangularity\_\_\allowbreak{}outside\_ratio} & 0.366 & [0.265, 0.465] \\
+    \texttt{Layout\_\_\allowbreak{}Balance\_\_\allowbreak{}text\_block\_mass} & 0.318 & [0.220, 0.411] \\
+    \texttt{AreaFeature\_\_\allowbreak{}WrittenSpaceRatio\_\_\allowbreak{}convexity} & -0.297 & [-0.392, -0.199] \\
+    \texttt{AreaFeature\_\_\allowbreak{}DropCapitalArea\_\_\allowbreak{}drop\_capital\_num\_isolated\_instances} & -0.203 & [-0.310, -0.087] \\
+    \texttt{Layout\_\_\allowbreak{}Entropy\_\_\allowbreak{}zone\_types} & 0.145 & [0.020, 0.273] \\
+    \texttt{AreaFeature\_\_\allowbreak{}GraphicZoneArea\_\_\allowbreak{}graphic\_area\_ratio\_std} & 0.128 & [0.063, 0.179] \\
+    \texttt{Layout\_\_\allowbreak{}Clutter\_\_\allowbreak{}zones} & 0.112 & [-0.020, 0.240] \\
+    \bottomrule
+  \end{tabular}
+\end{table}

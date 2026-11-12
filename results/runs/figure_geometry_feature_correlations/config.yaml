@@ -1,0 +1,25 @@
+output: results
+outputs:
+- geometry_feature_correlations
+name: figure_geometry_feature_correlations
+dataset: build/dataset
+scores: build/ranking/scores.tsv
+features: build/features/dataset/features.parquet
+layout: build/segment/dataset
+evaluations: {}
+labels: {}
+families:
+- geometry
+- layout
+pages: {}
+bootstrap: 1000
+seed: 20260629
+image_credit: Page images provided by Manuscriptorium (CC BY-NC 4.0).
+cache: null
+http:
+  contact: null
+  interval: 0.5
+  connections: 2
+  retries: 5
+  backoff: 1.0
+  timeout: 60.0

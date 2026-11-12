@@ -1,0 +1,10 @@
+# Shared by the tables and figures of the features: the dataset, its scores, the features and the segmentation they
+# were measured on, where the outputs go, and the resamples. Each table or figure adds its own configuration.
+dataset: build/dataset
+scores: build/ranking/scores.tsv
+features: build/features/dataset/features.parquet
+layout: build/segment/dataset
+output: results
+bootstrap: 1000
+seed: 20260629
+image_credit: "Page images provided by Manuscriptorium (CC BY-NC 4.0)."
