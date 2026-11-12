@@ -379,6 +379,14 @@ def _run(
     summary = summarize(rows, scheduler.stage_usage(), monitor.summary(), requests, output, settings, todo, began)
     summary["stopped"] = not finished
     summary["settings_key"] = key
+    summary["steps"] = {
+        placement.stage: {
+            "version": steps[placement.stage].version(),
+            "device": placement.device,
+            "workers": placement.workers,
+        }
+        for placement in placements
+    }
     report = output / "report.md"
     report.write_text(report_text(summary), encoding="utf-8")
     written += [report, *sorted((output / "layout").glob("*.parquet"))]

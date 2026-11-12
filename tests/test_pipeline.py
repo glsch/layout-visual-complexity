@@ -1,5 +1,6 @@
 """The pipeline with fake steps: no models, real worker processes."""
 
+import json
 from pathlib import Path
 
 import cv2
@@ -125,8 +126,9 @@ def test_alto_on_request(tmp_path: Path, sources: list[str]) -> None:
     assert files == [f"msa_{n}r.xml" for n in range(1, 6)]
     report = (tmp_path / "out" / "report.md").read_text()
     assert "## Stages" in report and "## The folio crop" in report
-    manifest = (tmp_path / "out" / "manifest.json").read_text()
-    assert '"command": "segment"' in manifest
+    manifest = json.loads((tmp_path / "out" / "manifest.json").read_text())
+    assert manifest["command"] == "segment"
+    assert manifest["summary"]["steps"]["lines"] == {"version": "FakeLines 1", "device": "cpu", "workers": 1}
 
 
 def test_workers_share_the_cpu_and_fit_in_memory() -> None:
