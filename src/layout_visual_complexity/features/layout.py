@@ -133,18 +133,41 @@ class Layout(Family):
             ]
         return groups
 
+    def words(self, column: str) -> str:
+        _, feature, flavour = column.split("__")
+        layer = "the written mass" if flavour.endswith("_mass") else "the ink"
+        found = {
+            ("Clutter", "zones"): "the number of zones on the folio",
+            ("Clutter", "zone_types"): "the number of zone types on the folio",
+            ("Clutter", "line_types"): "the number of YOLO's line types on the folio",
+            ("Entropy", "zone_types"): "the entropy of the zone types' shares of the zones' area",
+            ("BlankSpace", "share"): "the folio's unwritten share",
+            ("BlankSpace", "largest_empty"): "the largest empty rectangle relative to the folio",
+            ("BlankSpace", "margin_top"): "the top margin relative to the folio's height",
+            ("BlankSpace", "margin_bottom"): "the bottom margin relative to the folio's height",
+            ("BlankSpace", "margin_left"): "the left margin relative to the folio's width",
+            ("BlankSpace", "margin_right"): "the right margin relative to the folio's width",
+        }.get((feature, flavour))
+        if found:
+            return found
+        axis = flavour.rsplit("_", 1)[0]
+        if feature == "Symmetry":
+            about = "vertical" if axis == "left_right" else "horizontal"
+            return f"the mirror symmetry of {layer} about the text block's {about} axis"
+        if feature == "Regularity":
+            return f"the highest {axis} autocorrelation peak of {layer}"
+        if feature == "Balance":
+            centre = "the text block's" if axis == "text_block" else "the folio's"
+            return f"the distance of {layer}'s centre from {centre} centre"
+        return super().words(column)
+
     def measure(self, page: Page) -> list[dict[str, float]]:
         settings: LayoutSettings = self.settings  # type: ignore[assignment]
-        width, height = page.folio_size
-        size = raster_shape(width, height, settings.resolution)
-        frame = page.folio_bounds
-        folio = polygon_coverage([page.folio_points()], frame, size, settings.supersample) >= 0.5
+        frame, size, folio = folio_raster(page, settings)
         row: dict[str, float] = {}
         if "mass" in settings.flavours:
             zones = page.zones_on_folio(page.regions, settings.zone_on_folio)
-            polygons = [page.lines[number].polygon for number in page.folio_lines]
-            polygons += [zone.polygon for zone in zones if zone.cls in settings.mass_zones]
-            mass = polygon_coverage(polygons, frame, size, settings.supersample) * folio
+            mass = mass_layer(page, settings)
             yolo_lines = page.zones_on_folio(page.yolo_lines, settings.zone_on_folio)
             row |= {
                 "Layout__Clutter__zones": float(len(zones)),
@@ -157,6 +180,24 @@ class Layout(Family):
         if "ink" in settings.flavours:
             row |= order(ink_layer(page, size, settings.supersample), folio, "ink", settings.trim)
         return [row]
+
+
+def folio_raster(page: Page, settings: LayoutSettings) -> tuple[tuple[float, float, float, float], tuple[int, int],
+                                                                np.ndarray]:  # fmt: skip
+    """The rasters' frame (the folio's bounding box), their size, and which cells lie on the folio."""
+    width, height = page.folio_size
+    size = raster_shape(width, height, settings.resolution)
+    frame = page.folio_bounds
+    return frame, size, polygon_coverage([page.folio_points()], frame, size, settings.supersample) >= 0.5
+
+
+def mass_layer(page: Page, settings: LayoutSettings) -> np.ndarray:
+    """The share of each cell the written mass covers: the folio's lines and its decoration zones."""
+    frame, size, folio = folio_raster(page, settings)
+    zones = page.zones_on_folio(page.regions, settings.zone_on_folio)
+    polygons = [page.lines[number].polygon for number in page.folio_lines]
+    polygons += [zone.polygon for zone in zones if zone.cls in settings.mass_zones]
+    return polygon_coverage(polygons, frame, size, settings.supersample) * folio
 
 
 def ink_layer(page: Page, size: tuple[int, int], supersample: int) -> np.ndarray:
@@ -279,20 +320,23 @@ def order(raster: np.ndarray, inside: np.ndarray, flavour: str, trim: float) -> 
     return dict(zip(names, values, strict=True))
 
 
-def largest_rectangle(empty: np.ndarray) -> int:
-    """The most cells an axis-aligned rectangle of empty cells holds."""
+def largest_rectangle(empty: np.ndarray) -> tuple[int, tuple[int, int, int, int] | None]:
+    """The most cells an axis-aligned rectangle of empty cells holds, and that rectangle's first and last rows and
+    columns (inclusive)."""
     heights = np.zeros(empty.shape[1], dtype=int)
-    best = 0
-    for row in empty:
+    best, where = 0, None
+    for number, row in enumerate(empty):
         heights = np.where(row, heights + 1, 0)
         stack: list[tuple[int, int]] = []
         for position, height in enumerate([*heights.tolist(), 0]):
             start = position
             while stack and stack[-1][1] >= height:
                 start, taller = stack.pop()
-                best = max(best, taller * (position - start))
+                if taller * (position - start) > best:
+                    best = taller * (position - start)
+                    where = (number - taller + 1, number, start, position - 1)
             stack.append((start, height))
-    return best
+    return best, where
 
 
 def blank_space(mass: np.ndarray, inside: np.ndarray, settings: LayoutSettings) -> dict[str, float]:
@@ -306,7 +350,7 @@ def blank_space(mass: np.ndarray, inside: np.ndarray, settings: LayoutSettings) 
     height, width = rows[-1] - rows[0] + 1, columns[-1] - columns[0] + 1
     found = {
         "share": 1 - float(mass[inside].sum()) / cells,
-        "largest_empty": largest_rectangle((mass < settings.empty_below) & inside) / cells,
+        "largest_empty": largest_rectangle((mass < settings.empty_below) & inside)[0] / cells,
     }
     if mass.sum() <= 0:
         return found | dict.fromkeys(BLANK_SPACE[2:], math.nan)

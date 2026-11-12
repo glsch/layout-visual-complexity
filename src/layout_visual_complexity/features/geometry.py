@@ -163,29 +163,133 @@ class Geometry(Family):
     def aggregation(self, column: str) -> Aggregation:
         return "sum" if column in ADDITIVE else "median"
 
+    def words(self, column: str) -> str:
+        return column_words(column)
+
     def measure(self, page: Page) -> list[dict[str, float]]:
         settings: GeometrySettings = self.settings  # type: ignore[assignment]
-        folio_lines = page.folio_lines
-        zones = page.zones_on_folio(page.regions, settings.zone_on_folio)
         rows = []
-        if len(folio_lines) >= settings.min_lines:
-            rows.append(area_features(page, folio_lines, zones, settings))
-        zone_rows = []
-        for zone in zones:
-            if zone.cls not in settings.text_zones:
-                continue
-            lines = [line for line in page.lines if line.region == zone.id]
-            x0, _, x1, _ = bounds(zone.polygon)
-            row = line_features(lines, x0, x1, folio_diagonal(page), settings)
-            if row:
-                zone_rows.append(row)
-        if not zone_rows and settings.fallback_zone and len(folio_lines) >= settings.min_lines:
-            lines = [page.lines[number] for number in folio_lines]
-            x0, x1 = fallback_zone(lines, page.folio_bounds)
-            row = line_features(lines, x0, x1, folio_diagonal(page), settings)
-            if row:
-                zone_rows.append(row)
-        return rows + zone_rows
+        if len(page.folio_lines) >= settings.min_lines:
+            zones = page.zones_on_folio(page.regions, settings.zone_on_folio)
+            rows.append(area_features(page, page.folio_lines, zones, settings))
+        for zone in measured_zones(page, settings):
+            rows.append(line_features(zone.lines, zone.left, zone.right, folio_diagonal(page), settings))
+        return rows
+
+
+@dataclass
+class MeasuredZone:
+    """A text zone whose lines the line features measure: its left and right edges, its lines once the short ones
+    are left out, and its zone (None for the zone around the folio's lines)."""
+
+    zone: Zone | None
+    left: float
+    right: float
+    lines: list[TextLine]
+
+
+def kept_lines(lines: list[TextLine], left: float, right: float, settings: GeometrySettings) -> list[TextLine] | None:
+    """A zone's lines without the short ones, or None when too few remain."""
+    width = right - left
+    if width <= 0:
+        return None
+    kept = [line for line in lines if polyline_length(line.baseline) / width >= settings.short_line]
+    return kept if len(kept) >= settings.min_lines else None
+
+
+def measured_zones(page: Page, settings: GeometrySettings) -> list[MeasuredZone]:
+    """The text zones on the folio with enough lines, each with its lines in the store's order; when there is none,
+    the folio's lines in a zone around them."""
+    found = []
+    for zone in page.zones_on_folio(page.regions, settings.zone_on_folio):
+        if zone.cls not in settings.text_zones:
+            continue
+        x0, _, x1, _ = bounds(zone.polygon)
+        lines = kept_lines([line for line in page.lines if line.region == zone.id], x0, x1, settings)
+        if lines:
+            found.append(MeasuredZone(zone, x0, x1, lines))
+    if not found and settings.fallback_zone and len(page.folio_lines) >= settings.min_lines:
+        everything = [page.lines[number] for number in page.folio_lines]
+        x0, x1 = fallback_zone(everything, page.folio_bounds)
+        lines = kept_lines(everything, x0, x1, settings)
+        if lines:
+            found.append(MeasuredZone(None, x0, x1, lines))
+    return found
+
+
+# Columns in words.
+
+STATISTIC_WORDS = {
+    "mean": "mean",
+    "median": "median",
+    "std": "standard deviation",
+    "max_dev": "range",
+    "min": "minimum",
+    "max": "maximum",
+    "var_coef": "coefficient of variation",
+}
+DISTANCE_WORDS = {
+    "min_gap": "the shortest distance",
+    "max_gap": "the longest distance",
+    "mean_gap": "the mean vertical distance",
+    "midpoint": "the vertical distance of the mean points",
+    "percentile25": "the 25th percentile of the vertical distances",
+    "projection_gap": "the slope-adjusted vertical distance",
+}
+SHIFT_WORDS = {
+    "max_possible": "the number of possible shifts (lines less two) at the {side} margin",
+    "coord_shift": "the number of reversals of the {side} line ends' shifts",
+    "zigzag": "the number of significant shifts of the {side} line ends",
+    "zigzag_prop": "the share of possible shifts of the {side} line ends that are significant",
+    "coord_shift_prop": "the share of possible shifts of the {side} line ends that reverse",
+}
+
+
+def column_words(column: str) -> str:
+    """A geometric column in plain words."""
+    _, feature, flavour = column.split("__")
+    if feature == "WrittenSpaceRatio":
+        return {
+            "folio_ratio": "the area of the union of the line polygons relative to the folio's",
+            "convexity": "the area of the union of the line polygons relative to its convex hull's",
+        }[flavour]
+    if feature == "WrittenSpaceRectangularity":
+        return {
+            "outside_ratio": "the share of the written space outside a rectangle of its area and the folio's "
+            "proportions",
+            "perimeter_efficiency": "the perimeter of a rectangle of the written space's area and the folio's "
+            "proportions relative to the written space's convex hull",
+        }[flavour]
+    if feature == "LineSimilarity":
+        measure, _, statistic = flavour.partition("_")
+        name = "IoU" if measure == "iou" else "Dice"
+        return f"the {STATISTIC_WORDS[statistic]} {name} similarity of two line polygons centred on each other"
+    if feature in ("GraphicZoneArea", "DropCapitalArea"):
+        zones = "graphic zones" if feature == "GraphicZoneArea" else "drop capitals"
+        name = flavour.split("_", 1)[1] if feature == "GraphicZoneArea" else flavour.removeprefix("drop_capital_")
+        if name == "total_area_ratio":
+            return f"the {zones}' area relative to the folio's"
+        if name == "num_isolated_instances":
+            return f"the number of separate {zones}"
+        statistic = name.removeprefix("area_ratio_")
+        return f"the {STATISTIC_WORDS[statistic]} area of the {zones}, each relative to the folio's"
+    if feature == "LineLength":
+        return f"the {STATISTIC_WORDS[flavour]} of the baselines' lengths relative to their zone's width"
+    if feature == "InterlinearDistance":
+        distance = next(name for name in DISTANCE_WORDS if flavour.startswith(f"{name}_"))
+        statistic = flavour.removeprefix(f"{distance}_")
+        return f"the {STATISTIC_WORDS[statistic]} of {DISTANCE_WORDS[distance]} between consecutive baselines"
+    if feature == "ZigzagScore":
+        name, _, side = flavour.rpartition("_")
+        if name in SHIFT_WORDS:
+            return SHIFT_WORDS[name].format(side=side)
+        return f"the {STATISTIC_WORDS[name]} of the lines' {side} offsets from their zone's edge"
+    if feature == "LineParallelism":
+        if flavour.startswith("angle_"):
+            return f"the {STATISTIC_WORDS[flavour.removeprefix('angle_')]} of the baselines' angles"
+        statistic = flavour.removeprefix("pairwise_angle_diff_")
+        return f"the {STATISTIC_WORDS[statistic]} of the absolute differences between two baselines' angles"
+    raise ValueError(f"not a geometric column: {column}")
 
 
 # Shapes and statistics.
@@ -349,15 +453,10 @@ def polyline_length(points: np.ndarray) -> float:
 
 
 def line_features(
-    lines: list[TextLine], left: float, right: float, diagonal: float, settings: GeometrySettings
-) -> dict[str, float] | None:
-    """A zone's line features, or None when it has too few lines once the short ones are left out."""
+    kept: list[TextLine], left: float, right: float, diagonal: float, settings: GeometrySettings
+) -> dict[str, float]:
+    """A zone's line features, from its lines once the short ones are left out."""
     width = right - left
-    if width <= 0:
-        return None
-    kept = [line for line in lines if polyline_length(line.baseline) / width >= settings.short_line]
-    if len(kept) < settings.min_lines:
-        return None
     row: dict[str, float] = {}
     row |= prefixed("LineFeature__LineLength", line_lengths(kept, width))
     row |= prefixed(

@@ -90,6 +90,13 @@ class Family:
     def aggregation(self, column: str) -> Aggregation:
         return "median"
 
+    def words(self, column: str) -> str:
+        """What a column measures, in plain words for a caption; by default its feature's definition."""
+        for group in self.groups():
+            if column in group.columns:
+                return group.definition
+        raise FeatureError(f"{self.name} has no column {column!r}")
+
     def measure(self, page: Any) -> list[dict[str, float]]:
         raise NotImplementedError
 
