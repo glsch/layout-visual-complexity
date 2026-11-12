@@ -10,7 +10,9 @@ from collections.abc import Callable, Sequence
 
 import numpy as np
 import pandas as pd
+import shapely
 from matplotlib.axes import Axes
+from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.figure import Figure
 from matplotlib.patches import PathPatch, Polygon, Rectangle
 from matplotlib.path import Path as DrawnPath
@@ -140,44 +142,46 @@ def draw_rectangularity(axes: Axes, page: Page) -> None:
     add(axes, geometry_patch(rectangle, facecolor="none", edgecolor=VERMILLION, linewidth=1.0))
 
 
-def similar_pair(lines: list[TextLine]) -> tuple[TextLine, TextLine] | None:
-    """Two lines to compare: the longest and the shortest of those measured."""
-    if len(lines) < 2:
-        return None
-    lengths = [geometry.polyline_length(line.baseline) for line in lines]
-    return lines[int(np.argmax(lengths))], lines[int(np.argmin(lengths))]
+def similarity_to_others(polygons: list[BaseGeometry]) -> np.ndarray:
+    """Each polygon's median Dice similarity with every other one, all centred on each other, as the line similarity
+    measures them."""
+    centred = np.array([geometry.translate(found, -found.centroid.x, -found.centroid.y) for found in polygons])
+    first, second = np.triu_indices(len(centred), k=1)
+    overlap = shapely.area(shapely.intersection(centred[first], centred[second]))
+    areas = shapely.area(centred)
+    dice = np.zeros((len(centred), len(centred)))
+    dice[first, second] = dice[second, first] = 2 * overlap / (areas[first] + areas[second])
+    np.fill_diagonal(dice, np.nan)
+    return np.nanmedian(dice, axis=1)
+
+
+def similarity_colormap() -> LinearSegmentedColormap:
+    """Line similarity, unlike to alike: vermillion, reddish purple, blue."""
+    return LinearSegmentedColormap.from_list("similarity", [VERMILLION, "#CC79A7", BLUE])
 
 
 def draw_line_similarity(axes: Axes, page: Page, settings: GeometrySettings) -> None:
-    """Two lines highlighted on the page, and an inset with their polygons centred on each other."""
-    zones = geometry.measured_zones(page, settings)
-    pair = similar_pair([line for zone in zones for line in zone.lines])
-    if pair is None:
+    """Each of the folio's lines, coloured by its median Dice similarity with the others (their polygons centred on
+    each other): blue where a line is like most others, vermillion where it's unlike them."""
+    shapes = [page.line_shapes[number] for number in page.folio_lines]
+    shapes = [found for found in shapes if found is not None]
+    if len(shapes) < 2:
         return
-    shapes = [shape(line.polygon) for line in pair]
-    if any(found is None for found in shapes):
-        return
-    for found, colour in zip(shapes, (BLUE, VERMILLION), strict=True):
-        add(axes, geometry_patch(found, facecolor=colour, edgecolor=colour, alpha=0.6, linewidth=0.6))
-    inset = axes.inset_axes((0.08, 0.015, 0.84, 0.075))
-    centred = [geometry.translate(found, -found.centroid.x, -found.centroid.y) for found in shapes]
-    for found, colour in zip(centred, (BLUE, VERMILLION), strict=True):
-        add(inset, geometry_patch(found, facecolor=colour, edgecolor=colour, alpha=0.5, linewidth=0.6))
-    x0, y0, x1, y1 = unary_union(centred).bounds
-    pad = 0.08 * (x1 - x0)
-    inset.set_xlim(x0 - pad, x1 + pad)
-    inset.set_ylim(y1 + 3 * pad, y0 - 3 * pad)
-    inset.set_xticks([])
-    inset.set_yticks([])
-    inset.set_facecolor("white")
-    for spine in inset.spines.values():
-        spine.set_linewidth(0.5)
-        spine.set_edgecolor(style.SECONDARY)
+    colours = similarity_colormap()(similarity_to_others(shapes))
+    for found, colour in zip(shapes, colours, strict=True):
+        add(axes, geometry_patch(found, facecolor=colour, edgecolor=colour, alpha=0.65, linewidth=0.5))
 
 
-def draw_zones(axes: Axes, page: Page, contains: str, settings: GeometrySettings) -> None:
-    """The folio's zones whose class contains `contains`, and their union's outline."""
-    zones = [zone for zone in page.zones_on_folio(page.regions, settings.zone_on_folio) if contains in zone.cls]
+def draw_zones(axes: Axes, page: Page, contains: str, settings: GeometrySettings, other: str | None = None) -> None:
+    """The folio's zones whose class contains `contains`, and their union's outline; the zones whose class contains
+    `other` outlined in grey, to tell the two apart."""
+    on_folio = page.zones_on_folio(page.regions, settings.zone_on_folio)
+    if other is not None:
+        for zone in on_folio:
+            if other in zone.cls:
+                axes.add_patch(Polygon(zone.polygon, closed=True, facecolor="none", edgecolor=style.SECONDARY,
+                                       linewidth=0.8, linestyle=":"))  # fmt: skip
+    zones = [zone for zone in on_folio if contains in zone.cls]
     shapes = [found for found in (shape(zone.polygon) for zone in zones) if found is not None]
     if shapes:
         union = unary_union(shapes)
@@ -251,10 +255,10 @@ GROUP_DRAWINGS: dict[str, Callable[[Axes, Page, GeometrySettings], None]] = {
     "AreaFeature__WrittenSpaceRectangularity": lambda axes, page, settings: draw_rectangularity(axes, page),
     "AreaFeature__LineSimilarity": draw_line_similarity,
     "AreaFeature__GraphicZoneArea": lambda axes, page, settings: draw_zones(
-        axes, page, settings.graphic_zones, settings
+        axes, page, settings.graphic_zones, settings, settings.drop_capital_zones
     ),
     "AreaFeature__DropCapitalArea": lambda axes, page, settings: draw_zones(
-        axes, page, settings.drop_capital_zones, settings
+        axes, page, settings.drop_capital_zones, settings, settings.graphic_zones
     ),
     "LineFeature__LineLength": draw_line_length,
     "LineFeature__InterlinearDistance": draw_interlinear_distance,

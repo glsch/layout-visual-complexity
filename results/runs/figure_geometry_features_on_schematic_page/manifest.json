@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-12T18:09:23+00:00",
-  "ended": "2026-11-12T18:09:23+00:00",
+  "started": "2026-11-12T19:05:27+00:00",
+  "ended": "2026-11-12T19:05:28+00:00",
   "inputs": [],
   "outputs": [
     "results/figures/geometry_features_on_schematic_page.svg",
@@ -57,7 +57,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "526cfd56ba9977b897a949001845fb612602deaf-dirty",
+  "commit": "cc6651bca2dfd241de32572eb7e462c7742077cd-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "geometry_features_on_schematic_page": {
@@ -74,7 +74,7 @@
       }
     },
     "seconds": {
-      "geometry_features_on_schematic_page": 0.465
+      "geometry_features_on_schematic_page": 0.49
     }
   }
 }

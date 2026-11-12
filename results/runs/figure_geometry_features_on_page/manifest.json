@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-12T18:48:20+00:00",
-  "ended": "2026-11-12T18:48:21+00:00",
+  "started": "2026-11-12T19:05:24+00:00",
+  "ended": "2026-11-12T19:05:26+00:00",
   "inputs": [],
   "outputs": [
     "results/figures/geometry_features_on_page.svg",
@@ -25,12 +25,12 @@
       "layout"
     ],
     "pages": {
-      "AreaFeature__WrittenSpaceRatio": "ive19_10v",
-      "AreaFeature__WrittenSpaceRectangularity": "via6_197r",
-      "AreaFeature__LineSimilarity": "xie5_180r",
-      "AreaFeature__GraphicZoneArea": "xviic22_44r",
-      "AreaFeature__DropCapitalArea": "ive23_150v",
-      "LineFeature__LineLength": "xvie11_2r",
+      "AreaFeature__WrittenSpaceRatio": "ve4b_50v",
+      "AreaFeature__WrittenSpaceRectangularity": "xvie11_2r",
+      "AreaFeature__LineSimilarity": "xvif2_8r",
+      "AreaFeature__GraphicZoneArea": "if49_5r",
+      "AreaFeature__DropCapitalArea": "ve27_23r",
+      "LineFeature__LineLength": "vie21_11r",
       "LineFeature__InterlinearDistance": "ih4_3v",
       "LineFeature__ZigzagScore": "vc7_35r",
       "LineFeature__LineParallelism": "vh3_92r"
@@ -67,24 +67,24 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "5c8742176c8777a7c91696f83ffce3c653cf6f05-dirty",
+  "commit": "cc6651bca2dfd241de32572eb7e462c7742077cd-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "geometry_features_on_page": {
       "pages": {
-        "AreaFeature__WrittenSpaceRatio": "ive19_10v",
-        "AreaFeature__WrittenSpaceRectangularity": "via6_197r",
-        "AreaFeature__LineSimilarity": "xie5_180r",
-        "AreaFeature__GraphicZoneArea": "xviic22_44r",
-        "AreaFeature__DropCapitalArea": "ive23_150v",
-        "LineFeature__LineLength": "xvie11_2r",
+        "AreaFeature__WrittenSpaceRatio": "ve4b_50v",
+        "AreaFeature__WrittenSpaceRectangularity": "xvie11_2r",
+        "AreaFeature__LineSimilarity": "xvif2_8r",
+        "AreaFeature__GraphicZoneArea": "if49_5r",
+        "AreaFeature__DropCapitalArea": "ve27_23r",
+        "LineFeature__LineLength": "vie21_11r",
         "LineFeature__InterlinearDistance": "ih4_3v",
         "LineFeature__ZigzagScore": "vc7_35r",
         "LineFeature__LineParallelism": "vh3_92r"
       }
     },
     "seconds": {
-      "geometry_features_on_page": 1.889
+      "geometry_features_on_page": 2.075
     }
   }
 }

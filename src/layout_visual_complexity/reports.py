@@ -63,10 +63,10 @@ DRAWN = {
     "AreaFeature__WrittenSpaceRatio": "the union of the line polygons (blue) and its convex hull (dashed)",
     "AreaFeature__WrittenSpaceRectangularity": "the written space (blue), the rectangle of its area and the folio's "
     "proportions centred on it, and the written space outside it (vermillion)",
-    "AreaFeature__LineSimilarity": "the longest and the shortest line measured, and below, their polygons centred on "
-    "each other",
-    "AreaFeature__GraphicZoneArea": "the graphic zones",
-    "AreaFeature__DropCapitalArea": "the drop capitals",
+    "AreaFeature__LineSimilarity": "each line coloured by its median Dice similarity with the other lines, their "
+    "polygons centred on each other: blue where it is like most others, vermillion where it is unlike them",
+    "AreaFeature__GraphicZoneArea": "the graphic zones (vermillion; drop capitals dotted grey)",
+    "AreaFeature__DropCapitalArea": "the drop capitals (vermillion; graphic zones dotted grey)",
     "LineFeature__LineLength": "the baselines measured (blue) and their zones' widths",
     "LineFeature__InterlinearDistance": "the baselines and, for every third pair, the distance between them",
     "LineFeature__ZigzagScore": "the lines' left (blue) and right (vermillion) ends, from line to line",
