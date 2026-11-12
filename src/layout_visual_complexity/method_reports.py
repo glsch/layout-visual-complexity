@@ -45,7 +45,8 @@ class Evaluations:
     its colour."""
 
     def __init__(self, settings: Any, run: Run, output: str) -> None:
-        self.settings = settings
+        self.settings, self.run = settings, run
+        self.members: dict[str, Path] = {}
         self.folders = {key: Path(path) for key, path in needed(settings, "evaluations", output).items()}
         self.by_gap, self.metrics, self.manifests = {}, {}, {}
         for key, folder in self.folders.items():
@@ -80,16 +81,21 @@ class Evaluations:
 
     def member_label(self, name: str, folder: str) -> str:
         """An ensemble member's label: that of the evaluation in this table from the same folder, if any; else the
-        label given for its name."""
+        label given for its name, and the member is defined after the table's own evaluations."""
         for key, path in self.folders.items():
             if Path(folder) == path:
                 return self.label(key)
+        self.members.setdefault(self.label(name), Path(folder))
         return self.label(name)
 
     def definition(self, key: str) -> str:
         """What the evaluation's method is, in words, from its run's record."""
-        summary, configuration = self.manifests[key]["summary"], self.manifests[key]["configuration"]
-        kind = self.kind(key)
+        return self.define(self.manifests[key])
+
+    def define(self, manifest: dict[str, Any]) -> str:
+        """What a method is, in words, from its evaluation's run record."""
+        summary, configuration = manifest["summary"], manifest["configuration"]
+        kind = summary.get("method", "features")
         if kind == "tokens":
             tokens, head = summary["tokens"], summary["head"]
             backbone = BACKBONES.get(tokens["backbone"], tokens["backbone"])
@@ -113,7 +119,12 @@ class Evaluations:
         return f"the pairwise logistic model on the {summary.get('columns')} {' and '.join(families)} features"
 
     def definitions(self) -> str:
-        return "; ".join(f"\\emph{{{escape(self.label(key))}}}, {self.definition(key)}" for key in self.keys)
+        """Each evaluation's definition, then those of ensembles' members that aren't among the evaluations."""
+        found = [f"\\emph{{{escape(self.label(key))}}}, {self.definition(key)}" for key in self.keys]
+        for label, folder in self.members.items():
+            manifest = json.loads(self.run.read(folder / "manifest.json").read_text(encoding="utf-8"))
+            found.append(f"\\emph{{{escape(label)}}}, {self.define(manifest)}")
+        return "; ".join(found)
 
     def protocol(self) -> str:
         configuration = self.configuration()
@@ -364,7 +375,7 @@ def local_complexity_maps(settings: Any, run: Run, folder: Path) -> Written:
             crop = Image.fromarray(cropped(rgb, grid.box, width, height))
             crop.thumbnail((settings.map_long_edge, settings.map_long_edge), Image.Resampling.LANCZOS)
             value = float(scores[page])
-            panels.append(MapPanel(np.asarray(crop), local_map(head, grid), f"{page}, $z$ = {value:+.2f}"))
+            panels.append(MapPanel(np.asarray(crop), local_map(head, grid), f"{page}, $z = {value:+.2f}$"))
             described.append(f"{escape(page)} ($z = {value:+.2f}$)")
     every = np.concatenate([head.patch_scores(token_set.grid(page)) for page in token_set.pages.index])
     low, high = (float(value) for value in np.quantile(every, settings.map_range))

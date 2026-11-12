@@ -70,20 +70,20 @@ def plot_accuracy_by_gap(methods: list[Shown], consistency: pd.DataFrame, overal
 
 def plot_learning_curves_and_calibration(curves: list[Shown], calibrations: list[Shown]) -> Figure:
     """(a) Accuracy as the training judgments grow and (b) as the training images grow, each method's mean over the
-    folds with its 95% interval as a band (its learning curve: `by`, `share`, `accuracy`, `low`, `high`); (c) the
-    observed share of wins against the predicted probability (its calibration: `predicted`, `observed`,
-    `judgments`), the diagonal being perfect calibration. Full width."""
+    folds with its 95% interval as whiskers, set a little apart (its learning curve: `by`, `share`, `accuracy`,
+    `low`, `high`); (c) the observed share of wins against the predicted probability (its calibration: `predicted`,
+    `observed`, `judgments`), the diagonal being perfect calibration. Full width."""
     figure = style.new_figure("full", 6.0)
     panels = figure.subplots(1, 3)
     for axes, by in zip(panels[:2], ("judgments", "images"), strict=True):
-        for method in curves:
+        for number, method in enumerate(curves):
             table = method.table[method.table["by"] == by].sort_values("share")
-            share = table["share"].to_numpy(dtype=float) * 100
-            axes.fill_between(share, table["low"], table["high"], color=method.colour, alpha=0.15, linewidth=0)
+            share = table["share"].to_numpy(dtype=float) * 100 + 1.6 * (number - (len(curves) - 1) / 2)
+            axes.vlines(share, table["low"], table["high"], color=method.colour, linewidth=0.6, alpha=0.7)
             axes.plot(share, table["accuracy"], "o-", color=method.colour, markersize=2.5, label=method.label)
-        axes.set_xlim(0, 105)
+        axes.set_xlim(0, 106)
         axes.set_xticks([10, 25, 50, 75, 100], ["10", "25", "50", "75", "100"])
-        axes.set_xlabel(f"Share of the training {by} (%)")
+        axes.set_xlabel(f"Training {by} (%)")
         style.light_grid(axes)
     low = min(float(method.table["low"].min()) for method in curves) if curves else 0.5
     for axes in panels[:2]:

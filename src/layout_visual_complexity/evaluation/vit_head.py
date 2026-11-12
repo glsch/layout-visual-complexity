@@ -201,7 +201,9 @@ def train_task(chosen: np.ndarray, other: np.ndarray, settings: HeadSettings, se
 
 
 def worker_count(jobs: int, patches: int) -> int:
-    """Workers that fit in the memory the system says is available, less 1 GB; at most `jobs` (0: all cores)."""
+    """Workers that fit in three fifths of the memory the system says is available, less 1 GB; at most `jobs` (0:
+    all cores). macOS counts as available memory it would rather keep: nine workers filling all of it (1.16 GB each
+    beside 14.6 GB available) made it swap."""
     from layout_visual_complexity.pipeline.monitor import cores, memory_available
 
     wanted = jobs or cores()
@@ -209,7 +211,7 @@ def worker_count(jobs: int, patches: int) -> int:
     if available is None:
         return wanted
     each = WORKER_BASE_BYTES + WORKER_BYTES_PER_TOKEN * patches
-    return max(1, min(wanted, int((available - 2**30) // each)))
+    return max(1, min(wanted, int((0.6 * available - 2**30) // each)))
 
 
 @dataclass

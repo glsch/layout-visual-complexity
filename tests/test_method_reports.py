@@ -88,6 +88,7 @@ def test_the_methods_tables_and_figures(tmp_path: Path, dataset_folder: Path) ->
     run_report(appendix)
     caption = (output / "tables" / "ensembles_by_elo_gap.tex").read_text()
     assert "weighted as each fold's training judgments fit" in caption
+    assert "\\emph{Geometry}, the pairwise logistic model on the 2 signal features" in caption
 
 
 def test_the_local_complexity_maps(tmp_path: Path, tiny_vit: Path) -> None:

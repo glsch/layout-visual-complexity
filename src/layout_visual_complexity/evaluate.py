@@ -56,10 +56,12 @@ class LearningCurveSettings:
     Args:
         shares: The shares, below one; the whole is the evaluation itself. None, the default, draws no curves.
         by: What is shared out: `judgments`, `images`, or both.
+        repeats: The curves use the folds of the first this many repeats; all by default.
     """
 
     shares: list[float] = field(default_factory=list)
     by: list[Literal["judgments", "images"]] = field(default_factory=lambda: ["judgments", "images"])
+    repeats: int | None = None
 
 
 @dataclass(frozen=True)
@@ -215,7 +217,6 @@ class HeadMethod(Method):
             raise ValueError(f"{len(missing)} of the dataset's pages have no tokens, {missing[0]} among them")
         self.settings, self.judgments, self.pages = settings, judgments, pages
         self.ranker = HeadRanker(self.token_set, pages, settings.head, settings.jobs)
-        self.curves: list[str] = []
 
     def describe(self) -> str:
         tokens = self.token_set.description
@@ -268,6 +269,7 @@ class EnsembleMethod(Method):
         self.members = {name: Path(folder) for name, folder in settings.ensemble.items()}
         self.fold_z = {name: read_fold_scores(run.read(folder / FOLD_SCORES)) for name, folder in self.members.items()}
         self.fold_weights: list[pd.DataFrame] = []
+        self.curve_tables: dict[str, pd.DataFrame] = {}
 
     def weights(self) -> dict[str, float] | None:
         if self.settings.fitted_weights:
@@ -292,7 +294,9 @@ class EnsembleMethod(Method):
             path = folder / CURVE_SCORES
             if not path.is_file():
                 raise ValueError(f"the member {name} has no learning curves; evaluate it with the same ones")
-            table = read_fold_scores(self.run.read(path))
+            if name not in self.curve_tables:
+                self.curve_tables[name] = read_fold_scores(self.run.read(path))
+            table = self.curve_tables[name]
             chosen = table[(table["by"] == curve[0]) & (table["share_number"] == curve[1])]
             if chosen.empty:
                 raise ValueError(f"the member {name} has no learning curve by {curve[0]}, share {curve[1]}")
@@ -412,11 +416,7 @@ def run_evaluate(settings: EvaluateSettings) -> dict[str, object]:
         )  # fmt: skip
         curve, curve_scores = learning_curves(method, settings, judgments, elo, manuscripts, folds, protocol)
         if curve is not None:
-            whole = {"share": 1.0, "share_number": 0, "train_per_fold": float(evaluation.folds["train"].mean())}
-            whole |= {"accuracy": evaluation.summary["accuracy"], "accuracy_sd": evaluation.summary["accuracy_sd"]}
-            whole |= {"low": method_intervals.iloc[-1]["low"], "high": method_intervals.iloc[-1]["high"]}
-            whole |= {"srocc": evaluation.summary["srocc"]}
-            whole["train_pages_per_fold"] = float(np.mean([len(item.train_pages) for item in folds]))
+            whole = whole_share(evaluation, folds, settings, judgments, elo, manuscripts, protocol)
             curve = pd.concat([curve, pd.DataFrame([whole | {"by": by} for by in settings.learning_curves.by])])
             curve = curve.sort_values(["by", "share"], kind="stable").reset_index(drop=True)
         trained_path, trained_z, method_summary = method.train(output)
@@ -495,6 +495,8 @@ def learning_curves(
         return None, None
     if any(not 0 < share < 1 for share in shares):
         raise ValueError("learning curves' shares lie between 0 and 1; the whole is the evaluation itself")
+    repeats = settings.learning_curves.repeats
+    folds = [fold for fold in folds if repeats is None or fold.repeat < repeats]
     rows, scores = [], []
     for by in settings.learning_curves.by:
         for number, share in enumerate(shares, start=1):
@@ -519,6 +521,40 @@ def learning_curves(
             )
             scores.append(result.fold_scores.assign(by=by, share_number=number))
     return pd.DataFrame(rows), pd.concat(scores, ignore_index=True)
+
+
+def whole_share(
+    evaluation: Evaluation,
+    folds: list[Fold],
+    settings: EvaluateSettings,
+    judgments: pd.DataFrame,
+    elo: pd.Series,
+    manuscripts: pd.Series,
+    protocol: ProtocolSettings,
+) -> dict[str, Any]:
+    """The learning curves' whole share: the evaluation itself, on the folds the curves use."""
+    repeats = settings.learning_curves.repeats
+    kept = [number for number, fold in enumerate(folds) if repeats is None or fold.repeat < repeats]
+    if len(kept) == len(folds):
+        result, chosen = evaluation, folds
+    else:
+        chosen = [folds[number] for number in kept]
+        fold_scores = evaluation.fold_scores[evaluation.fold_scores["fold_number"].isin(kept)]
+        raw = [fold_scores[fold_scores["fold_number"] == number].set_index("page")["z"] for number in kept]
+        result = evaluate_fold_scores(raw, judgments, elo, chosen, protocol)  # type: ignore[arg-type]
+    values = result.tested.assign(value=result.tested["hit"])
+    overall = fold_mean_intervals(values, judgments, manuscripts, protocol.gap_edges, protocol).iloc[-1]
+    return {
+        "share": 1.0,
+        "share_number": 0,
+        "train_per_fold": float(np.mean([len(fold.train) for fold in chosen])),
+        "train_pages_per_fold": float(np.mean([len(fold.train_pages) for fold in chosen])),
+        "accuracy": result.summary["accuracy"],
+        "accuracy_sd": result.summary["accuracy_sd"],
+        "low": overall["low"],
+        "high": overall["high"],
+        "srocc": result.summary["srocc"],
+    }
 
 
 def by_elo_gap(

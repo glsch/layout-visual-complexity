@@ -134,7 +134,7 @@ def test_lvc_evaluate_trains_the_head_per_fold_and_keeps_it(tmp_path: Path, data
 
 
 def test_an_ensemble_of_two_evaluations_with_learning_curves(tmp_path: Path, dataset_folder: Path) -> None:
-    curves = LearningCurveSettings(shares=[0.5])
+    curves = LearningCurveSettings(shares=[0.5], repeats=1)
     signal = evaluate(tmp_path, dataset_folder, "signal", features=True, families="signal", learning_curves=curves)
     other = evaluate(tmp_path, dataset_folder, "other", features=True, families="other", learning_curves=curves)
     ensemble = {"signal": signal, "other": other}
@@ -143,6 +143,10 @@ def test_an_ensemble_of_two_evaluations_with_learning_curves(tmp_path: Path, dat
     assert curve[["by", "share"]].values.tolist() == [["images", 0.5], ["images", 1.0], ["judgments", 0.5],
                                                        ["judgments", 1.0]]  # fmt: skip
     assert curve["accuracy"].between(0, 1).all() and (curve["low"] <= curve["high"]).all()
+    folds = pd.read_csv(folder / "folds.tsv", sep="\t")
+    whole = curve[curve["share"] == 1.0]
+    assert (whole["train_per_fold"] == folds.loc[folds["repeat"] == 0, "train"].mean()).all()
+    assert pd.read_csv(folder / "learning_curve_fold_scores.tsv", sep="\t")["fold_number"].max() == 1
     model = pd.read_json(folder / "ensemble.json", typ="series")
     assert model["weights"] == {"signal": 0.5, "other": 0.5} and not model["fitted"]
     fitted = evaluate(tmp_path, dataset_folder, "fitted", ensemble=ensemble, fitted_weights=True)
