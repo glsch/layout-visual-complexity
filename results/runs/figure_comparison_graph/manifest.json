@@ -1,7 +1,7 @@
 {
   "command": "judgments report",
-  "started": "2026-11-11T18:20:24+00:00",
-  "ended": "2026-11-11T18:20:25+00:00",
+  "started": "2026-11-12T18:08:48+00:00",
+  "ended": "2026-11-12T18:08:50+00:00",
   "inputs": [
     {
       "path": "build/dataset/judgments.tsv",
@@ -15,8 +15,8 @@
     },
     {
       "path": "build/dataset/manuscripts.tsv",
-      "sha256": "96fc15e7c27a685f936955a53caae8fb352a8e1f68c4e2ac0b8fcf5137083a90",
-      "bytes": 63153
+      "sha256": "990e1a0481be75405ea1398f16e252f4a0f1342e848550d8bc9b264199a407a6",
+      "bytes": 64171
     },
     {
       "path": "build/ranking/scores.tsv",
@@ -76,6 +76,7 @@
     "http": {
       "contact": null,
       "interval": 0.5,
+      "connections": 2,
       "retries": 5,
       "backoff": 1.0,
       "timeout": 60.0
@@ -85,16 +86,23 @@
   "versions": {
     "layout-visual-complexity": "0.1.0",
     "python": "3.12.12",
-    "numpy": "2.5.4",
+    "numpy": "2.4.6",
     "pandas": "3.1.1",
-    "scipy": "1.18.1",
-    "scikit-learn": "1.9.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
     "matplotlib": "3.11.2",
     "jsonargparse": "4.53.0",
     "PyYAML": "6.0.3",
-    "httpx2": "2.16.0"
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
   },
-  "commit": "e3fb4d8746344355d578a721e88d2c6f1038a81c",
+  "commit": "526cfd56ba9977b897a949001845fb612602deaf-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "comparison_graph": {
@@ -111,7 +119,7 @@
       "anchors": 45
     },
     "seconds": {
-      "comparison_graph": 1.375
+      "comparison_graph": 1.402
     }
   }
 }

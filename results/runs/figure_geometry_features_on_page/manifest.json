@@ -1,0 +1,90 @@
+{
+  "command": "report",
+  "started": "2026-11-12T19:05:24+00:00",
+  "ended": "2026-11-12T19:05:26+00:00",
+  "inputs": [],
+  "outputs": [
+    "results/figures/geometry_features_on_page.svg",
+    "results/figures/geometry_features_on_page.png",
+    "results/figures/geometry_features_on_page.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "geometry_features_on_page"
+    ],
+    "name": "figure_geometry_features_on_page",
+    "dataset": "build/dataset",
+    "scores": "build/ranking/scores.tsv",
+    "features": "build/features/dataset/features.parquet",
+    "layout": "build/segment/dataset",
+    "evaluations": {},
+    "labels": {},
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {
+      "AreaFeature__WrittenSpaceRatio": "ve4b_50v",
+      "AreaFeature__WrittenSpaceRectangularity": "xvie11_2r",
+      "AreaFeature__LineSimilarity": "xvif2_8r",
+      "AreaFeature__GraphicZoneArea": "if49_5r",
+      "AreaFeature__DropCapitalArea": "ve27_23r",
+      "LineFeature__LineLength": "vie21_11r",
+      "LineFeature__InterlinearDistance": "ih4_3v",
+      "LineFeature__ZigzagScore": "vc7_35r",
+      "LineFeature__LineParallelism": "vh3_92r"
+    },
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    }
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "cc6651bca2dfd241de32572eb7e462c7742077cd-dirty",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "geometry_features_on_page": {
+      "pages": {
+        "AreaFeature__WrittenSpaceRatio": "ve4b_50v",
+        "AreaFeature__WrittenSpaceRectangularity": "xvie11_2r",
+        "AreaFeature__LineSimilarity": "xvif2_8r",
+        "AreaFeature__GraphicZoneArea": "if49_5r",
+        "AreaFeature__DropCapitalArea": "ve27_23r",
+        "LineFeature__LineLength": "vie21_11r",
+        "LineFeature__InterlinearDistance": "ih4_3v",
+        "LineFeature__ZigzagScore": "vc7_35r",
+        "LineFeature__LineParallelism": "vh3_92r"
+      }
+    },
+    "seconds": {
+      "geometry_features_on_page": 2.075
+    }
+  }
+}

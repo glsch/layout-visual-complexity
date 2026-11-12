@@ -1,0 +1,4 @@
+# Appendix A's table: the geometric features and the Layout family, with their code names.
+name: table_geometry_feature_hierarchy
+outputs: [geometry_feature_hierarchy]
+families: [geometry, layout]

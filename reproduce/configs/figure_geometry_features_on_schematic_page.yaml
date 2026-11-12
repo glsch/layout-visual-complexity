@@ -1,0 +1,3 @@
+# The nine groups of geometric features drawn on a made-up page.
+name: figure_geometry_features_on_schematic_page
+outputs: [geometry_features_on_schematic_page]

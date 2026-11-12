@@ -90,10 +90,11 @@ def write_table(table: pd.DataFrame, stem: Path, latex: LatexTable, float_format
     return [tsv, tex]
 
 
-def save_figure(figure, stem: Path, caption: str, label: str, width: str = r"\textwidth") -> list[Path]:
+def save_figure(figure, stem: Path, caption: str, label: str) -> list[Path]:
     """`<stem>.svg`, `<stem>.png` at 300 dpi, and `<stem>.tex`, a LaTeX figure with its caption below.
 
-    The LaTeX figure includes the PNG by its path relative to the output folder (the stem's grandparent).
+    The figure is saved at its own size, its print size, and the LaTeX figure includes the PNG at that width, so it's
+    never scaled. The PNG is named by its path relative to the output folder (the stem's grandparent).
     """
     import matplotlib
 
@@ -101,15 +102,16 @@ def save_figure(figure, stem: Path, caption: str, label: str, width: str = r"\te
     stem.parent.mkdir(parents=True, exist_ok=True)
     svg, png, tex = stem.with_suffix(".svg"), stem.with_suffix(".png"), stem.with_suffix(".tex")
     with matplotlib.rc_context({"svg.hashsalt": "layout-visual-complexity", "svg.fonttype": "none"}):
-        figure.savefig(svg, bbox_inches="tight", metadata={"Date": None})
-    figure.savefig(png, dpi=300, bbox_inches="tight")
+        figure.savefig(svg, metadata={"Date": None})
+    figure.savefig(png, dpi=300)
+    width = figure.get_size_inches()[0] * 2.54
     relative = f"{stem.parent.name}/{png.name}"
     tex.write_text(
         "\n".join(
             [
                 r"\begin{figure}[htbp]",
                 r"  \centering",
-                rf"  \includegraphics[width={width}]{{{relative}}}",
+                rf"  \includegraphics[width={width:.2f}cm]{{{relative}}}",
                 rf"  \caption{{{caption}}}",
                 rf"  \label{{{label}}}",
                 r"\end{figure}",

@@ -28,3 +28,18 @@
   - Kraken keeps up to 500 lines a page instead of its own 200 (`lines.max_lines`).
 - Downloads now fetch from several servers at once, with up to two requests in flight to each.
 - `reproduce/` segments the dataset's pages (`make -C reproduce segment-dataset`).
+- `lvc features` measures feature families on a segmentation run's pages, in worker processes and resumably, into a
+  table with one row per page that records each column's family and settings. Families keep a common contract and
+  are chosen by short name or Python path, so other projects can add their own. Two come with the package:
+  `geometry`, the article's 83 geometric features of the written space and the text lines, and `layout`, 22 features
+  adapting Kyle-Davidson's clutter, order and entropy to the page, with its blank space.
+- `lvc evaluate` runs the evaluation protocol on a feature table: accuracy by Elo gap beside the consistency reference,
+  SROCC beside the split-half ceiling, log-loss and calibration, with intervals from resamples of the manuscripts (a
+  judgment between two pages of one manuscript counts as often as that manuscript is drawn); and keeps the model
+  trained on every judgment, which refuses features computed with other settings.
+- `lvc report` writes the features' tables and figures: accuracy by Elo gap, the features' table, each feature's
+  correlation with the Elo scores, and the features drawn on pages.
+- Every figure has one style: a colour per method, STIX text, drawn at its print width (15 or 7.2 cm) and included in
+  LaTeX at that width. The comparison graph and the score distributions are redrawn with it.
+- `reproduce/` regenerates Table 4's geometry column, Appendix A's table and Figure 9's successor, and draws the
+  features on pages.

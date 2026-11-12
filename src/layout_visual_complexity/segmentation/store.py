@@ -94,9 +94,14 @@ def layout_rows(record: PageRecord) -> list[dict[str, Any]]:
 
 def write_layout(path: Path, records: list[PageRecord]) -> Path:
     """One document's pages, in their order, as one Parquet file, written whole."""
+    rows = [row for record in sorted(records, key=lambda r: r.position) for row in layout_rows(record)]
+    return write_layout_rows(path, rows)
+
+
+def write_layout_rows(path: Path, rows: list[dict[str, Any]]) -> Path:
+    """Layout rows (as `layout_rows` gives them) as one Parquet file, written whole."""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    rows = [row for record in sorted(records, key=lambda r: r.position) for row in layout_rows(record)]
     table = pa.Table.from_pylist(rows, schema=LAYOUT_SCHEMA)
     partial = path.with_name(path.name + ".part")
     pq.write_table(table, partial, compression="zstd", compression_level=9)

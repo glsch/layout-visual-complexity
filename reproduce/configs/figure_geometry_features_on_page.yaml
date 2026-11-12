@@ -1,0 +1,14 @@
+# The nine groups of geometric features drawn on typical, well-segmented pages of the dataset (for graphic zones, a
+# picture): for each group, the page it's drawn on.
+name: figure_geometry_features_on_page
+outputs: [geometry_features_on_page]
+pages:
+  AreaFeature__WrittenSpaceRatio: ve4b_50v
+  AreaFeature__WrittenSpaceRectangularity: xvie11_2r
+  AreaFeature__LineSimilarity: xvif2_8r
+  AreaFeature__GraphicZoneArea: if49_5r
+  AreaFeature__DropCapitalArea: ve27_23r
+  LineFeature__LineLength: vie21_11r
+  LineFeature__InterlinearDistance: ih4_3v
+  LineFeature__ZigzagScore: vc7_35r
+  LineFeature__LineParallelism: vh3_92r

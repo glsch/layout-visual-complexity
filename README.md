@@ -92,6 +92,53 @@ failed, each step's pace, how busy the cores and the GPU were, peak memory, the 
 whole image or the box); `alto/` with `--alto`, one
 ALTO 4 file per page; and the run's `config.yaml` and `manifest.json`, with the models' checksums.
 
+### Features of pages
+
+```
+lvc features --layout build/segment/name --families geometry,layout --output build/features/name [--jobs N]
+```
+
+measures feature families on a segmentation run's pages, into `features.parquet`: one row per page, `page` first,
+then one column per feature, named `Family__Feature__Flavour` (`AreaFeature__LineSimilarity__dice_median`).
+
+- **`geometry`**: 83 features of the folio's written space and of its text zones' lines, in nine groups: written
+  space, rectangularity, line similarity, graphic zones and drop capitals (`AreaFeature__…`); line length, interlinear
+  distance, the zigzag of line ends, and parallelism (`LineFeature__…`). Line features are measured per text zone
+  (`MainZone`, `MarginTextZone`) on its lines, at least three once those shorter than 7.5% of the zone's width are
+  left out, and taken to the page by the median. Lengths and offsets are relative to the zone's width, interlinear
+  distances to the folio's diagonal, areas to the folio's area.
+- **`layout`**: 22 features adapting Kyle–Davidson's dimensions of scene complexity to the page: clutter (zones, zone
+  types, the regions model's line types), order (mirror symmetry about the text block's axes, the regularity of the
+  rows and columns, the balance of the written mass), the entropy of the zone types' areas, and blank space (its
+  share, the largest empty rectangle, the margins). The order measures run on the written mass (`_mass`, from the
+  segmentation) and on the ink (`_ink`, Otsu's dark pixels of the folio, from the image alone).
+- **Your own family**: a subclass of `layout_visual_complexity.features.contract.Family`, named by its Python path
+  (`--families geometry,mypackage.features.Darkness`). It names its columns, declares its scope (page, region or
+  line) and what it needs (the image, the folio crop, the regions, the lines), says how its rows are aggregated to the
+  page, and has a dataclass of settings, given under `parameters` (`--parameters "{layout: {resolution: 128}}"`).
+
+Pages are measured in worker processes; what the families need is prepared once per page and shared among them.
+Images, when a family needs them, are found as the segmentation run fetched them, from the download cache. The
+table's metadata records each column's family and the family's settings and their hash. A rerun keeps the pages
+measured before with the same families, settings, layout and image. The run's `report.md` gives the seconds per page
+of each family, the pages per second, how busy the cores were, and the memory used.
+
+### Evaluating features, and the trained model
+
+```
+lvc evaluate --features build/features/name/features.parquet --dataset build/dataset --scores build/ranking/scores.tsv --output build/evaluate/name [--families geometry]
+```
+
+fits the pairwise logistic model on the features, cross-validated on folds by manuscript (10 × 10 by default), and
+writes the out-of-fold page scores (`scores.tsv`); accuracy by Elo gap and overall beside the consistency of the same
+test judgments with the Elo scores (`by_elo_gap.tsv`); SROCC beside the split-half ceiling (`--ceiling`), log-loss
+(`metrics.tsv`); calibration (`calibration.tsv`); each fold's results (`folds.tsv`), with 95% intervals from
+resamples of the manuscripts. It then trains the model on every judgment and keeps it in `model.json`, with the
+families and settings its features came from: the model refuses features computed with other settings.
+
+`lvc report` writes the tables and figures of the features and of the rankers evaluated on them: accuracy by Elo gap,
+the features' table, each feature's correlation with the Elo scores, and the features drawn on pages.
+
 ## The dataset
 
 A dataset is a folder of four files, which `import` checks before anything else uses them:
@@ -116,7 +163,9 @@ make -C reproduce all
 ```
 
 The dataset isn't in this repository: `reproduce/configs/dataset.yaml` names where it comes from. The dataset and the
-scores go to `build/`, the tables (TSV and LaTeX) and figures (SVG, PNG and LaTeX) to `results/`. The targets:
+scores go to `build/`, the tables (TSV and LaTeX) and figures (SVG, PNG and LaTeX) to `results/`. The features and
+the tables and figures made from them need the dataset's segmentation (`segment-dataset`), which they make first if
+it's missing. The targets:
 
 | Target | What it makes |
 |---|---|
@@ -127,6 +176,13 @@ scores go to `build/`, the tables (TSV and LaTeX) and figures (SVG, PNG and LaTe
 | `figure-comparison-graph` | Figure 2: the comparison graph |
 | `figure-elo-violins` | Figure 3: the distributions of the Elo scores |
 | `segment-dataset` | `build/segment/dataset/`: the dataset's pages segmented (not part of `all`: it needs the `segment` extra, the models in `models/` and the page images from their servers) |
+| `features-dataset` | `build/features/dataset/`: the geometric and Layout features of the dataset's pages, from their segmentation |
+| `evaluate-geometry`, `evaluate-geometry-layout` | `build/evaluate/`: the geometry ranker, without and with the Layout features |
+| `table-geometry-by-elo-gap` | Table 4's geometry column: accuracy by Elo gap and SROCC, with and without Layout, beside the consistency reference |
+| `table-geometry-feature-hierarchy` | Appendix A's table: the features, with their code names |
+| `figure-geometry-feature-correlations` | Figure 9: each feature's correlation with the Elo scores |
+| `figure-geometry-features-on-page`, `figure-geometry-features-on-schematic-page` | The geometric features drawn on pages of the dataset, and on a made-up page |
+| `figure-geometry-feature-families` | The plate of the features, with their code names |
 
 The dataset leaves out the sessions of a public exhibition, whose annotators were mostly not experts, and the
 calibration judgments; so its numbers differ from the article's, which kept them.

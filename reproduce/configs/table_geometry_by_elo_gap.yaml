@@ -1,0 +1,10 @@
+# Table 4's geometry column: the geometry ranker's accuracy by Elo gap and its SROCC, then with the Layout features,
+# beside the consistency reference.
+name: table_geometry_by_elo_gap
+outputs: [geometry_by_elo_gap]
+evaluations:
+  geometry: build/evaluate/geometry
+  geometry_layout: build/evaluate/geometry_layout
+labels:
+  geometry: Geometry
+  geometry_layout: Geometry + Layout

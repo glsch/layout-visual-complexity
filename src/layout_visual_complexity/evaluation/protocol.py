@@ -10,6 +10,7 @@ for SROCC is the split-half ceiling.
 """
 
 import math
+import warnings
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -204,6 +205,45 @@ def bootstrap(
     )
     (a_low, a_high), (s_low, s_high) = metrics.interval(accuracy), metrics.interval(srocc)
     return {"accuracy_low": a_low, "accuracy_high": a_high, "srocc_low": s_low, "srocc_high": s_high}
+
+
+def fold_mean_intervals(
+    values: pd.DataFrame,
+    judgments: pd.DataFrame,
+    manuscripts: pd.Series,
+    edges: tuple[float, ...] = DEFAULT_GAP_EDGES,
+    settings: ProtocolSettings | None = None,
+) -> pd.DataFrame:
+    """95% intervals of a mean over folds (each fold's share of hits), by gap bin and overall, resampling manuscripts.
+
+    `values` has one row per tested judgment: `fold_number`, `row` (the judgment's position in `judgments`), `gap`
+    and `value` (a hit: 1, 0.5 or 0). In each resample a judgment is weighted as `metrics.judgment_weights` says, in
+    the same resamples as `bootstrap` draws."""
+    settings = settings or ProtocolSettings()
+    names = sorted(manuscripts.unique())
+    number = {name: index for index, name in enumerate(names)}
+    multiplicities = metrics.manuscript_multiplicities(names, settings.bootstrap, settings.seed)
+    rows = values["row"].to_numpy()
+    left = judgments["left"].iloc[rows].map(manuscripts).map(number).to_numpy()
+    right = judgments["right"].iloc[rows].map(manuscripts).map(number).to_numpy()
+    weights = metrics.judgment_weights(multiplicities, left, right)
+    _, fold = np.unique(values["fold_number"].to_numpy(), return_inverse=True)
+    one_hot = np.zeros((len(values), fold.max() + 1 if len(fold) else 0))
+    one_hot[np.arange(len(values)), fold] = 1.0
+    hit = values["value"].to_numpy(dtype=float)
+    bins = metrics.gap_bin(values["gap"].to_numpy(), edges)
+    selections = [(metrics.gap_label(low, high), bins == n) for n, (low, high) in enumerate(metrics.gap_bins(edges))]
+    found = []
+    for label, chosen in [*selections, ("overall", np.ones(len(values), dtype=bool))]:
+        weight, folds = weights[:, chosen], one_hot[chosen]
+        with np.errstate(invalid="ignore", divide="ignore"):
+            per_fold = ((weight * hit[chosen]) @ folds) / (weight @ folds)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            means = np.nanmean(per_fold, axis=1) if per_fold.shape[1] else np.full(len(weight), math.nan)
+        low, high = metrics.interval(means)
+        found.append({"gap": label, "low": low, "high": high})
+    return pd.DataFrame(found)
 
 
 def paired_comparison(

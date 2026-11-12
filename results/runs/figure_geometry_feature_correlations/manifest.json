@@ -1,0 +1,174 @@
+{
+  "command": "report",
+  "started": "2026-11-12T18:09:09+00:00",
+  "ended": "2026-11-12T18:09:21+00:00",
+  "inputs": [
+    {
+      "path": "build/features/dataset/features.parquet",
+      "sha256": "3946928bc34aab30c6699c3d434a4f210a2a4223d8e1cf227fb6feb1255f7864",
+      "bytes": 391735
+    },
+    {
+      "path": "build/ranking/scores.tsv",
+      "sha256": "f27050a5b0039c31a3c2bce6766501b6320f14e735602fc02419f40cce9ce684",
+      "bytes": 43825
+    }
+  ],
+  "outputs": [
+    "results/figures/geometry_feature_correlations.svg",
+    "results/figures/geometry_feature_correlations.png",
+    "results/figures/geometry_feature_correlations.tex",
+    "results/tables/geometry_feature_correlations.tsv",
+    "results/tables/geometry_feature_correlations.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "geometry_feature_correlations"
+    ],
+    "name": "figure_geometry_feature_correlations",
+    "dataset": "build/dataset",
+    "scores": "build/ranking/scores.tsv",
+    "features": "build/features/dataset/features.parquet",
+    "layout": "build/segment/dataset",
+    "evaluations": {},
+    "labels": {},
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    }
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "526cfd56ba9977b897a949001845fb612602deaf-dirty",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "geometry_feature_correlations": {
+      "best": [
+        {
+          "column": "LineFeature__LineLength__var_coef",
+          "rho": 0.6490451647597578,
+          "low": 0.5732247005862255,
+          "high": 0.7062700556251692
+        },
+        {
+          "column": "AreaFeature__LineSimilarity__iou_median",
+          "rho": -0.6306989109351044,
+          "low": -0.7036542277513878,
+          "high": -0.5438374383315748
+        },
+        {
+          "column": "LineFeature__InterlinearDistance__min_gap_std",
+          "rho": 0.5906304286872114,
+          "low": 0.5084011888058892,
+          "high": 0.6594290586156205
+        },
+        {
+          "column": "LineFeature__ZigzagScore__std_right",
+          "rho": 0.5745501033907803,
+          "low": 0.4888056360428048,
+          "high": 0.6435254380582567
+        },
+        {
+          "column": "LineFeature__LineParallelism__pairwise_angle_diff_mean",
+          "rho": 0.5526011862226943,
+          "low": 0.46944982572246075,
+          "high": 0.6283261142714961
+        },
+        {
+          "column": "Layout__Symmetry__top_bottom_mass",
+          "rho": -0.5223121561551748,
+          "low": -0.6084798101743308,
+          "high": -0.42594114254222115
+        },
+        {
+          "column": "Layout__Regularity__vertical_ink",
+          "rho": -0.48294311033067794,
+          "low": -0.5653292818156148,
+          "high": -0.3926224580899557
+        },
+        {
+          "column": "Layout__BlankSpace__largest_empty",
+          "rho": -0.41829077420742644,
+          "low": -0.5269307814395743,
+          "high": -0.29350297243090034
+        },
+        {
+          "column": "AreaFeature__WrittenSpaceRectangularity__outside_ratio",
+          "rho": 0.36641819125395697,
+          "low": 0.26492770402383603,
+          "high": 0.4649153146282517
+        },
+        {
+          "column": "Layout__Balance__text_block_mass",
+          "rho": 0.3179702803767712,
+          "low": 0.22031732146856725,
+          "high": 0.4113370980090106
+        },
+        {
+          "column": "AreaFeature__WrittenSpaceRatio__convexity",
+          "rho": -0.29657830408434815,
+          "low": -0.39188137873152246,
+          "high": -0.19939168468836282
+        },
+        {
+          "column": "AreaFeature__DropCapitalArea__drop_capital_num_isolated_instances",
+          "rho": -0.20295492717070285,
+          "low": -0.3101057325887686,
+          "high": -0.08744932960281515
+        },
+        {
+          "column": "Layout__Entropy__zone_types",
+          "rho": 0.14539562570272355,
+          "low": 0.020206551640444964,
+          "high": 0.27338878578561876
+        },
+        {
+          "column": "AreaFeature__GraphicZoneArea__graphic_area_ratio_std",
+          "rho": 0.1280715829161153,
+          "low": 0.06297692316142299,
+          "high": 0.17911066119183686
+        },
+        {
+          "column": "Layout__Clutter__zones",
+          "rho": 0.11241647374881768,
+          "low": -0.019910798391490087,
+          "high": 0.2401538138543764
+        }
+      ]
+    },
+    "seconds": {
+      "geometry_feature_correlations": 11.96
+    }
+  }
+}

@@ -30,6 +30,7 @@ cache: ~/.cache/layout-visual-complexity
 http:
   contact: null
   interval: 0.5
+  connections: 2
   retries: 5
   backoff: 1.0
   timeout: 60.0
