@@ -73,7 +73,7 @@ def read_list(path: Path) -> list[Entry]:
         line = line.strip()
         if not line or line.startswith("#"):
             continue
-        source, _, selection = line.partition("\t") if "\t" in line else line.partition(" ")
+        source, _, selection = line.partition("\t")
         entry = entries.setdefault(source, Entry(_resolved(source, path.parent)))
         if selection.strip():
             entry.selection = f"{entry.selection},{selection.strip()}" if entry.selection else selection.strip()

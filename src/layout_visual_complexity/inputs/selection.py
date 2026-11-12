@@ -15,8 +15,9 @@ from collections.abc import Sequence
 
 from layout_visual_complexity.inputs import InputError
 
-# Leaves: a number, perhaps `bis`, `ter` and the like, then recto or verso: `12r`, `12bisv`, `12a v`.
-FOLIO_FILTER = r"\d+(?:bis|ter|quater|quinquies|[a-z])?[rv]"
+# Leaves: a number, perhaps a word such as `bis`, `ter` or `quinquies` (or a letter), then recto or verso: `12r`,
+# `12bisv`, `12a v`, `136deciesr`. Flyleaves (`Ir`), covers (`FC`) and spines (`SP`) don't pass.
+FOLIO_FILTER = r"\d+[a-z]*[rv]"
 LABEL_PREFIX = "label:"
 
 

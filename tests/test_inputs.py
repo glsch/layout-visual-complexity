@@ -18,6 +18,7 @@ from layout_visual_complexity.inputs.selection import (
 
 HOST = "https://iiif.example.org"
 LABELS = ["FC", "Ir", "0001r", "0001v", "0002r", "0002v", "0002bis r", "0003r", "Ir", "BC"]
+LEAVES = ["0001r", "0001v", "0002r", "0002v", "0002bis r", "0003r"]
 
 
 def manifest(labels: list[str], shelfmark: str = "I. G. 28.") -> dict:
@@ -87,7 +88,9 @@ def test_selections_by_index_and_by_label() -> None:
 def test_the_folio_filter_keeps_the_leaves() -> None:
     leaves = label_filter(FOLIO_FILTER)
     kept = [label for label in LABELS if passes(label, leaves)]
-    assert kept == ["0001r", "0001v", "0002r", "0002v", "0002bis r", "0003r"]
+    assert kept == LEAVES
+    assert all(passes(label, leaves) for label in ["0136deciesv", "149sexiesr", "12a v", "0263quatriesr"])
+    assert not any(passes(label, leaves) for label in ["IIr", "SP", "rs01r", "12", "fol. 3"])
     assert passes("FC", None) and not passes(None, leaves)
 
 
@@ -130,11 +133,12 @@ def test_list_files_plain_and_tabular(tmp_path: Path) -> None:
     for number in range(1, 4):
         image(folder / f"{number}r.jpg")
     plain = tmp_path / "pages.txt"
-    plain.write_text(f"# the sample\n{HOST}/manifest\t1r-1v\nms/2r.jpg\nms/3r.jpg\n")
+    image(folder / "a page 4r.jpg")
+    plain.write_text(f"# the sample\n{HOST}/manifest\t1r-1v\nms/2r.jpg\nms/3r.jpg\nms/a page 4r.jpg\n")
     documents = resolver().resolve([str(plain)])
     assert [(d.id, [p.page for p in d.pages]) for d in documents] == [
         ("ig28", ["ig28_1r", "ig28_1v"]),
-        ("ms", ["ms_2r", "ms_3r"]),
+        ("ms", ["ms_2r", "ms_3r", "ms_apage4r"]),
     ]
     table = tmp_path / "pages.tsv"
     table.write_text(f"manifest\tcanvas\tlabel\n{HOST}/manifest\t{HOST}/canvas/7\t\n{HOST}/manifest\t\t0002r\n")
