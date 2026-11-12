@@ -255,9 +255,7 @@ def comparison_graph(dataset: Dataset, scores: Scores, anchor_factor: float, see
         f"Outlined: the {len(described.anchors)} anchor images, compared more than {anchor_factor:g} times the "
         f"median number of comparisons. Connected components: {described.components}."
     )
-    paths = save_figure(
-        figure, folder / "figures" / "comparison_graph", caption, "fig:comparison_graph", r"0.7\textwidth"
-    )
+    paths = save_figure(figure, folder / "figures" / "comparison_graph", caption, "fig:comparison_graph")
     rows = [
         ("images", described.images),
         ("judgments", described.judgments),
