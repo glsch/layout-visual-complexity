@@ -216,7 +216,7 @@ The dataset isn't in this repository: `reproduce/configs/dataset.yaml` names whe
 scores go to `build/`, the tables (TSV and LaTeX) and figures (SVG, PNG and LaTeX) to `results/`. The features and
 the tables and figures made from them need the dataset's segmentation (`segment-dataset`), which they make first if
 it's missing; the ViT ranker needs the `vit` extra, and downloads DINOv2 ViT-S/14 once. Its evaluation, with its
-learning curves, takes about two hours on an Apple M4 Pro. The targets:
+learning curves (on the folds of the first two repeats), takes about 25 minutes on an Apple M4 Pro. The targets:
 
 | Target | What it makes |
 |---|---|

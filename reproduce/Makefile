@@ -14,8 +14,8 @@
 # segmentation (build/segment/dataset), which they make first if it's missing.
 #
 # The ViT ranker needs the vit extra; its tokens (embed-dataset) come from DINOv2 ViT-S/14, downloaded once into the
-# Hugging Face cache, and are kept in the user cache. Its evaluation with its learning curves takes about an hour on
-# an Apple M4 Pro. The head that comes with the package is trained on every judgment (head-dataset) and copied into
+# Hugging Face cache, and are kept in the user cache. Its evaluation with its learning curves takes about 25 minutes
+# on an Apple M4 Pro. The head that comes with the package is trained on every judgment (head-dataset) and copied into
 # the package by `make -C reproduce package-head`.
 
 LVC ?= ../.venv/bin/lvc

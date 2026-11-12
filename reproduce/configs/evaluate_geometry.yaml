@@ -4,4 +4,5 @@ families: geometry
 learning_curves:
   shares: [0.1, 0.25, 0.5, 0.75]
   by: [judgments, images]
+  repeats: 2
 output: build/evaluate/geometry
