@@ -1,0 +1,17 @@
+# For the appendix: the ensembles of the ViT ranker with the geometry ranker, without and with the Layout features,
+# with equal and with fitted weights.
+name: table_ensembles_by_elo_gap
+outputs: [ensembles_by_elo_gap]
+evaluations:
+  ensemble: build/evaluate/ensemble
+  ensemble_layout: build/evaluate/ensemble_layout
+  ensemble_fitted: build/evaluate/ensemble_fitted
+  ensemble_layout_fitted: build/evaluate/ensemble_layout_fitted
+labels:
+  ensemble: Geometry and ViT
+  ensemble_layout: Geometry, Layout and ViT
+  ensemble_fitted: Geometry and ViT, fitted
+  ensemble_layout_fitted: Geometry, Layout and ViT, fitted
+  geometry: Geometry
+  geometry_layout: Geometry + Layout
+  vit: ViT

@@ -18,11 +18,17 @@ pip install 'layout-visual-complexity[segment]'
 
 ultralytics, which runs the YOLO models, is licensed under the AGPL-3.0; the rest of the package doesn't need it.
 
+The ViT ranker needs the `vit` extra, which brings PyTorch and Hugging Face's transformers:
+
+```
+pip install 'layout-visual-complexity[vit]'
+```
+
 For development, from a clone:
 
 ```
 python3 -m venv .venv
-.venv/bin/python -m pip install -e '.[dev,segment]'
+.venv/bin/python -m pip install -e '.[dev,segment,vit]'
 ```
 
 ## Use
@@ -114,8 +120,9 @@ then one column per feature, named `Family__Feature__Flavour` (`AreaFeature__Lin
   segmentation) and on the ink (`_ink`, Otsu's dark pixels of the folio, from the image alone).
 - **Your own family**: a subclass of `layout_visual_complexity.features.contract.Family`, named by its Python path
   (`--families geometry,mypackage.features.Darkness`). It names its columns, declares its scope (page, region or
-  line) and what it needs (the image, the folio crop, the regions, the lines), says how its rows are aggregated to the
-  page, and has a dataclass of settings, given under `parameters` (`--parameters "{layout: {resolution: 128}}"`).
+  line) and what it needs (the image, the folio crop, the regions, the lines, a ViT's patch tokens from a token set
+  given with `--tokens`), says how its rows are aggregated to the page, and has a dataclass of settings, given under
+  `parameters` (`--parameters "{layout: {resolution: 128}}"`).
 
 Pages are measured in worker processes; what the families need is prepared once per page and shared among them.
 Images, when a family needs them, are found as the segmentation run fetched them, from the download cache. The
@@ -123,21 +130,64 @@ table's metadata records each column's family and the family's settings and thei
 measured before with the same families, settings, layout and image. The run's `report.md` gives the seconds per page
 of each family, the pages per second, how busy the cores were, and the memory used.
 
-### Evaluating features, and the trained model
+### Patch tokens of a vision transformer
+
+```
+lvc embed --layout build/segment/name --output build/embed/name [--tokens.backbone facebook/dinov2-small] [--tokens.crop folio|page] [--device auto|cpu|mps]
+```
+
+gives each page's patch tokens from a vision transformer (ViT), for the ViT ranker: any `transformers` model with
+patch tokens, from its publisher's repository at a pinned revision (`--tokens.revision`); DINOv2 ViT-S/14 by default.
+The page's folio crop (or the whole image) is resized to a long edge of 518 pixels (`--tokens.long_edge`), each side
+rounded to whole patches, so 37 patches of 14 pixels along it; the tokens are the last block's (`--tokens.layer`)
+after the model's final layer norm, without the class token. They are kept as float16 arrays, one file per page, in
+the user cache (`~/.cache/layout-visual-complexity/tokens/`, under a key of the backbone, revision, block, input
+size and crop); the run's folder holds the token set (`tokens.json`, `pages.tsv`). The model runs on Apple's GPU or
+CUDA where there is one. A rerun keeps the pages already embedded from the same image and crop.
+
+### Evaluating a method, and the trained model
 
 ```
 lvc evaluate --features build/features/name/features.parquet --dataset build/dataset --scores build/ranking/scores.tsv --output build/evaluate/name [--families geometry]
+lvc evaluate --tokens build/embed/name --dataset … --scores … --output build/evaluate/vit [--jobs N]
+lvc evaluate --ensemble "{geometry: build/evaluate/geometry, vit: build/evaluate/vit}" --dataset … --scores … --output build/evaluate/ensemble [--fitted_weights]
 ```
 
-fits the pairwise logistic model on the features, cross-validated on folds by manuscript (10 × 10 by default), and
-writes the out-of-fold page scores (`scores.tsv`); accuracy by Elo gap and overall beside the consistency of the same
-test judgments with the Elo scores (`by_elo_gap.tsv`); SROCC beside the split-half ceiling (`--ceiling`), log-loss
-(`metrics.tsv`); calibration (`calibration.tsv`); each fold's results (`folds.tsv`), with 95% intervals from
-resamples of the manuscripts. It then trains the model on every judgment and keeps it in `model.json`, with the
-families and settings its features came from: the model refuses features computed with other settings.
+evaluates a method, cross-validated on folds by manuscript (10 × 10 by default):
 
-`lvc report` writes the tables and figures of the features and of the rankers evaluated on them: accuracy by Elo gap,
-the features' table, each feature's correlation with the Elo scores, and the features drawn on pages.
+- **the pairwise logistic model** on a feature table;
+- **the local ViT head** on a token set: a small network (the tokens' width, 128, 1, with a ReLU) gives each patch a
+  value, softplus makes it a non-negative score, and the page's score is the mean of its patches'; it is trained with
+  RankNet's logistic loss on each fold's training judgments (180 epochs of Adam, learning rate 0.002, weight decay
+  0.001, `--head.*`), the ViT frozen. Folds train in worker processes on the CPU, each from a seeded start, so the
+  results don't depend on `--jobs`;
+- **an ensemble** of earlier evaluations on the same folds: their z-scored page scores combined fold by fold, with
+  equal weights, the weights given (`--weights`), or weights fitted on each fold's training judgments
+  (`--fitted_weights`).
+
+It writes the out-of-fold page scores (`scores.tsv`); accuracy by Elo gap and overall beside the consistency of the
+same test judgments with the Elo scores (`by_elo_gap.tsv`); SROCC beside the split-half ceiling (`--ceiling`),
+log-loss (`metrics.tsv`); calibration (`calibration.tsv`); each fold's results (`folds.tsv`), hits (`hits.tsv`) and
+z-scores (`fold_scores.tsv`), so that evaluations can be compared on the same resamples and combined; with 95%
+intervals from resamples of the manuscripts. With `--learning_curves.shares`, it also trains the method on shares of
+each fold's training judgments and images (`learning_curve.tsv`). It then trains the method on every judgment and
+keeps it, with what its inputs must be: `model.json` refuses features computed with other settings, `head.npz`
+tokens made with another backbone, revision, block, input size or crop; `ensemble.json` names its members and
+weights.
+
+```
+lvc train --tokens build/embed/name --dataset build/dataset --output build/train/name
+```
+
+trains the pairwise model (`--features`) or the head (`--tokens`) on every judgment, without the evaluation. The
+package comes with a head trained on the dataset's 397 pages and all their judgments, on DINOv2 ViT-S/14's tokens of
+the folio crop (`layout_visual_complexity.evaluation.vit_head.shipped_head()`); it scores a page with numpy alone, and
+its patch scores make a map of where on the page the head finds complexity.
+
+`lvc report` writes the tables and figures of the features and of the methods evaluated on them: accuracy by Elo gap
+(as a table and a figure), the differences between methods on the same resamples, learning curves and calibration,
+the local complexity maps, the features' table, each feature's correlation with the Elo scores, and the features
+drawn on pages.
 
 ## The dataset
 
@@ -165,7 +215,8 @@ make -C reproduce all
 The dataset isn't in this repository: `reproduce/configs/dataset.yaml` names where it comes from. The dataset and the
 scores go to `build/`, the tables (TSV and LaTeX) and figures (SVG, PNG and LaTeX) to `results/`. The features and
 the tables and figures made from them need the dataset's segmentation (`segment-dataset`), which they make first if
-it's missing. The targets:
+it's missing; the ViT ranker needs the `vit` extra, and downloads DINOv2 ViT-S/14 once. Its evaluation, with its
+learning curves, takes about two hours on an Apple M4 Pro. The targets:
 
 | Target | What it makes |
 |---|---|
@@ -183,6 +234,15 @@ it's missing. The targets:
 | `figure-geometry-feature-correlations` | Figure 9: each feature's correlation with the Elo scores |
 | `figure-geometry-features-on-page`, `figure-geometry-features-on-schematic-page` | The geometric features drawn on pages of the dataset, and on a made-up page |
 | `figure-geometry-feature-families` | The plate of the features, with their code names |
+| `embed-dataset` | `build/embed/dataset/`: the dataset's pages' patch tokens from DINOv2 ViT-S/14, the folio crop |
+| `evaluate-vit`, `evaluate-ensembles` | `build/evaluate/`: the ViT ranker; its ensembles with the geometry ranker (without and with Layout, with equal and fitted weights) |
+| `head-dataset`, `package-head` | `build/train/vit_head/`: the ViT head trained on every judgment; copied into the package |
+| `table-methods-by-elo-gap` | Table 4: the geometry ranker, the ViT ranker and their ensemble by Elo gap, beside the consistency reference |
+| `figure-accuracy-by-elo-gap` | The same as a figure, with each method's interval, and as a table |
+| `table-paired-differences` | The methods' differences in accuracy and SROCC, on the same resamples |
+| `table-ensembles-by-elo-gap` | For the appendix: the ensembles, without and with Layout, with equal and fitted weights |
+| `figure-learning-curves-and-calibration` | Accuracy as the training judgments and images grow, and calibration |
+| `figure-local-complexity-maps` | The ViT head's local complexity maps on three pages |
 
 The dataset leaves out the sessions of a public exhibition, whose annotators were mostly not experts, and the
 calibration judgments; so its numbers differ from the article's, which kept them.
@@ -195,7 +255,8 @@ calibration judgments; so its numbers differ from the article's, which kept them
 
 Tests marked `requires_models` run the segmentation models on a synthetic page; they are skipped without the
 `segment` extra or without the regions model in `models/` (`medieval-yolov11x.pt`; `folio_yolo.pt` for the folio
-model's test). The ALTO output is
+model's test). One runs DINOv2 ViT-S/14 with the package's head, skipped without the `vit` extra or without the
+backbone in the Hugging Face cache; the other ViT tests use a tiny random ViT and download nothing. The ALTO output is
 checked against the ALTO 4.4 schema when `LVC_ALTO_SCHEMA` names the schema's file.
 
 ## Licence

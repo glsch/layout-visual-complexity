@@ -1,0 +1,12 @@
+# The ViT head trained on every judgment of the dataset's 397 pages, as evaluate_vit.yaml trains it on each fold: the
+# head that comes with the package (make -C reproduce package-head copies it there).
+dataset: build/dataset
+tokens: build/embed/dataset
+head:
+  hidden: 128
+  epochs: 180
+  learning_rate: 0.002
+  weight_decay: 0.001
+  unit_length: true
+  seed: 20260629
+output: build/train/vit_head

@@ -1,0 +1,11 @@
+# Each method's accuracy by Elo gap with its interval, beside the consistency reference, as a figure and a table.
+name: figure_accuracy_by_elo_gap
+outputs: [accuracy_by_elo_gap]
+evaluations:
+  geometry: build/evaluate/geometry
+  vit: build/evaluate/vit
+  ensemble: build/evaluate/ensemble
+labels:
+  geometry: Geometry
+  vit: ViT
+  ensemble: Ensemble

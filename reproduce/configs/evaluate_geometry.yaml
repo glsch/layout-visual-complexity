@@ -1,3 +1,7 @@
-# The geometry ranker: the pairwise logistic model on the 83 geometric features.
+# The geometry ranker: the pairwise logistic model on the 83 geometric features, with its learning curves.
+features: build/features/dataset/features.parquet
 families: geometry
+learning_curves:
+  shares: [0.1, 0.25, 0.5, 0.75]
+  by: [judgments, images]
 output: build/evaluate/geometry

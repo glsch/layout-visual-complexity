@@ -1,0 +1,14 @@
+# The ViT ranker: the local head on DINOv2 ViT-S/14's patch tokens of the folio crops (embed_dataset.yaml), trained
+# with RankNet's loss on each fold's training judgments, as the earlier code's defaults have it.
+tokens: build/embed/dataset
+head:
+  hidden: 128
+  epochs: 180
+  learning_rate: 0.002
+  weight_decay: 0.001
+  unit_length: true
+  seed: 20260629
+learning_curves:
+  shares: [0.1, 0.25, 0.5, 0.75]
+  by: [judgments, images]
+output: build/evaluate/vit

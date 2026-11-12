@@ -1,0 +1,12 @@
+# The patch tokens of the dataset's pages, for the ViT ranker: DINOv2 ViT-S/14 from its publisher's repository at a
+# pinned revision, its last block's tokens after the final layer norm, the folio crop resized to 518 pixels on the
+# long edge (37 patches). The tokens go to the user cache; build/embed/dataset holds the token set and the run's
+# record. Needs the vit extra.
+layout: build/segment/dataset
+output: build/embed/dataset
+tokens:
+  backbone: facebook/dinov2-small
+  revision: ed25f3a31f01632728cabb09d1542f84ab7b0056
+  layer: -1
+  long_edge: 518
+  crop: folio

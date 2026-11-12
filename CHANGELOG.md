@@ -43,3 +43,23 @@
   LaTeX at that width. The comparison graph and the score distributions are redrawn with it.
 - `reproduce/` regenerates Table 4's geometry column, Appendix A's table and Figure 9's successor, and draws the
   features on pages.
+- `lvc embed` gives each page's patch tokens from a vision transformer: any `transformers` model with patch tokens, at
+  a pinned revision, DINOv2 ViT-S/14 by default, on the folio crop or the whole page; kept in the user cache. Needs
+  the new `vit` extra (PyTorch, transformers).
+- `lvc evaluate` also evaluates the local ViT head on a token set (trained per fold with RankNet's loss, in worker
+  processes, with results that don't depend on their number) and ensembles of earlier evaluations, with equal, given
+  or fitted weights; it now writes each fold's hits and z-scores, so that two methods compare on the same resamples,
+  and learning curves on request. Feature tables are given with `--features`, which the shared configuration no
+  longer has to name.
+- `lvc train` trains the pairwise model or the ViT head on every judgment. The package comes with a ViT head trained
+  on the dataset's 397 pages.
+- `lvc report` writes the methods' tables and figures: accuracy by Elo gap (Table 4's successor, as a table and a
+  figure), differences between methods, learning curves and calibration, the ensembles for the appendix, and the ViT
+  head's local complexity maps.
+- Feature families may need a ViT's patch tokens (`--tokens`); a family given by its Python path now loads in the
+  worker processes too.
+- `reproduce/` regenerates Table 4 with the ViT ranker and the ensemble, the accuracy by Elo gap as a figure, the
+  methods' differences, the ensembles for the appendix, the learning curves and calibration, and the local complexity
+  maps.
+- In Python, `EvaluateSettings` takes the dataset, the scores and the output first; the feature table is one of three
+  methods, given by name.

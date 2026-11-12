@@ -1,0 +1,6 @@
+# For the appendix: the geometry ranker and the ViT ranker, with weights fitted on each fold's training judgments.
+ensemble:
+  geometry: build/evaluate/geometry
+  vit: build/evaluate/vit
+fitted_weights: true
+output: build/evaluate/ensemble_fitted

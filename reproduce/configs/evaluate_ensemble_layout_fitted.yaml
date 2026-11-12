@@ -1,0 +1,7 @@
+# For the appendix: the geometry ranker with the Layout features and the ViT ranker, with weights fitted on each
+# fold's training judgments.
+ensemble:
+  geometry_layout: build/evaluate/geometry_layout
+  vit: build/evaluate/vit
+fitted_weights: true
+output: build/evaluate/ensemble_layout_fitted

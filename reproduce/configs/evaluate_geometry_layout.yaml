@@ -1,3 +1,4 @@
 # The geometry ranker with the Layout features beside the geometric ones.
+features: build/features/dataset/features.parquet
 families: geometry,layout
 output: build/evaluate/geometry_layout

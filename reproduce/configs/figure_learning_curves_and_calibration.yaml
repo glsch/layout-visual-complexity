@@ -1,0 +1,11 @@
+# Learning curves (by judgments, by images) and calibration of the geometry ranker, the ViT ranker and their ensemble.
+name: figure_learning_curves_and_calibration
+outputs: [learning_curves_and_calibration]
+evaluations:
+  geometry: build/evaluate/geometry
+  vit: build/evaluate/vit
+  ensemble: build/evaluate/ensemble
+labels:
+  geometry: Geometry
+  vit: ViT
+  ensemble: Ensemble
