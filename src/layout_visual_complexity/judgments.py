@@ -10,6 +10,7 @@ import yaml
 
 from layout_visual_complexity import judgment_reports
 from layout_visual_complexity.download import DEFAULT_CACHE, Cache, HttpClient, HttpSettings
+from layout_visual_complexity.evaluation.folds import FoldSettings
 from layout_visual_complexity.logs import logger
 from layout_visual_complexity.ranking import graph
 from layout_visual_complexity.ranking.dataset import copy_dataset, read_dataset, validate_dataset
@@ -72,21 +73,6 @@ class RankSettings:
     bt_prior: float = 1.0
     anchor_factor: float = 3.0
     jobs: int = 0
-
-
-@dataclass(frozen=True)
-class FoldSettings:
-    """Cross-validation folds over pages, each manuscript in one fold.
-
-    Args:
-        k: Folds per repeat.
-        repeats: How many times the folds are drawn, each time with other groups.
-        seed: The seed of the folds.
-    """
-
-    k: int = 10
-    repeats: int = 10
-    seed: int = 1
 
 
 @dataclass(frozen=True)

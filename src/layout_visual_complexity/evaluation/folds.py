@@ -12,6 +12,21 @@ import pandas as pd
 
 
 @dataclass(frozen=True)
+class FoldSettings:
+    """Cross-validation folds over pages, each manuscript in one fold.
+
+    Args:
+        k: Folds per repeat.
+        repeats: How many times the folds are drawn, each time with other groups.
+        seed: The seed of the folds.
+    """
+
+    k: int = 10
+    repeats: int = 10
+    seed: int = 1
+
+
+@dataclass(frozen=True)
 class Fold:
     """One split: the pages and the judgments (row positions in the judgment table) on each side."""
 
