@@ -31,6 +31,8 @@ dependencies = [
 dev = ["pytest==9.2.0", "ruff==0.17.3"]
 # Segmentation: Kraken for lines, ultralytics (AGPL-3.0) for YOLO's folios and regions.
 segment = ["kraken>=7.1.1,<8", "torch>=2.9,<3", "ultralytics>=8.4.203,<9"]
+# Vision transformers: their patch tokens (lvc embed) and the local ViT head's training.
+vit = ["torch>=2.9,<3", "transformers>=4.56,<6"]
 
 [project.urls]
 Repository = "https://github.com/glsch/layout-visual-complexity"
@@ -42,9 +44,14 @@ lvc = "layout_visual_complexity.cli:main"
 where = ["src"]
 include = ["layout_visual_complexity*"]
 
+[tool.setuptools.package-data]
+layout_visual_complexity = ["heads/*.npz"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-markers = ["requires_models: needs the segmentation models in models/ and the segment extra; skipped without them"]
+markers = [
+    "requires_models: needs the segmentation models in models/ and the segment extra, or the ViT backbone in the Hugging Face cache and the vit extra; skipped without them",
+]
 
 [tool.ruff]
 line-length = 120

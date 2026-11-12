@@ -13,7 +13,7 @@ from layout_visual_complexity.evaluation.folds import FoldSettings
 from layout_visual_complexity.features.contract import load_families
 from layout_visual_complexity.features.extraction import write_feature_table
 from layout_visual_complexity.ranking.dataset import read_dataset
-from layout_visual_complexity.reports import ReportSettings, correlations, run_report
+from layout_visual_complexity.reports import ALL_OUTPUTS, ReportSettings, correlations, run_report
 from layout_visual_complexity.segmentation.store import write_layout_rows, write_pages
 
 
@@ -37,7 +37,8 @@ def write_inputs(folder: Path, dataset_folder: Path) -> dict[str, Path]:
     evaluations = {}
     for name, chosen in (("geometry", "geometry"), ("geometry_layout", "geometry,layout")):
         evaluations[name] = folder / name
-        settings = EvaluateSettings(features, dataset_folder, scores, folder / name, chosen, FoldSettings(2, 2, 3))
+        folds = FoldSettings(2, 2, 3)
+        settings = EvaluateSettings(dataset_folder, scores, folder / name, features, chosen, folds=folds)
         run_evaluate(settings)
     segment = folder / "segment"
     images = segment / "images" / "msa"
@@ -71,6 +72,7 @@ def test_the_geometry_tables_and_figures(tmp_path: Path, dataset_folder: Path) -
     groups = ["AreaFeature__WrittenSpaceRatio", "AreaFeature__GraphicZoneArea", "LineFeature__ZigzagScore"]
     settings = ReportSettings(
         output,
+        [output for output in ALL_OUTPUTS if output.startswith("geometry")],
         dataset=dataset_folder,
         scores=inputs["scores"],
         features=inputs["features"],

@@ -1,7 +1,8 @@
 """The contract every feature family follows.
 
 A family names its columns `Family__Feature__Flavour`, declares its scope (`page`, `region` or `line`: the level its
-rows come at) and what it needs prepared (the image, the folio crop, the regions, the lines, YOLO's lines), and says
+rows come at) and what it needs prepared (the image, the folio crop, the regions, the lines, YOLO's lines, a ViT's
+patch tokens), and says
 how its rows are aggregated to the page, column by column. Its settings are a frozen dataclass; their hash, with the
 family's class and version, identifies how its columns were computed, so a trained model can refuse features computed
 differently.
@@ -23,7 +24,7 @@ from typing import Any, ClassVar, Literal
 import numpy as np
 
 Scope = Literal["page", "region", "line"]
-Need = Literal["image", "folio_crop", "regions", "lines", "yolo_lines"]
+Need = Literal["image", "folio_crop", "regions", "lines", "yolo_lines", "tokens"]
 Aggregation = Literal["median", "mean", "sum", "min", "max"]
 
 COLUMN = re.compile(r"^[A-Z][A-Za-z0-9]*__[A-Z][A-Za-z0-9]*__[a-z0-9]+(?:_[a-z0-9]+)*$")

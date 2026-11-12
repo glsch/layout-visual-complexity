@@ -1,9 +1,11 @@
 """The evaluation protocol every method is measured with.
 
-On each fold, the pairwise model is fitted on the training judgments and scores the test pages. Scores are z-scored
-per fold, with the mean and spread of the training pages' scores, so folds are comparable; a page's out-of-fold
-score is the mean of its z-scores over the folds that tested it. Win probabilities are a sigmoid of the score
-difference, with its scale fitted on the training judgments.
+On each fold, a method is trained on the training judgments and scores the training and test pages: the pairwise
+model on a feature table, the local ViT head on tokens, or an ensemble of earlier evaluations. Scores are z-scored per
+fold, with the mean and spread of the training pages' scores, so folds are comparable; a page's out-of-fold score is
+the mean of its z-scores over the folds that tested it. Win probabilities are a sigmoid of the score difference, with
+its scale fitted on the training judgments. An ensemble combines its members' z-scores fold by fold, with weights
+given or fitted on the fold's training judgments.
 
 The reference for accuracy is the consistency of the same test judgments with the final Elo scores; the reference
 for SROCC is the split-half ceiling.
@@ -11,10 +13,12 @@ for SROCC is the split-half ceiling.
 
 import math
 import warnings
+from collections.abc import Callable
 from dataclasses import dataclass, field
 
 import numpy as np
 import pandas as pd
+from sklearn.linear_model import LogisticRegression
 
 from layout_visual_complexity.evaluation import metrics
 from layout_visual_complexity.evaluation.folds import Fold, judgments_within
@@ -43,7 +47,9 @@ class ProtocolSettings:
 
 @dataclass
 class Evaluation:
-    """A method's results: per fold, by gap, per tested judgment, the out-of-fold scores, and a summary."""
+    """A method's results: per fold, by gap, per tested judgment, the out-of-fold scores, and a summary; and each
+    fold's z-scores of its training and test pages (`fold_scores`: `fold_number`, `page`, `test`, `z`), which an
+    ensemble combines."""
 
     folds: pd.DataFrame
     by_gap: pd.DataFrame
@@ -51,6 +57,11 @@ class Evaluation:
     scores: pd.Series
     reliability: pd.DataFrame
     summary: dict[str, float] = field(default_factory=dict)
+    fold_scores: pd.DataFrame = field(default_factory=pd.DataFrame)
+
+
+# Each fold's raw scores of its training and test pages, None where the fold has no training or no test judgments.
+FoldScores = list[pd.Series | None]
 
 
 def _z(scores: pd.Series, centre: float, spread: float) -> pd.Series:
@@ -86,6 +97,20 @@ def _summarise_by_gap(
     return pd.DataFrame(rows)
 
 
+def pairwise_fold_scores(
+    features: pd.DataFrame, judgments: pd.DataFrame, folds: list[Fold], regularisation: float = 1.0
+) -> FoldScores:
+    """The pairwise model fitted on each fold's training judgments: its raw scores of the fold's pages."""
+    found: FoldScores = []
+    for fold in folds:
+        if not len(fold.train) or not len(fold.test):
+            found.append(None)
+            continue
+        model = fit_pairwise_model(features.loc[fold.train_pages], judgments.iloc[fold.train], regularisation)
+        found.append(model.scores(features.loc[np.concatenate([fold.train_pages, fold.test_pages])]))
+    return found
+
+
 def evaluate(
     features: pd.DataFrame,
     judgments: pd.DataFrame,
@@ -95,21 +120,44 @@ def evaluate(
 ) -> Evaluation:
     """Fit and test the pairwise model on every fold. `features` is pages × features; `reference` the final Elo."""
     settings = settings or ProtocolSettings()
+    scores = pairwise_fold_scores(features, judgments, folds, settings.regularisation)
+    return evaluate_fold_scores(scores, judgments, reference, folds, settings)
+
+
+def evaluate_fold_scores(
+    fold_scores: FoldScores,
+    judgments: pd.DataFrame,
+    reference: pd.Series,
+    folds: list[Fold],
+    settings: ProtocolSettings | None = None,
+) -> Evaluation:
+    """The protocol's measures of a method from its raw scores on each fold (`fold_scores`, one per fold: the
+    training and test pages' scores under the method trained on the fold's training judgments)."""
+    settings = settings or ProtocolSettings()
     edges = tuple(settings.gap_edges)
     gaps = judgment_gaps(judgments, reference)
-    fold_rows, tested_parts, oof = [], [], []
-    for number, fold in enumerate(folds):
+    fold_rows, tested_parts, oof, z_parts = [], [], [], []
+    for number, (fold, raw) in enumerate(zip(folds, fold_scores, strict=True)):
         row = {"kind": fold.kind, "repeat": fold.repeat, "fold": fold.label, "train": len(fold.train)}
         row["test"] = len(fold.test)
-        if not len(fold.train) or not len(fold.test):
+        if raw is None or not len(fold.train) or not len(fold.test):
             fold_rows.append(row)
             continue
         train, test = judgments.iloc[fold.train], judgments.iloc[fold.test]
-        model = fit_pairwise_model(features.loc[fold.train_pages], train, settings.regularisation)
-        train_scores = model.scores(features.loc[fold.train_pages])
+        train_scores = raw.loc[fold.train_pages]
         centre, spread = float(train_scores.mean()), float(train_scores.std(ddof=0))
         z_train = _z(train_scores, centre, spread)
-        z_test = _z(model.scores(features.loc[fold.test_pages]), centre, spread)
+        z_test = _z(raw.loc[fold.test_pages], centre, spread)
+        z_parts.append(
+            pd.DataFrame(
+                {
+                    "fold_number": number,
+                    "page": np.concatenate([fold.train_pages, fold.test_pages]),
+                    "test": np.repeat([False, True], [len(fold.train_pages), len(fold.test_pages)]),
+                    "z": np.concatenate([z_train.to_numpy(dtype=float), z_test.to_numpy(dtype=float)]),
+                }
+            )
+        )
         scale = metrics.fit_scale(z_train[train["chosen"]].to_numpy() - z_train[other_image(train)].to_numpy())
         difference = z_test[test["chosen"]].to_numpy() - z_test[other_image(test)].to_numpy()
         left_difference = z_test[test["left"]].to_numpy() - z_test[test["right"]].to_numpy()
@@ -147,7 +195,8 @@ def evaluate(
         "srocc": metrics.srocc(scores, reference),
         "log_loss": metrics.log_loss(tested["chosen_probability"].to_numpy()),
     }
-    return Evaluation(folds_table, by_gap, tested, scores, reliability, summary)
+    fold_z = pd.concat(z_parts, ignore_index=True) if z_parts else pd.DataFrame()
+    return Evaluation(folds_table, by_gap, tested, scores, reliability, summary, fold_z)
 
 
 def consistency_reference(
@@ -252,9 +301,11 @@ def paired_comparison(
     judgments: pd.DataFrame,
     manuscripts: pd.Series,
     settings: ProtocolSettings | None = None,
+    reference: pd.Series | None = None,
 ) -> dict[str, float]:
     """The first method's accuracy minus the second's, on the same folds: the mean of the per-fold differences, and
-    a 95% interval of the pooled difference from the same manuscript resamples for both."""
+    a 95% interval of the pooled difference from the same manuscript resamples for both. With the `reference` scores,
+    also the difference of their SROCC and its interval, on the same resamples."""
     settings = settings or ProtocolSettings()
     if len(first.folds) != len(second.folds):
         raise ValueError("the two evaluations ran on different folds")
@@ -268,16 +319,85 @@ def paired_comparison(
     right = judgments["right"].map(manuscripts).map(number).to_numpy()[both]
     difference = metrics.bootstrap_accuracy(a[both] - b[both], left, right, multiplicities)
     low, high = metrics.interval(difference)
-    return {
+    found = {
         "difference": float(np.nanmean(per_fold)),
         "difference_pooled": float(np.mean(a[both] - b[both])),
         "low": low,
         "high": high,
     }
+    if reference is not None:
+        pages = first.scores.index.intersection(second.scores.index).intersection(reference.index)
+        page_manuscript = manuscripts.reindex(pages).map(number).to_numpy()
+        values = [evaluation.scores[pages].to_numpy() for evaluation in (first, second)]
+        target = reference[pages].to_numpy()
+        resampled = [metrics.bootstrap_srocc(value, target, page_manuscript, multiplicities) for value in values]
+        srocc_low, srocc_high = metrics.interval(resampled[0] - resampled[1])
+        found |= {
+            "srocc_difference": metrics.srocc(first.scores, reference) - metrics.srocc(second.scores, reference),
+            "srocc_low": srocc_low,
+            "srocc_high": srocc_high,
+        }
+    return found
+
+
+# Folds as a method is trained on them, with the number of the learning curve's share (0 for the evaluation itself),
+# to their raw scores.
+Scorer = Callable[[list[Fold], int], FoldScores]
+
+
+def reduced_folds(
+    folds: list[Fold], judgments: pd.DataFrame, share: float, by: str, seed: int, share_number: int
+) -> list[Fold]:
+    """The folds with a share of their training judgments, or of their training images (then the judgments between
+    the images kept), drawn from `numpy.random.default_rng([seed, share_number, fold number])`; the test sides
+    unchanged."""
+    if by not in {"judgments", "images"}:
+        raise ValueError(f"unknown learning curve {by!r}: expected judgments or images")
+    reduced = []
+    for number, fold in enumerate(folds):
+        rng = np.random.default_rng([seed, share_number, number])
+        if by == "judgments":
+            keep = max(1, round(share * len(fold.train)))
+            train = np.sort(rng.choice(fold.train, size=keep, replace=False)) if len(fold.train) else fold.train
+            train_pages = fold.train_pages
+        else:
+            keep = max(2, round(share * len(fold.train_pages)))
+            train_pages = rng.choice(fold.train_pages, size=min(keep, len(fold.train_pages)), replace=False)
+            within = judgments_within(judgments, train_pages)
+            train = np.intersect1d(within, fold.train)
+        kept = Fold(fold.kind, fold.repeat, fold.index, fold.label, train_pages, fold.test_pages, train, fold.test)
+        reduced.append(kept)
+    return reduced
+
+
+def learning_curve_runs(
+    method: pd.DataFrame | Scorer,
+    judgments: pd.DataFrame,
+    reference: pd.Series,
+    folds: list[Fold],
+    shares: tuple[float, ...] = (0.1, 0.25, 0.5, 0.75, 1.0),
+    by: str = "judgments",
+    settings: ProtocolSettings | None = None,
+) -> list[tuple[float, list[Fold], Evaluation]]:
+    """The method evaluated on the folds reduced to each share: a feature table for the pairwise model, or a scorer
+    that trains the method on folds."""
+    settings = settings or ProtocolSettings()
+    if isinstance(method, pd.DataFrame):
+        features = method
+
+        def method(chosen: list[Fold], share_number: int) -> FoldScores:
+            return pairwise_fold_scores(features, judgments, chosen, settings.regularisation)
+
+    runs = []
+    for share_number, share in enumerate(shares):
+        reduced = reduced_folds(folds, judgments, share, by, settings.seed, share_number)
+        evaluation = evaluate_fold_scores(method(reduced, share_number + 1), judgments, reference, reduced, settings)
+        runs.append((share, reduced, evaluation))
+    return runs
 
 
 def learning_curve(
-    features: pd.DataFrame,
+    method: pd.DataFrame | Scorer,
     judgments: pd.DataFrame,
     reference: pd.Series,
     folds: list[Fold],
@@ -287,35 +407,73 @@ def learning_curve(
 ) -> pd.DataFrame:
     """Accuracy on the same test judgments when training on a share of the training judgments or of the training
     images (then on the judgments between the images kept). One row per share: the mean over folds."""
-    settings = settings or ProtocolSettings()
-    if by not in {"judgments", "images"}:
-        raise ValueError(f"unknown learning curve {by!r}: expected judgments or images")
     rows = []
-    for share_number, share in enumerate(shares):
-        reduced = []
-        for number, fold in enumerate(folds):
-            rng = np.random.default_rng([settings.seed, share_number, number])
-            if by == "judgments":
-                keep = max(1, round(share * len(fold.train)))
-                train = np.sort(rng.choice(fold.train, size=keep, replace=False)) if len(fold.train) else fold.train
-                train_pages = fold.train_pages
-            else:
-                keep = max(2, round(share * len(fold.train_pages)))
-                train_pages = rng.choice(fold.train_pages, size=min(keep, len(fold.train_pages)), replace=False)
-                within = judgments_within(judgments, train_pages)
-                train = np.intersect1d(within, fold.train)
-            reduced.append(
-                Fold(fold.kind, fold.repeat, fold.index, fold.label, train_pages, fold.test_pages, train, fold.test)
-            )
-        result = evaluate(features, judgments, reference, reduced, settings)
+    for share, reduced, result in learning_curve_runs(method, judgments, reference, folds, shares, by, settings):
         rows.append(
             {
                 "by": by,
                 "share": share,
-                "train_per_fold": float(result.folds["train"].mean()),
+                "train_per_fold": float(np.mean([len(fold.train) for fold in reduced])),
                 "accuracy": result.summary["accuracy"],
                 "accuracy_sd": result.summary["accuracy_sd"],
                 "srocc": result.summary["srocc"],
             }
         )
     return pd.DataFrame(rows)
+
+
+# Ensembles.
+
+
+def fitted_weights(z: pd.DataFrame, judgments: pd.DataFrame, regularisation: float = 1.0) -> np.ndarray:
+    """Weights of the members' z-scores (pages × members) that best predict the judgments: an intercept-free
+    logistic regression on the differences between the two pages' z-scores, each judgment entered in both orders;
+    scaled so that their absolute values sum to one."""
+    chosen = z.loc[judgments["chosen"].to_numpy()].to_numpy(dtype=float)
+    other = z.loc[other_image(judgments).to_numpy()].to_numpy(dtype=float)
+    differences = chosen - other
+    design = np.vstack([differences, -differences])
+    outcome = np.concatenate([np.ones(len(differences)), np.zeros(len(differences))])
+    regression = LogisticRegression(fit_intercept=False, C=regularisation, max_iter=1000)
+    weights = regression.fit(design, outcome).coef_[0].astype(float)
+    total = np.abs(weights).sum()
+    return weights / total if total > 0 else np.full(len(weights), 1 / len(weights))
+
+
+def ensemble_fold_scores(
+    members: dict[str, pd.DataFrame],
+    folds: list[Fold],
+    judgments: pd.DataFrame,
+    weights: dict[str, float] | None = None,
+    regularisation: float = 1.0,
+) -> tuple[FoldScores, pd.DataFrame]:
+    """Each fold's weighted sum of its members' z-scores of the fold's pages. `members` holds each member's fold
+    z-scores (`fold_number`, `page`, `test`, `z`) from an evaluation on the same folds. The weights are as given, or,
+    when None, fitted on each fold's training judgments alone (`fitted_weights`). Returns the fold scores and each
+    fold's weights."""
+    names = list(members)
+    by_fold = {name: dict(tuple(table.groupby("fold_number"))) for name, table in members.items()}
+    found: FoldScores = []
+    rows = []
+    for number, fold in enumerate(folds):
+        if not len(fold.train) or not len(fold.test) or any(number not in by_fold[name] for name in names):
+            found.append(None)
+            rows.append({"fold_number": number})
+            continue
+        columns = {}
+        for name in names:
+            part = by_fold[name][number]
+            if set(part.loc[part["test"].astype(bool), "page"]) != set(fold.test_pages):
+                raise ValueError(f"the member {name} was evaluated on other folds than the ensemble's")
+            columns[name] = part.set_index("page")["z"]
+        pages = np.concatenate([fold.train_pages, fold.test_pages])
+        z = pd.DataFrame(columns).reindex(pages)
+        if z.isna().any().any():
+            raise ValueError(f"fold {number}: a member has no score for some of its pages")
+        if weights is None:
+            chosen = fitted_weights(z.loc[fold.train_pages], judgments.iloc[fold.train], regularisation)
+        else:
+            chosen = np.array([float(weights[name]) for name in names])
+        found.append(pd.Series(z.to_numpy(dtype=float) @ chosen, index=pages))
+        rows.append({"fold_number": number, **dict(zip(names, chosen, strict=True))})
+    return found, pd.DataFrame(rows)

@@ -132,3 +132,44 @@ class FakeZenodo:
 @pytest.fixture
 def dataset_folder(tmp_path: Path) -> Path:
     return write_published(tmp_path / "published")
+
+
+def write_token_set(folder: Path, strength: dict[str, float], dim: int = 8, seed: int = 0) -> Path:
+    """A token set as `lvc embed` writes one, of made-up tokens: each page a 2 × 3 grid whose first dimension grows
+    with the page's strength."""
+    from dataclasses import asdict
+
+    from layout_visual_complexity.features.vit import TokenCache, TokenGrid, TokenSettings
+
+    settings = TokenSettings(backbone="tiny", revision=None, long_edge=42)
+    cache = TokenCache(folder / "cache", settings)
+    rng = np.random.default_rng(seed)
+    rows = []
+    for page, value in strength.items():
+        tokens = rng.normal(size=(6, dim))
+        tokens[:, 0] += 2 * value
+        cache.write(page, TokenGrid(tokens, 2, 3, (0.0, 0.0, 30.0, 20.0)), "made-up", "cpu")
+        rows.append({"page": page, "width": 30, "height": 20, "source": "made-up", "rows": 2, "columns": 3,
+                     "x0": 0.0, "y0": 0.0, "x1": 30.0, "y1": 20.0, "device": "cpu"})  # fmt: skip
+    description = asdict(settings) | {"block": 2, "blocks": 2, "patch_size": 14, "dim": dim, "model": "made-up"}
+    description |= {"cache_root": str(folder / "cache"), "cache": str(cache.folder), "pages": len(rows)}
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / "tokens.json").write_text(json.dumps(description))
+    pd.DataFrame(rows).to_csv(folder / "pages.tsv", sep="\t", index=False)
+    return folder
+
+
+@pytest.fixture(scope="session")
+def tiny_vit(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    """A tiny DINOv2 with random weights, saved as a `transformers` model with its image processor: the backbone of
+    the tests, which download nothing."""
+    transformers = pytest.importorskip("transformers")
+    torch = pytest.importorskip("torch")
+    torch.manual_seed(0)
+    config = transformers.Dinov2Config(
+        hidden_size=16, num_hidden_layers=2, num_attention_heads=2, intermediate_size=32, patch_size=14, image_size=56
+    )
+    folder = tmp_path_factory.mktemp("tiny_vit")
+    transformers.Dinov2Model(config).eval().save_pretrained(folder)
+    transformers.BitImageProcessor(image_mean=[0.5] * 3, image_std=[0.25] * 3).save_pretrained(folder)
+    return folder

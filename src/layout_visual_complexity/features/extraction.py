@@ -57,6 +57,7 @@ class FeaturesSettings:
         batch: Pages a worker measures at a time.
         cache: The download cache holding the page images; by default the segmentation run's.
         http: How to fetch page images that aren't in the cache.
+        tokens: A token set (the folder of `lvc embed`), for families that need the pages' patch tokens.
     """
 
     layout: Path
@@ -68,6 +69,7 @@ class FeaturesSettings:
     batch: int = 4
     cache: Path | None = None
     http: HttpSettings = field(default_factory=HttpSettings)
+    tokens: Path | None = None
 
 
 def family_names(families: Sequence[str] | str) -> list[str]:
@@ -188,11 +190,14 @@ def measure_batch(pages: list[Page]) -> dict[str, Any]:
 # Where the run's pages and images come from.
 
 
-def page_key(families: Sequence[Family], page: Page, image: str | None) -> str:
-    """What decides a page's values: the families' classes, versions and settings, its layout and its image."""
+def page_key(families: Sequence[Family], page: Page, image: str | None, tokens: str | None = None) -> str:
+    """What decides a page's values: the families' classes, versions and settings, its layout, its image and its
+    tokens (their key and source)."""
     digest = hashlib.sha256()
     digest.update(json.dumps([[family.name, family.settings_hash()] for family in families]).encode())
     digest.update(json.dumps([page.page, page.width, page.height, image]).encode())
+    if tokens is not None:
+        digest.update(f"|tokens|{tokens}|".encode())
     if page.folio is not None:
         digest.update(np.ascontiguousarray(page.folio).tobytes())
     for zone in [*page.regions, *page.yolo_lines]:
@@ -341,7 +346,8 @@ def run_features(settings: FeaturesSettings) -> dict[str, Any]:
     """Measure the families on the segmentation run's pages into `output`. Running it again resumes. Returns the
     run's summary."""
     began = time.monotonic()
-    families = load_families(family_names(settings.families), settings.parameters)
+    given = family_names(settings.families)
+    families = load_families(given, settings.parameters)
     names = [family.name for family in families]
     run = Run("features", settings)
     layout_folder, output = Path(settings.layout), Path(settings.output)
@@ -349,6 +355,23 @@ def run_features(settings: FeaturesSettings) -> dict[str, Any]:
     pages = store_pages(layout_folder, settings.limit)
     order = pages["page"].tolist()
     needs_image = any(family.needs & {"image", "folio_crop"} for family in families)
+    token_set = None
+    if any("tokens" in family.needs for family in families):
+        if settings.tokens is None:
+            raise ValueError("a family needs the pages' patch tokens: give a token set (--tokens)")
+        from layout_visual_complexity.features.vit import TOKEN_PAGES, TOKEN_SET, read_token_set
+
+        for name in (TOKEN_SET, TOKEN_PAGES):
+            run.read(Path(settings.tokens) / name)
+        token_set = read_token_set(settings.tokens)
+
+    def tokens_of(page: str) -> str | None:
+        if token_set is None:
+            return None
+        if page not in token_set.pages.index:
+            return "missing"
+        return f"{token_set.description.get('key')}:{token_set.pages.at[page, 'source']}"
+
     jobs = settings.jobs or cores()
     state = State(output / ".state.sqlite")
     done_keys = state.keys()
@@ -360,7 +383,7 @@ def run_features(settings: FeaturesSettings) -> dict[str, Any]:
     monitor = Monitor(lambda: reported_cpu[0] + time.process_time()).start()
     measured = skipped = 0
     try:
-        with ProcessPoolExecutor(jobs, initializer=start_worker, initargs=(names, dict(settings.parameters))) as pool:
+        with ProcessPoolExecutor(jobs, initializer=start_worker, initargs=(given, dict(settings.parameters))) as pool:
             pending: dict[Future, tuple[list[Page], list[str], list[Any]]] = {}
 
             def collect(finished: set[Future]) -> None:
@@ -384,7 +407,9 @@ def run_features(settings: FeaturesSettings) -> dict[str, Any]:
                 for document, wanted in pages.groupby("document", sort=False):
                     document_batch = document_pages(layout_folder, str(document), wanted)
                     keys = [
-                        page_key(families, page, images.identity(page.page) if needs_image else None)
+                        page_key(
+                            families, page, images.identity(page.page) if needs_image else None, tokens_of(page.page)
+                        )
                         for page in document_batch
                     ]
                     todo_pages = [
@@ -394,6 +419,10 @@ def run_features(settings: FeaturesSettings) -> dict[str, Any]:
                     ]
                     skipped += len(document_batch) - len(todo_pages)
                     fetched = fetch_images([page for page, _ in todo_pages], images, fetchers) if needs_image else {}
+                    if token_set is not None:
+                        for page, _ in todo_pages:
+                            if page.page in token_set.pages.index:
+                                page.tokens = token_set.grid(page.page)
                     for start in range(0, len(todo_pages), max(1, settings.batch)):
                         chunk = todo_pages[start : start + max(1, settings.batch)]
                         batch = [page for page, _ in chunk]
