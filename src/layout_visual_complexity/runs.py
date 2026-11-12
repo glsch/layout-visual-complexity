@@ -27,6 +27,13 @@ LIBRARIES = [
     "jsonargparse",
     "PyYAML",
     "httpx2",
+    "opencv-python-headless",
+    "Pillow",
+    "pyarrow",
+    "shapely",
+    "torch",
+    "kraken",
+    "ultralytics",
 ]
 
 

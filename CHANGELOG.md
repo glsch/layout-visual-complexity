@@ -18,3 +18,13 @@
 - `reproduce/` regenerates the article's Table 1, Table 2 and Figures 2 and 3, and imports the dataset again when the
   folder it reads from changes.
 - In the published structure, a manuscript's identifier in the Handschriftencensus is `hscensus_id`.
+- `lvc segment` finds the folio crop, the regions and the text lines of pages from IIIF manifests and image services,
+  image URLs, local images, folders, lists and page tables, into a layout store in Parquet (and ALTO 4 with
+  `--alto`); its steps run at once in worker processes, YOLO and Kraken's network on Apple's GPU where there is one,
+  and a rerun resumes. It needs the new `segment` extra (Kraken, PyTorch, ultralytics).
+  - The folio crop is Otsu's threshold on lightness, the whole image where its quadrilateral is implausible; a YOLO
+    folio model can seed it, for pages photographed on a bright ground.
+  - The regions model's line classes (headings, interlinear glosses, music) are kept beside its zones.
+  - Kraken keeps up to 500 lines a page instead of its own 200 (`lines.max_lines`).
+- Downloads now fetch from several servers at once, with up to two requests in flight to each.
+- `reproduce/` segments the dataset's pages (`make -C reproduce segment-dataset`).

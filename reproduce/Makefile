@@ -4,6 +4,11 @@
 #
 # Paths in the configurations are relative to the working folder (the repository's root), so every command runs
 # from there. The dataset and the ranking go to build/, the tables and figures to results/.
+#
+# The segmentation of the dataset's pages isn't part of `all`: it needs the segment extra, the models in models/ and
+# the page images from their servers.
+#
+#     make -C reproduce segment-dataset
 
 LVC ?= ../.venv/bin/lvc
 
@@ -20,7 +25,8 @@ DATASET := $(TOP)/build/dataset/judgments.tsv
 RANKING := $(TOP)/build/ranking/scores.tsv
 REPORT := $(RUN) judgments report --config $(CONFIGS)/report.yaml --config $(CONFIGS)
 
-.PHONY: all dataset ranking table-dataset-categories table-reliability figure-comparison-graph figure-elo-violins clean
+.PHONY: all dataset ranking segment-dataset table-dataset-categories table-reliability figure-comparison-graph \
+	figure-elo-violins clean
 
 all: table-dataset-categories table-reliability figure-comparison-graph figure-elo-violins
 
@@ -34,6 +40,11 @@ $(DATASET): configs/dataset.yaml $(wildcard $(TOP)/$(SOURCE)/*.tsv $(TOP)/$(SOUR
 ranking: $(RANKING)
 $(RANKING): $(DATASET) configs/ranking.yaml
 	$(RUN) judgments rank --config $(CONFIGS)/ranking.yaml
+
+SEGMENT := $(TOP)/build/segment/dataset/pages.parquet
+segment-dataset: $(SEGMENT)
+$(SEGMENT): $(DATASET) configs/segment_dataset.yaml
+	$(RUN) segment --config $(CONFIGS)/segment_dataset.yaml
 
 table-dataset-categories: $(TOP)/results/tables/dataset_categories.tsv
 $(TOP)/results/tables/dataset_categories.tsv: $(RANKING) configs/report.yaml configs/table_dataset_categories.yaml

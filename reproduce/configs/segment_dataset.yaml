@@ -1,0 +1,7 @@
+# The dataset's pages segmented: the folio crop (Otsu's leaf), YOLO's regions and lines, and Kraken's lines, into a
+# layout store in build/segment/dataset (layout/<manuscript>.parquet, pages.parquet, the report and the run's record).
+# Needs the segment extra and the regions model in models/. Paths are relative to the working folder.
+sources: [build/dataset/images.tsv]
+output: build/segment/dataset
+regions:
+  model: models/medieval-yolov11x.pt
