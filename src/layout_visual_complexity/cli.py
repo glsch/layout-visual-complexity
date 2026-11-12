@@ -7,7 +7,8 @@ import sys
 import typing
 from collections.abc import Callable
 
-from jsonargparse import ActionConfigFile, ArgumentParser, Namespace
+import docstring_parser
+from jsonargparse import ActionConfigFile, ActionYesNo, ArgumentParser, Namespace
 
 import layout_visual_complexity
 from layout_visual_complexity import logs
@@ -32,21 +33,35 @@ def judgment_commands() -> dict[str, tuple[type, Callable[..., object]]]:
     }
 
 
+def segment_command() -> tuple[type, Callable[..., object]]:
+    """The segment command's settings and what runs it, imported when needed."""
+    from layout_visual_complexity.segment import SegmentSettings, run_segment
+
+    return SegmentSettings, run_segment
+
+
 def first_paragraph(text: str | None) -> str:
     return " ".join((text or "").strip().split("\n\n")[0].split())
 
 
-def settings_parser(settings: type) -> ArgumentParser:
+def settings_parser(settings: type, flags: tuple[str, ...] = ()) -> ArgumentParser:
+    """A command's options from its settings dataclass; the boolean settings named in `flags` are flags (`--alto`,
+    `--no_alto`) rather than options taking `true` or `false`."""
     parser = ArgumentParser(description=first_paragraph(settings.__doc__))
     parser.add_argument(
         "--config", action=ActionConfigFile, help="A YAML configuration file; give several to combine them."
     )
-    parser.add_class_arguments(settings)
+    parser.add_class_arguments(settings, skip=set(flags))
+    documented = docstring_parser.parse(settings.__doc__ or "")
+    for name in flags:
+        described = next((item.description for item in documented.params if item.arg_name == name), None)
+        default = next(item.default for item in dataclasses.fields(settings) if item.name == name)
+        parser.add_argument(f"--{name}", action=ActionYesNo, default=default, help=described)
     return parser
 
 
 def parser() -> ArgumentParser:
-    """The command line: `lvc judgments import|rank|report`."""
+    """The command line: `lvc judgments import|rank|report` and `lvc segment`."""
     top = ArgumentParser(prog="lvc", description=layout_visual_complexity.__doc__)
     top.add_argument("--version", action="version", version=layout_visual_complexity.__version__)
     top.add_argument("--quiet", action="store_true", help="Show only warnings and errors.")
@@ -56,6 +71,16 @@ def parser() -> ArgumentParser:
     actions = judgments.add_subcommands(dest="action", required=True)
     for name, (settings, _) in judgment_commands().items():
         actions.add_subcommand(name, settings_parser(settings), help=first_paragraph(settings.__doc__))
+    settings, _ = segment_command()
+    segment = settings_parser(settings, flags=("alto",))
+    segment.add_argument(
+        "given_sources",
+        nargs="*",
+        default=[],
+        metavar="SOURCES",
+        help="Sources to segment; they replace the configuration's.",
+    )
+    commands.add_subcommand("segment", segment, help=first_paragraph(settings.__doc__))
     return top
 
 
@@ -77,10 +102,18 @@ def build(settings: type, values: Namespace | dict) -> object:
 def main(argv: list[str] | None = None) -> int:
     arguments = parser().parse_args(argv)
     logs.setup(logging.WARNING if arguments.quiet else logging.INFO)
-    action = arguments.judgments.action
-    settings, run = judgment_commands()[action]
+    if arguments.command == "segment":
+        settings, run = segment_command()
+        values = arguments.segment.as_dict()
+        if values.pop("given_sources", None):
+            values["sources"] = list(arguments.segment.given_sources)
+        chosen = build(settings, values)
+    else:
+        action = arguments.judgments.action
+        settings, run = judgment_commands()[action]
+        chosen = build(settings, arguments.judgments[action])
     try:
-        run(build(settings, arguments.judgments[action]))
+        run(chosen)
     except (OSError, ValueError, RuntimeError) as error:
         print(f"lvc: error: {error}", file=sys.stderr)
         return 1

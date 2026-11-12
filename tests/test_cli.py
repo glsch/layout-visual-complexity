@@ -59,3 +59,15 @@ def test_errors_are_reported_without_a_traceback(tmp_path: Path, capsys: pytest.
     arguments = ["judgments", "rank", "--dataset", str(tmp_path / "missing"), "--output", str(tmp_path / "out")]
     assert cli.main(["--quiet", *arguments]) == 1
     assert "lvc: error:" in capsys.readouterr().err
+
+
+def test_segment_takes_sources_and_flags_and_needs_sources(capsys: pytest.CaptureFixture[str], tmp_path: Path) -> None:
+    arguments = cli.parser().parse_args(["segment", "a.tsv", "b", "--alto", "--limit", "3", "--device", "cpu"])
+    assert (arguments.segment.given_sources, arguments.segment.alto, arguments.segment.limit) == (
+        ["a.tsv", "b"],
+        True,
+        3,
+    )
+    assert cli.main(["--quiet", "segment", "--output", str(tmp_path / "out")]) == 1
+    assert not (tmp_path / "out").exists()
+    assert "no sources" in capsys.readouterr().err
