@@ -5,6 +5,7 @@ The GPU's busy share and the memory in use are read on macOS (`ioreg`, `sysctl`)
 `/proc/meminfo`); elsewhere they're left out.
 """
 
+import itertools
 import os
 import re
 import shutil
@@ -102,8 +103,12 @@ def process_tree_cpu(pid: int | None = None) -> float | None:
 
 @dataclass
 class Sample:
+    """One reading: seconds since the start, CPU seconds of the run's processes as `ps` sees them (None if it
+    can't) and as the workers report them (each at the end of its batches), the GPU's busy share, the memory in use."""
+
     seconds: float
-    cpu: float
+    tree: float | None
+    reported: float
     gpu: float | None
     memory: int | None
 
@@ -135,11 +140,11 @@ class Monitor:
         self._sample()
 
     def _sample(self) -> None:
-        # `ps` sees the workers while they run; the workers' own reports also count those that have stopped.
         tree = process_tree_cpu()
-        reported = float(self.cpu_seconds())
-        cpu = max(reported, tree - self.baseline_cpu if tree is not None else 0.0)
-        self.samples.append(Sample(time.monotonic() - self.began, cpu, gpu_busy(), memory_in_use()))
+        tree = tree - self.baseline_cpu if tree is not None else None
+        self.samples.append(
+            Sample(time.monotonic() - self.began, tree, float(self.cpu_seconds()), gpu_busy(), memory_in_use())
+        )
 
     def _loop(self) -> None:
         while not self.stop_event.wait(self.interval):
@@ -155,17 +160,19 @@ class Monitor:
             return {}
         last = self.samples[-1]
         wall = max(last.seconds, 1e-9)
+        # The whole run's CPU: `ps` sees the workers while they run, their own reports count them once they've stopped.
+        total = max([last.reported] + [sample.tree for sample in self.samples if sample.tree is not None])
+        # The busiest interval, from `ps` alone: the workers report a batch's CPU only when it ends.
         shares = []
-        previous = Sample(0.0, 0.0, None, None)
-        for sample in self.samples:
-            if sample.seconds > previous.seconds:
-                shares.append((sample.cpu - previous.cpu) / ((sample.seconds - previous.seconds) * cores()))
-            previous = sample
+        timed = [sample for sample in self.samples if sample.tree is not None]
+        for previous, sample in itertools.pairwise(timed):
+            if sample.seconds > previous.seconds and sample.tree >= previous.tree:  # type: ignore[operator]
+                shares.append((sample.tree - previous.tree) / ((sample.seconds - previous.seconds) * cores()))  # type: ignore[operator]
         gpu = [sample.gpu for sample in self.samples if sample.gpu is not None]
         memory = [sample.memory for sample in self.samples if sample.memory is not None]
         return {
             "cores": cores(),
-            "cores_busy": last.cpu / (wall * cores()),
+            "cores_busy": total / (wall * cores()),
             "cores_busy_peak": max(shares) if shares else None,
             "gpu_busy": sum(gpu) / len(gpu) if gpu else None,
             "gpu_busy_peak": max(gpu) if gpu else None,

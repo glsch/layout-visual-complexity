@@ -531,7 +531,7 @@ def report_text(summary: dict[str, Any]) -> str:
         "",
         "## Stages",
         "",
-        "| Stage | Device | Workers | Seconds per page | Pages per second | CPU seconds per page | Peak memory per"
+        "| Stage | Device | Workers | Seconds per page | Capacity (pages/s) | CPU seconds per page | Peak memory per"
         " worker (GB) | Load (s) |",
         "|---|---|---:|---:|---:|---:|---:|---:|",
     ]
