@@ -83,7 +83,8 @@ def test_without_yolos_box_the_folio_crop_runs_alone(tmp_path: Path, sources: li
     table = outcome(tmp_path / "out")
     assert set(table["folio_method"]) == {"otsu"} and table["folio_iou"].isna().all()
     assert "folio_box" not in set(read_layout(tmp_path / "out" / "layout" / "msa.parquet")["kind"])
-    assert "Pages where YOLO's box" not in (tmp_path / "out" / "report.md").read_text()
+    report = (tmp_path / "out" / "report.md").read_text()
+    assert "Pages where YOLO's box" not in report and "| folio_box |" not in report
 
 
 def test_a_failing_page_fails_alone(tmp_path: Path, sources: list[str]) -> None:

@@ -446,6 +446,8 @@ def summarize(
     done = [row for row in rows if row["status"] == "done"]
     stages = {}
     for stage in STAGES:
+        if stage != "fetch" and stage not in usage:
+            continue  # a step the run didn't have
         seconds = [row[f"{stage}_seconds"] for row in ran if row[f"{stage}_seconds"] is not None]
         used = usage.get(stage)
         entry: dict[str, Any] = {
