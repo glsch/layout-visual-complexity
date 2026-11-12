@@ -264,6 +264,8 @@ class Scheduler:
         record.seconds[stage] = record.seconds.get(stage, 0.0) + seconds
         self.finished[page][stage] = state
         if len(self.finished[page]) == len(self.order):
+            # In the steps' order, not the order they finished in, so a page's status doesn't depend on timing.
+            record.status = {name: record.status[name] for name in self.order if name in record.status}
             self.unfinished -= 1
             document = record.document
             self.unfinished_in[document] -= 1
