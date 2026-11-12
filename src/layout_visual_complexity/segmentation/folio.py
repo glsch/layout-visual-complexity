@@ -1,9 +1,12 @@
 """The folio crop: where the leaf is on the page image.
 
-YOLO's folio box is the seed. Otsu's threshold on CIELAB lightness separates the bright leaf from a darker ground; the
-bright component overlapping the box most is the leaf, fitted with a quadrilateral (its rotated rectangle when four
-corners don't fit). The box is the fallback when Otsu's region is implausible: under half or over 98% of the image, or
-filling under 90% of its rotated rectangle. With no box at all, the whole image is the folio.
+Otsu's threshold on CIELAB lightness separates the bright leaf from a darker ground; the largest bright component is
+the leaf, fitted with a quadrilateral (its rotated rectangle when four corners don't fit). When that quadrilateral
+covers under half or over 98% of the image, the whole image is the folio: a leaf filling the image has no ground
+around it.
+
+YOLO's folio box is an option, for pages photographed on a bright ground: with it, the component overlapping the box
+most is the leaf, the box is the fallback, and the IoU of the two is recorded.
 """
 
 from dataclasses import dataclass
@@ -18,15 +21,14 @@ Box = tuple[float, float, float, float]
 
 @dataclass(frozen=True)
 class FolioSettings:
-    """How the leaf is found within YOLO's folio box.
+    """How the leaf is found.
 
     Args:
         work_edge: The long edge, in pixels, the image is scaled to for thresholding.
-        min_area: Otsu's region is implausible under this share of the image.
-        max_area: Otsu's region is implausible over this share of the image.
-        min_rectangularity: Otsu's region is implausible when it fills less than this share of its rotated rectangle.
-        disagreement: Pages where the IoU of YOLO's box and Otsu's region is under this are listed in the run's
-            report.
+        min_area: Otsu's quadrilateral is implausible under this share of the image.
+        max_area: Otsu's quadrilateral is implausible over this share of the image.
+        disagreement: With YOLO's folio box, the pages where the IoU of the box and Otsu's quadrilateral is under this
+            are listed in the run's report.
         batch_size: Pages per batch sent to a worker.
         workers: Worker processes; by default a share of `--jobs`.
     """
@@ -34,7 +36,6 @@ class FolioSettings:
     work_edge: int = 700
     min_area: float = 0.5
     max_area: float = 0.98
-    min_rectangularity: float = 0.9
     disagreement: float = 0.85
     batch_size: int = 4
     workers: int | None = None
@@ -42,8 +43,9 @@ class FolioSettings:
 
 @dataclass(frozen=True)
 class Folio:
-    """The leaf: how it was found, its quadrilateral (four corners, in the image's pixels), and the IoU of YOLO's box
-    with Otsu's region (None when either is missing)."""
+    """The leaf: how it was found (`otsu`, or the fallback: `yolo` for YOLO's box, `image` for the whole image), its
+    quadrilateral (four corners, in the image's pixels), and the IoU of YOLO's box with Otsu's quadrilateral (None
+    without either)."""
 
     method: Method
     quadrilateral: list[tuple[float, float]]
@@ -96,16 +98,14 @@ def iou(first: np.ndarray, second: np.ndarray) -> float:
 
 @dataclass(frozen=True)
 class Region:
-    """Otsu's leaf: the component's quadrilateral, and the share of the image and of its rotated rectangle that the
-    region within its outline fills."""
+    """Otsu's leaf: the component's quadrilateral, and the share of the image it covers."""
 
     quadrilateral: np.ndarray
     area: float
-    rectangularity: float
 
 
-def otsu_region(rgb: np.ndarray, prefer: np.ndarray | None) -> Region | None:
-    """The bright component overlapping `prefer` most (or the largest), cleaned, with its quadrilateral."""
+def otsu_region(rgb: np.ndarray, prefer: np.ndarray | None = None) -> Region | None:
+    """The largest bright component, or the one overlapping `prefer` most, cleaned, with its quadrilateral."""
     k = max(3, round(0.01 * max(rgb.shape[:2])))
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (k, k))
     mask = cv2.morphologyEx(bright_mask(rgb).astype(np.uint8), cv2.MORPH_OPEN, kernel)
@@ -118,39 +118,34 @@ def otsu_region(rgb: np.ndarray, prefer: np.ndarray | None) -> Region | None:
         overlap = np.bincount(labels[prefer], minlength=count)[1:]
         if overlap.max() > 0:
             chosen = 1 + int(np.argmax(overlap))
-    component = (labels == chosen).astype(np.uint8)
-    contours, _ = cv2.findContours(component, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    contour = max(contours, key=cv2.contourArea)
-    width, height = cv2.minAreaRect(contour)[1]
-    filled = cv2.contourArea(contour)  # the region within its outline: the ink inside the leaf doesn't count against it
-    return Region(
-        quadrilateral=fit_quadrilateral(cv2.convexHull(contour)),
-        area=filled / component.size,
-        rectangularity=filled / (width * height) if width * height else 0.0,
-    )
+    contours, _ = cv2.findContours((labels == chosen).astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    quadrilateral = fit_quadrilateral(cv2.convexHull(max(contours, key=cv2.contourArea)))
+    return Region(quadrilateral, cv2.contourArea(quadrilateral.astype(np.float32)) / labels.size)
 
 
 def plausible(region: Region, settings: FolioSettings) -> bool:
-    sized = settings.min_area <= region.area <= settings.max_area
-    return sized and region.rectangularity >= settings.min_rectangularity
+    return settings.min_area <= region.area <= settings.max_area
 
 
-def find_folio(rgb: np.ndarray, box: Box | None, settings: FolioSettings | None = None) -> Folio:
-    """The leaf on an RGB page image, given YOLO's folio box (in the image's pixels) or None."""
+def corners(points: np.ndarray, scale: float = 1.0) -> list[tuple[float, float]]:
+    return [(float(x) / scale, float(y) / scale) for x, y in points]
+
+
+def find_folio(rgb: np.ndarray, box: Box | None = None, settings: FolioSettings | None = None) -> Folio:
+    """The leaf on an RGB page image; with YOLO's folio box (in the image's pixels), the leaf it overlaps most."""
     settings = settings or FolioSettings()
     height, width = rgb.shape[:2]
-    if box is None:
-        corners = [(0.0, 0.0), (float(width), 0.0), (float(width), float(height)), (0.0, float(height))]
-        return Folio("image", corners, None)
     scale = min(1.0, settings.work_edge / max(height, width))
     size = (round(width * scale), round(height * scale))
     small = rgb if scale == 1.0 else cv2.resize(rgb, size, interpolation=cv2.INTER_AREA)
     shape = small.shape[:2]
-    small_box = box_corners(tuple(value * scale for value in box))  # type: ignore[arg-type]
-    box_mask = polygon_mask(small_box, shape)
+    box_mask = polygon_mask(box_corners(tuple(value * scale for value in box)), shape) if box else None  # type: ignore[arg-type]
     region = otsu_region(small, box_mask)
-    overlap = iou(polygon_mask(region.quadrilateral, shape), box_mask) if region is not None else None
-    if region is None or not plausible(region, settings):
-        return Folio("yolo", [(float(x), float(y)) for x, y in box_corners(box)], overlap)
-    corners = [(float(x) / scale, float(y) / scale) for x, y in region.quadrilateral]
-    return Folio("otsu", corners, overlap)
+    overlap = None
+    if region is not None and box_mask is not None:
+        overlap = iou(polygon_mask(region.quadrilateral, shape), box_mask)
+    if region is not None and plausible(region, settings):
+        return Folio("otsu", corners(region.quadrilateral, scale), overlap)
+    if box is not None:
+        return Folio("yolo", corners(box_corners(box)), overlap)
+    return Folio("image", corners(box_corners((0.0, 0.0, float(width), float(height)))), None)

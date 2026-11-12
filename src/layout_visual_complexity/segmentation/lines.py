@@ -30,6 +30,8 @@ class LineSettings:
         threads: Torch threads per worker.
         map_workers: Worker processes running Kraken's network; by default one on a GPU, a share of `--jobs` on the
             CPU.
+        max_lines: Lines kept on a page at most. Kraken 7 keeps 200 (400 baseline endpoints), dropping the smallest
+            fragments first; dense pages reach that.
     """
 
     model: Path | None = None
@@ -38,6 +40,7 @@ class LineSettings:
     workers: int | None = None
     threads: int = 1
     map_workers: int | None = None
+    max_lines: int = 500
 
 
 def kraken_device(device: str) -> tuple[str, Any]:
@@ -53,7 +56,7 @@ class Kraken:
     own vectorisation and reading order, so the lines are those Kraken's `predict` gives. Kraken's regions are not
     kept."""
 
-    def __init__(self, model: Path | None, device: str, text_direction: str) -> None:
+    def __init__(self, model: Path | None, device: str, text_direction: str, max_lines: int | None = None) -> None:
         for name in ("kraken", "lightning", "lightning.fabric", "lightning.pytorch", "coremltools"):
             logging.getLogger(name).setLevel(logging.ERROR)
         warnings.filterwarnings("ignore", module="coremltools")
@@ -71,6 +74,8 @@ class Kraken:
             text_direction=text_direction, accelerator=accelerator, device=devices, precision="32-true"
         )
         self.compute = self.net._compute_segmentation_map
+        if max_lines is not None:
+            limit_lines(max_lines)
 
     def maps(self, image: str, target: Path) -> Path:
         """Run the network on a page and save its heatmaps, the scaled page and the scale into `target` (`.npz`)."""
@@ -118,6 +123,20 @@ class Kraken:
                 boundary = [(float(x), float(y)) for x, y in line.boundary]
                 found_lines.append(Line(baseline, boundary))
         return found_lines
+
+
+def limit_lines(max_lines: int) -> None:
+    """Let Kraken's vectorisation keep up to `max_lines` lines a page (two baseline endpoints each), in this process."""
+    import functools
+    import inspect
+
+    from kraken.lib.vgsl import spred
+
+    vectorize = getattr(spred, "vectorize_lines", None)
+    vectorize = getattr(vectorize, "func", vectorize)
+    if vectorize is None or "max_endpoints" not in inspect.signature(vectorize).parameters:
+        raise RuntimeError("this Kraken version doesn't let its number of lines be set; Kraken 7.1 does")
+    spred.vectorize_lines = functools.partial(vectorize, max_endpoints=2 * max_lines)
 
 
 def _shape(points: list[tuple[float, float]]) -> Any:

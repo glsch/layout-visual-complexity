@@ -473,6 +473,7 @@ def summarize(
     methods: dict[str, int] = {}
     for row in done:
         methods[row["folio_method"]] = methods.get(row["folio_method"], 0) + 1
+    fallbacks = [(row["page"], row["folio_method"]) for row in done if row["folio_method"] != "otsu"]
     statuses = [row.get("status") for row in ran]
     fetched = [request for request in requests if request.status == 200]
     return {
@@ -498,9 +499,12 @@ def summarize(
             "bytes_per_page": (layout_bytes + pages_bytes) / len(done) if done else None,
         },
         "folio_methods": methods,
+        "folio_fallbacks": fallbacks,
+        "folio_box_used": any(row["folio_iou"] is not None for row in done),
         "folio_disagreements": disagreements,
         "disagreement_below": disagreement,
         "regions": sum(row["regions"] or 0 for row in done),
+        "yolo_lines": sum(row["yolo_lines"] or 0 for row in done),
         "lines": sum(row["lines"] or 0 for row in done),
     }
 
@@ -524,7 +528,8 @@ def report_text(summary: dict[str, Any]) -> str:
         f" pages, {summary['done_this_run']:,} done, in {summary['seconds']:.0f} s"
         f" ({_number(summary['pages_per_second'])} pages/s)."
         + (" Stopped before the end." if summary["stopped"] else ""),
-        f"- Regions {summary['regions']:,}, lines {summary['lines']:,}.",
+        f"- Regions {summary['regions']:,}, YOLO's lines {summary['yolo_lines']:,},"
+        f" Kraken's lines {summary['lines']:,}.",
         f"- Cores busy: {_number(machine.get('cores_busy'))} of {machine.get('cores')} on average, "
         f"{_number(machine.get('cores_busy_peak'))} at the busiest interval.",
         f"- GPU busy: {_number(machine.get('gpu_busy'))} on average, {_number(machine.get('gpu_busy_peak'))} at most.",
@@ -555,13 +560,17 @@ def report_text(summary: dict[str, Any]) -> str:
     lines.append(
         "Methods: " + ", ".join(f"{method} {count}" for method, count in sorted(summary["folio_methods"].items()))
     )
-    below = summary["disagreement_below"]
-    lines += ["", f"Pages where YOLO's box and Otsu's region disagree (IoU under {below}):", ""]
-    if summary["folio_disagreements"]:
-        lines += ["| Page | IoU | Method |", "|---|---:|---|"]
-        lines += [f"| {page} | {iou:.3f} | {method} |" for page, iou, method in summary["folio_disagreements"]]
-    else:
-        lines.append("None.")
+    names = {"image": "the whole image", "yolo": "YOLO's box"}
+    lines += ["", "Pages where Otsu's quadrilateral was implausible, cropped to the whole image or YOLO's box:", ""]
+    lines += [f"- {page}: {names.get(method, method)}" for page, method in summary["folio_fallbacks"]] or ["None."]
+    if summary["folio_box_used"]:
+        below = summary["disagreement_below"]
+        lines += ["", f"Pages where YOLO's box and Otsu's quadrilateral disagree (IoU under {below}):", ""]
+        if summary["folio_disagreements"]:
+            lines += ["| Page | IoU | Method |", "|---|---:|---|"]
+            lines += [f"| {page} | {iou:.3f} | {method} |" for page, iou, method in summary["folio_disagreements"]]
+        else:
+            lines.append("None.")
     lines += ["", "## Failures", ""]
     lines += [f"- {page}: {status}" for page, status in summary["failed"]] or ["None."]
     return "\n".join(lines) + "\n"

@@ -68,13 +68,15 @@ finds on each page the leaf (the folio crop), its regions and its text lines, an
   canvas label in lower case without spaces or leading zeros (`ig28_115r`).
 - **Images** are fetched at a 2,000 px long edge, or at their own size when smaller, into a cache of about 2 GB from
   which the oldest leave first (`images.long_edge`, `images.cache_gb`).
-- **The folio crop**: YOLO's folio box (`folio_box.model`), then Otsu's threshold on lightness, keeping the bright
-  region that overlaps the box most, fitted with a quadrilateral. The box is the fallback when that region is under
-  half or over 98% of the image, or fills under 90% of its rotated rectangle; with no box, the whole image.
-- **Regions**: a YOLO model (`regions.model`), at the size it was trained at, keeping the classes that
-  `regions.classes` matches (its zones by default).
-- **Lines**: Kraken's baseline segmenter (its own `blla` model by default); each line is assigned to the region its
-  boundary overlaps most.
+- **The folio crop**: Otsu's threshold on lightness; the largest bright region, fitted with a quadrilateral; the
+  whole image when that quadrilateral covers under half or over 98% of the image, as when the image is cut to the
+  leaf. For pages photographed on a bright ground, a YOLO folio model (`folio_box.model`) can seed it: the region
+  that overlaps its box most, and the box when Otsu's quadrilateral is implausible.
+- **Regions**: a YOLO model (`regions.model`), at the size it was trained at, keeping as regions the classes that
+  `regions.classes` matches (its zones by default), and as YOLO's lines those `regions.line_classes` matches (its
+  line classes: headings, interlinear glosses, music).
+- **Lines**: Kraken's baseline segmenter (its own `blla` model by default), keeping up to 500 lines a page
+  (`lines.max_lines`; Kraken alone keeps 200); each line is assigned to the region its boundary overlaps most.
 
 Every step runs at once in worker processes, each page moving on as soon as it is ready. `--device auto` runs the
 YOLO models and Kraken's network on Apple's GPU when there is one, and Kraken's vectorisation on the CPU's cores; the
@@ -82,11 +84,12 @@ CPU and the GPU give the same layout. Workers are capped to fit in the memory av
 again skips the pages already done with the same settings and models, and retries those that failed.
 
 The output folder holds `layout/<document>.parquet`, one row per element of a page (`page`, `kind`: `folio`,
-`folio_box`, `region` or `line`, `class`, `polygon`, `baseline`, `confidence`, `region`, `id`), with every
-coordinate in the full image's pixels; `pages.parquet`, one row per page (its source, canvas, image service, full
-and fetched size, the folio crop's method and IoU with YOLO's box, its numbers of regions and lines, each step's
-seconds, its status); `report.md` (pages done and failed, each step's pace, how busy the cores and the GPU were,
-peak memory, the store's size, the pages where YOLO's box and Otsu's region disagree); `alto/` with `--alto`, one
+`folio_box` with a folio model, `region`, `yolo_line` or `line`, `class`, `polygon`, `baseline`, `confidence`,
+`region`, `id`), with every coordinate in the full image's pixels; `pages.parquet`, one row per page (its source,
+canvas, image service, full and fetched size, the folio crop's method and, with a folio model, its IoU with the box,
+its numbers of regions, YOLO's lines and Kraken's lines, each step's seconds, its status); `report.md` (pages done and
+failed, each step's pace, how busy the cores and the GPU were, peak memory, the store's size, the pages cropped to the
+whole image or the box); `alto/` with `--alto`, one
 ALTO 4 file per page; and the run's `config.yaml` and `manifest.json`, with the models' checksums.
 
 ## The dataset
@@ -135,7 +138,8 @@ calibration judgments; so its numbers differ from the article's, which kept them
 ```
 
 Tests marked `requires_models` run the segmentation models on a synthetic page; they are skipped without the
-`segment` extra or without the models in `models/` (`folio_yolo.pt`, `medieval-yolov11x.pt`). The ALTO output is
+`segment` extra or without the regions model in `models/` (`medieval-yolov11x.pt`; `folio_yolo.pt` for the folio
+model's test). The ALTO output is
 checked against the ALTO 4.4 schema when `LVC_ALTO_SCHEMA` names the schema's file.
 
 ## Licence

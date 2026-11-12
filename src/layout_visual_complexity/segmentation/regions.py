@@ -13,15 +13,17 @@ from typing import Any
 from layout_visual_complexity.segmentation.records import Detection
 
 IOU = 0.7
-MAX_DETECTIONS = 300
+# Enough for every zone and line of a dense page, so that keeping the line classes leaves the zones as they'd be alone.
+MAX_DETECTIONS = 1000
 
 
 @dataclass(frozen=True)
 class FolioBoxSettings:
-    """YOLO's folio box.
+    """YOLO's folio box, an option for pages photographed on a bright ground: the folio crop then takes the leaf the
+    box overlaps most, and the box where Otsu's quadrilateral is implausible.
 
     Args:
-        model: The YOLO model that finds folios (one class, `Folio`).
+        model: The YOLO model that finds folios (one class, `Folio`); without one, the folio crop uses no box.
         image_size: The size images are scaled to for the model; by default the size it was trained at.
         confidence: Detections less confident than this are left out.
         batch_size: Pages per call to the model. More than one can change detections slightly, and was no faster on
@@ -30,7 +32,7 @@ class FolioBoxSettings:
         threads: Torch threads per worker.
     """
 
-    model: Path = Path("models/folio_yolo.pt")
+    model: Path | None = None
     image_size: int | None = None
     confidence: float = 0.25
     batch_size: int = 1
@@ -46,8 +48,10 @@ class RegionSettings:
         model: The YOLO model that finds regions.
         image_size: The size images are scaled to for the model; by default the size it was trained at.
         confidence: Detections less confident than this are left out.
-        classes: The classes kept, a regular expression matched against the model's class names; by default its zones
-            (the lines come from Kraken).
+        classes: The classes kept as regions, a regular expression matched against the model's class names; by
+            default its zones, to which Kraken's lines are assigned.
+        line_classes: The classes kept as YOLO's lines, beside Kraken's: by default the model's line classes, whose
+            types (headings, interlinear glosses, music) Kraken's lines don't have.
         batch_size: Pages per call to the model. More than one can change detections slightly, and was no faster on
             Apple's GPU.
         workers: Worker processes; by default one on a GPU, a share of `--jobs` on the CPU.
@@ -58,6 +62,7 @@ class RegionSettings:
     image_size: int | None = None
     confidence: float = 0.25
     classes: str = r".*Zone"
+    line_classes: str = r".*Line"
     batch_size: int = 1
     workers: int | None = None
     threads: int = 1

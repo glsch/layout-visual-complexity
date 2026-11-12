@@ -25,7 +25,8 @@ def rect(x0: float, y0: float, x1: float, y1: float) -> list[tuple[float, float]
 
 
 def record(page: str = "msa_1r", position: int = 1) -> PageRecord:
-    """A page fetched at 500×750 from a 1000×1500 image: a folio, two regions, three lines (one outside both)."""
+    """A page fetched at 500×750 from a 1000×1500 image: a folio, two regions, a YOLO line, three lines (one outside
+    both regions)."""
     return PageRecord(
         page=page,
         document="msa",
@@ -40,6 +41,7 @@ def record(page: str = "msa_1r", position: int = 1) -> PageRecord:
             Detection("MainZone", (50.0, 50.0, 400.0, 600.0), 0.88),
             Detection("MarginTextZone", (410.0, 50.0, 470.0, 600.0), 0.51),
         ],
+        yolo_lines=[Detection("HeadingLine", (60.0, 60.0, 300.0, 80.0), 0.7)],
         lines=[
             Line([(60.0, 100.0), (390.0, 100.0)], rect(60, 90, 390, 103)),
             Line([(380.0, 140.0), (460.0, 140.0)], rect(380, 130, 460, 143)),  # mostly in the margin
@@ -63,6 +65,11 @@ def test_a_page_fetched_smaller_gives_full_image_coordinates() -> None:
     assert rows["folio_box"]["polygon"] == [[40, 60], [960, 60], [960, 1440], [40, 1440]]
     assert rows["r1"]["polygon"][2] == [800, 1200] and rows["r1"]["class"] == "MainZone"
     assert rows["l2"]["baseline"] == [[760, 280], [920, 280]] and rows["l2"]["region"] == "r2"
+    assert (rows["y1"]["kind"], rows["y1"]["class"], rows["y1"]["polygon"][2]) == (
+        "yolo_line",
+        "HeadingLine",
+        [600, 160],
+    )
 
 
 def test_the_store_is_written_and_read_back_row_for_row(tmp_path: Path) -> None:
@@ -72,7 +79,7 @@ def test_the_store_is_written_and_read_back_row_for_row(tmp_path: Path) -> None:
     path = write_layout(tmp_path / "layout" / "msa.parquet", pages)
     table = read_layout(path)
     expected = [row for page in sorted(pages, key=lambda p: p.position) for row in layout_rows(page)]
-    assert len(table) == len(expected) == 2 * 7
+    assert len(table) == len(expected) == 2 * 8
     for (_, got), want in zip(table.iterrows(), expected, strict=True):
         assert (got["page"], got["kind"], got["class"], got["id"]) == (
             want["page"],
@@ -86,7 +93,7 @@ def test_the_store_is_written_and_read_back_row_for_row(tmp_path: Path) -> None:
             assert got["confidence"] != got["confidence"] or got["confidence"] is None
         else:
             assert got["confidence"] == pytest.approx(want["confidence"], rel=1e-6)
-    assert list(table["kind"].unique()) == ["folio", "folio_box", "region", "line"]
+    assert list(table["kind"].unique()) == ["folio", "folio_box", "region", "yolo_line", "line"]
 
 
 def test_the_pages_table(tmp_path: Path) -> None:
@@ -97,13 +104,8 @@ def test_the_pages_table(tmp_path: Path) -> None:
     source = {"label": "0001r", "source": "x.tsv", "canvas": "c", "image_service": "s"}
     path = write_pages(tmp_path / "pages.parquet", [page_row(page, "done", source, "key")])
     (row,) = read_pages(path).to_dict("records")
-    assert (row["width"], row["fetched_width"], row["folio_method"], row["regions"], row["lines"]) == (
-        1000,
-        500,
-        "otsu",
-        2,
-        3,
-    )
+    counts = (row["regions"], row["yolo_lines"], row["lines"])
+    assert (row["width"], row["fetched_width"], row["folio_method"], *counts) == (1000, 500, "otsu", 2, 1, 3)
     assert row["lines_seconds"] == 4.0 and row["status"] == "done" and row["label"] == "0001r"
 
 

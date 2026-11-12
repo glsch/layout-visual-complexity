@@ -59,6 +59,7 @@ class PageRecord:
     folio_box: Detection | None = None
     folio: FolioRecord | None = None
     regions: list[Detection] = field(default_factory=list)
+    yolo_lines: list[Detection] = field(default_factory=list)
     lines: list[Line] = field(default_factory=list)
     line_map: str | None = None
     status: dict[str, Status] = field(default_factory=dict)
@@ -85,6 +86,7 @@ class PageRecord:
             folio_box=detection(data.get("folio_box")),
             folio=FolioRecord(folio["method"], points(folio["quadrilateral"]), folio["iou"]) if folio else None,
             regions=[detection(region) for region in data.get("regions", [])],  # type: ignore[misc]
+            yolo_lines=[detection(line) for line in data.get("yolo_lines", [])],  # type: ignore[misc]
             lines=[
                 Line(points(line["baseline"]), points(line["boundary"]), line.get("region"))
                 for line in data.get("lines", [])
@@ -96,5 +98,5 @@ class PageRecord:
 
     @property
     def failed(self) -> list[str]:
-        """The stages that failed, in the order they were recorded."""
+        """The stages that failed, in the steps' order."""
         return [name for name, status in self.status.items() if status.state == "failed"]

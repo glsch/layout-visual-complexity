@@ -1,10 +1,12 @@
-"""The segmentation steps: YOLO's folio box, the folio crop, YOLO's regions, and Kraken's lines.
+"""The segmentation steps: the folio crop (with YOLO's folio box, if asked for), YOLO's regions and lines, and
+Kraken's lines.
 
 The memory each worker adds was measured on Apple's M4 Pro: one worker's peak footprint (YOLO 2.2 GB on the GPU,
 Kraken's network 5.5 GB, a line worker 0.95 GB) overstates it, since peaks don't come at once; twelve line workers
 with the GPU steps added 11.3 GB to the memory in use. The figures below lie between the two.
 """
 
+import re
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any, ClassVar
@@ -53,7 +55,7 @@ class FolioBoxStep(Step):
     settings: FolioBoxSettings
 
     def models(self) -> list[Path]:
-        return [self.settings.model]
+        return [self.settings.model] if self.settings.model else []
 
     def version(self) -> str:
         return f"{engine_version('ultralytics')}; {super().version()}"
@@ -63,7 +65,7 @@ class FolioBoxStep(Step):
         set_threads(self.threads)
         from layout_visual_complexity.segmentation.regions import Yolo
 
-        self.yolo = Yolo(self.settings.model, device, getattr(self, "cache", DEFAULT_CACHE))
+        self.yolo = Yolo(self.settings.model, device, getattr(self, "cache", DEFAULT_CACHE))  # type: ignore[arg-type]
 
     def process(self, pages: list[PageRecord]) -> list[PageRecord]:
         found = self.yolo.detect([page.image for page in pages], self.settings.image_size, self.settings.confidence)
@@ -75,12 +77,20 @@ class FolioBoxStep(Step):
 
 
 class FolioStep(Step):
-    """The folio crop: Otsu within YOLO's box, the box when Otsu's region is implausible, the image without a box."""
+    """The folio crop: Otsu's leaf, or the whole image where it's implausible; with YOLO's folio box (`seeded`), the
+    leaf the box overlaps most, and the box where Otsu's is implausible."""
 
-    needs = frozenset({"image", "folio_box"})
     produces = frozenset({"folio"})
     memory_mb = {"cpu": 300}
     settings: FolioSettings
+
+    def __init__(self, settings: FolioSettings, seeded: bool = False) -> None:
+        super().__init__(settings)
+        self.seeded = seeded
+        self.needs = frozenset({"image", "folio_box"} if seeded else {"image"})  # type: ignore[misc]
+
+    def result_settings(self) -> dict[str, Any]:
+        return super().result_settings() | {"seeded": self.seeded}
 
     def load(self, device: str) -> None:
         super().load(device)
@@ -105,9 +115,9 @@ class FolioStep(Step):
 
 
 class RegionsStep(Step):
-    """YOLO's regions: the classes the settings keep, as boxes, from the top of the page down."""
+    """YOLO's regions and lines: the classes the settings keep, as boxes, each from the top of the page down."""
 
-    produces = frozenset({"regions"})
+    produces = frozenset({"regions", "yolo_lines"})
     speed_settings = frozenset({"workers", "threads"})
     gpu = True
     auto_device = "mps"
@@ -129,11 +139,17 @@ class RegionsStep(Step):
 
     def process(self, pages: list[PageRecord]) -> list[PageRecord]:
         settings = self.settings
+        zones, lines = re.compile(settings.classes), re.compile(settings.line_classes)
         found = self.yolo.detect(
-            [page.image for page in pages], settings.image_size, settings.confidence, settings.classes
+            [page.image for page in pages],
+            settings.image_size,
+            settings.confidence,
+            f"(?:{settings.classes})|(?:{settings.line_classes})",
         )
         for page, detections in zip(pages, found, strict=True):
-            page.regions = sorted(detections, key=lambda d: (round(d.box[1]), round(d.box[0]), -d.confidence))
+            in_order = sorted(detections, key=lambda d: (round(d.box[1]), round(d.box[0]), -d.confidence))
+            page.regions = [detection for detection in in_order if zones.fullmatch(detection.cls)]
+            page.yolo_lines = [d for d in in_order if lines.fullmatch(d.cls) and not zones.fullmatch(d.cls)]
             page.status[self.name] = Status()
         return pages
 
@@ -161,7 +177,8 @@ class KrakenStep(Step):
         set_threads(self.threads)
         from layout_visual_complexity.segmentation.lines import Kraken
 
-        self.kraken = Kraken(self.settings.model, device, self.settings.text_direction)
+        settings = self.settings
+        self.kraken = Kraken(settings.model, device, settings.text_direction, settings.max_lines)
 
     def maps_folder(self) -> Path:
         return Path(getattr(self, "work", Path(".")))
@@ -222,10 +239,11 @@ class LinesStep(KrakenStep):
 def segmentation_steps(
     folio_box: FolioBoxSettings, folio: FolioSettings, regions: RegionSettings, lines: LineSettings
 ) -> dict[str, Any]:
-    """The steps, by stage name, in order."""
-    return {
-        "folio_box": FolioBoxStep(folio_box),
-        "folio": FolioStep(folio),
+    """The steps, by stage name, in order; YOLO's folio box only when its model is given."""
+    seeded = folio_box.model is not None
+    steps: dict[str, Any] = {"folio_box": FolioBoxStep(folio_box)} if seeded else {}
+    return steps | {
+        "folio": FolioStep(folio, seeded),
         "regions": RegionsStep(regions),
         "line_maps": LineMapsStep(lines),
         "lines": LinesStep(lines),

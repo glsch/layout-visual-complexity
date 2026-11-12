@@ -1,9 +1,10 @@
 """The layout store: Parquet, in the full image's pixels.
 
-`layout/<document>.parquet` holds one row per element of a page: its folio (the quadrilateral) and YOLO's folio box,
-its regions and its lines, with `page`, `kind` (`folio`, `folio_box`, `region`, `line`), `class`, `polygon` (a list
-of `[x, y]` points), `baseline` (lines only), `confidence` (YOLO's), `region` (the id of a line's region) and `id`
-(unique within the page: `folio`, `folio_box`, `r1`…, `l1`…). `pages.parquet` holds one row per page.
+`layout/<document>.parquet` holds one row per element of a page: its folio (the quadrilateral, its method as its
+class), YOLO's folio box when one was used, YOLO's regions and lines, and Kraken's lines, with `page`, `kind`
+(`folio`, `folio_box`, `region`, `yolo_line`, `line`), `class`, `polygon` (a list of `[x, y]` points), `baseline`
+(Kraken's lines only), `confidence` (YOLO's), `region` (the id of a Kraken line's region) and `id` (unique within
+the page: `folio`, `folio_box`, `r1`…, `y1`…, `l1`…). `pages.parquet` holds one row per page.
 """
 
 from pathlib import Path
@@ -43,6 +44,7 @@ PAGE_COLUMNS = [
     "folio_method",
     "folio_iou",
     "regions",
+    "yolo_lines",
     "lines",
     *[f"{stage}_seconds" for stage in STAGES],
     "status",
@@ -82,6 +84,8 @@ def layout_rows(record: PageRecord) -> list[dict[str, Any]]:
             confidence=record.folio_box.confidence)  # fmt: skip
     for number, region in enumerate(record.regions, start=1):
         add("region", region.cls, box_points(region.box), f"r{number}", confidence=region.confidence)
+    for number, line in enumerate(record.yolo_lines, start=1):
+        add("yolo_line", line.cls, box_points(line.box), f"y{number}", confidence=line.confidence)
     for number, line in enumerate(record.lines, start=1):
         region = f"r{line.region + 1}" if line.region is not None else None
         add("line", "line", line.boundary, f"l{number}", baseline=scaled(line.baseline, scale), region=region)
@@ -124,6 +128,7 @@ def page_row(record: PageRecord, status: str, source: dict[str, Any], settings: 
         "folio_method": folio.method if folio else None,
         "folio_iou": folio.iou if folio else None,
         "regions": len(record.regions),
+        "yolo_lines": len(record.yolo_lines),
         "lines": len(record.lines),
         **{f"{stage}_seconds": record.seconds.get(stage) for stage in STAGES},
         "status": status,
@@ -134,7 +139,7 @@ def page_row(record: PageRecord, status: str, source: dict[str, Any], settings: 
 def write_pages(path: Path, rows: list[dict[str, Any]]) -> Path:
     """The pages table, in the order given."""
     table = pd.DataFrame(rows, columns=PAGE_COLUMNS)
-    for column in ("width", "height", "fetched_width", "fetched_height", "regions", "lines"):
+    for column in ("width", "height", "fetched_width", "fetched_height", "regions", "yolo_lines", "lines"):
         table[column] = table[column].astype("Int32")
     for column in ("folio_iou", *[f"{stage}_seconds" for stage in STAGES]):
         table[column] = table[column].astype("Float64")

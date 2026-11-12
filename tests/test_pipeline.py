@@ -31,11 +31,12 @@ def pages(folder: Path, name: str, count: int) -> Path:
 
 
 def steps(workers: int | None = 1, batch: int = 3, **fake: object) -> dict:
-    """Fake YOLO and Kraken steps around the real folio crop. `fake` settings go to every fake step."""
+    """Fake YOLO and Kraken steps around the real folio crop, seeded by the fake folio box. `fake` settings go to every
+    fake step but the lines."""
     settings = FakeSettings(workers=workers, batch_size=batch, **fake)  # type: ignore[arg-type]
     return {
         "folio_box": FakeFolioBox(settings),
-        "folio": FolioStep(FolioSettings(workers=workers, batch_size=batch)),
+        "folio": FolioStep(FolioSettings(workers=workers, batch_size=batch), seeded=True),
         "regions": FakeRegions(settings),
         "lines": FakeLines(FakeSettings(workers=workers, batch_size=batch)),
     }
@@ -73,12 +74,26 @@ def test_the_same_results_with_one_worker_or_many_and_in_any_order(tmp_path: Pat
     assert set(outcome(tmp_path / "one")["folio_method"]) == {"otsu"}
 
 
+def test_without_yolos_box_the_folio_crop_runs_alone(tmp_path: Path, sources: list[str]) -> None:
+    chosen = steps()
+    del chosen["folio_box"]
+    chosen["folio"] = FolioStep(FolioSettings(workers=1))
+    summary = run(tmp_path, "out", sources, chosen)
+    assert summary["done"] == 9 and not summary["folio_box_used"]
+    table = outcome(tmp_path / "out")
+    assert set(table["folio_method"]) == {"otsu"} and table["folio_iou"].isna().all()
+    assert "folio_box" not in set(read_layout(tmp_path / "out" / "layout" / "msa.parquet")["kind"])
+    assert "Pages where YOLO's box" not in (tmp_path / "out" / "report.md").read_text()
+
+
 def test_a_failing_page_fails_alone(tmp_path: Path, sources: list[str]) -> None:
     summary = run(tmp_path, "out", sources, steps(batch=3, fail_pages=["msa_2r"], raise_pages=["msb_3r"]))
     failed = dict(summary["failed"])
     assert set(failed) == {"msa_2r", "msb_3r"}
-    assert failed["msb_3r"].startswith("folio_box: RuntimeError: fake error on msb_3r")
-    assert "folio: folio_box failed" in failed["msb_3r"]
+    assert failed["msb_3r"] == (
+        "folio_box: RuntimeError: fake error on msb_3r; folio: folio_box failed;"
+        " regions: RuntimeError: fake error on msb_3r"
+    )
     assert summary["done"] == 7
     table = read_layout(tmp_path / "out" / "layout" / "msa.parquet")
     assert "msa_2r" not in set(table["page"]) and {"msa_1r", "msa_3r"} <= set(table["page"])
@@ -136,6 +151,12 @@ def test_workers_share_the_cpu_and_fit_in_memory() -> None:
     from layout_visual_complexity.segmentation.regions import FolioBoxSettings, RegionSettings
 
     chosen = segmentation_steps(FolioBoxSettings(), FolioSettings(), RegionSettings(), LineSettings())
+    assert list(chosen) == ["folio", "regions", "line_maps", "lines"]
+    assert chosen["folio"].needs == {"image"}
+    seeded = segmentation_steps(
+        FolioBoxSettings(model=Path("box.pt")), FolioSettings(), RegionSettings(), LineSettings()
+    )
+    assert list(seeded)[:2] == ["folio_box", "folio"] and seeded["folio"].needs == {"image", "folio_box"}
     on_cpu = {p.stage: (p.device, p.workers) for p in place(chosen, "cpu", 14, 64_000)}
     assert on_cpu["lines"][1] > on_cpu["regions"][1] >= 1 and all(device == "cpu" for device, _ in on_cpu.values())
     tight = {p.stage: p.workers for p in place(chosen, "cpu", 14, 12_000)}

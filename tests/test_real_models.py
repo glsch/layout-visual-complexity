@@ -8,16 +8,17 @@ import numpy as np
 import pytest
 
 from layout_visual_complexity.segment import SegmentSettings, run_segment
+from layout_visual_complexity.segmentation.regions import FolioBoxSettings, RegionSettings
 from layout_visual_complexity.segmentation.store import read_layout, read_pages
 
 MODELS = Path("models")
-NEEDED = [MODELS / "folio_yolo.pt", MODELS / "medieval-yolov11x.pt"]
+REGIONS, FOLIO = MODELS / "medieval-yolov11x.pt", MODELS / "folio_yolo.pt"
 INSTALLED = all(importlib.util.find_spec(name) for name in ("torch", "ultralytics", "kraken"))
 
 pytestmark = [
     pytest.mark.requires_models,
     pytest.mark.skipif(
-        not (INSTALLED and all(path.is_file() for path in NEEDED)), reason="needs the models in models/"
+        not (INSTALLED and REGIONS.is_file()), reason="needs the segment extra and the regions model in models/"
     ),
 ]
 
@@ -38,17 +39,27 @@ def written_page(path: Path) -> Path:
     return path
 
 
-def test_one_page_end_to_end(tmp_path: Path) -> None:
+@pytest.mark.parametrize("seeded", [False, True])
+def test_one_page_end_to_end(tmp_path: Path, seeded: bool) -> None:
+    if seeded and not FOLIO.is_file():
+        pytest.skip("needs the folio model in models/")
     page = written_page(tmp_path / "ms" / "001r.jpg")
     settings = SegmentSettings(
-        sources=[str(page)], output=tmp_path / "out", cache=tmp_path / "cache", jobs=2, alto=True
+        sources=[str(page)],
+        output=tmp_path / "out",
+        cache=tmp_path / "cache",
+        jobs=2,
+        alto=True,
+        folio_box=FolioBoxSettings(model=FOLIO if seeded else None),
+        regions=RegionSettings(model=REGIONS),
     )
     summary = run_segment(settings)
     assert summary["done"] == 1, summary["failed"]
     (row,) = read_pages(tmp_path / "out" / "pages.parquet").to_dict("records")
-    assert row["folio_method"] in ("otsu", "yolo", "image") and row["lines"] > 20
+    assert row["folio_method"] == "otsu" and row["lines"] > 20
+    assert (row["folio_iou"] is not None and row["folio_iou"] == row["folio_iou"]) == seeded
     layout = read_layout(tmp_path / "out" / "layout" / "ms.parquet")
-    assert {"folio", "line"} <= set(layout["kind"])
+    assert {"folio", "line"} <= set(layout["kind"]) and ("folio_box" in set(layout["kind"])) == seeded
     xs = [x for polygon in layout["polygon"] for x, _ in polygon]
     assert min(xs) >= 0 and max(xs) <= 1300
     assert (tmp_path / "out" / "alto" / "ms" / "ms_1r.xml").is_file()
@@ -64,3 +75,11 @@ def test_kraken_in_two_halves_gives_what_kraken_gives(tmp_path: Path) -> None:
     halves = Kraken(None, "cpu", "horizontal-lr").lines(page, maps)
     assert len(whole) > 20
     assert [(line.baseline, line.boundary) for line in halves] == [(line.baseline, line.boundary) for line in whole]
+
+
+def test_the_number_of_lines_kraken_keeps_is_a_setting(tmp_path: Path) -> None:
+    from layout_visual_complexity.segmentation.lines import Kraken
+
+    page = str(written_page(tmp_path / "page.jpg"))
+    assert len(Kraken(None, "cpu", "horizontal-lr", max_lines=10).lines(page)) == 10
+    assert len(Kraken(None, "cpu", "horizontal-lr", max_lines=500).lines(page)) > 20
