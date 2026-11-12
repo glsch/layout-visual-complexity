@@ -53,7 +53,7 @@ MANUSCRIPT_COLUMNS = [
     "catalogue_record",
     "mirabile_id",
     "biblissima_id",
-    "census_id",
+    "hscensus_id",
     "licence",
 ]
 TABLES = {"judgments": JUDGMENT_COLUMNS, "images": IMAGE_COLUMNS, "manuscripts": MANUSCRIPT_COLUMNS}

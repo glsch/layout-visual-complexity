@@ -50,7 +50,7 @@ A dataset is a folder of four files, which `import` checks before anything else 
 |---|---|---|
 | `judgments.tsv` | judgment | `judgment`, `session`, `annotator`, `campaign`, `date`, `left`, `right`, `chosen`, `response_ms` |
 | `images.tsv` | page | `image`, `manuscript`, `folio`, `canvas`, `image_url`, `image_service`, `width`, `height`, `work`, `text`, `text_language` |
-| `manuscripts.tsv` | manuscript | `manuscript`, `shelfmark`, `library`, `city`, `country`, `title`, `date`, `date_not_before`, `date_not_after`, `date_edtf`, `place_of_origin`, `material`, `height_mm`, `width_mm`, `languages`, `texts`, `category`, `secondary_categories`, `pages`, `canvases`, `iiif_manifest`, `catalogue_record`, `mirabile_id`, `biblissima_id`, `census_id`, `licence` |
+| `manuscripts.tsv` | manuscript | `manuscript`, `shelfmark`, `library`, `city`, `country`, `title`, `date`, `date_not_before`, `date_not_after`, `date_edtf`, `place_of_origin`, `material`, `height_mm`, `width_mm`, `languages`, `texts`, `category`, `secondary_categories`, `pages`, `canvases`, `iiif_manifest`, `catalogue_record`, `mirabile_id`, `biblissima_id`, `hscensus_id`, `licence` |
 | `README.md` | | what the dataset is, and each column |
 
 Every judgment names two pages of `images.tsv`, every page a manuscript of `manuscripts.tsv`; every page has its IIIF

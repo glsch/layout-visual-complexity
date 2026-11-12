@@ -63,7 +63,7 @@ def published(seed: int = 7) -> Dataset:
                 "catalogue_record": f"https://catalogue.example.org/{m}",
                 "mirabile_id": "",
                 "biblissima_id": "",
-                "census_id": "",
+                "hscensus_id": "",
                 "licence": "https://creativecommons.org/licenses/by-nc/4.0/",
             }
             for m, category in MANUSCRIPTS.items()

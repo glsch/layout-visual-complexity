@@ -17,3 +17,4 @@
   manuscripts, paired comparisons and learning curves.
 - `reproduce/` regenerates the article's Table 1, Table 2 and Figures 2 and 3, and imports the dataset again when the
   folder it reads from changes.
+- In the published structure, a manuscript's identifier in the Handschriftencensus is `hscensus_id`.
