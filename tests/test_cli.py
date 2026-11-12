@@ -14,7 +14,17 @@ def test_the_command_line_shows_its_version(capsys: pytest.CaptureFixture[str]) 
     assert layout_visual_complexity.__version__ in capsys.readouterr().out
 
 
-@pytest.mark.parametrize("arguments", [["--help"], ["judgments", "--help"], ["judgments", "rank", "--help"]])
+@pytest.mark.parametrize(
+    "arguments",
+    [
+        ["--help"],
+        ["judgments", "--help"],
+        ["judgments", "rank", "--help"],
+        ["features", "--help"],
+        ["evaluate", "--help"],
+        ["report", "--help"],
+    ],  # fmt: skip
+)
 def test_help(arguments: list[str], capsys: pytest.CaptureFixture[str]) -> None:
     with pytest.raises(SystemExit) as stop:
         cli.main(arguments)

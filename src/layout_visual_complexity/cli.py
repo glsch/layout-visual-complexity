@@ -54,6 +54,13 @@ def evaluate_command() -> tuple[type, Callable[..., object]]:
     return EvaluateSettings, run_evaluate
 
 
+def report_command() -> tuple[type, Callable[..., object]]:
+    """The report command's settings and what runs it, imported when needed."""
+    from layout_visual_complexity.reports import ReportSettings, run_report
+
+    return ReportSettings, run_report
+
+
 def first_paragraph(text: str | None) -> str:
     return " ".join((text or "").strip().split("\n\n")[0].split())
 
@@ -75,7 +82,8 @@ def settings_parser(settings: type, flags: tuple[str, ...] = ()) -> ArgumentPars
 
 
 def parser() -> ArgumentParser:
-    """The command line: `lvc judgments import|rank|report`, `lvc segment`, `lvc features` and `lvc evaluate`."""
+    """The command line: `lvc judgments import|rank|report`, `lvc segment`, `lvc features`, `lvc evaluate`
+    and `lvc report`."""
     top = ArgumentParser(prog="lvc", description=layout_visual_complexity.__doc__)
     top.add_argument("--version", action="version", version=layout_visual_complexity.__version__)
     top.add_argument("--quiet", action="store_true", help="Show only warnings and errors.")
@@ -99,6 +107,8 @@ def parser() -> ArgumentParser:
     commands.add_subcommand("features", settings_parser(settings), help=first_paragraph(settings.__doc__))
     settings, _ = evaluate_command()
     commands.add_subcommand("evaluate", settings_parser(settings), help=first_paragraph(settings.__doc__))
+    settings, _ = report_command()
+    commands.add_subcommand("report", settings_parser(settings), help=first_paragraph(settings.__doc__))
     return top
 
 
@@ -132,6 +142,9 @@ def main(argv: list[str] | None = None) -> int:
     elif arguments.command == "evaluate":
         settings, run = evaluate_command()
         chosen = build(settings, arguments.evaluate)
+    elif arguments.command == "report":
+        settings, run = report_command()
+        chosen = build(settings, arguments.report)
     else:
         action = arguments.judgments.action
         settings, run = judgment_commands()[action]
