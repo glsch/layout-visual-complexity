@@ -34,7 +34,8 @@
   `geometry`, the article's 83 geometric features of the written space and the text lines, and `layout`, 22 features
   adapting Kyle-Davidson's clutter, order and entropy to the page, with its blank space.
 - `lvc evaluate` runs the evaluation protocol on a feature table: accuracy by Elo gap beside the consistency reference,
-  SROCC beside the split-half ceiling, log-loss and calibration, with intervals over manuscripts; and keeps the model
+  SROCC beside the split-half ceiling, log-loss and calibration, with intervals from resamples of the manuscripts (a
+  judgment between two pages of one manuscript counts as often as that manuscript is drawn); and keeps the model
   trained on every judgment, which refuses features computed with other settings.
 - `lvc report` writes the features' tables and figures: accuracy by Elo gap, the features' table, each feature's
   correlation with the Elo scores, and the features drawn on pages.

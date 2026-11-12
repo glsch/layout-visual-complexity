@@ -96,14 +96,26 @@ def manuscript_multiplicities(manuscripts: list[str], resamples: int, seed: int)
     return np.stack([np.bincount(row, minlength=count) for row in draws])
 
 
+def judgment_weights(
+    multiplicities: np.ndarray, left_manuscript: np.ndarray, right_manuscript: np.ndarray
+) -> np.ndarray:
+    """Each judgment's weight in each resample: the product of its two pages' manuscripts' multiplicities, or, for two
+    pages of one manuscript, that manuscript's multiplicity. A judgment then counts as often as its manuscripts' copies
+    hold it: m² would also count each copy's pages against another copy's, doubling the weight of the judgments within
+    a manuscript on average."""
+    left = multiplicities[:, left_manuscript]
+    right = multiplicities[:, right_manuscript]
+    return np.where(np.asarray(left_manuscript) == np.asarray(right_manuscript), left, left * right)
+
+
 def bootstrap_accuracy(
     hit_values: np.ndarray,
     left_manuscript: np.ndarray,
     right_manuscript: np.ndarray,
     multiplicities: np.ndarray,
 ) -> np.ndarray:
-    """The accuracy in each resample: each judgment weighs the product of its two manuscripts' multiplicities."""
-    weights = multiplicities[:, left_manuscript] * multiplicities[:, right_manuscript]
+    """The accuracy in each resample, each judgment weighted as `judgment_weights` says."""
+    weights = judgment_weights(multiplicities, left_manuscript, right_manuscript)
     totals = weights.sum(axis=1)
     with np.errstate(invalid="ignore", divide="ignore"):
         return (weights * np.asarray(hit_values, dtype=float)).sum(axis=1) / totals

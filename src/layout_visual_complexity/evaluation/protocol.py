@@ -217,8 +217,8 @@ def fold_mean_intervals(
     """95% intervals of a mean over folds (each fold's share of hits), by gap bin and overall, resampling manuscripts.
 
     `values` has one row per tested judgment: `fold_number`, `row` (the judgment's position in `judgments`), `gap`
-    and `value` (a hit: 1, 0.5 or 0). In each resample a judgment weighs the product of its two pages' manuscripts'
-    multiplicities, the same resamples as `bootstrap` draws."""
+    and `value` (a hit: 1, 0.5 or 0). In each resample a judgment is weighted as `metrics.judgment_weights` says, in
+    the same resamples as `bootstrap` draws."""
     settings = settings or ProtocolSettings()
     names = sorted(manuscripts.unique())
     number = {name: index for index, name in enumerate(names)}
@@ -226,7 +226,7 @@ def fold_mean_intervals(
     rows = values["row"].to_numpy()
     left = judgments["left"].iloc[rows].map(manuscripts).map(number).to_numpy()
     right = judgments["right"].iloc[rows].map(manuscripts).map(number).to_numpy()
-    weights = multiplicities[:, left] * multiplicities[:, right]
+    weights = metrics.judgment_weights(multiplicities, left, right)
     _, fold = np.unique(values["fold_number"].to_numpy(), return_inverse=True)
     one_hot = np.zeros((len(values), fold.max() + 1 if len(fold) else 0))
     one_hot[np.arange(len(values)), fold] = 1.0

@@ -141,3 +141,13 @@ def test_learning_curves_rise_with_more_training() -> None:
     assert by_judgments["accuracy"].iloc[0] < by_judgments["accuracy"].iloc[1]
     by_images = learning_curve(features, judgments, strength, folds, (0.1, 1.0), "images", settings)
     assert by_images["train_per_fold"].iloc[0] < by_images["train_per_fold"].iloc[1]
+
+
+def test_a_judgment_within_one_manuscript_weighs_its_manuscripts_multiplicity() -> None:
+    multiplicities = np.array([[2, 3, 0], [1, 1, 1]])
+    left, right = np.array([0, 0, 1, 2]), np.array([0, 1, 1, 0])
+    weights = metrics.judgment_weights(multiplicities, left, right)
+    assert weights.tolist() == [[2, 6, 3, 0], [1, 1, 1, 1]]
+    # Within a manuscript drawn twice, a judgment counts twice, not four times.
+    hits = np.array([1.0, 0.0, 1.0, 0.0])
+    assert metrics.bootstrap_accuracy(hits, left, right, multiplicities).tolist() == [5 / 11, 0.5]

@@ -1,37 +1,37 @@
 {
   "command": "report",
-  "started": "2026-11-12T18:09:07+00:00",
-  "ended": "2026-11-12T18:09:07+00:00",
+  "started": "2026-11-12T18:44:02+00:00",
+  "ended": "2026-11-12T18:44:02+00:00",
   "inputs": [
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
-      "sha256": "9e04f75742e1a514238fb2f8b3cf72790f43146f6d6b35e27b88a20d904771f3",
+      "sha256": "59782a5158994706e32de5e9cb806a3e99fb1a030f80c9a7e505f8ed1691af21",
       "bytes": 735
     },
     {
       "path": "build/evaluate/geometry/metrics.tsv",
-      "sha256": "4cd6e66b93435b7e66aa07ad7ab4ca373985153cc8136a451befa363ff0e2983",
+      "sha256": "d19e5740a20546a612a48c360bdbcdcaf0984a077e713ca15046b0d6521bca36",
       "bytes": 218
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "337e0699f843aca9e1e697d5ae51ceaf1c2fba00eefc57fd8670e43f16c6d63a",
-      "bytes": 6412
+      "sha256": "e68dd0e252297d7545369e33d836738ff0856722387bd26ff1ff8c031a1a4314",
+      "bytes": 6411
     },
     {
       "path": "build/evaluate/geometry_layout/by_elo_gap.tsv",
-      "sha256": "2c70a8fe3f25309e6e27b7a382a045407e457594734793c6c526334f4ef10c31",
+      "sha256": "67c1244b75a71f583f49384e505d7c954765644065a57eaa4c4a8fe9a5463120",
       "bytes": 735
     },
     {
       "path": "build/evaluate/geometry_layout/metrics.tsv",
-      "sha256": "3090a1364006d5b7ac6fef7b118e1335e12a6294577092fe3ccacc96b82c41e8",
+      "sha256": "c57f2c756fc6e6a62e6efa1a72dff28cd1b26c858e12741071cf4cf8c4478996",
       "bytes": 218
     },
     {
       "path": "build/evaluate/geometry_layout/manifest.json",
-      "sha256": "f7479817d34218834304eef99a0d1e5150f8c90de028ac423dc12e490ef429bd",
-      "bytes": 6494
+      "sha256": "c53e610353545f93227894aa2ef2663a7bf34161f3b7a17f6fdc219d855694c9",
+      "bytes": 6495
     }
   ],
   "outputs": [
@@ -93,7 +93,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "526cfd56ba9977b897a949001845fb612602deaf-dirty",
+  "commit": "5c8742176c8777a7c91696f83ffce3c653cf6f05-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "geometry_by_elo_gap": {
@@ -102,79 +102,79 @@
           "gap": "<100",
           "judgments_per_fold": 15.82,
           "consistency": 0.61133,
-          "consistency_low": 0.544552,
-          "consistency_high": 0.688471,
+          "consistency_low": 0.553414,
+          "consistency_high": 0.674677,
           "geometry": 0.551481,
-          "geometry_low": 0.482948,
-          "geometry_high": 0.63751,
+          "geometry_low": 0.494161,
+          "geometry_high": 0.620947,
           "geometry_layout": 0.534263,
-          "geometry_layout_low": 0.467117,
-          "geometry_layout_high": 0.621856
+          "geometry_layout_low": 0.475327,
+          "geometry_layout_high": 0.605326
         },
         {
           "gap": "100-200",
           "judgments_per_fold": 15.29,
           "consistency": 0.796688,
-          "consistency_low": 0.757196,
-          "consistency_high": 0.856913,
+          "consistency_low": 0.759575,
+          "consistency_high": 0.85075,
           "geometry": 0.626432,
-          "geometry_low": 0.565866,
-          "geometry_high": 0.711857,
+          "geometry_low": 0.569416,
+          "geometry_high": 0.70116,
           "geometry_layout": 0.634915,
-          "geometry_layout_low": 0.576568,
-          "geometry_layout_high": 0.71742
+          "geometry_layout_low": 0.578927,
+          "geometry_layout_high": 0.708823
         },
         {
           "gap": "200-300",
           "judgments_per_fold": 12.58,
           "consistency": 0.915344,
-          "consistency_low": 0.897945,
-          "consistency_high": 0.956601,
+          "consistency_low": 0.893005,
+          "consistency_high": 0.953155,
           "geometry": 0.787292,
-          "geometry_low": 0.717069,
-          "geometry_high": 0.851039,
+          "geometry_low": 0.725239,
+          "geometry_high": 0.842047,
           "geometry_layout": 0.770649,
-          "geometry_layout_low": 0.698079,
-          "geometry_layout_high": 0.843231
+          "geometry_layout_low": 0.711885,
+          "geometry_layout_high": 0.832937
         },
         {
           "gap": "300-400",
           "judgments_per_fold": 9.36,
           "consistency": 0.908824,
-          "consistency_low": 0.818663,
-          "consistency_high": 0.949019,
+          "consistency_low": 0.837633,
+          "consistency_high": 0.948723,
           "geometry": 0.853169,
-          "geometry_low": 0.728677,
-          "geometry_high": 0.905527,
+          "geometry_low": 0.751339,
+          "geometry_high": 0.906698,
           "geometry_layout": 0.846609,
-          "geometry_layout_low": 0.718769,
-          "geometry_layout_high": 0.902027
+          "geometry_layout_low": 0.743446,
+          "geometry_layout_high": 0.90309
         },
         {
           "gap": ">=400",
           "judgments_per_fold": 12.84,
           "consistency": 0.953114,
-          "consistency_low": 0.937925,
-          "consistency_high": 0.980778,
+          "consistency_low": 0.934285,
+          "consistency_high": 0.979258,
           "geometry": 0.940802,
-          "geometry_low": 0.921278,
-          "geometry_high": 0.973352,
+          "geometry_low": 0.91933,
+          "geometry_high": 0.972755,
           "geometry_layout": 0.924267,
-          "geometry_layout_low": 0.901205,
-          "geometry_layout_high": 0.965938
+          "geometry_layout_low": 0.897671,
+          "geometry_layout_high": 0.964914
         },
         {
           "gap": "overall",
           "judgments_per_fold": 65.89,
           "consistency": 0.812007,
-          "consistency_low": 0.771897,
-          "consistency_high": 0.840909,
+          "consistency_low": 0.782028,
+          "consistency_high": 0.836214,
           "geometry": 0.723675,
-          "geometry_low": 0.657621,
-          "geometry_high": 0.756035,
+          "geometry_low": 0.679826,
+          "geometry_high": 0.752685,
           "geometry_layout": 0.714445,
-          "geometry_layout_low": 0.652096,
-          "geometry_layout_high": 0.749702
+          "geometry_layout_low": 0.66947,
+          "geometry_layout_high": 0.743352
         },
         {
           "gap": "srocc",
@@ -192,7 +192,7 @@
       ]
     },
     "seconds": {
-      "geometry_by_elo_gap": 0.006
+      "geometry_by_elo_gap": 0.007
     }
   }
 }
