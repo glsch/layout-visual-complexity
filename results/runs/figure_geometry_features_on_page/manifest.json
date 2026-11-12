@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-12T18:08:03+00:00",
-  "ended": "2026-11-12T18:08:04+00:00",
+  "started": "2026-11-12T18:12:47+00:00",
+  "ended": "2026-11-12T18:12:48+00:00",
   "inputs": [],
   "outputs": [
     "results/figures/geometry_features_on_page.svg",
@@ -32,8 +32,8 @@
       "AreaFeature__DropCapitalArea": "if11_53v",
       "LineFeature__LineLength": "vib6_189v",
       "LineFeature__InterlinearDistance": "xiif2_134v",
-      "LineFeature__ZigzagScore": "ve6_240v",
-      "LineFeature__LineParallelism": "xvic15_338r"
+      "LineFeature__ZigzagScore": "xie5_180r",
+      "LineFeature__LineParallelism": "ih4_298r"
     },
     "bootstrap": 1000,
     "seed": 20260629,
@@ -67,7 +67,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "526cfd56ba9977b897a949001845fb612602deaf-dirty",
+  "commit": "86c20368e7c9ba04f9fb266723b5cdcd03747dcc",
   "platform": "macOS-26.5.1",
   "summary": {
     "geometry_features_on_page": {
@@ -79,12 +79,12 @@
         "AreaFeature__DropCapitalArea": "if11_53v",
         "LineFeature__LineLength": "vib6_189v",
         "LineFeature__InterlinearDistance": "xiif2_134v",
-        "LineFeature__ZigzagScore": "ve6_240v",
-        "LineFeature__LineParallelism": "xvic15_338r"
+        "LineFeature__ZigzagScore": "xie5_180r",
+        "LineFeature__LineParallelism": "ih4_298r"
       }
     },
     "seconds": {
-      "geometry_features_on_page": 1.721
+      "geometry_features_on_page": 1.63
     }
   }
 }
