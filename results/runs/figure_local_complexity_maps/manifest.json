@@ -1,0 +1,109 @@
+{
+  "command": "report",
+  "started": "2026-11-12T21:22:43+00:00",
+  "ended": "2026-11-12T21:22:44+00:00",
+  "inputs": [
+    {
+      "path": "build/embed/dataset/tokens.json",
+      "sha256": "b2223f6c50af152ab2173ec395cc2db392e6d78880cab6e2843de5f6b6b2e8a3",
+      "bytes": 564
+    },
+    {
+      "path": "build/embed/dataset/pages.tsv",
+      "sha256": "050317895299bc9a41a3e751aa96c45e150faddfc9cc93fd63896c2f722124b9",
+      "bytes": 31272
+    },
+    {
+      "path": "build/train/vit_head/head.npz",
+      "sha256": "8ea32e82910e3b7037359f70060610760096dfbe88b67a00e67e00e0c7ea70cc",
+      "bytes": 200942
+    }
+  ],
+  "outputs": [
+    "results/figures/local_complexity_maps.svg",
+    "results/figures/local_complexity_maps.png",
+    "results/figures/local_complexity_maps.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "local_complexity_maps"
+    ],
+    "name": "figure_local_complexity_maps",
+    "dataset": "build/dataset",
+    "scores": "build/ranking/scores.tsv",
+    "features": "build/features/dataset/features.parquet",
+    "layout": "build/segment/dataset",
+    "evaluations": {},
+    "labels": {},
+    "colours": {},
+    "comparisons": [],
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "tokens": "build/embed/dataset",
+    "head": "build/train/vit_head/head.npz",
+    "map_pages": [
+      "vif12b_96r",
+      "vc7_35r",
+      "vh1_48r"
+    ],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    }
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "17cbf3a081c9bfee09ebc7ef0972a91849389a5d",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "local_complexity_maps": {
+      "pages": {
+        "vif12b_96r": -1.0344897703892688,
+        "vc7_35r": -0.07617494265215023,
+        "vh1_48r": 1.234830481615288
+      },
+      "scale": [
+        1.6628398716449737,
+        7.842441987991333
+      ]
+    },
+    "seconds": {
+      "local_complexity_maps": 1.156
+    }
+  }
+}

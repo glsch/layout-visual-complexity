@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-12T18:44:02+00:00",
-  "ended": "2026-11-12T18:44:02+00:00",
+  "started": "2026-11-12T21:21:50+00:00",
+  "ended": "2026-11-12T21:21:50+00:00",
   "inputs": [
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
@@ -15,8 +15,8 @@
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "e68dd0e252297d7545369e33d836738ff0856722387bd26ff1ff8c031a1a4314",
-      "bytes": 6411
+      "sha256": "ca8e2852b1f295832640506abeb0784e21884b4f33f7e0471dd7b5920b27939b",
+      "bytes": 10722
     },
     {
       "path": "build/evaluate/geometry_layout/by_elo_gap.tsv",
@@ -30,8 +30,8 @@
     },
     {
       "path": "build/evaluate/geometry_layout/manifest.json",
-      "sha256": "c53e610353545f93227894aa2ef2663a7bf34161f3b7a17f6fdc219d855694c9",
-      "bytes": 6495
+      "sha256": "a058fbf46f309a3bd85e9f9751fe0c220230e04ce39d458229eb6743bfba5113",
+      "bytes": 7103
     }
   ],
   "outputs": [
@@ -56,6 +56,8 @@
       "geometry": "Geometry",
       "geometry_layout": "Geometry + Layout"
     },
+    "colours": {},
+    "comparisons": [],
     "families": [
       "geometry",
       "layout"
@@ -64,6 +66,14 @@
     "bootstrap": 1000,
     "seed": 20260629,
     "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
     "cache": null,
     "http": {
       "contact": null,
@@ -90,10 +100,11 @@
     "pyarrow": "26.0.1",
     "shapely": "2.1.2",
     "torch": "2.14.0",
+    "transformers": "5.22.2",
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "5c8742176c8777a7c91696f83ffce3c653cf6f05-dirty",
+  "commit": "17cbf3a081c9bfee09ebc7ef0972a91849389a5d",
   "platform": "macOS-26.5.1",
   "summary": {
     "geometry_by_elo_gap": {
@@ -192,7 +203,7 @@
       ]
     },
     "seconds": {
-      "geometry_by_elo_gap": 0.007
+      "geometry_by_elo_gap": 0.006
     }
   }
 }

@@ -1,0 +1,40 @@
+output: results
+outputs:
+- learning_curves_and_calibration
+name: figure_learning_curves_and_calibration
+dataset: build/dataset
+scores: build/ranking/scores.tsv
+features: build/features/dataset/features.parquet
+layout: build/segment/dataset
+evaluations:
+  geometry: build/evaluate/geometry
+  vit: build/evaluate/vit
+  ensemble: build/evaluate/ensemble
+labels:
+  geometry: Geometry
+  vit: ViT
+  ensemble: Ensemble
+colours: {}
+comparisons: []
+families:
+- geometry
+- layout
+pages: {}
+bootstrap: 1000
+seed: 20260629
+image_credit: Page images provided by Manuscriptorium (CC BY-NC 4.0).
+tokens: null
+head: null
+map_pages: []
+map_long_edge: 900
+map_range:
+- 0.05
+- 0.95
+cache: null
+http:
+  contact: null
+  interval: 0.5
+  connections: 2
+  retries: 5
+  backoff: 1.0
+  timeout: 60.0
