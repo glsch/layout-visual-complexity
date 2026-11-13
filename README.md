@@ -133,6 +133,15 @@ then one column per feature, named `Family__Feature__Flavour` (`AreaFeature__Lin
   lacunarity at 1 to 16 line heights, fragmentation, the share of chromatic ink against the parchment's own colour,
   and the shares of red, gold, green and blue ink.
 - **`mean_token`**: the mean of a page's patch tokens from a token set (`--tokens`), for a linear model on them.
+- **`line_texture`**: the article's 38 line-texture measures (its Appendix B), named as the article names them
+  (`LineTextureFeature__LineSuperpixels__…`): for each text line, the vertical Sobel responses of the gamma-corrected
+  red, green and blue channels, partitioned into SLIC superpixels, and their number, areas, positions, channel
+  statistics and position–response correlations, averaged over the folio's lines. They describe texture, not hue.
+- **`colour`**: real colour, on the ink layer with the parchment made neutral: the chromatic share of the ink, the
+  shares of red, gold, green and blue ink and the number of classes present, the entropy of the chromatic ink's hues,
+  its median chroma and spread, its chromatic share within each kind of zone (main text, margins, numbering and
+  running titles, decoration, heading lines, the rest), the share of rubric lines and the spread of the lines'
+  chromatic shares, and the number of coloured initials. The ink within the libraries' stamps is left out.
 - **Your own family**: a subclass of `layout_visual_complexity.features.contract.Family`, named by its Python path
   (`--families geometry,mypackage.features.Darkness`). It names its columns, declares its scope (page, region or
   line) and what it needs (the image, the folio crop, the regions, the lines, a ViT's patch tokens from a token set
@@ -193,7 +202,9 @@ evaluates a method, cross-validated on folds by manuscript (10 × 10 by default)
 
 It writes the out-of-fold page scores (`scores.tsv`); accuracy by Elo gap and overall beside the consistency of the
 same test judgments with the Elo scores (`by_elo_gap.tsv`); SROCC beside its ceiling, the square root of the Elo
-scores' split-half reliability (`--ceiling`), log-loss (`metrics.tsv`); calibration (`calibration.tsv`); each fold's results (`folds.tsv`), hits (`hits.tsv`) and
+scores' split-half reliability (`--ceiling`), log-loss, and within and across manuscripts the accuracy on the test
+judgments between two pages of one manuscript and on those between two manuscripts, apart, and SROCC with each
+manuscript's mean removed from both scores (`metrics.tsv`); calibration (`calibration.tsv`); each fold's results (`folds.tsv`), hits (`hits.tsv`) and
 z-scores (`fold_scores.tsv`), so that evaluations can be compared on the same resamples and combined; with 95%
 intervals from resamples of the manuscripts. With `--learning_curves.shares`, it also trains the method on shares of
 each fold's training judgments and images (`learning_curve.tsv`). It then trains the method on every judgment and
@@ -213,8 +224,11 @@ its patch scores make a map of where on the page the head finds complexity.
 `lvc report` writes the tables and figures of the features and of the methods evaluated on them: accuracy by Elo gap
 (as a table and a figure), the differences between methods on the same resamples, learning curves and calibration,
 the local complexity maps, the features' table, each feature's correlation with the Elo scores, and the features
-drawn on pages; and the baselines' (by Elo gap, by the information they need, the measures defined, the generic
-measures' correlations with ink coverage).
+drawn on pages; the baselines' (by Elo gap, by the information they need, the measures defined, the generic
+measures' correlations with ink coverage); the colour level's (by Elo gap with what colour adds to geometry, the
+measures defined, ink colour drawn on pages); and every method within and across manuscripts, from the hits and
+scores each evaluation keeps. In the methods' tables and figures, the Reference is one limit measured for accuracy
+and for ρ: the consistency of the same test judgments with the final Elo scores, and the ceiling for SROCC.
 
 ## The dataset
 
@@ -254,9 +268,9 @@ learning curves (on the folds of the first two repeats), takes about 25 minutes 
 | `figure-comparison-graph` | Figure 2: the comparison graph |
 | `figure-elo-violins` | Figure 3: the distributions of the Elo scores |
 | `segment-dataset` | `build/segment/dataset/`: the dataset's pages segmented (not part of `all`: it needs the `segment` extra, the models in `models/` and the page images from their servers) |
-| `features-dataset` | `build/features/dataset/`: the geometric and Layout features of the dataset's pages, from their segmentation, and the baselines' |
+| `features-dataset` | `build/features/dataset/`: the geometric and Layout features of the dataset's pages, from their segmentation, the baselines' and the colour level's |
 | `evaluate-geometry`, `evaluate-geometry-layout` | `build/evaluate/`: the geometry ranker, without and with the Layout features |
-| `table-geometry-by-elo-gap` | Table 4's geometry column: accuracy by Elo gap and SROCC, with and without Layout, beside the consistency reference |
+| `table-geometry-by-elo-gap` | Table 4's geometry column: accuracy by Elo gap and SROCC, with and without Layout, beside the Reference |
 | `table-geometry-feature-hierarchy` | Appendix A's table: the features, with their code names |
 | `figure-geometry-feature-correlations` | Figure 9: each feature's correlation with the Elo scores |
 | `figure-geometry-features-on-page`, `figure-geometry-features-on-schematic-page` | The geometric features drawn on pages of the dataset, and on a made-up page |
@@ -264,19 +278,25 @@ learning curves (on the folds of the first two repeats), takes about 25 minutes 
 | `embed-dataset` | `build/embed/dataset/`: the dataset's pages' patch tokens from DINOv2 ViT-S/14, the folio crop |
 | `evaluate-vit`, `evaluate-ensembles` | `build/evaluate/`: the ViT ranker; its ensembles with the geometry ranker (without and with Layout, with equal and fitted weights) |
 | `head-dataset`, `package-head` | `build/train/vit_head/`: the ViT head trained on every judgment; copied into the package |
-| `table-methods-by-elo-gap` | Table 4: the generic image baseline, the geometry ranker, the ViT ranker and their ensemble by Elo gap, beside the consistency reference |
+| `table-methods-by-elo-gap` | Table 4: the generic image baseline, real colour, the geometry ranker, the ViT ranker and their ensemble by Elo gap, beside the Reference |
 | `figure-accuracy-by-elo-gap` | The same as a figure, with each method's interval, and as a table |
 | `table-paired-differences` | The methods' differences in accuracy and SROCC, on the same resamples |
-| `table-ensembles-by-elo-gap` | For the appendix: the ensembles, without and with Layout, with equal and fitted weights |
+| `table-ensembles-by-elo-gap` | For the appendix: the ensembles, without and with Layout, with equal and fitted weights, and with real colour |
 | `figure-learning-curves-and-calibration` | Accuracy as the training judgments and images grow, and calibration |
 | `figure-local-complexity-maps` | The ViT head's local complexity maps on three pages |
 | `codebook-dataset`, `package-codebook` | `build/codebook/dataset/`: the generic measures' patch codebook, learned on the dataset's pages; copied into the package |
 | `evaluate-baselines`, `evaluate-measures` | `build/evaluate/`: the baselines (the trivial measures, the generic image measures, Kyle–Davidson, ink distribution, the mean token), each family together and each measure alone |
-| `table-baselines-by-elo-gap` | Table 3's successor: the baselines by Elo gap, beside the consistency reference |
+| `table-baselines-by-elo-gap` | Table 3's successor: the baselines by Elo gap, beside the Reference |
 | `table-baseline-measures` | The baseline measures defined, with their parameters and sources |
 | `table-baseline-differences` | The baselines' differences from the geometry ranker and the ensemble |
 | `figure-baselines-by-information`, `figure-baselines-by-information-each-measure` | What each level of information buys: the methods by the information they need, combined, and with each measure alone |
 | `figure-generic-measure-correlations` | The generic image measures' correlations with each other and with ink coverage |
+| `evaluate-colour`, `evaluate-colour-measures` | `build/evaluate/`: line texture and real colour alone, each with the geometric features in one model, the ensemble with colour, and each colour measure alone |
+| `table-colour-by-elo-gap` | Appendix B's successor: line texture, real colour and geometry with real colour by Elo gap, within manuscripts, and what colour adds to geometry |
+| `table-colour-differences` | What colour adds to geometry and to the ensemble, overall and within manuscripts |
+| `table-line-texture-families`, `table-colour-measures` | Appendix B's table of the line-texture measures; the real colour measures defined |
+| `table-within-and-across-manuscripts` | Every method's accuracy across and within manuscripts, and its SROCC overall and within |
+| `figure-ink-colour-on-page` | Ink colour on three pages, drawn by hue class beside the classes' shares |
 
 The dataset leaves out the sessions of a public exhibition, whose annotators were mostly not experts, and the
 calibration judgments; so its numbers differ from the article's, which kept them.

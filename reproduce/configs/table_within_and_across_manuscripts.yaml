@@ -1,0 +1,44 @@
+# For the appendix: every method's accuracy on the test judgments across manuscripts and within one, and its SROCC
+# over all pages and within manuscripts, below the Reference.
+name: table_within_and_across_manuscripts
+outputs: [within_and_across_manuscripts]
+evaluations:
+  ink_coverage: build/evaluate/measures/ink_coverage
+  text_lines: build/evaluate/measures/text_lines
+  trivial: build/evaluate/trivial
+  generic: build/evaluate/generic
+  kyle_davidson: build/evaluate/kyle_davidson
+  ink_distribution: build/evaluate/ink_distribution
+  line_texture: build/evaluate/line_texture
+  colour: build/evaluate/colour
+  geometry: build/evaluate/geometry
+  geometry_layout: build/evaluate/geometry_layout
+  geometry_line_texture: build/evaluate/geometry_line_texture
+  geometry_colour: build/evaluate/geometry_colour
+  mean_token: build/evaluate/mean_token
+  vit: build/evaluate/vit
+  ensemble: build/evaluate/ensemble
+  ensemble_layout: build/evaluate/ensemble_layout
+  ensemble_fitted: build/evaluate/ensemble_fitted
+  ensemble_layout_fitted: build/evaluate/ensemble_layout_fitted
+  ensemble_colour: build/evaluate/ensemble_colour
+labels:
+  ink_coverage: Ink coverage
+  text_lines: Text lines
+  trivial: Trivial, both
+  generic: Generic image
+  kyle_davidson: Kyle–Davidson
+  ink_distribution: Ink distribution
+  line_texture: Line texture
+  colour: Real colour
+  geometry: Geometry
+  geometry_layout: Geometry with Layout
+  geometry_line_texture: Geometry with line texture
+  geometry_colour: Geometry with real colour
+  mean_token: Mean ViT token
+  vit: ViT
+  ensemble: Ensemble
+  ensemble_layout: Ensemble with Layout
+  ensemble_fitted: Ensemble, fitted
+  ensemble_layout_fitted: Ensemble with Layout, fitted
+  ensemble_colour: Ensemble with colour

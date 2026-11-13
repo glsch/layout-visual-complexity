@@ -1,10 +1,11 @@
 # The features of the dataset's pages, measured on their segmentation (segment_dataset.yaml), into
 # build/features/dataset: features.parquet (one row per page), the report and the run's record. The geometric and
-# Layout features, and the baselines' families: the trivial measures, the generic image measures (with the patch
-# codebook learned on the same pages, codebook_dataset.yaml), Kyle–Davidson as published, and ink distribution.
+# Layout features, the baselines' families (the trivial measures, the generic image measures with the patch codebook
+# learned on the same pages, codebook_dataset.yaml, Kyle–Davidson as published, and ink distribution), and the colour
+# level: line texture as the article publishes it, and real colour.
 layout: build/segment/dataset
 output: build/features/dataset
-families: [geometry, layout, trivial, generic, kyle_davidson, ink]
+families: [geometry, layout, trivial, generic, kyle_davidson, ink, line_texture, colour]
 parameters:
   generic:
     codebook: build/codebook/dataset/codebook.npz

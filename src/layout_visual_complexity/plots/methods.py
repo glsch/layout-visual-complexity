@@ -65,7 +65,7 @@ def plot_accuracy_by_gap(methods: list[Shown], reference: pd.DataFrame, overall:
                label="Reference"),
         Line2D([], [], color=style.METHODS["chance"], linestyle="--", linewidth=0.8, label="Chance"),
     ]  # fmt: skip
-    axes.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 1.0), ncols=min(5, len(handles)))
+    axes.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 1.0), ncols=min(6, len(handles)))
     return figure
 
 

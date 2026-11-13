@@ -170,7 +170,8 @@ class Evaluations:
             given = ", ".join(f"{escape(name)} {value:g}" for name, value in weights.items())
             return f"{named} combined, their z-scored page scores weighted {given}"
         names = summary.get("families", [])
-        if summary.get("measures") and (configuration.get("columns") or set(names) & BY_MEASURE):
+        alone = len(names) == 1 and set(names) & BY_MEASURE
+        if summary.get("measures") and (configuration.get("columns") or alone):
             return f"the pairwise logistic model on {measures_described(summary, names)}"
         families = [ADJECTIVES.get(name, name) for name in names]
         return f"the pairwise logistic model on the {summary.get('columns')} {' and '.join(families)} features"

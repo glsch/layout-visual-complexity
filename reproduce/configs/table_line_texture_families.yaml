@@ -1,0 +1,3 @@
+# Appendix B's table: the families of the line-texture measures, their number and what they measure.
+name: table_line_texture_families
+outputs: [line_texture_families]

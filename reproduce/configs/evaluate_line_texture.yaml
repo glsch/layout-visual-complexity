@@ -1,0 +1,4 @@
+# Line texture as the article publishes it (Appendix B): the pairwise logistic model on its 38 measures.
+features: build/features/dataset/features.parquet
+families: line_texture
+output: build/evaluate/line_texture

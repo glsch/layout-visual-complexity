@@ -1,0 +1,5 @@
+# Geometry with line texture: one pairwise logistic model on the 83 geometric features and the 38 line-texture
+# measures.
+features: build/features/dataset/features.parquet
+families: [geometry, line_texture]
+output: build/evaluate/geometry_line_texture

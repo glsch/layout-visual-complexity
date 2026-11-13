@@ -1,0 +1,5 @@
+# Ink colour on three pages that differ in colour (rubrics only, coloured initials, several colours): each page's ink
+# drawn by hue class, beside the classes' shares of the ink.
+name: figure_ink_colour_on_page
+outputs: [ink_colour_on_page]
+colour_pages: [xxiiid157_101v, xviif31_27r, vc26_50v]

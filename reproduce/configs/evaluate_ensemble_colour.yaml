@@ -1,0 +1,7 @@
+# The ensemble with colour: the geometry ranker, the ViT ranker and real colour, their z-scored page scores averaged
+# with equal weights, fold by fold.
+ensemble:
+  geometry: build/evaluate/geometry
+  vit: build/evaluate/vit
+  colour: build/evaluate/colour
+output: build/evaluate/ensemble_colour

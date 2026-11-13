@@ -21,6 +21,9 @@
 # The baselines' features are measured with the others, the generic image measures with the patch codebook learned
 # on the dataset's pages (codebook-dataset), which `make -C reproduce package-codebook` copies into the package. The
 # linear model on the mean token needs the ViT's tokens.
+#
+# The colour level (line texture as the article publishes it, and real colour) is measured with the others too; its
+# ensemble with the geometry and ViT rankers needs the ViT's evaluation.
 
 LVC ?= ../.venv/bin/lvc
 
@@ -46,7 +49,9 @@ REPORT := $(RUN) judgments report --config $(CONFIGS)/report.yaml --config $(CON
 	figure-local-complexity-maps codebook-dataset package-codebook features-mean-token evaluate-baselines \
 	evaluate-measures table-baselines-by-elo-gap table-baseline-measures table-baseline-differences \
 	figure-baselines-by-information figure-baselines-by-information-each-measure \
-	figure-generic-measure-correlations clean
+	figure-generic-measure-correlations evaluate-colour evaluate-colour-measures table-colour-by-elo-gap \
+	table-colour-differences table-line-texture-families table-colour-measures \
+	table-within-and-across-manuscripts figure-ink-colour-on-page clean
 
 all: table-dataset-categories table-reliability figure-comparison-graph figure-elo-violins table-geometry-by-elo-gap \
 	table-geometry-feature-hierarchy figure-geometry-feature-correlations figure-geometry-features-on-page \
@@ -54,7 +59,9 @@ all: table-dataset-categories table-reliability figure-comparison-graph figure-e
 	figure-accuracy-by-elo-gap table-paired-differences table-ensembles-by-elo-gap \
 	figure-learning-curves-and-calibration figure-local-complexity-maps table-baselines-by-elo-gap \
 	table-baseline-measures table-baseline-differences figure-baselines-by-information \
-	figure-baselines-by-information-each-measure figure-generic-measure-correlations
+	figure-baselines-by-information-each-measure figure-generic-measure-correlations table-colour-by-elo-gap \
+	table-colour-differences table-line-texture-families table-colour-measures table-within-and-across-manuscripts \
+	figure-ink-colour-on-page
 
 # The dataset comes from configs/dataset.yaml's source: a folder in the published structure, or the Zenodo
 # record's DOI. When it is a folder, a change to its files makes the dataset again.
@@ -216,6 +223,13 @@ COLUMNS_lacunarity := Ink__Lacunarity
 COLUMNS_fragmentation := Ink__Fragmentation
 COLUMNS_chromatic_share := Ink__ChromaticShare
 COLUMNS_hue_classes := Ink__HueClasses
+COLUMNS_colour_chromatic_share := Colour__ChromaticShare
+COLUMNS_colour_hue_classes := Colour__HueClasses
+COLUMNS_colour_hue_entropy := Colour__HueEntropy
+COLUMNS_colour_saturation := Colour__Saturation
+COLUMNS_colour_zones := Colour__Zones
+COLUMNS_colour_lines := Colour__Lines
+COLUMNS_colour_coloured_initials := Colour__ColouredInitials
 MEASURES := $(patsubst COLUMNS_%,%,$(filter COLUMNS_%,$(.VARIABLES)))
 MEASURE_MODELS := $(foreach measure,$(MEASURES),$(TOP)/build/evaluate/measures/$(measure)/model.json)
 $(MEASURE_MODELS): $(TOP)/build/evaluate/measures/%/model.json: $(FEATURES) $(RANKING) $(RELIABILITY) \
@@ -224,7 +238,26 @@ $(MEASURE_MODELS): $(TOP)/build/evaluate/measures/%/model.json: $(FEATURES) $(RA
 
 evaluate-baselines: $(GROUP_MODELS) $(MEAN_TOKEN)
 evaluate-measures: $(MEASURE_MODELS)
-BASELINES := $(GROUP_MODELS) $(MEAN_TOKEN) $(MEASURE_MODELS) $(GEOMETRY) $(GEOMETRY_LAYOUT) $(VIT) $(ENSEMBLE)
+
+# The colour level: line texture and real colour alone, each with geometry in one model, and the ensemble with colour.
+COLOUR_GROUPS := line_texture colour geometry_line_texture geometry_colour
+COLOUR_MODELS := $(foreach group,$(COLOUR_GROUPS),$(TOP)/build/evaluate/$(group)/model.json)
+COLOUR := $(TOP)/build/evaluate/colour/model.json
+LINE_TEXTURE := $(TOP)/build/evaluate/line_texture/model.json
+GEOMETRY_COLOUR := $(TOP)/build/evaluate/geometry_colour/model.json
+GEOMETRY_LINE_TEXTURE := $(TOP)/build/evaluate/geometry_line_texture/model.json
+ENSEMBLE_COLOUR := $(TOP)/build/evaluate/ensemble_colour/ensemble.json
+$(COLOUR_MODELS): $(TOP)/build/evaluate/%/model.json: $(FEATURES) $(RANKING) $(RELIABILITY) configs/evaluate.yaml \
+		configs/evaluate_%.yaml
+	$(EVALUATE)/evaluate_$*.yaml
+$(ENSEMBLE_COLOUR): $(GEOMETRY) $(VIT) $(COLOUR) configs/evaluate.yaml configs/evaluate_ensemble_colour.yaml
+	$(EVALUATE)/evaluate_ensemble_colour.yaml
+COLOUR_MEASURE_MODELS := $(foreach measure,$(filter colour_%,$(MEASURES)),$(TOP)/build/evaluate/measures/$(measure)/model.json)
+evaluate-colour: $(COLOUR_MODELS) $(ENSEMBLE_COLOUR)
+evaluate-colour-measures: $(COLOUR_MEASURE_MODELS)
+
+BASELINES := $(GROUP_MODELS) $(MEAN_TOKEN) $(MEASURE_MODELS) $(GEOMETRY) $(GEOMETRY_LAYOUT) $(VIT) $(ENSEMBLE) \
+	$(COLOUR) $(LINE_TEXTURE)
 
 table-baselines-by-elo-gap: $(TOP)/results/tables/baselines_by_elo_gap.tsv
 $(TOP)/results/tables/baselines_by_elo_gap.tsv: $(GROUP_MODELS) $(MEASURE_MODELS) configs/report_features.yaml \
@@ -257,12 +290,12 @@ $(TOP)/results/figures/generic_measure_correlations.svg: $(FEATURES) $(GENERIC) 
 	$(FEATURE_REPORT)/figure_generic_measure_correlations.yaml
 
 table-methods-by-elo-gap: $(TOP)/results/tables/methods_by_elo_gap.tsv
-$(TOP)/results/tables/methods_by_elo_gap.tsv: $(GENERIC) $(METHODS) configs/report_features.yaml \
+$(TOP)/results/tables/methods_by_elo_gap.tsv: $(GENERIC) $(COLOUR) $(METHODS) configs/report_features.yaml \
 		configs/table_methods_by_elo_gap.yaml
 	$(FEATURE_REPORT)/table_methods_by_elo_gap.yaml
 
 figure-accuracy-by-elo-gap: $(TOP)/results/figures/accuracy_by_elo_gap.svg
-$(TOP)/results/figures/accuracy_by_elo_gap.svg: $(METHODS) configs/report_features.yaml \
+$(TOP)/results/figures/accuracy_by_elo_gap.svg: $(COLOUR) $(METHODS) configs/report_features.yaml \
 		configs/figure_accuracy_by_elo_gap.yaml
 	$(FEATURE_REPORT)/figure_accuracy_by_elo_gap.yaml
 
@@ -273,7 +306,7 @@ $(TOP)/results/tables/paired_differences.tsv: $(METHODS) configs/report_features
 
 table-ensembles-by-elo-gap: $(TOP)/results/tables/ensembles_by_elo_gap.tsv
 $(TOP)/results/tables/ensembles_by_elo_gap.tsv: $(ENSEMBLE) $(ENSEMBLE_LAYOUT) $(ENSEMBLE_FITTED) \
-		$(ENSEMBLE_LAYOUT_FITTED) configs/report_features.yaml configs/table_ensembles_by_elo_gap.yaml
+		$(ENSEMBLE_LAYOUT_FITTED) $(ENSEMBLE_COLOUR) configs/report_features.yaml configs/table_ensembles_by_elo_gap.yaml
 	$(FEATURE_REPORT)/table_ensembles_by_elo_gap.yaml
 
 figure-learning-curves-and-calibration: $(TOP)/results/figures/learning_curves_and_calibration.svg
@@ -285,6 +318,36 @@ figure-local-complexity-maps: $(TOP)/results/figures/local_complexity_maps.svg
 $(TOP)/results/figures/local_complexity_maps.svg: $(HEAD) $(TOKENS) configs/report_features.yaml \
 		configs/figure_local_complexity_maps.yaml
 	$(FEATURE_REPORT)/figure_local_complexity_maps.yaml
+
+table-colour-by-elo-gap: $(TOP)/results/tables/colour_by_elo_gap.tsv
+$(TOP)/results/tables/colour_by_elo_gap.tsv: $(LINE_TEXTURE) $(COLOUR) $(GEOMETRY_COLOUR) $(GEOMETRY) \
+		configs/report_features.yaml configs/table_colour_by_elo_gap.yaml
+	$(FEATURE_REPORT)/table_colour_by_elo_gap.yaml
+
+table-colour-differences: $(TOP)/results/tables/colour_differences.tsv
+$(TOP)/results/tables/colour_differences.tsv: $(GEOMETRY_LINE_TEXTURE) $(GEOMETRY_COLOUR) $(GEOMETRY) \
+		$(ENSEMBLE_COLOUR) $(ENSEMBLE) configs/report_features.yaml configs/table_colour_differences.yaml
+	$(FEATURE_REPORT)/table_colour_differences.yaml
+
+table-line-texture-families: $(TOP)/results/tables/line_texture_families.tsv
+$(TOP)/results/tables/line_texture_families.tsv: configs/report_features.yaml configs/table_line_texture_families.yaml
+	$(FEATURE_REPORT)/table_line_texture_families.yaml
+
+table-colour-measures: $(TOP)/results/tables/colour_measures.tsv
+$(TOP)/results/tables/colour_measures.tsv: $(FEATURES) configs/report_features.yaml configs/table_colour_measures.yaml
+	$(FEATURE_REPORT)/table_colour_measures.yaml
+
+ALL_METHODS := $(BASELINES) $(COLOUR_MODELS) $(ENSEMBLE_COLOUR) $(ENSEMBLE_LAYOUT) $(ENSEMBLE_FITTED) \
+	$(ENSEMBLE_LAYOUT_FITTED)
+table-within-and-across-manuscripts: $(TOP)/results/tables/within_and_across_manuscripts.tsv
+$(TOP)/results/tables/within_and_across_manuscripts.tsv: $(ALL_METHODS) configs/report_features.yaml \
+		configs/table_within_and_across_manuscripts.yaml
+	$(FEATURE_REPORT)/table_within_and_across_manuscripts.yaml
+
+figure-ink-colour-on-page: $(TOP)/results/figures/ink_colour_on_page.svg
+$(TOP)/results/figures/ink_colour_on_page.svg: $(FEATURES) configs/report_features.yaml \
+		configs/figure_ink_colour_on_page.yaml
+	$(FEATURE_REPORT)/figure_ink_colour_on_page.yaml
 
 clean:
 	rm -rf $(TOP)/build/dataset $(TOP)/build/ranking $(TOP)/build/features/dataset $(TOP)/build/evaluate
