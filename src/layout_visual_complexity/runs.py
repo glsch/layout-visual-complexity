@@ -32,6 +32,7 @@ LIBRARIES = [
     "pyarrow",
     "shapely",
     "torch",
+    "transformers",
     "kraken",
     "ultralytics",
 ]

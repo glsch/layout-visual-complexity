@@ -47,11 +47,25 @@ def features_command() -> tuple[type, Callable[..., object]]:
     return FeaturesSettings, run_features
 
 
+def embed_command() -> tuple[type, Callable[..., object]]:
+    """The embed command's settings and what runs it, imported when needed."""
+    from layout_visual_complexity.embed import EmbedSettings, run_embed
+
+    return EmbedSettings, run_embed
+
+
 def evaluate_command() -> tuple[type, Callable[..., object]]:
     """The evaluate command's settings and what runs it, imported when needed."""
     from layout_visual_complexity.evaluate import EvaluateSettings, run_evaluate
 
     return EvaluateSettings, run_evaluate
+
+
+def train_command() -> tuple[type, Callable[..., object]]:
+    """The train command's settings and what runs it, imported when needed."""
+    from layout_visual_complexity.train import TrainSettings, run_train
+
+    return TrainSettings, run_train
 
 
 def report_command() -> tuple[type, Callable[..., object]]:
@@ -82,8 +96,8 @@ def settings_parser(settings: type, flags: tuple[str, ...] = ()) -> ArgumentPars
 
 
 def parser() -> ArgumentParser:
-    """The command line: `lvc judgments import|rank|report`, `lvc segment`, `lvc features`, `lvc evaluate`
-    and `lvc report`."""
+    """The command line: `lvc judgments import|rank|report`, `lvc segment`, `lvc features`, `lvc embed`,
+    `lvc evaluate`, `lvc train` and `lvc report`."""
     top = ArgumentParser(prog="lvc", description=layout_visual_complexity.__doc__)
     top.add_argument("--version", action="version", version=layout_visual_complexity.__version__)
     top.add_argument("--quiet", action="store_true", help="Show only warnings and errors.")
@@ -105,8 +119,12 @@ def parser() -> ArgumentParser:
     commands.add_subcommand("segment", segment, help=first_paragraph(settings.__doc__))
     settings, _ = features_command()
     commands.add_subcommand("features", settings_parser(settings), help=first_paragraph(settings.__doc__))
+    settings, _ = embed_command()
+    commands.add_subcommand("embed", settings_parser(settings), help=first_paragraph(settings.__doc__))
     settings, _ = evaluate_command()
     commands.add_subcommand("evaluate", settings_parser(settings), help=first_paragraph(settings.__doc__))
+    settings, _ = train_command()
+    commands.add_subcommand("train", settings_parser(settings), help=first_paragraph(settings.__doc__))
     settings, _ = report_command()
     commands.add_subcommand("report", settings_parser(settings), help=first_paragraph(settings.__doc__))
     return top
@@ -139,9 +157,15 @@ def main(argv: list[str] | None = None) -> int:
     elif arguments.command == "features":
         settings, run = features_command()
         chosen = build(settings, arguments.features)
+    elif arguments.command == "embed":
+        settings, run = embed_command()
+        chosen = build(settings, arguments.embed)
     elif arguments.command == "evaluate":
         settings, run = evaluate_command()
         chosen = build(settings, arguments.evaluate)
+    elif arguments.command == "train":
+        settings, run = train_command()
+        chosen = build(settings, arguments.train)
     elif arguments.command == "report":
         settings, run = report_command()
         chosen = build(settings, arguments.report)

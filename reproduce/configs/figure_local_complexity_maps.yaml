@@ -1,0 +1,8 @@
+# The ViT head's local complexity maps on three pages of low, middle and high predicted complexity, each typical of
+# its third of the dataset's predicted scores; the head trained on every judgment (train_vit_head.yaml).
+name: figure_local_complexity_maps
+outputs: [local_complexity_maps]
+tokens: build/embed/dataset
+head: build/train/vit_head/head.npz
+map_pages: [vif12b_96r, vc7_35r, vh1_48r]
+map_range: [0.05, 0.95]

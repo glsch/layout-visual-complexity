@@ -1,0 +1,528 @@
+{
+  "command": "report",
+  "started": "2026-11-13T09:40:50+00:00",
+  "ended": "2026-11-13T09:40:50+00:00",
+  "inputs": [
+    {
+      "path": "build/evaluate/geometry/by_elo_gap.tsv",
+      "sha256": "59782a5158994706e32de5e9cb806a3e99fb1a030f80c9a7e505f8ed1691af21",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/geometry/metrics.tsv",
+      "sha256": "952e499c556cb952b604f7a4e1134004d7d669c27edbcbf93bba49b6dd80912a",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/geometry/manifest.json",
+      "sha256": "9e21ab700377e41bcb3f08571acda23a1932fb2b6452ce4e7ecab59a7c46b2b6",
+      "bytes": 10853
+    },
+    {
+      "path": "build/evaluate/vit/by_elo_gap.tsv",
+      "sha256": "3ac1c2b8094ba26ed9a0703d2844b743479941a0a0d0c7e9a62601778793165d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/vit/metrics.tsv",
+      "sha256": "9f2cb0e58c18136bfa99e85ebf8b2e68b4e00e020255cb5fc6912db48e2241aa",
+      "bytes": 218
+    },
+    {
+      "path": "build/evaluate/vit/manifest.json",
+      "sha256": "72bf2e7d3014604ef1606182bc1f30de0ed9dea69a9dede931322448bfef1bd4",
+      "bytes": 11241
+    },
+    {
+      "path": "build/evaluate/ensemble/by_elo_gap.tsv",
+      "sha256": "50072af82f24a6954aace94ee9e78cceefbb2fa4e99baa38b405069a2a85a471",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/ensemble/metrics.tsv",
+      "sha256": "7ba1654cc6a733fb3ce39a679c33b5be3a70722b1c7ca54749b819c1a34f2f20",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/ensemble/manifest.json",
+      "sha256": "836e89f1d7797f16fb40ee1342f58d24745a5f8bd2ae797a028a9bd5d66f1205",
+      "bytes": 11806
+    },
+    {
+      "path": "build/evaluate/geometry/learning_curve.tsv",
+      "sha256": "a6281458c7f9ffee8a2f36fe88289c7939eab408d0a86eb3267685aef9fb8611",
+      "bytes": 963
+    },
+    {
+      "path": "build/evaluate/geometry/calibration.tsv",
+      "sha256": "92f8a6070e50222477b76b4c471af7263e216ecdf5416697b3682e671535620b",
+      "bytes": 438
+    },
+    {
+      "path": "build/evaluate/vit/learning_curve.tsv",
+      "sha256": "83dd987967da42ddf8c19a32bc4cf791257180b627e759efe9b387a37875a391",
+      "bytes": 963
+    },
+    {
+      "path": "build/evaluate/vit/calibration.tsv",
+      "sha256": "8ec68881083c76a33a7003a90d2e01714eb975f4ef41b1a00aace37bb773f368",
+      "bytes": 438
+    },
+    {
+      "path": "build/evaluate/ensemble/learning_curve.tsv",
+      "sha256": "19d2937b207a97a58e9edf7ee313f5de59f344c48130ebd522de50cb4abefc21",
+      "bytes": 963
+    },
+    {
+      "path": "build/evaluate/ensemble/calibration.tsv",
+      "sha256": "1d39385d8b1bddd52db01d2a31d93313a36904aa3f9b5f5df9ac577895b7e180",
+      "bytes": 438
+    }
+  ],
+  "outputs": [
+    "results/figures/learning_curves_and_calibration.svg",
+    "results/figures/learning_curves_and_calibration.png",
+    "results/figures/learning_curves_and_calibration.tex",
+    "results/tables/learning_curves.tsv",
+    "results/tables/learning_curves.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "learning_curves_and_calibration"
+    ],
+    "name": "figure_learning_curves_and_calibration",
+    "dataset": "build/dataset",
+    "scores": "build/ranking/scores.tsv",
+    "features": "build/features/dataset/features.parquet",
+    "layout": "build/segment/dataset",
+    "evaluations": {
+      "geometry": "build/evaluate/geometry",
+      "vit": "build/evaluate/vit",
+      "ensemble": "build/evaluate/ensemble"
+    },
+    "labels": {
+      "geometry": "Geometry",
+      "vit": "ViT",
+      "ensemble": "Ensemble"
+    },
+    "colours": {},
+    "comparisons": [],
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    }
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "6d3f5c70f7cd0ef96c31558a6ea5fa483abe387f",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "learning_curves_and_calibration": {
+      "learning_curves": [
+        {
+          "method": "geometry",
+          "by": "images",
+          "share": 0.1,
+          "train_per_fold": 41.1,
+          "train_pages_per_fold": 35.9,
+          "accuracy": 0.601329,
+          "accuracy_sd": 0.089748,
+          "low": 0.54434,
+          "high": 0.657439,
+          "srocc": 0.496853
+        },
+        {
+          "method": "geometry",
+          "by": "images",
+          "share": 0.25,
+          "train_per_fold": 278.85,
+          "train_pages_per_fold": 89.5,
+          "accuracy": 0.64321,
+          "accuracy_sd": 0.090662,
+          "low": 0.582099,
+          "high": 0.694252,
+          "srocc": 0.629377
+        },
+        {
+          "method": "geometry",
+          "by": "images",
+          "share": 0.5,
+          "train_per_fold": 1147.6,
+          "train_pages_per_fold": 178.7,
+          "accuracy": 0.6955,
+          "accuracy_sd": 0.080689,
+          "low": 0.636702,
+          "high": 0.746329,
+          "srocc": 0.719461
+        },
+        {
+          "method": "geometry",
+          "by": "images",
+          "share": 0.75,
+          "train_per_fold": 2563.35,
+          "train_pages_per_fold": 267.8,
+          "accuracy": 0.710807,
+          "accuracy_sd": 0.053478,
+          "low": 0.645599,
+          "high": 0.760686,
+          "srocc": 0.733955
+        },
+        {
+          "method": "geometry",
+          "by": "images",
+          "share": 1.0,
+          "train_per_fold": 4514.95,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.718792,
+          "accuracy_sd": 0.054194,
+          "low": 0.654176,
+          "high": 0.768792,
+          "srocc": 0.754849
+        },
+        {
+          "method": "geometry",
+          "by": "judgments",
+          "share": 0.1,
+          "train_per_fold": 451.6,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.671725,
+          "accuracy_sd": 0.081197,
+          "low": 0.601799,
+          "high": 0.715453,
+          "srocc": 0.709342
+        },
+        {
+          "method": "geometry",
+          "by": "judgments",
+          "share": 0.25,
+          "train_per_fold": 1128.7,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.72268,
+          "accuracy_sd": 0.044016,
+          "low": 0.657078,
+          "high": 0.769689,
+          "srocc": 0.749576
+        },
+        {
+          "method": "geometry",
+          "by": "judgments",
+          "share": 0.5,
+          "train_per_fold": 2257.5,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.721944,
+          "accuracy_sd": 0.059021,
+          "low": 0.659398,
+          "high": 0.765981,
+          "srocc": 0.752541
+        },
+        {
+          "method": "geometry",
+          "by": "judgments",
+          "share": 0.75,
+          "train_per_fold": 3386.25,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.719931,
+          "accuracy_sd": 0.06169,
+          "low": 0.654713,
+          "high": 0.76844,
+          "srocc": 0.749681
+        },
+        {
+          "method": "geometry",
+          "by": "judgments",
+          "share": 1.0,
+          "train_per_fold": 4514.95,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.718792,
+          "accuracy_sd": 0.054194,
+          "low": 0.654176,
+          "high": 0.768792,
+          "srocc": 0.754849
+        },
+        {
+          "method": "vit",
+          "by": "images",
+          "share": 0.1,
+          "train_per_fold": 41.1,
+          "train_pages_per_fold": 35.9,
+          "accuracy": 0.625099,
+          "accuracy_sd": 0.092559,
+          "low": 0.5534,
+          "high": 0.67613,
+          "srocc": 0.59527
+        },
+        {
+          "method": "vit",
+          "by": "images",
+          "share": 0.25,
+          "train_per_fold": 278.85,
+          "train_pages_per_fold": 89.5,
+          "accuracy": 0.678064,
+          "accuracy_sd": 0.077711,
+          "low": 0.618956,
+          "high": 0.729736,
+          "srocc": 0.715093
+        },
+        {
+          "method": "vit",
+          "by": "images",
+          "share": 0.5,
+          "train_per_fold": 1147.6,
+          "train_pages_per_fold": 178.7,
+          "accuracy": 0.705052,
+          "accuracy_sd": 0.070578,
+          "low": 0.643082,
+          "high": 0.751691,
+          "srocc": 0.761132
+        },
+        {
+          "method": "vit",
+          "by": "images",
+          "share": 0.75,
+          "train_per_fold": 2563.35,
+          "train_pages_per_fold": 267.8,
+          "accuracy": 0.72063,
+          "accuracy_sd": 0.058618,
+          "low": 0.654069,
+          "high": 0.768138,
+          "srocc": 0.779832
+        },
+        {
+          "method": "vit",
+          "by": "images",
+          "share": 1.0,
+          "train_per_fold": 4514.95,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.723158,
+          "accuracy_sd": 0.065255,
+          "low": 0.659372,
+          "high": 0.770317,
+          "srocc": 0.786658
+        },
+        {
+          "method": "vit",
+          "by": "judgments",
+          "share": 0.1,
+          "train_per_fold": 451.6,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.70687,
+          "accuracy_sd": 0.066067,
+          "low": 0.641158,
+          "high": 0.755713,
+          "srocc": 0.754536
+        },
+        {
+          "method": "vit",
+          "by": "judgments",
+          "share": 0.25,
+          "train_per_fold": 1128.7,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.702588,
+          "accuracy_sd": 0.08006,
+          "low": 0.638129,
+          "high": 0.749645,
+          "srocc": 0.782229
+        },
+        {
+          "method": "vit",
+          "by": "judgments",
+          "share": 0.5,
+          "train_per_fold": 2257.5,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.713651,
+          "accuracy_sd": 0.077885,
+          "low": 0.644757,
+          "high": 0.765281,
+          "srocc": 0.785555
+        },
+        {
+          "method": "vit",
+          "by": "judgments",
+          "share": 0.75,
+          "train_per_fold": 3386.25,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.722726,
+          "accuracy_sd": 0.063671,
+          "low": 0.657755,
+          "high": 0.770471,
+          "srocc": 0.785643
+        },
+        {
+          "method": "vit",
+          "by": "judgments",
+          "share": 1.0,
+          "train_per_fold": 4514.95,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.723158,
+          "accuracy_sd": 0.065255,
+          "low": 0.659372,
+          "high": 0.770317,
+          "srocc": 0.786658
+        },
+        {
+          "method": "ensemble",
+          "by": "images",
+          "share": 0.1,
+          "train_per_fold": 41.1,
+          "train_pages_per_fold": 35.9,
+          "accuracy": 0.660191,
+          "accuracy_sd": 0.091027,
+          "low": 0.593289,
+          "high": 0.71123,
+          "srocc": 0.622503
+        },
+        {
+          "method": "ensemble",
+          "by": "images",
+          "share": 0.25,
+          "train_per_fold": 278.85,
+          "train_pages_per_fold": 89.5,
+          "accuracy": 0.676126,
+          "accuracy_sd": 0.068246,
+          "low": 0.610876,
+          "high": 0.726292,
+          "srocc": 0.738558
+        },
+        {
+          "method": "ensemble",
+          "by": "images",
+          "share": 0.5,
+          "train_per_fold": 1147.6,
+          "train_pages_per_fold": 178.7,
+          "accuracy": 0.710692,
+          "accuracy_sd": 0.070204,
+          "low": 0.648779,
+          "high": 0.759137,
+          "srocc": 0.784171
+        },
+        {
+          "method": "ensemble",
+          "by": "images",
+          "share": 0.75,
+          "train_per_fold": 2563.35,
+          "train_pages_per_fold": 267.8,
+          "accuracy": 0.735109,
+          "accuracy_sd": 0.065784,
+          "low": 0.673926,
+          "high": 0.78318,
+          "srocc": 0.811754
+        },
+        {
+          "method": "ensemble",
+          "by": "images",
+          "share": 1.0,
+          "train_per_fold": 4514.95,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.739192,
+          "accuracy_sd": 0.068585,
+          "low": 0.675323,
+          "high": 0.786237,
+          "srocc": 0.817115
+        },
+        {
+          "method": "ensemble",
+          "by": "judgments",
+          "share": 0.1,
+          "train_per_fold": 451.6,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.702715,
+          "accuracy_sd": 0.063324,
+          "low": 0.625118,
+          "high": 0.744155,
+          "srocc": 0.800271
+        },
+        {
+          "method": "ensemble",
+          "by": "judgments",
+          "share": 0.25,
+          "train_per_fold": 1128.7,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.729615,
+          "accuracy_sd": 0.07092,
+          "low": 0.6614,
+          "high": 0.775243,
+          "srocc": 0.812153
+        },
+        {
+          "method": "ensemble",
+          "by": "judgments",
+          "share": 0.5,
+          "train_per_fold": 2257.5,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.73827,
+          "accuracy_sd": 0.069542,
+          "low": 0.676932,
+          "high": 0.783127,
+          "srocc": 0.819785
+        },
+        {
+          "method": "ensemble",
+          "by": "judgments",
+          "share": 0.75,
+          "train_per_fold": 3386.25,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.73651,
+          "accuracy_sd": 0.067388,
+          "low": 0.670519,
+          "high": 0.782538,
+          "srocc": 0.81548
+        },
+        {
+          "method": "ensemble",
+          "by": "judgments",
+          "share": 1.0,
+          "train_per_fold": 4514.95,
+          "train_pages_per_fold": 357.3,
+          "accuracy": 0.739192,
+          "accuracy_sd": 0.068585,
+          "low": 0.675323,
+          "high": 0.786237,
+          "srocc": 0.817115
+        }
+      ]
+    },
+    "seconds": {
+      "learning_curves_and_calibration": 0.458
+    }
+  }
+}

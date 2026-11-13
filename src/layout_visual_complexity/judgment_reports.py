@@ -1,5 +1,6 @@
 """Tables and figures about a set of judgments: the dataset's categories, reliability by Elo gap, position bias,
-the consistency reference per fold, the split-half ceiling, the comparison graph and the score distributions."""
+the consistency reference per fold, the split-half reliability and the ceiling for SROCC, the comparison graph and the
+score distributions."""
 
 import io
 import math
@@ -200,12 +201,13 @@ def consistency_reference_by_fold(
 def split_half_ceiling(
     dataset: Dataset, settings: split_half.SplitHalfSettings, elo: EloSettings, jobs: int, folder: Path
 ) -> Written:
-    """The split-half correlation of the Elo scores, and its Spearman–Brown correction: the ceiling for SROCC."""
+    """The split-half correlation of the Elo scores; its Spearman–Brown correction, the scores' reliability; and the
+    reliability's square root, the ceiling for a method's SROCC."""
     images = dataset.images["image"].tolist()
     repeats = split_half.split_half_correlations(dataset.judgments, images, settings, elo, jobs)
     summary = split_half.summarise(repeats)
     rows = []
-    for column, name in [("spearman", "split-half correlation"), ("spearman_brown", "Spearman-Brown corrected")]:
+    for column, name in [("spearman", "split-half correlation"), ("spearman_brown", split_half.RELIABILITY)]:
         rows.append(
             {
                 "measure": name,
@@ -214,12 +216,21 @@ def split_half_ceiling(
                 "q95": summary[f"{column}_q95"],
             }
         )
+    # The square root is monotonic: its quantiles are the square roots of the reliability's.
+    reliability = rows[-1]
+    rows.append({"measure": split_half.CEILING} | {key: split_half.ceiling(reliability[key]) for key in
+                                                    ("median", "q05", "q95")})  # fmt: skip
     table = pd.DataFrame(rows)
     table["repeats"] = settings.repeats
     table["permutations"] = settings.permutations
     table["balance"] = settings.balance
+    names = {
+        "split-half correlation": "Split-half correlation",
+        split_half.RELIABILITY: "Spearman--Brown corrected: the reliability",
+        split_half.CEILING: r"Its square root: the ceiling for SROCC",
+    }
     latex_rows = [
-        [escape(row.measure.capitalize()), decimal(row.median), f"[{decimal(row.q05)}, {decimal(row.q95)}]"]
+        [names[row.measure], decimal(row.median), f"[{decimal(row.q05)}, {decimal(row.q95)}]"]
         for row in table.itertuples(index=False)
     ]
     balanced = (
@@ -230,11 +241,13 @@ def split_half_ceiling(
     latex = LatexTable(
         headers=["", r"Spearman's $\rho$", r"5--95\%"],
         rows=latex_rows,
-        caption=f"The split-half ceiling: the annotators split at random into two halves ({balanced}), "
+        caption=f"The reliability of the Elo scores: the annotators split at random into two halves ({balanced}), "
         f"{settings.repeats} times; Elo scores from each half's judgments ({settings.permutations} permutations); "
         "and Spearman's correlation between the halves' mean scores over the images judged in both, with its "
-        "Spearman--Brown correction to the full set of annotators. The corrected median is the ceiling for a "
-        "method's SROCC against the Elo scores.",
+        "Spearman--Brown correction to the full set of annotators: the correlation expected between two independent "
+        "runs of the whole annotation. Its square root is the correlation of the observed scores with the true "
+        "ones, and the ceiling for a method's SROCC against the Elo scores: the most that scores free of the "
+        "annotation's noise can reach.",
         label="tab:split_half_ceiling",
         align="lrr",
     )

@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-12T18:44:02+00:00",
-  "ended": "2026-11-12T18:44:02+00:00",
+  "started": "2026-11-13T08:38:58+00:00",
+  "ended": "2026-11-13T08:38:58+00:00",
   "inputs": [
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
@@ -10,13 +10,13 @@
     },
     {
       "path": "build/evaluate/geometry/metrics.tsv",
-      "sha256": "d19e5740a20546a612a48c360bdbcdcaf0984a077e713ca15046b0d6521bca36",
-      "bytes": 218
+      "sha256": "952e499c556cb952b604f7a4e1134004d7d669c27edbcbf93bba49b6dd80912a",
+      "bytes": 245
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "e68dd0e252297d7545369e33d836738ff0856722387bd26ff1ff8c031a1a4314",
-      "bytes": 6411
+      "sha256": "9e21ab700377e41bcb3f08571acda23a1932fb2b6452ce4e7ecab59a7c46b2b6",
+      "bytes": 10853
     },
     {
       "path": "build/evaluate/geometry_layout/by_elo_gap.tsv",
@@ -25,13 +25,13 @@
     },
     {
       "path": "build/evaluate/geometry_layout/metrics.tsv",
-      "sha256": "c57f2c756fc6e6a62e6efa1a72dff28cd1b26c858e12741071cf4cf8c4478996",
-      "bytes": 218
+      "sha256": "4d6088e119c3d26162d8dbf891317d41d65eb55024ef219d9dd7c980e7abc2ee",
+      "bytes": 245
     },
     {
       "path": "build/evaluate/geometry_layout/manifest.json",
-      "sha256": "c53e610353545f93227894aa2ef2663a7bf34161f3b7a17f6fdc219d855694c9",
-      "bytes": 6495
+      "sha256": "f45da9da1e9cb86119bbcaf34bcd04f868ed8b9a16149943aef09aaba401b554",
+      "bytes": 7235
     }
   ],
   "outputs": [
@@ -56,6 +56,8 @@
       "geometry": "Geometry",
       "geometry_layout": "Geometry + Layout"
     },
+    "colours": {},
+    "comparisons": [],
     "families": [
       "geometry",
       "layout"
@@ -64,6 +66,14 @@
     "bootstrap": 1000,
     "seed": 20260629,
     "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
     "cache": null,
     "http": {
       "contact": null,
@@ -90,10 +100,11 @@
     "pyarrow": "26.0.1",
     "shapely": "2.1.2",
     "torch": "2.14.0",
+    "transformers": "5.22.2",
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "5c8742176c8777a7c91696f83ffce3c653cf6f05-dirty",
+  "commit": "6d3f5c70f7cd0ef96c31558a6ea5fa483abe387f",
   "platform": "macOS-26.5.1",
   "summary": {
     "geometry_by_elo_gap": {
@@ -179,7 +190,7 @@
         {
           "gap": "srocc",
           "judgments_per_fold": NaN,
-          "consistency": 0.793053,
+          "consistency": 0.890535,
           "consistency_low": NaN,
           "consistency_high": NaN,
           "geometry": 0.751235,
@@ -192,7 +203,7 @@
       ]
     },
     "seconds": {
-      "geometry_by_elo_gap": 0.007
+      "geometry_by_elo_gap": 0.006
     }
   }
 }

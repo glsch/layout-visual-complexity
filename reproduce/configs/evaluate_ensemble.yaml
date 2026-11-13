@@ -1,0 +1,10 @@
+# The article's ensemble: the geometry ranker (without the Layout features) and the ViT ranker, their z-scored page
+# scores averaged with equal weights, fold by fold.
+ensemble:
+  geometry: build/evaluate/geometry
+  vit: build/evaluate/vit
+learning_curves:
+  shares: [0.1, 0.25, 0.5, 0.75]
+  by: [judgments, images]
+  repeats: 2
+output: build/evaluate/ensemble

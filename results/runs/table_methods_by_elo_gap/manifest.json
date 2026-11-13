@@ -1,0 +1,247 @@
+{
+  "command": "report",
+  "started": "2026-11-13T09:40:43+00:00",
+  "ended": "2026-11-13T09:40:43+00:00",
+  "inputs": [
+    {
+      "path": "build/evaluate/geometry/by_elo_gap.tsv",
+      "sha256": "59782a5158994706e32de5e9cb806a3e99fb1a030f80c9a7e505f8ed1691af21",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/geometry/metrics.tsv",
+      "sha256": "952e499c556cb952b604f7a4e1134004d7d669c27edbcbf93bba49b6dd80912a",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/geometry/manifest.json",
+      "sha256": "9e21ab700377e41bcb3f08571acda23a1932fb2b6452ce4e7ecab59a7c46b2b6",
+      "bytes": 10853
+    },
+    {
+      "path": "build/evaluate/vit/by_elo_gap.tsv",
+      "sha256": "3ac1c2b8094ba26ed9a0703d2844b743479941a0a0d0c7e9a62601778793165d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/vit/metrics.tsv",
+      "sha256": "9f2cb0e58c18136bfa99e85ebf8b2e68b4e00e020255cb5fc6912db48e2241aa",
+      "bytes": 218
+    },
+    {
+      "path": "build/evaluate/vit/manifest.json",
+      "sha256": "72bf2e7d3014604ef1606182bc1f30de0ed9dea69a9dede931322448bfef1bd4",
+      "bytes": 11241
+    },
+    {
+      "path": "build/evaluate/ensemble/by_elo_gap.tsv",
+      "sha256": "50072af82f24a6954aace94ee9e78cceefbb2fa4e99baa38b405069a2a85a471",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/ensemble/metrics.tsv",
+      "sha256": "7ba1654cc6a733fb3ce39a679c33b5be3a70722b1c7ca54749b819c1a34f2f20",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/ensemble/manifest.json",
+      "sha256": "836e89f1d7797f16fb40ee1342f58d24745a5f8bd2ae797a028a9bd5d66f1205",
+      "bytes": 11806
+    }
+  ],
+  "outputs": [
+    "results/tables/methods_by_elo_gap.tsv",
+    "results/tables/methods_by_elo_gap.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "methods_by_elo_gap"
+    ],
+    "name": "table_methods_by_elo_gap",
+    "dataset": "build/dataset",
+    "scores": "build/ranking/scores.tsv",
+    "features": "build/features/dataset/features.parquet",
+    "layout": "build/segment/dataset",
+    "evaluations": {
+      "geometry": "build/evaluate/geometry",
+      "vit": "build/evaluate/vit",
+      "ensemble": "build/evaluate/ensemble"
+    },
+    "labels": {
+      "geometry": "Geometry",
+      "vit": "ViT",
+      "ensemble": "Ensemble"
+    },
+    "colours": {},
+    "comparisons": [],
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    }
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "6d3f5c70f7cd0ef96c31558a6ea5fa483abe387f",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "methods_by_elo_gap": {
+      "by_elo_gap": [
+        {
+          "gap": "<100",
+          "judgments_per_fold": 15.82,
+          "consistency": 0.61133,
+          "consistency_low": 0.553414,
+          "consistency_high": 0.674677,
+          "geometry": 0.551481,
+          "geometry_low": 0.494161,
+          "geometry_high": 0.620947,
+          "vit": 0.537361,
+          "vit_low": 0.487572,
+          "vit_high": 0.596288,
+          "ensemble": 0.542784,
+          "ensemble_low": 0.485264,
+          "ensemble_high": 0.600663
+        },
+        {
+          "gap": "100-200",
+          "judgments_per_fold": 15.29,
+          "consistency": 0.796688,
+          "consistency_low": 0.759575,
+          "consistency_high": 0.85075,
+          "geometry": 0.626432,
+          "geometry_low": 0.569416,
+          "geometry_high": 0.70116,
+          "vit": 0.632048,
+          "vit_low": 0.573733,
+          "vit_high": 0.693336,
+          "ensemble": 0.656319,
+          "ensemble_low": 0.600852,
+          "ensemble_high": 0.720319
+        },
+        {
+          "gap": "200-300",
+          "judgments_per_fold": 12.58,
+          "consistency": 0.915344,
+          "consistency_low": 0.893005,
+          "consistency_high": 0.953155,
+          "geometry": 0.787292,
+          "geometry_low": 0.725239,
+          "geometry_high": 0.842047,
+          "vit": 0.808951,
+          "vit_low": 0.726968,
+          "vit_high": 0.864547,
+          "ensemble": 0.831851,
+          "ensemble_low": 0.77408,
+          "ensemble_high": 0.882095
+        },
+        {
+          "gap": "300-400",
+          "judgments_per_fold": 9.36,
+          "consistency": 0.908824,
+          "consistency_low": 0.837633,
+          "consistency_high": 0.948723,
+          "geometry": 0.853169,
+          "geometry_low": 0.751339,
+          "geometry_high": 0.906698,
+          "vit": 0.878851,
+          "vit_low": 0.828114,
+          "vit_high": 0.935432,
+          "ensemble": 0.870892,
+          "ensemble_low": 0.780665,
+          "ensemble_high": 0.914101
+        },
+        {
+          "gap": ">=400",
+          "judgments_per_fold": 12.84,
+          "consistency": 0.953114,
+          "consistency_low": 0.934285,
+          "consistency_high": 0.979258,
+          "geometry": 0.940802,
+          "geometry_low": 0.91933,
+          "geometry_high": 0.972755,
+          "vit": 0.945944,
+          "vit_low": 0.92157,
+          "vit_high": 0.975616,
+          "ensemble": 0.953185,
+          "ensemble_low": 0.936398,
+          "ensemble_high": 0.979654
+        },
+        {
+          "gap": "overall",
+          "judgments_per_fold": 65.89,
+          "consistency": 0.812007,
+          "consistency_low": 0.782028,
+          "consistency_high": 0.836214,
+          "geometry": 0.723675,
+          "geometry_low": 0.679826,
+          "geometry_high": 0.752685,
+          "vit": 0.730137,
+          "vit_low": 0.689683,
+          "vit_high": 0.76136,
+          "ensemble": 0.742301,
+          "ensemble_low": 0.699953,
+          "ensemble_high": 0.767298
+        },
+        {
+          "gap": "srocc",
+          "judgments_per_fold": NaN,
+          "consistency": 0.890535,
+          "consistency_low": NaN,
+          "consistency_high": NaN,
+          "geometry": 0.751235,
+          "geometry_low": 0.677634,
+          "geometry_high": 0.803791,
+          "vit": 0.784495,
+          "vit_low": 0.725238,
+          "vit_high": 0.827712,
+          "ensemble": 0.818944,
+          "ensemble_low": 0.767109,
+          "ensemble_high": 0.856341
+        }
+      ]
+    },
+    "seconds": {
+      "methods_by_elo_gap": 0.01
+    }
+  }
+}

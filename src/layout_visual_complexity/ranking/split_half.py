@@ -1,11 +1,16 @@
-"""The split-half ceiling: how well Elo scores from half the annotators predict those from the other half.
+"""The split-half reliability of the Elo scores, and the ceiling for SROCC: how well Elo scores from half the annotators
+predict those from the other half.
 
 Each repeat splits the persons at random into two halves, computes Elo scores from each half's judgments, and
 correlates them (Spearman) over the images judged in both. The Spearman–Brown formula, 2r / (1 + r), corrects the
-correlation to what the full set of annotators would reach. Its median over repeats is the ceiling for a method's
-SROCC against the Elo scores, as consistency is for its accuracy.
+correlation to what the full set of annotators would reach: its median over repeats is the reliability of the Elo
+scores, the correlation expected between two independent runs of the annotation. A method's scores are compared with
+one run, not two, and carry none of its noise: the most they can reach is the reliability's square root, the
+correlation of the observed scores with the true ones. That is the ceiling for a method's SROCC against the Elo
+scores, as consistency is the reference for its accuracy.
 """
 
+import math
 import multiprocessing
 from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass
@@ -16,6 +21,14 @@ import pandas as pd
 
 from layout_visual_complexity.ranking.elo import EloSettings, permuted_scores, workers
 from layout_visual_complexity.ranking.reliability import spearman
+
+RELIABILITY = "Spearman-Brown corrected"
+CEILING = "ceiling for SROCC"
+
+
+def ceiling(reliability: float) -> float:
+    """The ceiling for a method's SROCC against scores of this reliability: its square root (0 when it is negative)."""
+    return math.sqrt(max(reliability, 0.0)) if math.isfinite(reliability) else math.nan
 
 
 @dataclass(frozen=True)

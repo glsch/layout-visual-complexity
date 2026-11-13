@@ -9,6 +9,8 @@
   `geometry_features_on_schematic_page`, the same on a made-up page.
 - `geometry_feature_families`: the plate of the geometric groups and Layout's measures on a made-up page, with their
   code names.
+- The methods' tables and figures (`method_reports.py`): `methods_by_elo_gap`, `ensembles_by_elo_gap`,
+  `accuracy_by_elo_gap`, `paired_differences`, `learning_curves_and_calibration`, `local_complexity_maps`.
 """
 
 import json
@@ -21,6 +23,7 @@ from typing import Literal, get_args
 import numpy as np
 import pandas as pd
 
+from layout_visual_complexity import method_reports
 from layout_visual_complexity.download import HttpSettings
 from layout_visual_complexity.evaluate import read_elo
 from layout_visual_complexity.evaluation import metrics
@@ -44,6 +47,12 @@ Output = Literal[
     "geometry_features_on_page",
     "geometry_features_on_schematic_page",
     "geometry_feature_families",
+    "methods_by_elo_gap",
+    "ensembles_by_elo_gap",
+    "accuracy_by_elo_gap",
+    "paired_differences",
+    "learning_curves_and_calibration",
+    "local_complexity_maps",
 ]
 ALL_OUTPUTS: list[Output] = list(get_args(Output))
 
@@ -95,11 +104,21 @@ class ReportSettings:
         evaluations: Evaluations (`lvc evaluate` folders) to set side by side, under the short names their columns
             take.
         labels: Each evaluation's name in the tables.
+        colours: Each evaluation's colour in the figures: a method's (`geometry`, `vit`, `ensemble`, …) or a hex
+            code; by default its short name's, if it is a method's, else its kind's.
+        comparisons: Pairs of evaluations (by short name) whose differences `paired_differences` gives, the first
+            minus the second.
         families: The families the hierarchy table shows: short names or Python paths.
         pages: The real page each geometric group is drawn on, by its code name (`Family__Feature`).
         bootstrap: Resamples of the manuscripts for the correlations' 95% intervals.
         seed: The seed of the resamples.
         image_credit: A line crediting the page images, added to the captions of figures that show them.
+        tokens: A token set (the folder of `lvc embed`), for the local complexity maps.
+        head: The trained local ViT head (`head.npz`) the maps come from; the package's own by default.
+        map_pages: The pages the local complexity maps are drawn on.
+        map_long_edge: The long edge, in pixels, the maps' page images are drawn at.
+        map_range: The maps' colour scale runs between these quantiles of the patch scores of every page of the
+            token set, lower scores transparent, higher ones in full colour.
         cache: The download cache holding the page images; by default the segmentation run's.
         http: How to fetch page images that aren't in the cache.
     """
@@ -113,11 +132,18 @@ class ReportSettings:
     layout: Path | None = None
     evaluations: dict[str, Path] = field(default_factory=dict)
     labels: dict[str, str] = field(default_factory=dict)
+    colours: dict[str, str] = field(default_factory=dict)
+    comparisons: list[list[str]] = field(default_factory=list)
     families: list[str] = field(default_factory=lambda: ["geometry", "layout"])
     pages: dict[str, str] = field(default_factory=dict)
     bootstrap: int = 1000
     seed: int = 1
     image_credit: str = ""
+    tokens: Path | None = None
+    head: Path | None = None
+    map_pages: list[str] = field(default_factory=list)
+    map_long_edge: int = 900
+    map_range: list[float] = field(default_factory=lambda: [0.05, 0.95])
     cache: Path | None = None
     http: HttpSettings = field(default_factory=HttpSettings)
 
@@ -149,6 +175,8 @@ def run_report(settings: ReportSettings) -> dict[str, object]:
             written = features_on_schematic_page(folder)
         elif output == "geometry_feature_families":
             written = feature_families(folder)
+        elif output in METHOD_OUTPUTS:
+            written = METHOD_OUTPUTS[output](settings, run, folder)
         else:
             raise ValueError(f"unknown output {output!r}")
         timings[output] = round(time.perf_counter() - began, 3)
@@ -158,6 +186,20 @@ def run_report(settings: ReportSettings) -> dict[str, object]:
     run.summary["seconds"] = timings
     run.wrote(run.finish(folder / "runs" / settings.name))
     return run.summary
+
+
+METHOD_OUTPUTS = {
+    "methods_by_elo_gap": lambda settings, run, folder: method_reports.methods_by_elo_gap(
+        settings, run, folder, "methods_by_elo_gap"
+    ),
+    "ensembles_by_elo_gap": lambda settings, run, folder: method_reports.methods_by_elo_gap(
+        settings, run, folder, "ensembles_by_elo_gap"
+    ),
+    "accuracy_by_elo_gap": method_reports.accuracy_by_elo_gap,
+    "paired_differences": method_reports.paired_differences,
+    "learning_curves_and_calibration": method_reports.learning_curves_and_calibration,
+    "local_complexity_maps": method_reports.local_complexity_maps,
+}
 
 
 # Accuracy by Elo gap.
@@ -225,7 +267,8 @@ def by_elo_gap(settings: ReportSettings, run: Run, folder: Path) -> Written:
         "a fold tests the judgments between two of its pages. Accuracy is the mean over the folds of the share of "
         "test judgments whose chosen page the model scores higher; \\emph{Consistency} is the same share for the "
         "final Elo scores, on the same test judgments, and the reference for accuracy. Its $\\rho$ is the ceiling "
-        "for SROCC, the split-half correlation of the Elo scores with its Spearman--Brown correction. "
+        "for SROCC: the square root of the Elo scores' reliability (their split-half correlation with its "
+        "Spearman--Brown correction), the most that scores free of the annotation's noise can reach against them. "
         f"\\emph{{Judgments per fold}} counts the test judgments. In brackets, 95\\% intervals from "
         f"{configuration['bootstrap']:,} resamples of the manuscripts.",
         label="tab:geometry_by_elo_gap",

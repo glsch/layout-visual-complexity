@@ -12,6 +12,11 @@
 #
 # The features, the geometry ranker and their tables and figures are part of `all` and are made from that
 # segmentation (build/segment/dataset), which they make first if it's missing.
+#
+# The ViT ranker needs the vit extra; its tokens (embed-dataset) come from DINOv2 ViT-S/14, downloaded once into the
+# Hugging Face cache, and are kept in the user cache. Its evaluation with its learning curves takes about 25 minutes
+# on an Apple M4 Pro. The head that comes with the package is trained on every judgment (head-dataset) and copied into
+# the package by `make -C reproduce package-head`.
 
 LVC ?= ../.venv/bin/lvc
 
@@ -31,11 +36,16 @@ REPORT := $(RUN) judgments report --config $(CONFIGS)/report.yaml --config $(CON
 .PHONY: all dataset ranking segment-dataset table-dataset-categories table-reliability figure-comparison-graph \
 	figure-elo-violins features-dataset evaluate-geometry evaluate-geometry-layout table-geometry-by-elo-gap \
 	table-geometry-feature-hierarchy figure-geometry-feature-correlations figure-geometry-features-on-page \
-	figure-geometry-features-on-schematic-page figure-geometry-feature-families clean
+	figure-geometry-features-on-schematic-page figure-geometry-feature-families embed-dataset evaluate-vit \
+	evaluate-ensembles head-dataset package-head table-methods-by-elo-gap figure-accuracy-by-elo-gap \
+	table-paired-differences table-ensembles-by-elo-gap figure-learning-curves-and-calibration \
+	figure-local-complexity-maps clean
 
 all: table-dataset-categories table-reliability figure-comparison-graph figure-elo-violins table-geometry-by-elo-gap \
 	table-geometry-feature-hierarchy figure-geometry-feature-correlations figure-geometry-features-on-page \
-	figure-geometry-features-on-schematic-page figure-geometry-feature-families
+	figure-geometry-features-on-schematic-page figure-geometry-feature-families table-methods-by-elo-gap \
+	figure-accuracy-by-elo-gap table-paired-differences table-ensembles-by-elo-gap \
+	figure-learning-curves-and-calibration figure-local-complexity-maps
 
 # The dataset comes from configs/dataset.yaml's source: a folder in the published structure, or the Zenodo
 # record's DOI. When it is a folder, a change to its files makes the dataset again.
@@ -121,6 +131,72 @@ $(TOP)/results/figures/geometry_feature_families.svg: configs/report_features.ya
 		configs/figure_geometry_feature_families.yaml
 	$(FEATURE_REPORT)/figure_geometry_feature_families.yaml
 
+# The ViT ranker, the ensembles, and the methods' tables and figures.
+TOKENS := $(TOP)/build/embed/dataset/tokens.json
+embed-dataset: $(TOKENS)
+$(TOKENS): $(SEGMENT) configs/embed_dataset.yaml
+	$(RUN) embed --config $(CONFIGS)/embed_dataset.yaml
+
+VIT := $(TOP)/build/evaluate/vit/head.npz
+evaluate-vit: $(VIT)
+$(VIT): $(TOKENS) $(RANKING) $(RELIABILITY) configs/evaluate.yaml configs/evaluate_vit.yaml
+	$(EVALUATE)/evaluate_vit.yaml
+
+ENSEMBLE := $(TOP)/build/evaluate/ensemble/ensemble.json
+ENSEMBLE_LAYOUT := $(TOP)/build/evaluate/ensemble_layout/ensemble.json
+ENSEMBLE_FITTED := $(TOP)/build/evaluate/ensemble_fitted/ensemble.json
+ENSEMBLE_LAYOUT_FITTED := $(TOP)/build/evaluate/ensemble_layout_fitted/ensemble.json
+evaluate-ensembles: $(ENSEMBLE) $(ENSEMBLE_LAYOUT) $(ENSEMBLE_FITTED) $(ENSEMBLE_LAYOUT_FITTED)
+$(ENSEMBLE): $(GEOMETRY) $(VIT) configs/evaluate.yaml configs/evaluate_ensemble.yaml
+	$(EVALUATE)/evaluate_ensemble.yaml
+$(ENSEMBLE_LAYOUT): $(GEOMETRY_LAYOUT) $(VIT) configs/evaluate.yaml configs/evaluate_ensemble_layout.yaml
+	$(EVALUATE)/evaluate_ensemble_layout.yaml
+$(ENSEMBLE_FITTED): $(GEOMETRY) $(VIT) configs/evaluate.yaml configs/evaluate_ensemble_fitted.yaml
+	$(EVALUATE)/evaluate_ensemble_fitted.yaml
+$(ENSEMBLE_LAYOUT_FITTED): $(GEOMETRY_LAYOUT) $(VIT) configs/evaluate.yaml configs/evaluate_ensemble_layout_fitted.yaml
+	$(EVALUATE)/evaluate_ensemble_layout_fitted.yaml
+
+HEAD := $(TOP)/build/train/vit_head/head.npz
+head-dataset: $(HEAD)
+$(HEAD): $(TOKENS) $(DATASET) configs/train_vit_head.yaml
+	$(RUN) train --config $(CONFIGS)/train_vit_head.yaml
+
+package-head: $(HEAD)
+	cp $(HEAD) $(TOP)/src/layout_visual_complexity/heads/dinov2_vits14.npz
+
+METHODS := $(GEOMETRY) $(VIT) $(ENSEMBLE)
+
+table-methods-by-elo-gap: $(TOP)/results/tables/methods_by_elo_gap.tsv
+$(TOP)/results/tables/methods_by_elo_gap.tsv: $(METHODS) configs/report_features.yaml \
+		configs/table_methods_by_elo_gap.yaml
+	$(FEATURE_REPORT)/table_methods_by_elo_gap.yaml
+
+figure-accuracy-by-elo-gap: $(TOP)/results/figures/accuracy_by_elo_gap.svg
+$(TOP)/results/figures/accuracy_by_elo_gap.svg: $(METHODS) configs/report_features.yaml \
+		configs/figure_accuracy_by_elo_gap.yaml
+	$(FEATURE_REPORT)/figure_accuracy_by_elo_gap.yaml
+
+table-paired-differences: $(TOP)/results/tables/paired_differences.tsv
+$(TOP)/results/tables/paired_differences.tsv: $(METHODS) configs/report_features.yaml \
+		configs/table_paired_differences.yaml
+	$(FEATURE_REPORT)/table_paired_differences.yaml
+
+table-ensembles-by-elo-gap: $(TOP)/results/tables/ensembles_by_elo_gap.tsv
+$(TOP)/results/tables/ensembles_by_elo_gap.tsv: $(ENSEMBLE) $(ENSEMBLE_LAYOUT) $(ENSEMBLE_FITTED) \
+		$(ENSEMBLE_LAYOUT_FITTED) configs/report_features.yaml configs/table_ensembles_by_elo_gap.yaml
+	$(FEATURE_REPORT)/table_ensembles_by_elo_gap.yaml
+
+figure-learning-curves-and-calibration: $(TOP)/results/figures/learning_curves_and_calibration.svg
+$(TOP)/results/figures/learning_curves_and_calibration.svg: $(METHODS) configs/report_features.yaml \
+		configs/figure_learning_curves_and_calibration.yaml
+	$(FEATURE_REPORT)/figure_learning_curves_and_calibration.yaml
+
+figure-local-complexity-maps: $(TOP)/results/figures/local_complexity_maps.svg
+$(TOP)/results/figures/local_complexity_maps.svg: $(HEAD) $(TOKENS) configs/report_features.yaml \
+		configs/figure_local_complexity_maps.yaml
+	$(FEATURE_REPORT)/figure_local_complexity_maps.yaml
+
 clean:
 	rm -rf $(TOP)/build/dataset $(TOP)/build/ranking $(TOP)/build/features/dataset $(TOP)/build/evaluate
+	rm -rf $(TOP)/build/embed/dataset $(TOP)/build/train
 	rm -rf $(TOP)/results/tables $(TOP)/results/figures $(TOP)/results/runs

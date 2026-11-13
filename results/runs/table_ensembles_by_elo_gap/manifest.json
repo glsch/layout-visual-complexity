@@ -1,0 +1,303 @@
+{
+  "command": "report",
+  "started": "2026-11-13T09:40:48+00:00",
+  "ended": "2026-11-13T09:40:48+00:00",
+  "inputs": [
+    {
+      "path": "build/evaluate/ensemble/by_elo_gap.tsv",
+      "sha256": "50072af82f24a6954aace94ee9e78cceefbb2fa4e99baa38b405069a2a85a471",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/ensemble/metrics.tsv",
+      "sha256": "7ba1654cc6a733fb3ce39a679c33b5be3a70722b1c7ca54749b819c1a34f2f20",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/ensemble/manifest.json",
+      "sha256": "836e89f1d7797f16fb40ee1342f58d24745a5f8bd2ae797a028a9bd5d66f1205",
+      "bytes": 11806
+    },
+    {
+      "path": "build/evaluate/ensemble_layout/by_elo_gap.tsv",
+      "sha256": "d0b43a39db3881b4d5d6f7641ad6bd84cddbac7f0f4c513e6835143fdca97723",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/ensemble_layout/metrics.tsv",
+      "sha256": "e30d1b0dc023ce3dfb646cc4f1c980f6c8b210fcb32e9b24c3e8d3a5a7f1bae2",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/ensemble_layout/manifest.json",
+      "sha256": "37af4b6b13912614b101e7e31350656d2a082736ed7eeb871bc0e6d7dc57c2df",
+      "bytes": 7824
+    },
+    {
+      "path": "build/evaluate/ensemble_fitted/by_elo_gap.tsv",
+      "sha256": "6e275126823ec879053234d7232c9da402b4a80521826c989eef9051c9184e6d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/ensemble_fitted/metrics.tsv",
+      "sha256": "0b7562146e304ee2b404853c0d7780635d324948b0d2d325eae2f12caadd1e04",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/ensemble_fitted/manifest.json",
+      "sha256": "969bce6787159a2578173b78866908fde92079eec4a4ec81194c553951cefbdd",
+      "bytes": 7805
+    },
+    {
+      "path": "build/evaluate/ensemble_layout_fitted/by_elo_gap.tsv",
+      "sha256": "7e5dd7fbc08060acc57e585e1c73f89012498c285934228a6c627c05eecad729",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/ensemble_layout_fitted/metrics.tsv",
+      "sha256": "71dc528bacfe18ca946ff3d376be6e7d1d5ab577ad0bb9ebbc31d7cd2e2ce639",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/ensemble_layout_fitted/manifest.json",
+      "sha256": "f865a3cd0557105d8777c33ed6a731483600a1dd7f01ad59731759b84d02ab69",
+      "bytes": 7921
+    },
+    {
+      "path": "build/evaluate/geometry/manifest.json",
+      "sha256": "9e21ab700377e41bcb3f08571acda23a1932fb2b6452ce4e7ecab59a7c46b2b6",
+      "bytes": 10853
+    },
+    {
+      "path": "build/evaluate/vit/manifest.json",
+      "sha256": "72bf2e7d3014604ef1606182bc1f30de0ed9dea69a9dede931322448bfef1bd4",
+      "bytes": 11241
+    },
+    {
+      "path": "build/evaluate/geometry_layout/manifest.json",
+      "sha256": "f45da9da1e9cb86119bbcaf34bcd04f868ed8b9a16149943aef09aaba401b554",
+      "bytes": 7235
+    }
+  ],
+  "outputs": [
+    "results/tables/ensembles_by_elo_gap.tsv",
+    "results/tables/ensembles_by_elo_gap.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "ensembles_by_elo_gap"
+    ],
+    "name": "table_ensembles_by_elo_gap",
+    "dataset": "build/dataset",
+    "scores": "build/ranking/scores.tsv",
+    "features": "build/features/dataset/features.parquet",
+    "layout": "build/segment/dataset",
+    "evaluations": {
+      "ensemble": "build/evaluate/ensemble",
+      "ensemble_layout": "build/evaluate/ensemble_layout",
+      "ensemble_fitted": "build/evaluate/ensemble_fitted",
+      "ensemble_layout_fitted": "build/evaluate/ensemble_layout_fitted"
+    },
+    "labels": {
+      "ensemble": "Geometry and ViT",
+      "ensemble_layout": "Geometry, Layout and ViT",
+      "ensemble_fitted": "Geometry and ViT, fitted",
+      "ensemble_layout_fitted": "Geometry, Layout and ViT, fitted",
+      "geometry": "Geometry",
+      "geometry_layout": "Geometry + Layout",
+      "vit": "ViT"
+    },
+    "colours": {},
+    "comparisons": [],
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    }
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "6d3f5c70f7cd0ef96c31558a6ea5fa483abe387f",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "ensembles_by_elo_gap": {
+      "by_elo_gap": [
+        {
+          "gap": "<100",
+          "judgments_per_fold": 15.82,
+          "consistency": 0.61133,
+          "consistency_low": 0.553414,
+          "consistency_high": 0.674677,
+          "ensemble": 0.542784,
+          "ensemble_low": 0.485264,
+          "ensemble_high": 0.600663,
+          "ensemble_layout": 0.541388,
+          "ensemble_layout_low": 0.481826,
+          "ensemble_layout_high": 0.59819,
+          "ensemble_fitted": 0.548411,
+          "ensemble_fitted_low": 0.490842,
+          "ensemble_fitted_high": 0.605615,
+          "ensemble_layout_fitted": 0.541868,
+          "ensemble_layout_fitted_low": 0.483802,
+          "ensemble_layout_fitted_high": 0.608344
+        },
+        {
+          "gap": "100-200",
+          "judgments_per_fold": 15.29,
+          "consistency": 0.796688,
+          "consistency_low": 0.759575,
+          "consistency_high": 0.85075,
+          "ensemble": 0.656319,
+          "ensemble_low": 0.600852,
+          "ensemble_high": 0.720319,
+          "ensemble_layout": 0.654567,
+          "ensemble_layout_low": 0.596783,
+          "ensemble_layout_high": 0.719047,
+          "ensemble_fitted": 0.654395,
+          "ensemble_fitted_low": 0.598575,
+          "ensemble_fitted_high": 0.719349,
+          "ensemble_layout_fitted": 0.646196,
+          "ensemble_layout_fitted_low": 0.587724,
+          "ensemble_layout_fitted_high": 0.714172
+        },
+        {
+          "gap": "200-300",
+          "judgments_per_fold": 12.58,
+          "consistency": 0.915344,
+          "consistency_low": 0.893005,
+          "consistency_high": 0.953155,
+          "ensemble": 0.831851,
+          "ensemble_low": 0.77408,
+          "ensemble_high": 0.882095,
+          "ensemble_layout": 0.818393,
+          "ensemble_layout_low": 0.748096,
+          "ensemble_layout_high": 0.872104,
+          "ensemble_fitted": 0.828518,
+          "ensemble_fitted_low": 0.770722,
+          "ensemble_fitted_high": 0.878824,
+          "ensemble_layout_fitted": 0.809388,
+          "ensemble_layout_fitted_low": 0.742569,
+          "ensemble_layout_fitted_high": 0.866708
+        },
+        {
+          "gap": "300-400",
+          "judgments_per_fold": 9.36,
+          "consistency": 0.908824,
+          "consistency_low": 0.837633,
+          "consistency_high": 0.948723,
+          "ensemble": 0.870892,
+          "ensemble_low": 0.780665,
+          "ensemble_high": 0.914101,
+          "ensemble_layout": 0.856328,
+          "ensemble_layout_low": 0.756813,
+          "ensemble_layout_high": 0.91739,
+          "ensemble_fitted": 0.870178,
+          "ensemble_fitted_low": 0.780005,
+          "ensemble_fitted_high": 0.914101,
+          "ensemble_layout_fitted": 0.854499,
+          "ensemble_layout_fitted_low": 0.753159,
+          "ensemble_layout_fitted_high": 0.914115
+        },
+        {
+          "gap": ">=400",
+          "judgments_per_fold": 12.84,
+          "consistency": 0.953114,
+          "consistency_low": 0.934285,
+          "consistency_high": 0.979258,
+          "ensemble": 0.953185,
+          "ensemble_low": 0.936398,
+          "ensemble_high": 0.979654,
+          "ensemble_layout": 0.954354,
+          "ensemble_layout_low": 0.937596,
+          "ensemble_layout_high": 0.980593,
+          "ensemble_fitted": 0.953185,
+          "ensemble_fitted_low": 0.936398,
+          "ensemble_fitted_high": 0.979654,
+          "ensemble_layout_fitted": 0.953039,
+          "ensemble_layout_fitted_low": 0.934667,
+          "ensemble_layout_fitted_high": 0.979032
+        },
+        {
+          "gap": "overall",
+          "judgments_per_fold": 65.89,
+          "consistency": 0.812007,
+          "consistency_low": 0.782028,
+          "consistency_high": 0.836214,
+          "ensemble": 0.742301,
+          "ensemble_low": 0.699953,
+          "ensemble_high": 0.767298,
+          "ensemble_layout": 0.734456,
+          "ensemble_layout_low": 0.691114,
+          "ensemble_layout_high": 0.760747,
+          "ensemble_fitted": 0.741994,
+          "ensemble_fitted_low": 0.699523,
+          "ensemble_fitted_high": 0.766663,
+          "ensemble_layout_fitted": 0.730609,
+          "ensemble_layout_fitted_low": 0.686641,
+          "ensemble_layout_fitted_high": 0.758067
+        },
+        {
+          "gap": "srocc",
+          "judgments_per_fold": NaN,
+          "consistency": 0.890535,
+          "consistency_low": NaN,
+          "consistency_high": NaN,
+          "ensemble": 0.818944,
+          "ensemble_low": 0.767109,
+          "ensemble_high": 0.856341,
+          "ensemble_layout": 0.813904,
+          "ensemble_layout_low": 0.760693,
+          "ensemble_layout_high": 0.855013,
+          "ensemble_fitted": 0.816192,
+          "ensemble_fitted_low": 0.762794,
+          "ensemble_fitted_high": 0.85466,
+          "ensemble_layout_fitted": 0.804845,
+          "ensemble_layout_fitted_low": 0.751057,
+          "ensemble_layout_fitted_high": 0.848063
+        }
+      ]
+    },
+    "seconds": {
+      "ensembles_by_elo_gap": 0.011
+    }
+  }
+}

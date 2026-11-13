@@ -1,0 +1,5 @@
+# For the appendix: the geometry ranker with the Layout features and the ViT ranker, with equal weights.
+ensemble:
+  geometry_layout: build/evaluate/geometry_layout
+  vit: build/evaluate/vit
+output: build/evaluate/ensemble_layout

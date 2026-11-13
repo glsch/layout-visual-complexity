@@ -1,7 +1,7 @@
-# The evaluation protocol, shared by the evaluations of feature sets: the dataset and its final Elo scores, 10 x 10
-# folds by manuscript, 1,000 resamples of the manuscripts for the intervals, the split-half ceiling for SROCC. Each
-# evaluation adds its feature families and its output after this one.
-features: build/features/dataset/features.parquet
+# The evaluation protocol, shared by the evaluations of the methods: the dataset and its final Elo scores, 10 x 10
+# folds by manuscript, 1,000 resamples of the manuscripts for the intervals, the ceiling for SROCC from the split-half
+# table. Each evaluation adds its method (a feature table and its families, a token set, or an ensemble) and its
+# output after this one.
 dataset: build/dataset
 scores: build/ranking/scores.tsv
 ceiling: results/tables/split_half_ceiling.tsv

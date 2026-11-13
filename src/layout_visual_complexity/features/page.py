@@ -1,5 +1,6 @@
 """A page as feature families see it: its folio, zones and lines from the layout store, in the full image's pixels,
-and its image on request. What a family asks for is prepared once per page and shared by the families."""
+its image on request, and its patch tokens from a token set when a family needs them. What a family asks for is
+prepared once per page and shared by the families."""
 
 import math
 from dataclasses import dataclass, field
@@ -66,6 +67,7 @@ class Page:
     lines: list[TextLine] = field(default_factory=list)
     yolo_lines: list[Zone] = field(default_factory=list)
     image_path: Path | None = None
+    tokens: Any = None
     _folio_images: dict[tuple[int, int], tuple[np.ndarray, np.ndarray]] = field(default_factory=dict, repr=False)
 
     @classmethod
