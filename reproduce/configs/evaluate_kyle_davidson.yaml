@@ -1,0 +1,4 @@
+# Kyle–Davidson as published: the pairwise logistic model on clutter, symmetry and entropy.
+features: build/features/dataset/features.parquet
+families: kyle_davidson
+output: build/evaluate/kyle_davidson

@@ -1,0 +1,48 @@
+# What each level of information buys: each method's accuracy with its interval and its SROCC, grouped by the
+# information it needs, from trivial to learned, beside chance and the consistency reference.
+name: figure_baselines_by_information
+outputs: [baselines_by_information]
+evaluations:
+  ink_coverage: build/evaluate/measures/ink_coverage
+  text_lines: build/evaluate/measures/text_lines
+  trivial: build/evaluate/trivial
+  generic: build/evaluate/generic
+  kyle_davidson: build/evaluate/kyle_davidson
+  ink_distribution: build/evaluate/ink_distribution
+  geometry: build/evaluate/geometry
+  geometry_layout: build/evaluate/geometry_layout
+  mean_token: build/evaluate/mean_token
+  vit: build/evaluate/vit
+  ensemble: build/evaluate/ensemble
+labels:
+  ink_coverage: Ink coverage alone
+  text_lines: Number of text lines
+  trivial: Both together
+  generic: Generic image measures
+  kyle_davidson: Kyle–Davidson as published
+  ink_distribution: Ink distribution
+  geometry: Geometry
+  geometry_layout: Geometry with Layout
+  mean_token: Linear model on the mean ViT token
+  vit: Local ViT head
+  ensemble: Ensemble (geometry and ViT)
+levels:
+  ink_coverage: Trivial
+  text_lines: Trivial
+  trivial: Trivial
+  generic: Image only
+  kyle_davidson: Image only
+  ink_distribution: Ink
+  geometry: Layout
+  geometry_layout: Layout
+  mean_token: Learned
+  vit: Learned
+  ensemble: Learned
+colours:
+  ink_coverage: trivial
+  text_lines: trivial
+  trivial: trivial
+  generic: generic_image
+  ink_distribution: ink
+  geometry_layout: geometry
+  mean_token: vit

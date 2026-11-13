@@ -118,17 +118,40 @@ then one column per feature, named `Family__Feature__Flavour` (`AreaFeature__Lin
   rows and columns, the balance of the written mass), the entropy of the zone types' areas, and blank space (its
   share, the largest empty rectangle, the margins). The order measures run on the written mass (`_mass`, from the
   segmentation) and on the ink (`_ink`, Otsu's dark pixels of the folio, from the image alone).
+- **`trivial`**: ink coverage (the ink layer's share of the folio) and the number of text lines.
+- **`generic`**: six generic image measures, needing neither segmentation nor judgments, on the folio crop at 1,400
+  pixels on its long edge with its illumination flattened: edge-orientation entropy, MSSC at each of seven scales,
+  lossless compressibility (the quantised lightness's raw size over its PNG's), feature congestion (colour, contrast
+  and orientation), colourfulness, and patch-codebook variety (how many kinds of patch a page has, and the entropy of
+  their use, against one codebook of patch colour histograms: the package's, learned on the dataset's pages, or one
+  of your own from `lvc codebook`, given as `parameters.generic.codebook`).
+- **`kyle_davidson`**: Kyle-Davidson et al.'s (2023) clutter (the regions left by a normalised cut of SLIC
+  superpixels), mirror symmetry in patches of three sizes, and the entropy of each HSV channel over a Gaussian pyramid,
+  on the folio crop at 700 pixels, as they measure scenes.
+- **`ink`**: ink distribution, on one ink layer (Sauvola's threshold of the flattened lightness, specks removed), with
+  scales in line heights estimated from the page (the text lines' spacing, else the period of the ink's rows): coverage,
+  lacunarity at 1 to 16 line heights, fragmentation, the share of chromatic ink against the parchment's own colour,
+  and the shares of red, gold, green and blue ink.
+- **`mean_token`**: the mean of a page's patch tokens from a token set (`--tokens`), for a linear model on them.
 - **Your own family**: a subclass of `layout_visual_complexity.features.contract.Family`, named by its Python path
   (`--families geometry,mypackage.features.Darkness`). It names its columns, declares its scope (page, region or
   line) and what it needs (the image, the folio crop, the regions, the lines, a ViT's patch tokens from a token set
-  given with `--tokens`), says how its rows are aggregated to the page, and has a dataclass of settings, given under
-  `parameters` (`--parameters "{layout: {resolution: 128}}"`).
+  given with `--tokens`, the ink layer), says how its rows are aggregated to the page, and has a dataclass of
+  settings, given under `parameters` (`--parameters "{layout: {resolution: 128}}"`).
 
-Pages are measured in worker processes; what the families need is prepared once per page and shared among them.
+Pages are measured in worker processes; what the families need (the ink layer among it) is prepared once per page
+and shared among them.
 Images, when a family needs them, are found as the segmentation run fetched them, from the download cache. The
 table's metadata records each column's family and the family's settings and their hash. A rerun keeps the pages
 measured before with the same families, settings, layout and image. The run's `report.md` gives the seconds per page
 of each family, the pages per second, how busy the cores were, and the memory used.
+
+```
+lvc codebook --layout build/segment/name --output build/codebook/name [--codewords 32] [--jobs N]
+```
+
+learns the generic family's patch codebook from a segmentation run's pages, without any judgment: k-means, seeded,
+over the colour histograms of patches drawn from every page. The codebook doesn't depend on the number of workers.
 
 ### Patch tokens of a vision transformer
 
@@ -155,7 +178,10 @@ lvc evaluate --ensemble "{geometry: build/evaluate/geometry, vit: build/evaluate
 
 evaluates a method, cross-validated on folds by manuscript (10 × 10 by default):
 
-- **the pairwise logistic model** on a feature table;
+- **the pairwise logistic model** on a feature table: all its columns, some families' (`--families`), or some
+  columns (`--columns`, by name or by their measure's prefix, `Generic__Mssc`). With `--restating.reference`, a
+  column whose Spearman correlation with that reference column reaches `--restating.threshold` (0.9) in absolute
+  value, and which adds nothing to it on the same folds, is left out (`restating.tsv` says which);
 - **the local ViT head** on a token set: a small network (the tokens' width, 128, 1, with a ReLU) gives each patch a
   value, softplus makes it a non-negative score, and the page's score is the mean of its patches'; it is trained with
   RankNet's logistic loss on each fold's training judgments (180 epochs of Adam, learning rate 0.002, weight decay
@@ -187,7 +213,8 @@ its patch scores make a map of where on the page the head finds complexity.
 `lvc report` writes the tables and figures of the features and of the methods evaluated on them: accuracy by Elo gap
 (as a table and a figure), the differences between methods on the same resamples, learning curves and calibration,
 the local complexity maps, the features' table, each feature's correlation with the Elo scores, and the features
-drawn on pages.
+drawn on pages; and the baselines' (by Elo gap, by the information they need, the measures defined, the generic
+measures' correlations with ink coverage).
 
 ## The dataset
 
@@ -227,7 +254,7 @@ learning curves (on the folds of the first two repeats), takes about 25 minutes 
 | `figure-comparison-graph` | Figure 2: the comparison graph |
 | `figure-elo-violins` | Figure 3: the distributions of the Elo scores |
 | `segment-dataset` | `build/segment/dataset/`: the dataset's pages segmented (not part of `all`: it needs the `segment` extra, the models in `models/` and the page images from their servers) |
-| `features-dataset` | `build/features/dataset/`: the geometric and Layout features of the dataset's pages, from their segmentation |
+| `features-dataset` | `build/features/dataset/`: the geometric and Layout features of the dataset's pages, from their segmentation, and the baselines' |
 | `evaluate-geometry`, `evaluate-geometry-layout` | `build/evaluate/`: the geometry ranker, without and with the Layout features |
 | `table-geometry-by-elo-gap` | Table 4's geometry column: accuracy by Elo gap and SROCC, with and without Layout, beside the consistency reference |
 | `table-geometry-feature-hierarchy` | Appendix A's table: the features, with their code names |
@@ -237,12 +264,19 @@ learning curves (on the folds of the first two repeats), takes about 25 minutes 
 | `embed-dataset` | `build/embed/dataset/`: the dataset's pages' patch tokens from DINOv2 ViT-S/14, the folio crop |
 | `evaluate-vit`, `evaluate-ensembles` | `build/evaluate/`: the ViT ranker; its ensembles with the geometry ranker (without and with Layout, with equal and fitted weights) |
 | `head-dataset`, `package-head` | `build/train/vit_head/`: the ViT head trained on every judgment; copied into the package |
-| `table-methods-by-elo-gap` | Table 4: the geometry ranker, the ViT ranker and their ensemble by Elo gap, beside the consistency reference |
+| `table-methods-by-elo-gap` | Table 4: the generic image baseline, the geometry ranker, the ViT ranker and their ensemble by Elo gap, beside the consistency reference |
 | `figure-accuracy-by-elo-gap` | The same as a figure, with each method's interval, and as a table |
 | `table-paired-differences` | The methods' differences in accuracy and SROCC, on the same resamples |
 | `table-ensembles-by-elo-gap` | For the appendix: the ensembles, without and with Layout, with equal and fitted weights |
 | `figure-learning-curves-and-calibration` | Accuracy as the training judgments and images grow, and calibration |
 | `figure-local-complexity-maps` | The ViT head's local complexity maps on three pages |
+| `codebook-dataset`, `package-codebook` | `build/codebook/dataset/`: the generic measures' patch codebook, learned on the dataset's pages; copied into the package |
+| `evaluate-baselines`, `evaluate-measures` | `build/evaluate/`: the baselines (the trivial measures, the generic image measures, Kyle–Davidson, ink distribution, the mean token), each family together and each measure alone |
+| `table-baselines-by-elo-gap` | Table 3's successor: the baselines by Elo gap, beside the consistency reference |
+| `table-baseline-measures` | The baseline measures defined, with their parameters and sources |
+| `table-baseline-differences` | The baselines' differences from the geometry ranker and the ensemble |
+| `figure-baselines-by-information`, `figure-baselines-by-information-each-measure` | What each level of information buys: the methods by the information they need, combined, and with each measure alone |
+| `figure-generic-measure-correlations` | The generic image measures' correlations with each other and with ink coverage |
 
 The dataset leaves out the sessions of a public exhibition, whose annotators were mostly not experts, and the
 calibration judgments; so its numbers differ from the article's, which kept them.

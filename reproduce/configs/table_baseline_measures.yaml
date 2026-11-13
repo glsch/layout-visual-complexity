@@ -1,0 +1,5 @@
+# The baseline measures defined: each one's name, what it measures, its parameters and its source, with the settings
+# the feature table recorded.
+name: table_baseline_measures
+outputs: [baseline_measures]
+families: [trivial, generic, kyle_davidson, ink]

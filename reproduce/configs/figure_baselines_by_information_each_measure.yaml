@@ -1,0 +1,102 @@
+# What each level of information buys, measure by measure: each group's measures combined (filled dots) and each
+# measure alone (open dots), beside the learned methods, chance and the consistency reference.
+name: figure_baselines_by_information_each_measure
+outputs: [baselines_by_information_each_measure]
+evaluations:
+  trivial: build/evaluate/trivial
+  ink_coverage: build/evaluate/measures/ink_coverage
+  text_lines: build/evaluate/measures/text_lines
+  generic: build/evaluate/generic
+  edge_orientation_entropy: build/evaluate/measures/edge_orientation_entropy
+  mssc: build/evaluate/measures/mssc
+  compressibility: build/evaluate/measures/compressibility
+  feature_congestion: build/evaluate/measures/feature_congestion
+  colourfulness: build/evaluate/measures/colourfulness
+  codebook_variety: build/evaluate/measures/codebook_variety
+  kyle_davidson: build/evaluate/kyle_davidson
+  clutter: build/evaluate/measures/clutter
+  symmetry: build/evaluate/measures/symmetry
+  entropy: build/evaluate/measures/entropy
+  ink_distribution: build/evaluate/ink_distribution
+  lacunarity: build/evaluate/measures/lacunarity
+  fragmentation: build/evaluate/measures/fragmentation
+  chromatic_share: build/evaluate/measures/chromatic_share
+  hue_classes: build/evaluate/measures/hue_classes
+  geometry: build/evaluate/geometry
+  geometry_layout: build/evaluate/geometry_layout
+  mean_token: build/evaluate/mean_token
+  vit: build/evaluate/vit
+  ensemble: build/evaluate/ensemble
+alone: [ink_coverage, text_lines, edge_orientation_entropy, mssc, compressibility, feature_congestion, colourfulness,
+  codebook_variety, clutter, symmetry, entropy, lacunarity, fragmentation, chromatic_share, hue_classes]
+labels:
+  trivial: Trivial measures, combined
+  ink_coverage: Ink coverage
+  text_lines: Number of text lines
+  generic: Generic image measures, combined
+  edge_orientation_entropy: Edge-orientation entropy
+  mssc: MSSC per scale
+  compressibility: Lossless compressibility
+  feature_congestion: Feature congestion
+  colourfulness: Colourfulness
+  codebook_variety: Patch-codebook variety
+  kyle_davidson: Kyle–Davidson as published, combined
+  clutter: Clutter (normalised cut)
+  symmetry: Patch symmetry
+  entropy: HSV entropy
+  ink_distribution: Ink distribution, combined
+  lacunarity: Lacunarity
+  fragmentation: Fragmentation
+  chromatic_share: Chromatic share
+  hue_classes: Hue classes
+  geometry: Geometry
+  geometry_layout: Geometry with Layout
+  mean_token: Linear model on the mean ViT token
+  vit: Local ViT head
+  ensemble: Ensemble (geometry and ViT)
+levels:
+  trivial: Trivial
+  ink_coverage: Trivial
+  text_lines: Trivial
+  generic: Image only
+  edge_orientation_entropy: Image only
+  mssc: Image only
+  compressibility: Image only
+  feature_congestion: Image only
+  colourfulness: Image only
+  codebook_variety: Image only
+  kyle_davidson: Kyle–Davidson
+  clutter: Kyle–Davidson
+  symmetry: Kyle–Davidson
+  entropy: Kyle–Davidson
+  ink_distribution: Ink
+  lacunarity: Ink
+  fragmentation: Ink
+  chromatic_share: Ink
+  hue_classes: Ink
+  geometry: Layout
+  geometry_layout: Layout
+  mean_token: Learned
+  vit: Learned
+  ensemble: Learned
+colours:
+  trivial: trivial
+  ink_coverage: trivial
+  text_lines: trivial
+  generic: generic_image
+  edge_orientation_entropy: generic_image
+  mssc: generic_image
+  compressibility: generic_image
+  feature_congestion: generic_image
+  colourfulness: generic_image
+  codebook_variety: generic_image
+  clutter: kyle_davidson
+  symmetry: kyle_davidson
+  entropy: kyle_davidson
+  ink_distribution: ink
+  lacunarity: ink
+  fragmentation: ink
+  chromatic_share: ink
+  hue_classes: ink
+  geometry_layout: geometry
+  mean_token: vit

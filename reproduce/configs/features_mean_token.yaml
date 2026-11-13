@@ -1,0 +1,6 @@
+# The mean of each page's patch tokens (embed_dataset.yaml), into build/features/mean_token, for the linear model on
+# the mean token.
+layout: build/segment/dataset
+output: build/features/mean_token
+families: [mean_token]
+tokens: build/embed/dataset

@@ -68,3 +68,19 @@
   compared with one run and carry none of its noise. The split-half table gives the reliability and the ceiling;
   `metrics.tsv` gives both (`elo_reliability`, `srocc_ceiling`). On the dataset the ceiling moves from 0.793 to
   0.891.
+- Four new feature families, the baselines, arranged by the information they need: `trivial` (ink coverage, the
+  number of text lines), `generic` (six generic image measures: edge-orientation entropy, MSSC per scale, lossless
+  compressibility, feature congestion, colourfulness, patch-codebook variety), `kyle_davidson` (Kyle-Davidson et
+  al.'s clutter, symmetry and entropy as they publish them) and `ink` (coverage, lacunarity, fragmentation, chromatic
+  share and hue classes, with scales in line heights); and `mean_token`, the mean of a page's patch tokens. The image
+  families share one ink layer and one normalised folio crop, prepared once per page. Needs scikit-image, now a
+  declared dependency.
+- `lvc codebook` learns the generic measures' patch codebook from a segmentation run's pages; the package comes with
+  the one learned on the dataset's pages.
+- `lvc evaluate` takes some columns of a feature table (`--columns`, by name or by their measure's prefix), and can
+  leave out the columns that only restate a reference measure (`--restating.reference`), recording the check in
+  `restating.tsv`.
+- `lvc report` writes the baselines' tables and figures: by Elo gap (Table 3's successor), their differences from the
+  geometry ranker and the ensemble, the measures defined, what each level of information buys (with each measure
+  alone, too), and the generic measures' correlations with ink coverage. `reproduce/` regenerates them, and Table 4
+  has a column for the generic image baseline.

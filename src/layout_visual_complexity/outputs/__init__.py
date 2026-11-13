@@ -18,6 +18,9 @@ LATEX_SPECIAL = {
     "}": r"\}",
     "~": r"\textasciitilde{}",
     "^": r"\textasciicircum{}",
+    "\u2013": "--",
+    "\u2014": "---",
+    "\u2212": "$-$",
 }
 
 
