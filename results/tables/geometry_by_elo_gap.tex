@@ -1,6 +1,6 @@
 \begin{table}[htbp]
   \centering
-  \caption{Accuracy of pairwise outcome prediction by the absolute difference ($\Delta$) between the two pages' final Elo scores, and Spearman's correlation ($\rho$, SROCC) between the out-of-fold page scores and the Elo scores. Each method is the pairwise logistic model fitted to a feature set, evaluated by 10-fold cross-validation repeated 10 times, each manuscript's pages in one fold; a fold tests the judgments between two of its pages. Accuracy is the mean over the folds of the share of test judgments whose chosen page the model scores higher; \emph{Consistency} is the same share for the final Elo scores, on the same test judgments, and the reference for accuracy. Its $\rho$ is the ceiling for SROCC, the split-half correlation of the Elo scores with its Spearman--Brown correction. \emph{Judgments per fold} counts the test judgments. In brackets, 95\% intervals from 1,000 resamples of the manuscripts.}
+  \caption{Accuracy of pairwise outcome prediction by the absolute difference ($\Delta$) between the two pages' final Elo scores, and Spearman's correlation ($\rho$, SROCC) between the out-of-fold page scores and the Elo scores. Each method is the pairwise logistic model fitted to a feature set, evaluated by 10-fold cross-validation repeated 10 times, each manuscript's pages in one fold; a fold tests the judgments between two of its pages. Accuracy is the mean over the folds of the share of test judgments whose chosen page the model scores higher; \emph{Consistency} is the same share for the final Elo scores, on the same test judgments, and the reference for accuracy. Its $\rho$ is the ceiling for SROCC: the square root of the Elo scores' reliability (their split-half correlation with its Spearman--Brown correction), the most that scores free of the annotation's noise can reach against them. \emph{Judgments per fold} counts the test judgments. In brackets, 95\% intervals from 1,000 resamples of the manuscripts.}
   \label{tab:geometry_by_elo_gap}
   \begin{tabular}{lcccc}
     \toprule
@@ -14,7 +14,7 @@
     \midrule
     Overall & 65.9 & 0.812 [0.782, 0.836] & 0.724 [0.680, 0.753] & 0.714 [0.669, 0.743] \\
     \midrule
-    $\rho$ (SROCC) &  & 0.793 & 0.751 [0.678, 0.804] & 0.735 [0.664, 0.789] \\
+    $\rho$ (SROCC) &  & 0.891 & 0.751 [0.678, 0.804] & 0.735 [0.664, 0.789] \\
     \bottomrule
   \end{tabular}
 \end{table}

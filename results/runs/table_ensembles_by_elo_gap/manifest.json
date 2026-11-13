@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-12T21:22:20+00:00",
-  "ended": "2026-11-12T21:22:20+00:00",
+  "started": "2026-11-13T09:40:48+00:00",
+  "ended": "2026-11-13T09:40:48+00:00",
   "inputs": [
     {
       "path": "build/evaluate/ensemble/by_elo_gap.tsv",
@@ -10,13 +10,13 @@
     },
     {
       "path": "build/evaluate/ensemble/metrics.tsv",
-      "sha256": "0101f2f13bc652019ab45994608e9e0c0b70691fe5cae520de379924c9b5fe2a",
-      "bytes": 218
+      "sha256": "7ba1654cc6a733fb3ce39a679c33b5be3a70722b1c7ca54749b819c1a34f2f20",
+      "bytes": 245
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "b02aaad0566ffafba3558a7a49e1857987af80444a3694815c9a742b5976b57f",
-      "bytes": 11676
+      "sha256": "836e89f1d7797f16fb40ee1342f58d24745a5f8bd2ae797a028a9bd5d66f1205",
+      "bytes": 11806
     },
     {
       "path": "build/evaluate/ensemble_layout/by_elo_gap.tsv",
@@ -25,13 +25,13 @@
     },
     {
       "path": "build/evaluate/ensemble_layout/metrics.tsv",
-      "sha256": "a3af4dd6c7a00505b6413c3cffbb25b17a8abfd316a46005b2933404b929d6b0",
-      "bytes": 218
+      "sha256": "e30d1b0dc023ce3dfb646cc4f1c980f6c8b210fcb32e9b24c3e8d3a5a7f1bae2",
+      "bytes": 245
     },
     {
       "path": "build/evaluate/ensemble_layout/manifest.json",
-      "sha256": "9846c402a754194dee428b54609c89dd73e0d963acb6d3f58bb84add60aff9ba",
-      "bytes": 7693
+      "sha256": "37af4b6b13912614b101e7e31350656d2a082736ed7eeb871bc0e6d7dc57c2df",
+      "bytes": 7824
     },
     {
       "path": "build/evaluate/ensemble_fitted/by_elo_gap.tsv",
@@ -40,13 +40,13 @@
     },
     {
       "path": "build/evaluate/ensemble_fitted/metrics.tsv",
-      "sha256": "ecf090898ade8336903e6e084e6fe3220d7745d609cb8c187570494fb2aa01e5",
-      "bytes": 218
+      "sha256": "0b7562146e304ee2b404853c0d7780635d324948b0d2d325eae2f12caadd1e04",
+      "bytes": 245
     },
     {
       "path": "build/evaluate/ensemble_fitted/manifest.json",
-      "sha256": "a57739e8da82358865f65e565970c238bbdaf0152d112618d23abd26d2ab3cb3",
-      "bytes": 7674
+      "sha256": "969bce6787159a2578173b78866908fde92079eec4a4ec81194c553951cefbdd",
+      "bytes": 7805
     },
     {
       "path": "build/evaluate/ensemble_layout_fitted/by_elo_gap.tsv",
@@ -55,18 +55,18 @@
     },
     {
       "path": "build/evaluate/ensemble_layout_fitted/metrics.tsv",
-      "sha256": "0119c7ca157619fa50a862a40132e22c14ad9c8a2a41971e2898e187f912237c",
-      "bytes": 218
+      "sha256": "71dc528bacfe18ca946ff3d376be6e7d1d5ab577ad0bb9ebbc31d7cd2e2ce639",
+      "bytes": 245
     },
     {
       "path": "build/evaluate/ensemble_layout_fitted/manifest.json",
-      "sha256": "328f43b781359306aeb9376b0143603c26b6be6ce2e20c32791bc0b2cdc104f2",
-      "bytes": 7790
+      "sha256": "f865a3cd0557105d8777c33ed6a731483600a1dd7f01ad59731759b84d02ab69",
+      "bytes": 7921
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "ca8e2852b1f295832640506abeb0784e21884b4f33f7e0471dd7b5920b27939b",
-      "bytes": 10722
+      "sha256": "9e21ab700377e41bcb3f08571acda23a1932fb2b6452ce4e7ecab59a7c46b2b6",
+      "bytes": 10853
     },
     {
       "path": "build/evaluate/vit/manifest.json",
@@ -75,8 +75,8 @@
     },
     {
       "path": "build/evaluate/geometry_layout/manifest.json",
-      "sha256": "a058fbf46f309a3bd85e9f9751fe0c220230e04ce39d458229eb6743bfba5113",
-      "bytes": 7103
+      "sha256": "f45da9da1e9cb86119bbcaf34bcd04f868ed8b9a16149943aef09aaba401b554",
+      "bytes": 7235
     }
   ],
   "outputs": [
@@ -156,7 +156,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "17cbf3a081c9bfee09ebc7ef0972a91849389a5d",
+  "commit": "6d3f5c70f7cd0ef96c31558a6ea5fa483abe387f",
   "platform": "macOS-26.5.1",
   "summary": {
     "ensembles_by_elo_gap": {
@@ -278,7 +278,7 @@
         {
           "gap": "srocc",
           "judgments_per_fold": NaN,
-          "consistency": 0.793053,
+          "consistency": 0.890535,
           "consistency_low": NaN,
           "consistency_high": NaN,
           "ensemble": 0.818944,
@@ -297,7 +297,7 @@
       ]
     },
     "seconds": {
-      "ensembles_by_elo_gap": 0.008
+      "ensembles_by_elo_gap": 0.011
     }
   }
 }

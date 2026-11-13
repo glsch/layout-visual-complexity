@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-12T21:21:50+00:00",
-  "ended": "2026-11-12T21:21:50+00:00",
+  "started": "2026-11-13T08:38:58+00:00",
+  "ended": "2026-11-13T08:38:58+00:00",
   "inputs": [
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
@@ -10,13 +10,13 @@
     },
     {
       "path": "build/evaluate/geometry/metrics.tsv",
-      "sha256": "d19e5740a20546a612a48c360bdbcdcaf0984a077e713ca15046b0d6521bca36",
-      "bytes": 218
+      "sha256": "952e499c556cb952b604f7a4e1134004d7d669c27edbcbf93bba49b6dd80912a",
+      "bytes": 245
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "ca8e2852b1f295832640506abeb0784e21884b4f33f7e0471dd7b5920b27939b",
-      "bytes": 10722
+      "sha256": "9e21ab700377e41bcb3f08571acda23a1932fb2b6452ce4e7ecab59a7c46b2b6",
+      "bytes": 10853
     },
     {
       "path": "build/evaluate/geometry_layout/by_elo_gap.tsv",
@@ -25,13 +25,13 @@
     },
     {
       "path": "build/evaluate/geometry_layout/metrics.tsv",
-      "sha256": "c57f2c756fc6e6a62e6efa1a72dff28cd1b26c858e12741071cf4cf8c4478996",
-      "bytes": 218
+      "sha256": "4d6088e119c3d26162d8dbf891317d41d65eb55024ef219d9dd7c980e7abc2ee",
+      "bytes": 245
     },
     {
       "path": "build/evaluate/geometry_layout/manifest.json",
-      "sha256": "a058fbf46f309a3bd85e9f9751fe0c220230e04ce39d458229eb6743bfba5113",
-      "bytes": 7103
+      "sha256": "f45da9da1e9cb86119bbcaf34bcd04f868ed8b9a16149943aef09aaba401b554",
+      "bytes": 7235
     }
   ],
   "outputs": [
@@ -104,7 +104,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "17cbf3a081c9bfee09ebc7ef0972a91849389a5d",
+  "commit": "6d3f5c70f7cd0ef96c31558a6ea5fa483abe387f",
   "platform": "macOS-26.5.1",
   "summary": {
     "geometry_by_elo_gap": {
@@ -190,7 +190,7 @@
         {
           "gap": "srocc",
           "judgments_per_fold": NaN,
-          "consistency": 0.793053,
+          "consistency": 0.890535,
           "consistency_low": NaN,
           "consistency_high": NaN,
           "geometry": 0.751235,
