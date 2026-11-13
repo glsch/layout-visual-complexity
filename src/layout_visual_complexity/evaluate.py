@@ -33,6 +33,7 @@ from layout_visual_complexity.evaluation.protocol import (
     evaluate_fold_scores,
     fitted_weights,
     fold_mean_intervals,
+    paired_difference,
     pairwise_fold_scores,
     reduced_folds,
 )
@@ -40,7 +41,7 @@ from layout_visual_complexity.evaluation.vit_head import HeadSettings
 from layout_visual_complexity.features.extraction import family_names, read_feature_table
 from layout_visual_complexity.logs import logger
 from layout_visual_complexity.ranking.dataset import read_dataset
-from layout_visual_complexity.ranking.reliability import DEFAULT_GAP_EDGES, other_image
+from layout_visual_complexity.ranking.reliability import DEFAULT_GAP_EDGES, other_image, spearman
 from layout_visual_complexity.runs import Run, sha256, shown_path
 
 HITS, FOLD_SCORES = "hits.tsv", "fold_scores.tsv"
@@ -64,6 +65,23 @@ class LearningCurveSettings:
 
 
 @dataclass(frozen=True)
+class RestatingSettings:
+    """A check against a reference measure: a column whose Spearman correlation with the reference reaches
+    `threshold` in absolute value, and which adds nothing to the reference (the pairwise model on both against the
+    reference alone, on the same folds: neither the accuracy's nor SROCC's difference beyond chance above zero), only
+    restates it and is left out of the model.
+
+    Args:
+        reference: The reference column (ink coverage, `Trivial__InkCoverage__share`); empty, the default, checks
+            nothing.
+        threshold: The least absolute Spearman correlation with the reference that calls for the paired comparison.
+    """
+
+    reference: str = ""
+    threshold: float = 0.9
+
+
+@dataclass(frozen=True)
 class EvaluateSettings:
     """Evaluate a method by the protocol, cross-validated by manuscript, and train it on every judgment: the pairwise
     logistic model on a feature table, the local ViT head on a token set, or an ensemble of earlier evaluations.
@@ -75,6 +93,9 @@ class EvaluateSettings:
             (`model.json`, `head.npz` or `ensemble.json`) and the run's record.
         features: A feature table (`features.parquet` of `lvc features`), for the pairwise logistic model.
         families: Only these families' columns: comma-separated, or a list; all by default.
+        columns: Only these columns, each by its name or its measure's prefix (`Family__Feature`): comma-separated, or
+            a list; all the families' by default.
+        restating: Columns that only restate a reference measure, left out of the model.
         tokens: A token set (the folder of `lvc embed`), for the local ViT head.
         head: How the local ViT head is trained.
         ensemble: Earlier evaluations (`lvc evaluate` folders, on the same folds) to combine, by the names their
@@ -100,6 +121,8 @@ class EvaluateSettings:
     output: Path
     features: Path | None = None
     families: list[str] | str = field(default_factory=list)
+    columns: list[str] | str = field(default_factory=list)
+    restating: RestatingSettings = field(default_factory=RestatingSettings)
     tokens: Path | None = None
     head: HeadSettings = field(default_factory=HeadSettings)
     ensemble: dict[str, Path] = field(default_factory=dict)
@@ -172,9 +195,8 @@ class FeatureMethod(Method):
     kind = "features"
 
     def __init__(self, settings: EvaluateSettings, run: Run, pages: list[str], judgments: pd.DataFrame) -> None:
-        self.table = read_feature_table(run.read(Path(settings.features))).select(  # type: ignore[arg-type]
-            family_names(settings.families)
-        )
+        whole = read_feature_table(run.read(Path(settings.features)))  # type: ignore[arg-type]
+        self.table = whole.select(family_names(settings.families)).select_columns(settings.columns)
         missing = [page for page in pages if page not in self.table.values.index]
         if len(missing) == len(pages):
             raise ValueError("the feature table has none of the dataset's pages")
@@ -183,6 +205,52 @@ class FeatureMethod(Method):
         self.settings, self.judgments, self.pages = settings, judgments, pages
         self.features = self.table.values.reindex(pages)
         self.missing = len(missing)
+        self.reference = None
+        if settings.restating.reference:
+            if settings.restating.reference not in whole.values.columns:
+                raise ValueError(f"the feature table has no reference column {settings.restating.reference!r}")
+            self.reference = whole.values[settings.restating.reference].reindex(pages)
+        self.restating: pd.DataFrame | None = None
+
+    def drop_restating(
+        self, folds: list[Fold], elo: pd.Series, manuscripts: pd.Series, protocol: ProtocolSettings
+    ) -> pd.DataFrame:
+        """Leave out the columns that only restate the reference: each column's Spearman correlation with it and,
+        where it reaches the threshold, the pairwise model on the reference and the column against the reference
+        alone; the table of every column, and whether it was dropped."""
+        check, reference = self.settings.restating, self.reference
+        assert reference is not None
+        base = None
+        rows = []
+        for column in self.features.columns:
+            values = self.features[column]
+            both = np.isfinite(values.to_numpy(dtype=float)) & np.isfinite(reference.to_numpy(dtype=float))
+            rho = spearman(values[both].to_numpy(), reference[both].to_numpy()) if both.sum() >= 3 else math.nan
+            row: dict[str, Any] = {"column": column, "rho": rho, "compared": False, "dropped": False}
+            if column != check.reference and math.isfinite(rho) and abs(rho) >= check.threshold:
+                if base is None:
+                    base = self.evaluate(reference.to_frame("reference"), folds, elo, protocol)
+                paired = pd.concat([reference.rename("reference"), values], axis=1)
+                found = paired_difference(self.evaluate(paired, folds, elo, protocol), base, self.judgments,
+                                          manuscripts, protocol, elo)  # fmt: skip
+                row |= found | {"compared": True, "dropped": restates(found)}
+            rows.append(row)
+        table = pd.DataFrame(rows)
+        dropped = table.loc[table["dropped"], "column"].tolist()
+        if len(dropped) == self.features.shape[1]:
+            raise ValueError("every column only restates the reference; nothing is left to evaluate")
+        if dropped:
+            logger.info("evaluate: left out, restating %s: %s", check.reference, ", ".join(dropped))
+        self.features = self.features.drop(columns=dropped)
+        self.table = self.table.only(list(self.features.columns))
+        self.restating = table
+        return table
+
+    def evaluate(
+        self, features: pd.DataFrame, folds: list[Fold], elo: pd.Series, protocol: ProtocolSettings
+    ) -> Evaluation:
+        fold_scores = pairwise_fold_scores(features, self.judgments, folds, self.settings.regularisation)
+        return evaluate_fold_scores(fold_scores, self.judgments, elo, folds, protocol)
 
     def describe(self) -> str:
         families = ", ".join(f"{family['name']} (`{family['hash']}`)" for family in self.table.families)
@@ -198,6 +266,12 @@ class FeatureMethod(Method):
         z = (model.scores(self.features) - mean) / (sd if sd > 0 else 1.0)
         summary = {"columns": int(self.features.shape[1]), "families": [f["name"] for f in self.table.families]}
         summary["pages_without_features"] = self.missing
+        summary["measures"] = measures(self.table)
+        if self.settings.columns:
+            summary["selected"] = list(self.features.columns)
+        if self.restating is not None:
+            summary["dropped"] = self.restating.loc[self.restating["dropped"], "column"].tolist()
+            summary["restating"] = self.settings.restating.reference
         return trained.save(output / "model.json"), z, summary
 
 
@@ -346,6 +420,32 @@ class EnsembleMethod(Method):
         return path, combined, {"members": list(self.members), "weights": description["weights"]}
 
 
+def restates(difference: dict[str, float]) -> bool:
+    """Whether a measure adds nothing to the reference it is set against: neither its accuracy's nor its SROCC's
+    difference lies beyond chance above zero."""
+    return not (difference["accuracy_low"] > 0 or difference["srocc_low"] > 0)
+
+
+def measures(table: Any) -> list[dict[str, Any]]:
+    """The measures a feature table's columns belong to, in their order: each one's prefix, family and feature in
+    words, and its number of columns; by prefix alone where its family can't be loaded."""
+    from layout_visual_complexity.features.contract import FeatureError, load_family
+
+    groups: dict[str, dict[str, str]] = {}
+    for described in table.families:
+        try:
+            family = load_family(described["class"], described["settings"])
+        except (FeatureError, TypeError):
+            continue
+        groups |= {group.prefix: {"family": group.family, "feature": group.feature} for group in family.groups()}
+    found: dict[str, dict[str, Any]] = {}
+    for column in table.values.columns:
+        prefix = column.rsplit("__", 1)[0]
+        entry = found.setdefault(prefix, {"prefix": prefix, **groups.get(prefix, {}), "columns": 0})
+        entry["columns"] += 1
+    return list(found.values())
+
+
 def read_fold_scores(path: Path) -> pd.DataFrame:
     table = pd.read_csv(path, sep="\t", dtype={"page": str})
     table["test"] = table["test"].astype(bool)
@@ -392,6 +492,9 @@ def run_evaluate(settings: EvaluateSettings) -> dict[str, object]:
     output.mkdir(parents=True, exist_ok=True)
     try:
         logger.info("evaluate: %s, %d pages, %d folds", method.kind, len(pages), len(folds))
+        restating = None
+        if isinstance(method, FeatureMethod) and method.reference is not None:
+            restating = method.drop_restating(folds, elo, manuscripts, protocol)
         evaluated = time.perf_counter()
         evaluation = evaluate_fold_scores(method.fold_scores(folds, None), judgments, elo, folds, protocol)
         evaluated = time.perf_counter() - evaluated
@@ -453,13 +556,15 @@ def run_evaluate(settings: EvaluateSettings) -> dict[str, object]:
     ]
     if curve is not None:
         tables += [("learning_curve", curve), ("learning_curve_fold_scores", curve_scores)]
+    if restating is not None:
+        tables.append(("restating", restating))
     for name, frame in tables:
         path = output / f"{name}.tsv"
         frame.to_csv(path, sep="\t", index=False, lineterminator="\n", float_format="%.6f")
         written.append(path)
     written.append(trained_path)
     report = output / "report.md"
-    report.write_text(report_text(settings, method.describe(), by_gap, summary_metrics, curve), "utf-8")
+    report.write_text(report_text(settings, method.describe(), by_gap, summary_metrics, curve, restating), "utf-8")
     written.append(report)
     run.wrote(written)
     seconds = time.perf_counter() - began
@@ -601,6 +706,7 @@ def report_text(
     by_gap: pd.DataFrame,
     summary: pd.DataFrame,
     curve: pd.DataFrame | None = None,
+    restating: pd.DataFrame | None = None,
 ) -> str:
     """The evaluation in Markdown."""
 
@@ -643,6 +749,26 @@ def report_text(
                 f"| {row.by} | {row.share:g} | {row.train_per_fold:.0f} | {row.accuracy:.3f} |"
                 f"{interval(row.low, row.high)} | {row.srocc:.3f} |"
             )
+    if restating is not None:
+        lines += [
+            "",
+            f"Columns set against `{settings.restating.reference}` (left out when |ρ| ≥ "
+            f"{settings.restating.threshold:g} and neither difference is beyond chance above zero):",
+            "",
+            "| Column | ρ | Accuracy difference | 95% interval | SROCC difference | 95% interval | Left out |",
+            "|---|---:|---:|---|---:|---|---|",
+        ]
+        for row in restating.itertuples(index=False):
+            values = row._asdict()
+            if values["compared"]:
+                accuracy = interval(values["accuracy_low"], values["accuracy_high"])
+                srocc = interval(values["srocc_low"], values["srocc_high"])
+                compared = (
+                    f" {values['accuracy_difference']:+.3f} |{accuracy} | {values['srocc_difference']:+.3f} |{srocc} |"
+                )
+            else:
+                compared = " | | | |"
+            lines.append(f"| `{row.column}` | {row.rho:+.3f} |{compared} {'yes' if row.dropped else 'no'} |")
     return "\n".join(lines) + "\n"
 
 

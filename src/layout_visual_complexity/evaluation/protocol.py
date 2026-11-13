@@ -340,6 +340,33 @@ def paired_comparison(
     return found
 
 
+def paired_difference(
+    first: Evaluation,
+    second: Evaluation,
+    judgments: pd.DataFrame,
+    manuscripts: pd.Series,
+    settings: ProtocolSettings,
+    reference: pd.Series,
+) -> dict[str, float]:
+    """The first method's accuracy (the mean over folds) and SROCC minus the second's, on the same folds, each with
+    its 95% interval from the same resamples of the manuscripts for both: accuracy's as `fold_mean_intervals` draws
+    it (each fold's mean difference of hits, then their mean)."""
+    merged = first.tested.merge(second.tested, on=["fold_number", "row"], suffixes=("_a", "_b"))
+    if len(merged) != len(first.tested) or len(merged) != len(second.tested):
+        raise ValueError("the two evaluations ran on other folds")
+    values = merged.assign(value=merged["hit_a"] - merged["hit_b"], gap=merged["gap_a"])
+    interval = fold_mean_intervals(values, judgments, manuscripts, settings.gap_edges, settings).iloc[-1]
+    found = paired_comparison(first, second, judgments, manuscripts, settings, reference=reference)
+    return {
+        "accuracy_difference": found["difference"],
+        "accuracy_low": float(interval["low"]),
+        "accuracy_high": float(interval["high"]),
+        "srocc_difference": found["srocc_difference"],
+        "srocc_low": found["srocc_low"],
+        "srocc_high": found["srocc_high"],
+    }
+
+
 # Folds as a method is trained on them, with the number of the learning curve's share (0 for the evaluation itself),
 # to their raw scores.
 Scorer = Callable[[list[Fold], int], FoldScores]
