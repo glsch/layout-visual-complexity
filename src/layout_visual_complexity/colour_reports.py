@@ -24,6 +24,7 @@ from layout_visual_complexity.method_reports import (
     REFERENCE,
     Evaluations,
     by_gap_table,
+    counted,
     needed,
     signed_interval,
     with_interval,
@@ -204,7 +205,7 @@ def ink_colour_on_page(settings: Any, run: Run, folder: Path) -> Written:
                 f"{escape(page_id)}: {100 * values['Colour__ChromaticShare__share']:.1f}\\% of the ink chromatic "
                 f"({listed or 'none'}), {values['Colour__HueEntropy__bits']:.2f} bits of hue entropy, "
                 f"{values['Colour__Lines__rubric_share'] * 100:.0f}\\% rubric lines, "
-                f"{int(values['Colour__ColouredInitials__count'])} coloured initials"
+                f"{counted(int(values['Colour__ColouredInitials__count']), 'coloured initial')}"
             )
     figure = plot_ink_colour(panels)
     letters = "; ".join(f"({chr(ord('a') + number)}) {text}" for number, text in enumerate(described))

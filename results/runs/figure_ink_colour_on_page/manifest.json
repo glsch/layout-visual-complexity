@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T17:11:43+00:00",
-  "ended": "2026-11-13T17:11:45+00:00",
+  "started": "2026-11-13T17:18:45+00:00",
+  "ended": "2026-11-13T17:18:46+00:00",
   "inputs": [
     {
       "path": "build/features/dataset/features.parquet",
@@ -62,7 +62,7 @@
     "colour_pages": [
       "xxiiid157_101v",
       "xviif31_27r",
-      "vc26_50v"
+      "xviie15_127v"
     ]
   },
   "versions": {
@@ -85,7 +85,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "5bce467d70f56d47244a34e3281a89aecb0ba97b-dirty",
+  "commit": "f3ba6a66be74733376d5b233d8badc00d8f62e6f-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "ink_colour_on_page": {
@@ -105,16 +105,16 @@
           "blue": 0.0
         },
         {
-          "page": "vc26_50v",
-          "red": 0.0025703147520281123,
-          "gold": 0.016372458854373995,
+          "page": "xviie15_127v",
+          "red": 0.039496587893103535,
+          "gold": 0.00031070199934864884,
           "green": 0.0,
-          "blue": 0.009437070184348877
+          "blue": 0.021730422966492847
         }
       ]
     },
     "seconds": {
-      "ink_colour_on_page": 1.632
+      "ink_colour_on_page": 1.51
     }
   }
 }
