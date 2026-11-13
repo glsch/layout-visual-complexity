@@ -32,3 +32,6 @@ http:
   retries: 5
   backoff: 1.0
   timeout: 60.0
+levels: {}
+alone: []
+reference_column: ''

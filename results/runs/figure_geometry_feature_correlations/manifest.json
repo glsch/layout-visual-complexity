@@ -1,12 +1,12 @@
 {
   "command": "report",
-  "started": "2026-11-12T21:21:51+00:00",
-  "ended": "2026-11-12T21:22:02+00:00",
+  "started": "2026-11-13T11:25:49+00:00",
+  "ended": "2026-11-13T11:26:01+00:00",
   "inputs": [
     {
       "path": "build/features/dataset/features.parquet",
-      "sha256": "3946928bc34aab30c6699c3d434a4f210a2a4223d8e1cf227fb6feb1255f7864",
-      "bytes": 391735
+      "sha256": "4ad7732ebad225b65ea3c017da76840648998339cb9ccbe7878b042d160172fd",
+      "bytes": 528333
     },
     {
       "path": "build/ranking/scores.tsv",
@@ -59,7 +59,10 @@
       "retries": 5,
       "backoff": 1.0,
       "timeout": 60.0
-    }
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": ""
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -81,7 +84,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "17cbf3a081c9bfee09ebc7ef0972a91849389a5d",
+  "commit": "e61d0ed1c440faaa5a5562d508988603b062b92f-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "geometry_feature_correlations": {
@@ -179,7 +182,7 @@
       ]
     },
     "seconds": {
-      "geometry_feature_correlations": 11.374
+      "geometry_feature_correlations": 12.163
     }
   }
 }

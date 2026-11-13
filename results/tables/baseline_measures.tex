@@ -1,0 +1,35 @@
+\begin{table}[htbp]
+  \centering
+  \caption{The baseline measures: what each measures, its parameters and its source. The image measures work on the folio crop resized to a fixed long edge: the generic measures and the ink's after the lightness is flattened (divided by a smooth surface of the paper's brightness), the ink's on one ink layer (Sauvola's threshold of the flattened lightness, specks removed) with scales in line heights, the median spacing of the page's text lines; Kyle--Davidson's on the crop as it is, at their images' size.}
+  \label{tab:baseline_measures}
+  \begin{tabular}{lp{0.36\linewidth}p{0.24\linewidth}p{0.14\linewidth}}
+    \toprule
+    Measure & Definition & Parameters & Source \\
+    \midrule
+    \emph{Trivial} &  &  &  \\
+    Ink coverage & Share of the folio covered by ink. & Sauvola, window 0.065 of the shorter edge, k = 0.18, on the flattened lightness at 1,400 px & Sauvola and Pietikäinen 2000 \\
+    Text lines & Number of text lines on the folio. & Kraken's lines whose baseline's midpoint lies on the folio & Kiessling 2019 \\
+    \midrule
+    \emph{Generic} &  &  &  \\
+    Edge-orientation entropy & Shannon entropy of the edges' orientations, weighted by the gradient's magnitude. & 10,000 strongest edges at 120,000 px, 24 bins over 180° & Redies et al. 2017 \\
+    MSSC & Mean squared difference between the lightness and its 2 × 2 pooling, at each scale. & 7 successive poolings & Kravchenko et al. 2026 \\
+    Lossless compressibility & Raw size of the quantised lightness over its size as a PNG. & 16 grey levels, zlib level 6 & this study \\
+    Feature congestion & Local variability of colour, luminance contrast and orientation. & 3 pyramid levels, pooling σ 3–3.5 px & Rosenholtz et al. 2007 \\
+    Colourfulness & Spread and mean of the opponent colour channels. & -- & Hasler and Süsstrunk 2003 \\
+    Patch-codebook variety & Codewords used by the page's patches, and the entropy of their use, against one codebook of patch colour histograms learned on the reference pages. & k = 32, 32 px patches, 16 bins a channel; used from 0.01 of the patches & after Hajič, this study \\
+    \midrule
+    \emph{Kyle–Davidson} &  &  &  \\
+    Clutter & Regions left by a normalised cut of the region adjacency graph of SLIC superpixels. & 400 superpixels, compactness 30, cut below 0.001, at 700 px & Kyle-Davidson et al. 2023 \\
+    Symmetry & Mean left–right and top–bottom mirror symmetry within patches stepped by half their side. & patches of 100, 50, 25 px at 700 px & Kyle-Davidson et al. 2023 \\
+    Entropy & Shannon entropy of each HSV channel over a Gaussian pyramid. & 4 levels & Kyle-Davidson et al. 2023 \\
+    \midrule
+    \emph{Ink} &  &  &  \\
+    Coverage & Share of the folio covered by ink. & the ink layer at 1,400 px & Sauvola and Pietikäinen 2000 \\
+    Lacunarity & Gaps in the ink: the mean squared ink mass of gliding square boxes over its squared mean. & boxes 1, 2, 4, 8, 16 line heights wide & Plotnick et al. 1996 \\
+    Fragmentation & Ink masses after closing by one line height, per square line height of the folio. & a disc one line height across & this study \\
+    Chromatic share & Share of the ink whose chroma, the parchment's colour made neutral, reaches the threshold. & chroma at least 25 & this study \\
+    Hue classes & Shares of the ink in the chromatic hue classes, and the number of classes present. & red, gold, green, blue; present from 1 square line height & this study \\
+    Line height & The line height as a share of the folio's height, and whether it came from the text lines. & the text lines' median spacing, else the ink profile's period & this study \\
+    \bottomrule
+  \end{tabular}
+\end{table}

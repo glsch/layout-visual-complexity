@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-12T21:22:03+00:00",
-  "ended": "2026-11-12T21:22:05+00:00",
+  "started": "2026-11-13T11:23:30+00:00",
+  "ended": "2026-11-13T11:23:32+00:00",
   "inputs": [],
   "outputs": [
     "results/figures/geometry_features_on_page.svg",
@@ -56,7 +56,10 @@
       "retries": 5,
       "backoff": 1.0,
       "timeout": 60.0
-    }
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": ""
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -78,7 +81,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "17cbf3a081c9bfee09ebc7ef0972a91849389a5d",
+  "commit": "e61d0ed1c440faaa5a5562d508988603b062b92f-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "geometry_features_on_page": {
@@ -95,7 +98,7 @@
       }
     },
     "seconds": {
-      "geometry_features_on_page": 1.874
+      "geometry_features_on_page": 1.989
     }
   }
 }

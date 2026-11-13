@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T09:40:48+00:00",
-  "ended": "2026-11-13T09:40:48+00:00",
+  "started": "2026-11-13T11:23:52+00:00",
+  "ended": "2026-11-13T11:23:52+00:00",
   "inputs": [
     {
       "path": "build/evaluate/ensemble/by_elo_gap.tsv",
@@ -15,8 +15,8 @@
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "836e89f1d7797f16fb40ee1342f58d24745a5f8bd2ae797a028a9bd5d66f1205",
-      "bytes": 11806
+      "sha256": "e345addd74f26d04b4dad649f88c35e0fc24466242fe447a4821a92dc782b1a6",
+      "bytes": 11904
     },
     {
       "path": "build/evaluate/ensemble_layout/by_elo_gap.tsv",
@@ -30,8 +30,8 @@
     },
     {
       "path": "build/evaluate/ensemble_layout/manifest.json",
-      "sha256": "37af4b6b13912614b101e7e31350656d2a082736ed7eeb871bc0e6d7dc57c2df",
-      "bytes": 7824
+      "sha256": "cfd6ac622f192ba3caecd1323696ced644ff6d978af5cf3e022fd38b99bca88d",
+      "bytes": 7920
     },
     {
       "path": "build/evaluate/ensemble_fitted/by_elo_gap.tsv",
@@ -45,8 +45,8 @@
     },
     {
       "path": "build/evaluate/ensemble_fitted/manifest.json",
-      "sha256": "969bce6787159a2578173b78866908fde92079eec4a4ec81194c553951cefbdd",
-      "bytes": 7805
+      "sha256": "fbb87f5bd531ed910a91656123e818375e7b072c85ee27dd0a0774ea841ccc44",
+      "bytes": 7901
     },
     {
       "path": "build/evaluate/ensemble_layout_fitted/by_elo_gap.tsv",
@@ -60,13 +60,13 @@
     },
     {
       "path": "build/evaluate/ensemble_layout_fitted/manifest.json",
-      "sha256": "f865a3cd0557105d8777c33ed6a731483600a1dd7f01ad59731759b84d02ab69",
-      "bytes": 7921
+      "sha256": "10da3ccb92d8628dd8763cf2226f0592219462fa9810b3e7d74e2995a9f8269d",
+      "bytes": 8018
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "9e21ab700377e41bcb3f08571acda23a1932fb2b6452ce4e7ecab59a7c46b2b6",
-      "bytes": 10853
+      "sha256": "e10dbbf350435ee48da864aef8b8c446fdb0cfe3ca7a0a53e99fd93b062a90f8",
+      "bytes": 12338
     },
     {
       "path": "build/evaluate/vit/manifest.json",
@@ -75,8 +75,8 @@
     },
     {
       "path": "build/evaluate/geometry_layout/manifest.json",
-      "sha256": "f45da9da1e9cb86119bbcaf34bcd04f868ed8b9a16149943aef09aaba401b554",
-      "bytes": 7235
+      "sha256": "12b5d11dc91e1cb61ac65bf327d5d3215d0742362b24a0a0f8795c5abb52073d",
+      "bytes": 9532
     }
   ],
   "outputs": [
@@ -134,7 +134,10 @@
       "retries": 5,
       "backoff": 1.0,
       "timeout": 60.0
-    }
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": ""
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -156,7 +159,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "6d3f5c70f7cd0ef96c31558a6ea5fa483abe387f",
+  "commit": "e61d0ed1c440faaa5a5562d508988603b062b92f-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "ensembles_by_elo_gap": {
@@ -297,7 +300,7 @@
       ]
     },
     "seconds": {
-      "ensembles_by_elo_gap": 0.011
+      "ensembles_by_elo_gap": 0.01
     }
   }
 }

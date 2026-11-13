@@ -1,8 +1,23 @@
 {
   "command": "report",
-  "started": "2026-11-13T09:40:43+00:00",
-  "ended": "2026-11-13T09:40:43+00:00",
+  "started": "2026-11-13T11:23:40+00:00",
+  "ended": "2026-11-13T11:23:40+00:00",
   "inputs": [
+    {
+      "path": "build/evaluate/generic/by_elo_gap.tsv",
+      "sha256": "759093c6c9e224516286e8531c9f4071c26b0b6aa3c2de0afd8c33390ba490a0",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/generic/metrics.tsv",
+      "sha256": "d412091055073d939a5d46f1ae07ab61e2380aabc70dd1019e298c10155d777e",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/generic/manifest.json",
+      "sha256": "fea578471c9a9bdd3143d7ffb7aefdee3b310ee3e86e9f24dd4f69be0b63a3df",
+      "bytes": 8305
+    },
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
       "sha256": "59782a5158994706e32de5e9cb806a3e99fb1a030f80c9a7e505f8ed1691af21",
@@ -15,8 +30,8 @@
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "9e21ab700377e41bcb3f08571acda23a1932fb2b6452ce4e7ecab59a7c46b2b6",
-      "bytes": 10853
+      "sha256": "e10dbbf350435ee48da864aef8b8c446fdb0cfe3ca7a0a53e99fd93b062a90f8",
+      "bytes": 12338
     },
     {
       "path": "build/evaluate/vit/by_elo_gap.tsv",
@@ -45,8 +60,8 @@
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "836e89f1d7797f16fb40ee1342f58d24745a5f8bd2ae797a028a9bd5d66f1205",
-      "bytes": 11806
+      "sha256": "e345addd74f26d04b4dad649f88c35e0fc24466242fe447a4821a92dc782b1a6",
+      "bytes": 11904
     }
   ],
   "outputs": [
@@ -64,11 +79,13 @@
     "features": "build/features/dataset/features.parquet",
     "layout": "build/segment/dataset",
     "evaluations": {
+      "baseline": "build/evaluate/generic",
       "geometry": "build/evaluate/geometry",
       "vit": "build/evaluate/vit",
       "ensemble": "build/evaluate/ensemble"
     },
     "labels": {
+      "baseline": "Baseline",
       "geometry": "Geometry",
       "vit": "ViT",
       "ensemble": "Ensemble"
@@ -99,7 +116,10 @@
       "retries": 5,
       "backoff": 1.0,
       "timeout": 60.0
-    }
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": ""
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -121,7 +141,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "6d3f5c70f7cd0ef96c31558a6ea5fa483abe387f",
+  "commit": "e61d0ed1c440faaa5a5562d508988603b062b92f-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "methods_by_elo_gap": {
@@ -132,6 +152,9 @@
           "consistency": 0.61133,
           "consistency_low": 0.553414,
           "consistency_high": 0.674677,
+          "baseline": 0.499322,
+          "baseline_low": 0.443232,
+          "baseline_high": 0.566951,
           "geometry": 0.551481,
           "geometry_low": 0.494161,
           "geometry_high": 0.620947,
@@ -148,6 +171,9 @@
           "consistency": 0.796688,
           "consistency_low": 0.759575,
           "consistency_high": 0.85075,
+          "baseline": 0.544223,
+          "baseline_low": 0.479486,
+          "baseline_high": 0.607265,
           "geometry": 0.626432,
           "geometry_low": 0.569416,
           "geometry_high": 0.70116,
@@ -164,6 +190,9 @@
           "consistency": 0.915344,
           "consistency_low": 0.893005,
           "consistency_high": 0.953155,
+          "baseline": 0.631,
+          "baseline_low": 0.565346,
+          "baseline_high": 0.715164,
           "geometry": 0.787292,
           "geometry_low": 0.725239,
           "geometry_high": 0.842047,
@@ -180,6 +209,9 @@
           "consistency": 0.908824,
           "consistency_low": 0.837633,
           "consistency_high": 0.948723,
+          "baseline": 0.666867,
+          "baseline_low": 0.601772,
+          "baseline_high": 0.764838,
           "geometry": 0.853169,
           "geometry_low": 0.751339,
           "geometry_high": 0.906698,
@@ -196,6 +228,9 @@
           "consistency": 0.953114,
           "consistency_low": 0.934285,
           "consistency_high": 0.979258,
+          "baseline": 0.786911,
+          "baseline_low": 0.665339,
+          "baseline_high": 0.848233,
           "geometry": 0.940802,
           "geometry_low": 0.91933,
           "geometry_high": 0.972755,
@@ -212,6 +247,9 @@
           "consistency": 0.812007,
           "consistency_low": 0.782028,
           "consistency_high": 0.836214,
+          "baseline": 0.609157,
+          "baseline_low": 0.563068,
+          "baseline_high": 0.645085,
           "geometry": 0.723675,
           "geometry_low": 0.679826,
           "geometry_high": 0.752685,
@@ -228,6 +266,9 @@
           "consistency": 0.890535,
           "consistency_low": NaN,
           "consistency_high": NaN,
+          "baseline": 0.392507,
+          "baseline_low": 0.269048,
+          "baseline_high": 0.499128,
           "geometry": 0.751235,
           "geometry_low": 0.677634,
           "geometry_high": 0.803791,

@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T08:38:58+00:00",
-  "ended": "2026-11-13T08:38:58+00:00",
+  "started": "2026-11-13T11:23:11+00:00",
+  "ended": "2026-11-13T11:23:11+00:00",
   "inputs": [
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
@@ -15,8 +15,8 @@
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "9e21ab700377e41bcb3f08571acda23a1932fb2b6452ce4e7ecab59a7c46b2b6",
-      "bytes": 10853
+      "sha256": "e10dbbf350435ee48da864aef8b8c446fdb0cfe3ca7a0a53e99fd93b062a90f8",
+      "bytes": 12338
     },
     {
       "path": "build/evaluate/geometry_layout/by_elo_gap.tsv",
@@ -30,8 +30,8 @@
     },
     {
       "path": "build/evaluate/geometry_layout/manifest.json",
-      "sha256": "f45da9da1e9cb86119bbcaf34bcd04f868ed8b9a16149943aef09aaba401b554",
-      "bytes": 7235
+      "sha256": "12b5d11dc91e1cb61ac65bf327d5d3215d0742362b24a0a0f8795c5abb52073d",
+      "bytes": 9532
     }
   ],
   "outputs": [
@@ -82,7 +82,10 @@
       "retries": 5,
       "backoff": 1.0,
       "timeout": 60.0
-    }
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": ""
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -104,7 +107,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "6d3f5c70f7cd0ef96c31558a6ea5fa483abe387f",
+  "commit": "e61d0ed1c440faaa5a5562d508988603b062b92f-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "geometry_by_elo_gap": {

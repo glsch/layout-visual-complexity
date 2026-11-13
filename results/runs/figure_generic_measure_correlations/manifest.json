@@ -1,0 +1,160 @@
+{
+  "command": "report",
+  "started": "2026-11-13T11:25:23+00:00",
+  "ended": "2026-11-13T11:25:25+00:00",
+  "inputs": [
+    {
+      "path": "build/features/dataset/features.parquet",
+      "sha256": "4ad7732ebad225b65ea3c017da76840648998339cb9ccbe7878b042d160172fd",
+      "bytes": 528333
+    },
+    {
+      "path": "build/evaluate/generic/restating.tsv",
+      "sha256": "a4af103f4c9f17b18e0c8764fabf35ad71adc8f774e8f2bb0b2528d5459305e1",
+      "bytes": 783
+    }
+  ],
+  "outputs": [
+    "results/figures/generic_measure_correlations.svg",
+    "results/figures/generic_measure_correlations.png",
+    "results/figures/generic_measure_correlations.tex",
+    "results/tables/generic_measure_correlations.tsv",
+    "results/tables/generic_measure_correlations.tex",
+    "results/tables/generic_measure_correlations_matrix.tsv"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "generic_measure_correlations"
+    ],
+    "name": "figure_generic_measure_correlations",
+    "dataset": "build/dataset",
+    "scores": "build/ranking/scores.tsv",
+    "features": "build/features/dataset/features.parquet",
+    "layout": "build/segment/dataset",
+    "evaluations": {
+      "generic": "build/evaluate/generic"
+    },
+    "labels": {},
+    "colours": {},
+    "comparisons": [],
+    "families": [
+      "generic"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": "Trivial__InkCoverage__share"
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "e61d0ed1c440faaa5a5562d508988603b062b92f-dirty",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "generic_measure_correlations": {
+      "against_reference": [
+        {
+          "column": "Generic__EdgeOrientationEntropy__bits",
+          "rho_reference": 0.1643664087938356
+        },
+        {
+          "column": "Generic__Mssc__scale1",
+          "rho_reference": 0.6438274879473316
+        },
+        {
+          "column": "Generic__Mssc__scale2",
+          "rho_reference": 0.7029242080948979
+        },
+        {
+          "column": "Generic__Mssc__scale3",
+          "rho_reference": 0.7597626710761655
+        },
+        {
+          "column": "Generic__Mssc__scale4",
+          "rho_reference": 0.7466720673054611
+        },
+        {
+          "column": "Generic__Mssc__scale5",
+          "rho_reference": 0.6130403947069137
+        },
+        {
+          "column": "Generic__Mssc__scale6",
+          "rho_reference": 0.5592516816584258
+        },
+        {
+          "column": "Generic__Mssc__scale7",
+          "rho_reference": 0.47159774139762245
+        },
+        {
+          "column": "Generic__Compressibility__ratio",
+          "rho_reference": -0.7385797393961642
+        },
+        {
+          "column": "Generic__FeatureCongestion__colour",
+          "rho_reference": 0.7769973445580701
+        },
+        {
+          "column": "Generic__FeatureCongestion__contrast",
+          "rho_reference": 0.819684254414581
+        },
+        {
+          "column": "Generic__FeatureCongestion__orientation",
+          "rho_reference": 0.7271814380658349
+        },
+        {
+          "column": "Generic__Colourfulness__opponent",
+          "rho_reference": 0.15178058063771266
+        },
+        {
+          "column": "Generic__CodebookVariety__codewords",
+          "rho_reference": 0.21909849164013565
+        },
+        {
+          "column": "Generic__CodebookVariety__entropy",
+          "rho_reference": 0.17374292268916522
+        }
+      ]
+    },
+    "seconds": {
+      "generic_measure_correlations": 2.209
+    }
+  }
+}
