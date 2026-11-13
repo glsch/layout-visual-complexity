@@ -7,10 +7,12 @@ scores: build/ranking/scores.tsv
 features: build/features/dataset/features.parquet
 layout: build/segment/dataset
 evaluations:
+  baseline: build/evaluate/generic
   geometry: build/evaluate/geometry
   vit: build/evaluate/vit
   ensemble: build/evaluate/ensemble
 labels:
+  baseline: Baseline
   geometry: Geometry
   vit: ViT
   ensemble: Ensemble
@@ -38,3 +40,6 @@ http:
   retries: 5
   backoff: 1.0
   timeout: 60.0
+levels: {}
+alone: []
+reference_column: ''

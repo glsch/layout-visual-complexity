@@ -1,0 +1,16 @@
+column	reference	rho_reference	rho_low	rho_high	pages	compared	dropped	evaluation
+Generic__EdgeOrientationEntropy__bits	Trivial__InkCoverage__share	0.164366	-0.000452	0.326440	397	False	False	generic
+Generic__Mssc__scale1	Trivial__InkCoverage__share	0.643827	0.537693	0.724567	397	False	False	generic
+Generic__Mssc__scale2	Trivial__InkCoverage__share	0.702924	0.610362	0.776127	397	False	False	generic
+Generic__Mssc__scale3	Trivial__InkCoverage__share	0.759763	0.683816	0.821570	397	False	False	generic
+Generic__Mssc__scale4	Trivial__InkCoverage__share	0.746672	0.664650	0.812971	397	False	False	generic
+Generic__Mssc__scale5	Trivial__InkCoverage__share	0.613040	0.512045	0.698660	397	False	False	generic
+Generic__Mssc__scale6	Trivial__InkCoverage__share	0.559252	0.447128	0.657944	397	False	False	generic
+Generic__Mssc__scale7	Trivial__InkCoverage__share	0.471598	0.361861	0.560245	397	False	False	generic
+Generic__Compressibility__ratio	Trivial__InkCoverage__share	-0.738580	-0.804089	-0.657528	397	False	False	generic
+Generic__FeatureCongestion__colour	Trivial__InkCoverage__share	0.776997	0.700403	0.839069	397	False	False	generic
+Generic__FeatureCongestion__contrast	Trivial__InkCoverage__share	0.819684	0.752224	0.867528	397	False	False	generic
+Generic__FeatureCongestion__orientation	Trivial__InkCoverage__share	0.727181	0.643539	0.794615	397	False	False	generic
+Generic__Colourfulness__opponent	Trivial__InkCoverage__share	0.151781	0.012951	0.281212	397	False	False	generic
+Generic__CodebookVariety__codewords	Trivial__InkCoverage__share	0.219098	0.081622	0.344454	397	False	False	generic
+Generic__CodebookVariety__entropy	Trivial__InkCoverage__share	0.173743	0.028217	0.300474	397	False	False	generic

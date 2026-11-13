@@ -47,6 +47,13 @@ def features_command() -> tuple[type, Callable[..., object]]:
     return FeaturesSettings, run_features
 
 
+def codebook_command() -> tuple[type, Callable[..., object]]:
+    """The codebook command's settings and what runs it, imported when needed."""
+    from layout_visual_complexity.codebook import CodebookSettings, run_codebook
+
+    return CodebookSettings, run_codebook
+
+
 def embed_command() -> tuple[type, Callable[..., object]]:
     """The embed command's settings and what runs it, imported when needed."""
     from layout_visual_complexity.embed import EmbedSettings, run_embed
@@ -96,8 +103,8 @@ def settings_parser(settings: type, flags: tuple[str, ...] = ()) -> ArgumentPars
 
 
 def parser() -> ArgumentParser:
-    """The command line: `lvc judgments import|rank|report`, `lvc segment`, `lvc features`, `lvc embed`,
-    `lvc evaluate`, `lvc train` and `lvc report`."""
+    """The command line: `lvc judgments import|rank|report`, `lvc segment`, `lvc codebook`, `lvc features`,
+    `lvc embed`, `lvc evaluate`, `lvc train` and `lvc report`."""
     top = ArgumentParser(prog="lvc", description=layout_visual_complexity.__doc__)
     top.add_argument("--version", action="version", version=layout_visual_complexity.__version__)
     top.add_argument("--quiet", action="store_true", help="Show only warnings and errors.")
@@ -117,6 +124,8 @@ def parser() -> ArgumentParser:
         help="Sources to segment; they replace the configuration's.",
     )
     commands.add_subcommand("segment", segment, help=first_paragraph(settings.__doc__))
+    settings, _ = codebook_command()
+    commands.add_subcommand("codebook", settings_parser(settings), help=first_paragraph(settings.__doc__))
     settings, _ = features_command()
     commands.add_subcommand("features", settings_parser(settings), help=first_paragraph(settings.__doc__))
     settings, _ = embed_command()
@@ -154,6 +163,9 @@ def main(argv: list[str] | None = None) -> int:
         if values.pop("given_sources", None):
             values["sources"] = list(arguments.segment.given_sources)
         chosen = build(settings, values)
+    elif arguments.command == "codebook":
+        settings, run = codebook_command()
+        chosen = build(settings, arguments.codebook)
     elif arguments.command == "features":
         settings, run = features_command()
         chosen = build(settings, arguments.features)

@@ -1,0 +1,4 @@
+# The trivial baselines together: the pairwise logistic model on ink coverage and the number of text lines.
+features: build/features/dataset/features.parquet
+families: trivial
+output: build/evaluate/trivial

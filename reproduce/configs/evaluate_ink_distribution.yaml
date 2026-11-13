@@ -1,0 +1,5 @@
+# Ink distribution: the pairwise logistic model on the ink's coverage, lacunarity, fragmentation, chromatic share and
+# hue classes (the line height, their scale, left out).
+features: build/features/dataset/features.parquet
+columns: [Ink__Coverage, Ink__Lacunarity, Ink__Fragmentation, Ink__ChromaticShare, Ink__HueClasses]
+output: build/evaluate/ink_distribution

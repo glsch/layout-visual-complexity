@@ -103,6 +103,25 @@ class FeatureTable:
         if missing:
             raise ValueError(f"the feature table has no family {', '.join(missing)}")
         columns = [column for column in self.values.columns if self.columns[column] in names]
+        return self.only(columns)
+
+    def select_columns(self, columns: Sequence[str] | str | None) -> "FeatureTable":
+        """Only these columns, each given by its name or by its measure's prefix (`Family__Feature`); all when None
+        or empty."""
+        wanted = family_names(columns) if columns else []
+        if not wanted:
+            return self
+        chosen: list[str] = []
+        for item in wanted:
+            found = [column for column in self.values.columns if column == item or column.startswith(f"{item}__")]
+            if not found:
+                raise ValueError(f"the feature table has no column {item!r}")
+            chosen += [column for column in found if column not in chosen]
+        return self.only(chosen)
+
+    def only(self, columns: list[str]) -> "FeatureTable":
+        """These columns, with their families."""
+        names = {self.columns[column] for column in columns}
         kept = [family for family in self.families if family["name"] in names]
         return FeatureTable(self.values[columns], kept, {column: self.columns[column] for column in columns})
 
@@ -148,14 +167,17 @@ def start_worker(names: list[str], parameters: dict[str, dict[str, Any]]) -> Non
 
 
 def prepare(page: Page, families: Sequence[Family]) -> None:
-    """Prepare once what the families need: the folio and the lines' shapes, the image."""
+    """Prepare once what the families need: the folio and the lines' shapes, the image, and what they share (the ink
+    layer)."""
     needs = set().union(*(family.needs for family in families)) if families else set()
     page.folio_shape  # noqa: B018
-    if needs & {"lines", "regions"}:
+    if needs & {"lines", "regions", "ink"}:
         page.line_shapes  # noqa: B018
         page.folio_lines  # noqa: B018
-    if needs & {"image", "folio_crop"} and page.image_path is not None:
+    if needs & {"image", "folio_crop", "ink"} and page.image_path is not None:
         page.image  # noqa: B018
+        for family in families:
+            family.prepare(page)
 
 
 def measure_page(page: Page, families: Sequence[Family]) -> tuple[dict[str, float], dict[str, float], dict[str, str]]:
@@ -354,7 +376,7 @@ def run_features(settings: FeaturesSettings) -> dict[str, Any]:
     run.read(layout_folder / "pages.parquet")
     pages = store_pages(layout_folder, settings.limit)
     order = pages["page"].tolist()
-    needs_image = any(family.needs & {"image", "folio_crop"} for family in families)
+    needs_image = any(family.needs & {"image", "folio_crop", "ink"} for family in families)
     token_set = None
     if any("tokens" in family.needs for family in families):
         if settings.tokens is None:

@@ -1,0 +1,8 @@
+# The generic image measures together: the pairwise logistic model on the six measures, each column whose Spearman
+# correlation with ink coverage reaches 0.9 and that adds nothing to it left out (restating.tsv says which).
+features: build/features/dataset/features.parquet
+families: generic
+restating:
+  reference: Trivial__InkCoverage__share
+  threshold: 0.9
+output: build/evaluate/generic

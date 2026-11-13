@@ -1,0 +1,31 @@
+# The baselines set against the geometry ranker and the ensemble on the same folds and resamples: accuracy and SROCC
+# differences with their intervals.
+name: table_baseline_differences
+outputs: [baseline_differences]
+evaluations:
+  trivial: build/evaluate/trivial
+  generic: build/evaluate/generic
+  kyle_davidson: build/evaluate/kyle_davidson
+  ink_distribution: build/evaluate/ink_distribution
+  mean_token: build/evaluate/mean_token
+  geometry: build/evaluate/geometry
+  ensemble: build/evaluate/ensemble
+labels:
+  trivial: Trivial
+  generic: Generic image
+  kyle_davidson: Kyle–Davidson
+  ink_distribution: Ink distribution
+  mean_token: Mean token
+  geometry: Geometry
+  ensemble: Ensemble
+comparisons:
+  - [trivial, geometry]
+  - [generic, geometry]
+  - [kyle_davidson, geometry]
+  - [ink_distribution, geometry]
+  - [mean_token, geometry]
+  - [trivial, ensemble]
+  - [generic, ensemble]
+  - [kyle_davidson, ensemble]
+  - [ink_distribution, ensemble]
+  - [mean_token, ensemble]

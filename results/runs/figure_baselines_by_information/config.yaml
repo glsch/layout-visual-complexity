@@ -1,0 +1,77 @@
+output: results
+outputs:
+- baselines_by_information
+name: figure_baselines_by_information
+dataset: build/dataset
+scores: build/ranking/scores.tsv
+features: build/features/dataset/features.parquet
+layout: build/segment/dataset
+evaluations:
+  ink_coverage: build/evaluate/measures/ink_coverage
+  text_lines: build/evaluate/measures/text_lines
+  trivial: build/evaluate/trivial
+  generic: build/evaluate/generic
+  kyle_davidson: build/evaluate/kyle_davidson
+  ink_distribution: build/evaluate/ink_distribution
+  geometry: build/evaluate/geometry
+  geometry_layout: build/evaluate/geometry_layout
+  mean_token: build/evaluate/mean_token
+  vit: build/evaluate/vit
+  ensemble: build/evaluate/ensemble
+labels:
+  ink_coverage: Ink coverage alone
+  text_lines: Number of text lines
+  trivial: Both together
+  generic: Generic image measures
+  kyle_davidson: Kyle–Davidson as published
+  ink_distribution: Ink distribution
+  geometry: Geometry
+  geometry_layout: Geometry with Layout
+  mean_token: Linear model on the mean ViT token
+  vit: Local ViT head
+  ensemble: Ensemble (geometry and ViT)
+colours:
+  ink_coverage: trivial
+  text_lines: trivial
+  trivial: trivial
+  generic: generic_image
+  ink_distribution: ink
+  geometry_layout: geometry
+  mean_token: vit
+comparisons: []
+families:
+- geometry
+- layout
+pages: {}
+bootstrap: 1000
+seed: 20260629
+image_credit: Page images provided by Manuscriptorium (CC BY-NC 4.0).
+tokens: null
+head: null
+map_pages: []
+map_long_edge: 900
+map_range:
+- 0.05
+- 0.95
+cache: null
+http:
+  contact: null
+  interval: 0.5
+  connections: 2
+  retries: 5
+  backoff: 1.0
+  timeout: 60.0
+levels:
+  ink_coverage: Trivial
+  text_lines: Trivial
+  trivial: Trivial
+  generic: Image only
+  kyle_davidson: Image only
+  ink_distribution: Ink
+  geometry: Layout
+  geometry_layout: Layout
+  mean_token: Learned
+  vit: Learned
+  ensemble: Learned
+alone: []
+reference_column: ''

@@ -1,0 +1,11 @@
+# The patch codebook of the generic image measures: 32 codewords learned by k-means on the colour histograms of
+# 32-pixel patches of the dataset's folio crops (200 drawn from each page), without any judgment, into
+# build/codebook/dataset. The package comes with this codebook (make -C reproduce package-codebook).
+layout: build/segment/dataset
+output: build/codebook/dataset
+codewords: 32
+patch: 32
+bins: 16
+long_edge: 1400
+samples: 200
+seed: 20260629

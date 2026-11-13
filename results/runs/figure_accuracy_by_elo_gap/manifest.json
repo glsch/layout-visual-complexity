@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T09:40:44+00:00",
-  "ended": "2026-11-13T09:40:45+00:00",
+  "started": "2026-11-13T11:23:41+00:00",
+  "ended": "2026-11-13T11:23:41+00:00",
   "inputs": [
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
@@ -15,8 +15,8 @@
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "9e21ab700377e41bcb3f08571acda23a1932fb2b6452ce4e7ecab59a7c46b2b6",
-      "bytes": 10853
+      "sha256": "e10dbbf350435ee48da864aef8b8c446fdb0cfe3ca7a0a53e99fd93b062a90f8",
+      "bytes": 12338
     },
     {
       "path": "build/evaluate/vit/by_elo_gap.tsv",
@@ -45,8 +45,8 @@
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "836e89f1d7797f16fb40ee1342f58d24745a5f8bd2ae797a028a9bd5d66f1205",
-      "bytes": 11806
+      "sha256": "e345addd74f26d04b4dad649f88c35e0fc24466242fe447a4821a92dc782b1a6",
+      "bytes": 11904
     },
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
@@ -60,8 +60,8 @@
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "9e21ab700377e41bcb3f08571acda23a1932fb2b6452ce4e7ecab59a7c46b2b6",
-      "bytes": 10853
+      "sha256": "e10dbbf350435ee48da864aef8b8c446fdb0cfe3ca7a0a53e99fd93b062a90f8",
+      "bytes": 12338
     },
     {
       "path": "build/evaluate/vit/by_elo_gap.tsv",
@@ -90,8 +90,8 @@
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "836e89f1d7797f16fb40ee1342f58d24745a5f8bd2ae797a028a9bd5d66f1205",
-      "bytes": 11806
+      "sha256": "e345addd74f26d04b4dad649f88c35e0fc24466242fe447a4821a92dc782b1a6",
+      "bytes": 11904
     }
   ],
   "outputs": [
@@ -147,7 +147,10 @@
       "retries": 5,
       "backoff": 1.0,
       "timeout": 60.0
-    }
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": ""
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -169,7 +172,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "6d3f5c70f7cd0ef96c31558a6ea5fa483abe387f",
+  "commit": "e61d0ed1c440faaa5a5562d508988603b062b92f-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "accuracy_by_elo_gap": {
@@ -289,7 +292,7 @@
       ]
     },
     "seconds": {
-      "accuracy_by_elo_gap": 0.5
+      "accuracy_by_elo_gap": 0.37
     }
   }
 }

@@ -1,0 +1,12 @@
+level	evaluation	label	alone	accuracy	low	high	srocc	srocc_low	srocc_high
+Trivial	ink_coverage	Ink coverage alone	False	0.539712	0.485709	0.578079	0.086578	-0.045256	0.214162
+Trivial	text_lines	Number of text lines	False	0.591451	0.537684	0.628585	0.279078	0.151799	0.404629
+Trivial	trivial	Both together	False	0.583822	0.533399	0.619606	0.218421	0.080307	0.350503
+Image only	generic	Generic image measures	False	0.609157	0.563068	0.645085	0.392507	0.269048	0.499128
+Image only	kyle_davidson	Kyle–Davidson as published	False	0.592511	0.543976	0.627247	0.432469	0.311021	0.531871
+Ink	ink_distribution	Ink distribution	False	0.634363	0.587911	0.670053	0.548576	0.434793	0.628215
+Layout	geometry	Geometry	False	0.723675	0.679826	0.752685	0.751235	0.677634	0.803791
+Layout	geometry_layout	Geometry with Layout	False	0.714445	0.669470	0.743352	0.735137	0.664044	0.789211
+Learned	mean_token	Linear model on the mean ViT token	False	0.623678	0.580208	0.651572	0.497977	0.383625	0.595057
+Learned	vit	Local ViT head	False	0.730137	0.689683	0.761360	0.784495	0.725238	0.827712
+Learned	ensemble	Ensemble (geometry and ViT)	False	0.742301	0.699953	0.767298	0.818944	0.767109	0.856341

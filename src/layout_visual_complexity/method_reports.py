@@ -19,7 +19,7 @@ import numpy as np
 import pandas as pd
 
 from layout_visual_complexity.evaluate import read_elo, read_evaluation
-from layout_visual_complexity.evaluation.protocol import ProtocolSettings, fold_mean_intervals, paired_comparison
+from layout_visual_complexity.evaluation.protocol import ProtocolSettings, paired_difference
 from layout_visual_complexity.judgment_reports import Written, decimal
 from layout_visual_complexity.outputs import LatexTable, escape, gap_latex, save_figure, write_table
 from layout_visual_complexity.ranking.dataset import read_dataset
@@ -29,7 +29,17 @@ BACKBONES = {
     "facebook/dinov2-small": "DINOv2 ViT-S/14",
     "facebook/dinov3-vits16-pretrain-lvd1689m": "DINOv3 ViT-S/16",
 }
-ADJECTIVES = {"geometry": "geometric", "layout": "Layout"}
+ADJECTIVES = {
+    "geometry": "geometric",
+    "layout": "Layout",
+    "trivial": "trivial",
+    "generic": "generic image",
+    "kyle_davidson": "Kyle--Davidson",
+    "ink": "ink distribution",
+}
+NUMBERS = ("no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten")
+# Families described by their measures rather than by their number of features.
+BY_MEASURE = {"trivial", "generic", "kyle_davidson", "ink", "mean_token"}
 KIND_COLOURS = {"features": "geometry", "tokens": "vit", "ensemble": "ensemble"}
 
 
@@ -115,7 +125,10 @@ class Evaluations:
                 return f"the mean of the z-scored page scores of {named}"
             given = ", ".join(f"{escape(name)} {value:g}" for name, value in weights.items())
             return f"{named} combined, their z-scored page scores weighted {given}"
-        families = [ADJECTIVES.get(name, name) for name in summary.get("families", [])]
+        names = summary.get("families", [])
+        if summary.get("measures") and (configuration.get("columns") or set(names) & BY_MEASURE):
+            return f"the pairwise logistic model on {measures_described(summary, names)}"
+        families = [ADJECTIVES.get(name, name) for name in names]
         return f"the pairwise logistic model on the {summary.get('columns')} {' and '.join(families)} features"
 
     def definitions(self) -> str:
@@ -136,6 +149,33 @@ class Evaluations:
 
     def resamples(self) -> str:
         return f"{self.configuration()['bootstrap']:,} resamples of the manuscripts"
+
+
+def measure_name(feature: str) -> str:
+    """A measure's name within a sentence: lower case, except for acronyms."""
+    return feature if feature[:2].isupper() else feature[0].lower() + feature[1:]
+
+
+def counted(count: int, noun: str) -> str:
+    word = NUMBERS[count] if count < len(NUMBERS) else f"{count:,}"
+    return f"{word} {noun}{'' if count == 1 else 's'}"
+
+
+def measures_described(summary: dict[str, Any], families: list[str]) -> str:
+    """The measures an evaluation's model took, in words: one alone, or a family's with their columns."""
+    found = summary["measures"]
+    columns = int(summary.get("columns", sum(measure["columns"] for measure in found)))
+    if families == ["mean_token"]:
+        return f"the mean of the page's patch tokens ({columns:,} dimensions)"
+    names = [escape(measure_name(measure.get("feature", measure["prefix"]))) for measure in found]
+    dropped = summary.get("dropped") or []
+    left_out = f", {counted(len(dropped), 'column')} restating ink coverage left out" if dropped else ""
+    if len(found) == 1:
+        alone = f"{names[0]} alone"
+        return alone if columns == 1 else f"{alone} ({counted(columns, 'column')}{left_out})"
+    kind = " and ".join(ADJECTIVES.get(name, name) for name in families)
+    listed = ", ".join(names[:-1]) + f" and {names[-1]}"
+    return f"the {counted(len(found), kind + ' measure')}, {listed} ({columns} columns{left_out})"
 
 
 def with_interval(value: float, low: float, high: float) -> str:
@@ -234,13 +274,13 @@ def accuracy_by_elo_gap(settings: Any, run: Run, folder: Path, name: str = "accu
     return Written(written.paths + paths, written.summary)
 
 
-def paired_differences(settings: Any, run: Run, folder: Path) -> Written:
+def paired_differences(settings: Any, run: Run, folder: Path, name: str = "paired_differences") -> Written:
     """For each pair of evaluations, the first's accuracy and SROCC minus the second's, with 95% intervals from the
-    same resamples of the manuscripts for both."""
-    evaluations = Evaluations(settings, run, "paired_differences")
-    pairs = needed(settings, "comparisons", "paired_differences")
-    dataset = read_dataset(needed(settings, "dataset", "paired_differences"))
-    elo = read_elo(run.read(Path(needed(settings, "scores", "paired_differences"))))
+    same resamples of the manuscripts for both, as a table under `name`."""
+    evaluations = Evaluations(settings, run, name)
+    pairs = needed(settings, "comparisons", name)
+    dataset = read_dataset(needed(settings, "dataset", name))
+    elo = read_elo(run.read(Path(needed(settings, "scores", name))))
     judgments = dataset.judgments.reset_index(drop=True)
     manuscripts = dataset.images.set_index("image")["manuscript"]
     configuration = evaluations.configuration()
@@ -249,26 +289,12 @@ def paired_differences(settings: Any, run: Run, folder: Path) -> Written:
     rows = []
     for first, second in pairs:
         if first not in loaded or second not in loaded:
-            raise ValueError(f"paired_differences: {first} or {second} isn't among the evaluations")
-        a, b = loaded[first], loaded[second]
-        merged = a.tested.merge(b.tested, on=["fold_number", "row"], suffixes=("_a", "_b"))
-        if len(merged) != len(a.tested) or len(merged) != len(b.tested):
-            raise ValueError(f"{first} and {second} ran on other folds")
-        values = merged.assign(value=merged["hit_a"] - merged["hit_b"], gap=merged["gap_a"])
-        interval = fold_mean_intervals(values, judgments, manuscripts, settings=protocol).iloc[-1]
-        found = paired_comparison(a, b, judgments, manuscripts, protocol, reference=elo)
-        rows.append(
-            {
-                "first": first,
-                "second": second,
-                "accuracy_difference": found["difference"],
-                "accuracy_low": interval["low"],
-                "accuracy_high": interval["high"],
-                "srocc_difference": found["srocc_difference"],
-                "srocc_low": found["srocc_low"],
-                "srocc_high": found["srocc_high"],
-            }
-        )
+            raise ValueError(f"{name}: {first} or {second} isn't among the evaluations")
+        try:
+            found = paired_difference(loaded[first], loaded[second], judgments, manuscripts, protocol, elo)
+        except ValueError as error:
+            raise ValueError(f"{first} and {second}: {error}") from None
+        rows.append({"first": first, "second": second, **found})
     table = pd.DataFrame(rows)
     latex_rows = [
         [
@@ -283,9 +309,9 @@ def paired_differences(settings: Any, run: Run, folder: Path) -> Written:
         f"minus the second's, with 95\\% intervals from {evaluations.resamples()}, the same for both methods; an "
         f"interval that excludes zero marks a difference beyond chance. {evaluations.definitions()}."
     )
-    latex = LatexTable(["Methods", "Accuracy", r"$\rho$ (SROCC)"], latex_rows, caption, "tab:paired_differences",
+    latex = LatexTable(["Methods", "Accuracy", r"$\rho$ (SROCC)"], latex_rows, caption, f"tab:{name}",
                        align="lcc")  # fmt: skip
-    paths = write_table(table, folder / "tables" / "paired_differences", latex)
+    paths = write_table(table, folder / "tables" / name, latex)
     return Written(paths, {"differences": table.to_dict("records")})
 
 

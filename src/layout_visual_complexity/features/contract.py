@@ -2,10 +2,10 @@
 
 A family names its columns `Family__Feature__Flavour`, declares its scope (`page`, `region` or `line`: the level its
 rows come at) and what it needs prepared (the image, the folio crop, the regions, the lines, YOLO's lines, a ViT's
-patch tokens), and says
-how its rows are aggregated to the page, column by column. Its settings are a frozen dataclass; their hash, with the
-family's class and version, identifies how its columns were computed, so a trained model can refuse features computed
-differently.
+patch tokens, the ink layer), and says how its rows are aggregated to the page, column by column. What several
+families share (the ink layer) is prepared once per page, before they measure. Its settings are a frozen dataclass;
+their hash, with the family's class and version, identifies how its columns were computed, so a trained model can
+refuse features computed differently.
 
 Families are picked by short name (the built-in ones) or by Python path (`package.module.Class`).
 """
@@ -24,13 +24,18 @@ from typing import Any, ClassVar, Literal
 import numpy as np
 
 Scope = Literal["page", "region", "line"]
-Need = Literal["image", "folio_crop", "regions", "lines", "yolo_lines", "tokens"]
+Need = Literal["image", "folio_crop", "regions", "lines", "yolo_lines", "tokens", "ink"]
 Aggregation = Literal["median", "mean", "sum", "min", "max"]
 
 COLUMN = re.compile(r"^[A-Z][A-Za-z0-9]*__[A-Z][A-Za-z0-9]*__[a-z0-9]+(?:_[a-z0-9]+)*$")
 BUILT_IN = {
     "geometry": "layout_visual_complexity.features.geometry.Geometry",
     "layout": "layout_visual_complexity.features.layout.Layout",
+    "trivial": "layout_visual_complexity.features.trivial.Trivial",
+    "generic": "layout_visual_complexity.features.generic.Generic",
+    "kyle_davidson": "layout_visual_complexity.features.kyle_davidson.KyleDavidson",
+    "ink": "layout_visual_complexity.features.ink.InkDistribution",
+    "mean_token": "layout_visual_complexity.features.mean_token.MeanToken",
 }
 AGGREGATIONS = {"median": np.median, "mean": np.mean, "sum": np.sum, "min": np.min, "max": np.max}
 
@@ -42,14 +47,16 @@ class FeatureError(ValueError):
 @dataclass(frozen=True)
 class Group:
     """One feature of a family with its flavours, as a table of the family's features describes it: the family's
-    and the feature's names in words, the columns' common prefix (`Family__Feature`), the flavours, and a
-    definition."""
+    and the feature's names in words, the columns' common prefix (`Family__Feature`), the flavours, a definition,
+    and, for a table of measures, its parameters and its source."""
 
     family: str
     feature: str
     prefix: str
     flavours: tuple[str, ...]
     definition: str
+    parameters: str = ""
+    source: str = ""
 
     @property
     def columns(self) -> list[str]:
@@ -100,6 +107,11 @@ class Family:
 
     def measure(self, page: Any) -> list[dict[str, float]]:
         raise NotImplementedError
+
+    def prepare(self, page: Any) -> None:
+        """Prepare on the page what the family shares with others (the ink layer), before any family measures; by
+        default nothing."""
+        return None
 
     @classmethod
     def path(cls) -> str:

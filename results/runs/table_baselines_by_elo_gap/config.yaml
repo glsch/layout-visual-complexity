@@ -1,0 +1,47 @@
+output: results
+outputs:
+- baselines_by_elo_gap
+name: table_baselines_by_elo_gap
+dataset: build/dataset
+scores: build/ranking/scores.tsv
+features: build/features/dataset/features.parquet
+layout: build/segment/dataset
+evaluations:
+  ink_coverage: build/evaluate/measures/ink_coverage
+  text_lines: build/evaluate/measures/text_lines
+  generic: build/evaluate/generic
+  kyle_davidson: build/evaluate/kyle_davidson
+  ink_distribution: build/evaluate/ink_distribution
+labels:
+  ink_coverage: Ink coverage
+  text_lines: Text lines
+  generic: Generic image
+  kyle_davidson: Kyle–Davidson
+  ink_distribution: Ink distribution
+colours: {}
+comparisons: []
+families:
+- geometry
+- layout
+pages: {}
+bootstrap: 1000
+seed: 20260629
+image_credit: Page images provided by Manuscriptorium (CC BY-NC 4.0).
+tokens: null
+head: null
+map_pages: []
+map_long_edge: 900
+map_range:
+- 0.05
+- 0.95
+cache: null
+http:
+  contact: null
+  interval: 0.5
+  connections: 2
+  retries: 5
+  backoff: 1.0
+  timeout: 60.0
+levels: {}
+alone: []
+reference_column: ''

@@ -1,0 +1,4 @@
+# The linear model on the mean token: the pairwise logistic model on the mean of DINOv2 ViT-S/14's patch tokens of the
+# folio crop (features_mean_token.yaml).
+features: build/features/mean_token/features.parquet
+output: build/evaluate/mean_token

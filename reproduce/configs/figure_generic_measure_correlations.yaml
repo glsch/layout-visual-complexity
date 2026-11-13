@@ -1,0 +1,8 @@
+# The generic image measures' Spearman correlations with each other and with ink coverage, and the check of each
+# against ink coverage in the combined generic measures' evaluation.
+name: figure_generic_measure_correlations
+outputs: [generic_measure_correlations]
+families: [generic]
+reference_column: Trivial__InkCoverage__share
+evaluations:
+  generic: build/evaluate/generic

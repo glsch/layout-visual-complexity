@@ -1,0 +1,26 @@
+\begin{table}[htbp]
+  \centering
+  \caption{Each generic image measure's column against ink coverage: its Spearman correlation with it, with a 95\% interval from 1,000 resamples of the manuscripts; a column whose $|\rho|$ reaches 0.9 is set against ink coverage alone in a paired comparison (the pairwise logistic model on both against ink coverage alone, on the same folds), and is left out of the combined generic measures when neither its accuracy's nor its SROCC's difference is beyond chance above zero.}
+  \label{tab:generic_measure_correlations}
+  \begin{tabular}{lccc}
+    \toprule
+    Column & $\rho$ with ink coverage & Accuracy added & Left out \\
+    \midrule
+    \texttt{Generic\_\_EdgeOrientationEntropy\_\_bits} & 0.164 [-0.000, 0.326] & -- & no \\
+    \texttt{Generic\_\_Mssc\_\_scale1} & 0.644 [0.538, 0.725] & -- & no \\
+    \texttt{Generic\_\_Mssc\_\_scale2} & 0.703 [0.610, 0.776] & -- & no \\
+    \texttt{Generic\_\_Mssc\_\_scale3} & 0.760 [0.684, 0.822] & -- & no \\
+    \texttt{Generic\_\_Mssc\_\_scale4} & 0.747 [0.665, 0.813] & -- & no \\
+    \texttt{Generic\_\_Mssc\_\_scale5} & 0.613 [0.512, 0.699] & -- & no \\
+    \texttt{Generic\_\_Mssc\_\_scale6} & 0.559 [0.447, 0.658] & -- & no \\
+    \texttt{Generic\_\_Mssc\_\_scale7} & 0.472 [0.362, 0.560] & -- & no \\
+    \texttt{Generic\_\_Compressibility\_\_ratio} & -0.739 [-0.804, -0.658] & -- & no \\
+    \texttt{Generic\_\_FeatureCongestion\_\_colour} & 0.777 [0.700, 0.839] & -- & no \\
+    \texttt{Generic\_\_FeatureCongestion\_\_contrast} & 0.820 [0.752, 0.868] & -- & no \\
+    \texttt{Generic\_\_FeatureCongestion\_\_orientation} & 0.727 [0.644, 0.795] & -- & no \\
+    \texttt{Generic\_\_Colourfulness\_\_opponent} & 0.152 [0.013, 0.281] & -- & no \\
+    \texttt{Generic\_\_CodebookVariety\_\_codewords} & 0.219 [0.082, 0.344] & -- & no \\
+    \texttt{Generic\_\_CodebookVariety\_\_entropy} & 0.174 [0.028, 0.300] & -- & no \\
+    \bottomrule
+  \end{tabular}
+\end{table}

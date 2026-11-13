@@ -11,6 +11,9 @@
   code names.
 - The methods' tables and figures (`method_reports.py`): `methods_by_elo_gap`, `ensembles_by_elo_gap`,
   `accuracy_by_elo_gap`, `paired_differences`, `learning_curves_and_calibration`, `local_complexity_maps`.
+- The baselines' (`method_reports.py`, `baseline_reports.py`): `baselines_by_elo_gap`, `baseline_differences`,
+  `baseline_measures`, `baselines_by_information`, `baselines_by_information_each_measure`,
+  `generic_measure_correlations`.
 """
 
 import json
@@ -23,7 +26,7 @@ from typing import Literal, get_args
 import numpy as np
 import pandas as pd
 
-from layout_visual_complexity import method_reports
+from layout_visual_complexity import baseline_reports, method_reports
 from layout_visual_complexity.download import HttpSettings
 from layout_visual_complexity.evaluate import read_elo
 from layout_visual_complexity.evaluation import metrics
@@ -53,6 +56,12 @@ Output = Literal[
     "paired_differences",
     "learning_curves_and_calibration",
     "local_complexity_maps",
+    "baselines_by_elo_gap",
+    "baseline_differences",
+    "baseline_measures",
+    "baselines_by_information",
+    "baselines_by_information_each_measure",
+    "generic_measure_correlations",
 ]
 ALL_OUTPUTS: list[Output] = list(get_args(Output))
 
@@ -108,7 +117,9 @@ class ReportSettings:
             code; by default its short name's, if it is a method's, else its kind's.
         comparisons: Pairs of evaluations (by short name) whose differences `paired_differences` gives, the first
             minus the second.
-        families: The families the hierarchy table shows: short names or Python paths.
+        families: The families the hierarchy table shows (short names or Python paths); those whose features'
+            correlations with the Elo scores are drawn, those the measures' table defines, and those whose columns
+            the generic measures' correlations show (short names).
         pages: The real page each geometric group is drawn on, by its code name (`Family__Feature`).
         bootstrap: Resamples of the manuscripts for the correlations' 95% intervals.
         seed: The seed of the resamples.
@@ -121,6 +132,10 @@ class ReportSettings:
             token set, lower scores transparent, higher ones in full colour.
         cache: The download cache holding the page images; by default the segmentation run's.
         http: How to fetch page images that aren't in the cache.
+        levels: Each evaluation's level of information (its group in the figures of the baselines), by short name;
+            the levels in the order they first come.
+        alone: The evaluations of one measure alone, drawn as open dots.
+        reference_column: The column the generic measures are set against (ink coverage).
     """
 
     output: Path
@@ -146,6 +161,9 @@ class ReportSettings:
     map_range: list[float] = field(default_factory=lambda: [0.05, 0.95])
     cache: Path | None = None
     http: HttpSettings = field(default_factory=HttpSettings)
+    levels: dict[str, str] = field(default_factory=dict)
+    alone: list[str] = field(default_factory=list)
+    reference_column: str = ""
 
 
 def needed(settings: ReportSettings, name: str, output: str) -> object:
@@ -199,6 +217,20 @@ METHOD_OUTPUTS = {
     "paired_differences": method_reports.paired_differences,
     "learning_curves_and_calibration": method_reports.learning_curves_and_calibration,
     "local_complexity_maps": method_reports.local_complexity_maps,
+    "baselines_by_elo_gap": lambda settings, run, folder: method_reports.methods_by_elo_gap(
+        settings, run, folder, "baselines_by_elo_gap"
+    ),
+    "baseline_differences": lambda settings, run, folder: method_reports.paired_differences(
+        settings, run, folder, "baseline_differences"
+    ),
+    "baseline_measures": baseline_reports.baseline_measures,
+    "baselines_by_information": lambda settings, run, folder: baseline_reports.baselines_by_information(
+        settings, run, folder, "baselines_by_information"
+    ),
+    "baselines_by_information_each_measure": lambda settings, run, folder: baseline_reports.baselines_by_information(
+        settings, run, folder, "baselines_by_information_each_measure"
+    ),
+    "generic_measure_correlations": baseline_reports.generic_measure_correlations,
 }
 
 
@@ -365,7 +397,7 @@ def feature_correlations(settings: ReportSettings, run: Run, folder: Path) -> Wr
     from layout_visual_complexity.plots.features import plot_feature_correlations
 
     path = Path(needed(settings, "features", "geometry_feature_correlations"))  # type: ignore[arg-type]
-    table = read_feature_table(run.read(path))
+    table = read_feature_table(run.read(path)).select(settings.families)
     elo = read_elo(run.read(Path(needed(settings, "scores", "geometry_feature_correlations"))))  # type: ignore[arg-type]
     dataset = read_dataset(needed(settings, "dataset", "geometry_feature_correlations"))  # type: ignore[arg-type]
     manuscripts = dataset.images.set_index("image")["manuscript"]

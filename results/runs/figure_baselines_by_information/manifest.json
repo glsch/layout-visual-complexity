@@ -1,0 +1,430 @@
+{
+  "command": "report",
+  "started": "2026-11-13T11:25:20+00:00",
+  "ended": "2026-11-13T11:25:20+00:00",
+  "inputs": [
+    {
+      "path": "build/evaluate/measures/ink_coverage/by_elo_gap.tsv",
+      "sha256": "1013c69b31cc040441cc5e589fa6ba7d394bd961c869912beb5e94b9d12223e7",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/measures/ink_coverage/metrics.tsv",
+      "sha256": "4e32664a40aa44c3063f506e91391feec2a9529d6f3cb314e3215d121dac5255",
+      "bytes": 246
+    },
+    {
+      "path": "build/evaluate/measures/ink_coverage/manifest.json",
+      "sha256": "079a28b4cc0f9c58cd45953587ddf5210895f3d6407976d7f68cd5ced83bafa4",
+      "bytes": 7617
+    },
+    {
+      "path": "build/evaluate/measures/text_lines/by_elo_gap.tsv",
+      "sha256": "b0aef546f4c235fda1bf79ecaccb2a8d3603241d8ac4cd6a90bbaaffe70bdb6d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/measures/text_lines/metrics.tsv",
+      "sha256": "d514538aabc1b227383775b90dbdf8a8933619c8d7f3cf2a36b41e013398b921",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/measures/text_lines/manifest.json",
+      "sha256": "0432603480d6cc50b3ff0f3ab6e1f53f2b9b82293d68fc9cd404a5895dc0bdf0",
+      "bytes": 7587
+    },
+    {
+      "path": "build/evaluate/trivial/by_elo_gap.tsv",
+      "sha256": "f4900789079d1ab1847b9d29aeeca6d2dc89a0858730fcc44570ec43506ced80",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/trivial/metrics.tsv",
+      "sha256": "b82cf7180eebbeba10fa36e2f55639cd9b42e64c1b443218228a1e1237ee37f0",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/trivial/manifest.json",
+      "sha256": "71314c29842adf91f97e3c248d116311c1799bfd7cf1214bebc4bc7a78dbe3f8",
+      "bytes": 7536
+    },
+    {
+      "path": "build/evaluate/generic/by_elo_gap.tsv",
+      "sha256": "759093c6c9e224516286e8531c9f4071c26b0b6aa3c2de0afd8c33390ba490a0",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/generic/metrics.tsv",
+      "sha256": "d412091055073d939a5d46f1ae07ab61e2380aabc70dd1019e298c10155d777e",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/generic/manifest.json",
+      "sha256": "fea578471c9a9bdd3143d7ffb7aefdee3b310ee3e86e9f24dd4f69be0b63a3df",
+      "bytes": 8305
+    },
+    {
+      "path": "build/evaluate/kyle_davidson/by_elo_gap.tsv",
+      "sha256": "e52e33a230b1f243c2d09155571462dae44465c60c563f6445cddf219e36e4d0",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/kyle_davidson/metrics.tsv",
+      "sha256": "98ce12e7f91c3db40431b47e7bc2bd60e6e762e0772a66dacf1a16af9aad163d",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/kyle_davidson/manifest.json",
+      "sha256": "d5e5c00587f9c354c8fc32fa8651dfcdae911c6aa1d9e481611cd87c5598dbeb",
+      "bytes": 7764
+    },
+    {
+      "path": "build/evaluate/ink_distribution/by_elo_gap.tsv",
+      "sha256": "d2bdfb602d5b656e2b67eab1c1e290dfcc50c15f990fc95e20026f51e33a785d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/ink_distribution/metrics.tsv",
+      "sha256": "4b0563a465398215ea512221b18905889d8ba3fc06ff92cc46bfc2d4fad33633",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/ink_distribution/manifest.json",
+      "sha256": "cd362a5afd51f14c6c1a4e6812c86d8dff1dfc72d9fa6eea9ef0e63ded3d8aa9",
+      "bytes": 8572
+    },
+    {
+      "path": "build/evaluate/geometry/by_elo_gap.tsv",
+      "sha256": "59782a5158994706e32de5e9cb806a3e99fb1a030f80c9a7e505f8ed1691af21",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/geometry/metrics.tsv",
+      "sha256": "952e499c556cb952b604f7a4e1134004d7d669c27edbcbf93bba49b6dd80912a",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/geometry/manifest.json",
+      "sha256": "e10dbbf350435ee48da864aef8b8c446fdb0cfe3ca7a0a53e99fd93b062a90f8",
+      "bytes": 12338
+    },
+    {
+      "path": "build/evaluate/geometry_layout/by_elo_gap.tsv",
+      "sha256": "67c1244b75a71f583f49384e505d7c954765644065a57eaa4c4a8fe9a5463120",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/geometry_layout/metrics.tsv",
+      "sha256": "4d6088e119c3d26162d8dbf891317d41d65eb55024ef219d9dd7c980e7abc2ee",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/geometry_layout/manifest.json",
+      "sha256": "12b5d11dc91e1cb61ac65bf327d5d3215d0742362b24a0a0f8795c5abb52073d",
+      "bytes": 9532
+    },
+    {
+      "path": "build/evaluate/mean_token/by_elo_gap.tsv",
+      "sha256": "b18abf7f2604949724f59b994e672f622cbe9c955122a469400c8d9201d783c8",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/mean_token/metrics.tsv",
+      "sha256": "d7000c1d2cfe397bc82a30ed97da1807cf81cf345f466113c802fc0c5896e1ef",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/mean_token/manifest.json",
+      "sha256": "c75f398b22eae32406f5faa7927b07cda0f58ea6dd6e399ccb84fa8b579e4c3c",
+      "bytes": 7429
+    },
+    {
+      "path": "build/evaluate/vit/by_elo_gap.tsv",
+      "sha256": "3ac1c2b8094ba26ed9a0703d2844b743479941a0a0d0c7e9a62601778793165d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/vit/metrics.tsv",
+      "sha256": "9f2cb0e58c18136bfa99e85ebf8b2e68b4e00e020255cb5fc6912db48e2241aa",
+      "bytes": 218
+    },
+    {
+      "path": "build/evaluate/vit/manifest.json",
+      "sha256": "72bf2e7d3014604ef1606182bc1f30de0ed9dea69a9dede931322448bfef1bd4",
+      "bytes": 11241
+    },
+    {
+      "path": "build/evaluate/ensemble/by_elo_gap.tsv",
+      "sha256": "50072af82f24a6954aace94ee9e78cceefbb2fa4e99baa38b405069a2a85a471",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/ensemble/metrics.tsv",
+      "sha256": "7ba1654cc6a733fb3ce39a679c33b5be3a70722b1c7ca54749b819c1a34f2f20",
+      "bytes": 245
+    },
+    {
+      "path": "build/evaluate/ensemble/manifest.json",
+      "sha256": "e345addd74f26d04b4dad649f88c35e0fc24466242fe447a4821a92dc782b1a6",
+      "bytes": 11904
+    }
+  ],
+  "outputs": [
+    "results/figures/baselines_by_information.svg",
+    "results/figures/baselines_by_information.png",
+    "results/figures/baselines_by_information.tex",
+    "results/tables/baselines_by_information.tsv",
+    "results/tables/baselines_by_information.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "baselines_by_information"
+    ],
+    "name": "figure_baselines_by_information",
+    "dataset": "build/dataset",
+    "scores": "build/ranking/scores.tsv",
+    "features": "build/features/dataset/features.parquet",
+    "layout": "build/segment/dataset",
+    "evaluations": {
+      "ink_coverage": "build/evaluate/measures/ink_coverage",
+      "text_lines": "build/evaluate/measures/text_lines",
+      "trivial": "build/evaluate/trivial",
+      "generic": "build/evaluate/generic",
+      "kyle_davidson": "build/evaluate/kyle_davidson",
+      "ink_distribution": "build/evaluate/ink_distribution",
+      "geometry": "build/evaluate/geometry",
+      "geometry_layout": "build/evaluate/geometry_layout",
+      "mean_token": "build/evaluate/mean_token",
+      "vit": "build/evaluate/vit",
+      "ensemble": "build/evaluate/ensemble"
+    },
+    "labels": {
+      "ink_coverage": "Ink coverage alone",
+      "text_lines": "Number of text lines",
+      "trivial": "Both together",
+      "generic": "Generic image measures",
+      "kyle_davidson": "Kyle–Davidson as published",
+      "ink_distribution": "Ink distribution",
+      "geometry": "Geometry",
+      "geometry_layout": "Geometry with Layout",
+      "mean_token": "Linear model on the mean ViT token",
+      "vit": "Local ViT head",
+      "ensemble": "Ensemble (geometry and ViT)"
+    },
+    "colours": {
+      "ink_coverage": "trivial",
+      "text_lines": "trivial",
+      "trivial": "trivial",
+      "generic": "generic_image",
+      "ink_distribution": "ink",
+      "geometry_layout": "geometry",
+      "mean_token": "vit"
+    },
+    "comparisons": [],
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    },
+    "levels": {
+      "ink_coverage": "Trivial",
+      "text_lines": "Trivial",
+      "trivial": "Trivial",
+      "generic": "Image only",
+      "kyle_davidson": "Image only",
+      "ink_distribution": "Ink",
+      "geometry": "Layout",
+      "geometry_layout": "Layout",
+      "mean_token": "Learned",
+      "vit": "Learned",
+      "ensemble": "Learned"
+    },
+    "alone": [],
+    "reference_column": ""
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "e61d0ed1c440faaa5a5562d508988603b062b92f-dirty",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "baselines_by_information": {
+      "methods": [
+        {
+          "level": "Trivial",
+          "evaluation": "ink_coverage",
+          "label": "Ink coverage alone",
+          "alone": false,
+          "accuracy": 0.539712,
+          "low": 0.485709,
+          "high": 0.578079,
+          "srocc": 0.086578,
+          "srocc_low": -0.045256,
+          "srocc_high": 0.214162
+        },
+        {
+          "level": "Trivial",
+          "evaluation": "text_lines",
+          "label": "Number of text lines",
+          "alone": false,
+          "accuracy": 0.591451,
+          "low": 0.537684,
+          "high": 0.628585,
+          "srocc": 0.279078,
+          "srocc_low": 0.151799,
+          "srocc_high": 0.404629
+        },
+        {
+          "level": "Trivial",
+          "evaluation": "trivial",
+          "label": "Both together",
+          "alone": false,
+          "accuracy": 0.583822,
+          "low": 0.533399,
+          "high": 0.619606,
+          "srocc": 0.218421,
+          "srocc_low": 0.080307,
+          "srocc_high": 0.350503
+        },
+        {
+          "level": "Image only",
+          "evaluation": "generic",
+          "label": "Generic image measures",
+          "alone": false,
+          "accuracy": 0.609157,
+          "low": 0.563068,
+          "high": 0.645085,
+          "srocc": 0.392507,
+          "srocc_low": 0.269048,
+          "srocc_high": 0.499128
+        },
+        {
+          "level": "Image only",
+          "evaluation": "kyle_davidson",
+          "label": "Kyle–Davidson as published",
+          "alone": false,
+          "accuracy": 0.592511,
+          "low": 0.543976,
+          "high": 0.627247,
+          "srocc": 0.432469,
+          "srocc_low": 0.311021,
+          "srocc_high": 0.531871
+        },
+        {
+          "level": "Ink",
+          "evaluation": "ink_distribution",
+          "label": "Ink distribution",
+          "alone": false,
+          "accuracy": 0.634363,
+          "low": 0.587911,
+          "high": 0.670053,
+          "srocc": 0.548576,
+          "srocc_low": 0.434793,
+          "srocc_high": 0.628215
+        },
+        {
+          "level": "Layout",
+          "evaluation": "geometry",
+          "label": "Geometry",
+          "alone": false,
+          "accuracy": 0.723675,
+          "low": 0.679826,
+          "high": 0.752685,
+          "srocc": 0.751235,
+          "srocc_low": 0.677634,
+          "srocc_high": 0.803791
+        },
+        {
+          "level": "Layout",
+          "evaluation": "geometry_layout",
+          "label": "Geometry with Layout",
+          "alone": false,
+          "accuracy": 0.714445,
+          "low": 0.66947,
+          "high": 0.743352,
+          "srocc": 0.735137,
+          "srocc_low": 0.664044,
+          "srocc_high": 0.789211
+        },
+        {
+          "level": "Learned",
+          "evaluation": "mean_token",
+          "label": "Linear model on the mean ViT token",
+          "alone": false,
+          "accuracy": 0.623678,
+          "low": 0.580208,
+          "high": 0.651572,
+          "srocc": 0.497977,
+          "srocc_low": 0.383625,
+          "srocc_high": 0.595057
+        },
+        {
+          "level": "Learned",
+          "evaluation": "vit",
+          "label": "Local ViT head",
+          "alone": false,
+          "accuracy": 0.730137,
+          "low": 0.689683,
+          "high": 0.76136,
+          "srocc": 0.784495,
+          "srocc_low": 0.725238,
+          "srocc_high": 0.827712
+        },
+        {
+          "level": "Learned",
+          "evaluation": "ensemble",
+          "label": "Ensemble (geometry and ViT)",
+          "alone": false,
+          "accuracy": 0.742301,
+          "low": 0.699953,
+          "high": 0.767298,
+          "srocc": 0.818944,
+          "srocc_low": 0.767109,
+          "srocc_high": 0.856341
+        }
+      ],
+      "consistency": 0.812007
+    },
+    "seconds": {
+      "baselines_by_information": 0.45
+    }
+  }
+}
