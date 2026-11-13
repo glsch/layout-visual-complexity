@@ -3,6 +3,7 @@ its image on request, and its patch tokens from a token set when a family needs 
 prepared once per page and shared by the families."""
 
 import math
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from functools import cached_property
 from pathlib import Path
@@ -69,6 +70,14 @@ class Page:
     image_path: Path | None = None
     tokens: Any = None
     _folio_images: dict[tuple[int, int], tuple[np.ndarray, np.ndarray]] = field(default_factory=dict, repr=False)
+    _prepared: dict[Any, Any] = field(default_factory=dict, repr=False)
+
+    def prepared(self, key: Any, make: Callable[[], Any]) -> Any:
+        """What `make` gives, made once per page and `key` and shared by the families that ask for it (the
+        normalised folio, the ink layer)."""
+        if key not in self._prepared:
+            self._prepared[key] = make()
+        return self._prepared[key]
 
     @classmethod
     def from_layout(cls, page: str, rows: pd.DataFrame, width: int, height: int, image: Path | None = None) -> "Page":
