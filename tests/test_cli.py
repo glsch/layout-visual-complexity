@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+import pandas as pd
 import pytest
 import yaml
 
@@ -63,6 +64,10 @@ def test_import_rank_and_report_on_a_tiny_dataset(dataset_folder: Path, tmp_path
     assert (results / "runs" / "tiny" / "manifest.json").is_file()
     assert r"\caption" in (results / "tables" / "reliability_by_elo_gap.tex").read_text()
     assert "A --- Handbooks" in (results / "tables" / "dataset_categories.tex").read_text()
+    split = pd.read_csv(results / "tables" / "split_half_ceiling.tsv", sep="\t").set_index("measure")
+    reliability = split.at["Spearman-Brown corrected", "median"]
+    assert split.at["ceiling for SROCC", "median"] == pytest.approx(max(reliability, 0) ** 0.5)
+    assert "the ceiling for SROCC" in (results / "tables" / "split_half_ceiling.tex").read_text()
 
 
 def test_errors_are_reported_without_a_traceback(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:

@@ -105,3 +105,17 @@ def test_lvc_evaluate_from_the_command_line(tmp_path: Path, dataset_folder: Path
     small = ["--folds.k", "2", "--folds.repeats", "1", "--bootstrap", "20"]
     assert cli.main([*arguments, *small]) == 0
     assert TrainedModel.load(output / "model.json").model.columns[-1] == "Test__Other__value"
+
+
+def test_the_ceiling_for_srocc_is_the_square_root_of_the_reliability(tmp_path: Path, dataset_folder: Path) -> None:
+    features, scores = setup(tmp_path, dataset_folder)
+    split = tmp_path / "split_half_ceiling.tsv"
+    rows = [("split-half correlation", 0.68), ("Spearman-Brown corrected", 0.81)]
+    pd.DataFrame(rows, columns=["measure", "median"]).to_csv(split, sep="\t", index=False)
+    folds = FoldSettings(k=2, repeats=1, seed=5)
+    output = tmp_path / "out"
+    run_evaluate(
+        EvaluateSettings(dataset_folder, scores, output, features, [], folds=folds, bootstrap=20, ceiling=split)
+    )
+    metrics = pd.read_csv(output / "metrics.tsv", sep="\t").set_index("metric")["value"]
+    assert metrics["srocc_ceiling"] == pytest.approx(0.9) and metrics["elo_reliability"] == pytest.approx(0.81)

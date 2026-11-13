@@ -192,7 +192,9 @@ def methods_by_elo_gap(settings: Any, run: Run, folder: Path, name: str, every_r
         r"Elo scores, and Spearman's correlation ($\rho$, SROCC) between the out-of-fold page scores and the Elo "
         f"scores. {evaluations.definitions()}. \\emph{{Consistency}} is the share of the same test judgments that "
         r"agree with the final Elo scores, the reference for accuracy; its $\rho$ is the ceiling for SROCC, the "
-        f"split-half correlation of the Elo scores with its Spearman--Brown correction. {evaluations.protocol()} "
+        "square root of the Elo scores' reliability (their split-half correlation with its Spearman--Brown "
+        "correction), the most that scores free of the annotation's noise can reach against them. "
+        f"{evaluations.protocol()} "
         r"\emph{Overall} is the mean over the folds of the share of test judgments whose chosen page the method "
         f"scores higher. In brackets{where}, 95\\% intervals from {evaluations.resamples()}."
     )

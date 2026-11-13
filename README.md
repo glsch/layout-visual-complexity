@@ -166,8 +166,8 @@ evaluates a method, cross-validated on folds by manuscript (10 × 10 by default)
   (`--fitted_weights`).
 
 It writes the out-of-fold page scores (`scores.tsv`); accuracy by Elo gap and overall beside the consistency of the
-same test judgments with the Elo scores (`by_elo_gap.tsv`); SROCC beside the split-half ceiling (`--ceiling`),
-log-loss (`metrics.tsv`); calibration (`calibration.tsv`); each fold's results (`folds.tsv`), hits (`hits.tsv`) and
+same test judgments with the Elo scores (`by_elo_gap.tsv`); SROCC beside its ceiling, the square root of the Elo
+scores' split-half reliability (`--ceiling`), log-loss (`metrics.tsv`); calibration (`calibration.tsv`); each fold's results (`folds.tsv`), hits (`hits.tsv`) and
 z-scores (`fold_scores.tsv`), so that evaluations can be compared on the same resamples and combined; with 95%
 intervals from resamples of the manuscripts. With `--learning_curves.shares`, it also trains the method on shares of
 each fold's training judgments and images (`learning_curve.tsv`). It then trains the method on every judgment and
@@ -223,7 +223,7 @@ learning curves (on the folds of the first two repeats), takes about 25 minutes 
 | `dataset` | `build/dataset/`: the dataset, checked |
 | `ranking` | `build/ranking/`: Elo scores over 1,000 permutations, and Bradley-Terry |
 | `table-dataset-categories` | Table 1: the dataset by text category |
-| `table-reliability` | Table 2: reliability by Elo gap, with position bias; the consistency reference per fold; the split-half ceiling |
+| `table-reliability` | Table 2: reliability by Elo gap, with position bias; the consistency reference per fold; the split-half reliability and the ceiling for SROCC |
 | `figure-comparison-graph` | Figure 2: the comparison graph |
 | `figure-elo-violins` | Figure 3: the distributions of the Elo scores |
 | `segment-dataset` | `build/segment/dataset/`: the dataset's pages segmented (not part of `all`: it needs the `segment` extra, the models in `models/` and the page images from their servers) |

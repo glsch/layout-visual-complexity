@@ -4,7 +4,7 @@ A method is the pairwise logistic model on a feature table, the local ViT head o
 earlier evaluations, which combines their z-scores fold by fold with weights from the configuration (equal by
 default) or fitted on each fold's training judgments. It is cross-validated on folds by manuscript: accuracy by final
 Elo gap and overall (the mean over folds, as the article reports it, and pooled), SROCC against the Elo scores beside
-the split-half ceiling, log-loss and calibration, with 95% intervals by bootstrap over manuscripts; the consistency of
+its ceiling, log-loss and calibration, with 95% intervals by bootstrap over manuscripts; the consistency of
 the same test judgments with the final Elo scores is the reference. Each fold's hits and z-scores are kept, so that
 two evaluations can be compared on the same resamples and combined into ensembles. On request, learning curves: the
 method trained on shares of each fold's training judgments or images. Then the method is trained on every judgment
@@ -43,7 +43,6 @@ from layout_visual_complexity.ranking.dataset import read_dataset
 from layout_visual_complexity.ranking.reliability import DEFAULT_GAP_EDGES, other_image
 from layout_visual_complexity.runs import Run, sha256, shown_path
 
-CORRECTED = "Spearman-Brown corrected"
 HITS, FOLD_SCORES = "hits.tsv", "fold_scores.tsv"
 CURVE, CURVE_SCORES = "learning_curve.tsv", "learning_curve_fold_scores.tsv"
 
@@ -89,8 +88,8 @@ class EvaluateSettings:
         bootstrap: Resamples of the manuscripts for the 95% intervals.
         seed: The seed of the bootstrap and of the learning curves' shares.
         reliability_bins: Bins of the predicted probability in the calibration table.
-        ceiling: A split-half table (`split_half_ceiling.tsv` of `lvc judgments report`), whose corrected median is
-            the ceiling for SROCC.
+        ceiling: A split-half table (`split_half_ceiling.tsv` of `lvc judgments report`): the Elo scores' reliability
+            (its corrected median) and the ceiling for SROCC, the reliability's square root.
         learning_curves: Which learning curves to draw, if any.
         jobs: Worker processes training the head's folds; 0 means all cores, as many as fit in memory. The results
             don't depend on it.
@@ -123,10 +122,13 @@ def read_elo(path: Path) -> pd.Series:
     return table.set_index("image")["elo_mean"].astype(float)
 
 
-def read_ceiling(path: Path) -> float:
-    """The corrected median of a split-half table."""
-    table = pd.read_csv(path, sep="\t")
-    return float(table.set_index("measure").at[CORRECTED, "median"])
+def read_ceiling(path: Path) -> tuple[float, float]:
+    """A split-half table's reliability (the corrected median) and the ceiling for SROCC, its square root."""
+    from layout_visual_complexity.ranking.split_half import RELIABILITY, ceiling
+
+    table = pd.read_csv(path, sep="\t").set_index("measure")
+    reliability = float(table.at[RELIABILITY, "median"])
+    return reliability, ceiling(reliability)
 
 
 def train(features: pd.DataFrame, judgments: pd.DataFrame, regularisation: float) -> tuple:
@@ -401,7 +403,7 @@ def run_evaluate(settings: EvaluateSettings) -> dict[str, object]:
         reference_intervals = fold_mean_intervals(reference_values, judgments, manuscripts, edges, protocol)
         intervals = bootstrap(evaluation, judgments, elo, manuscripts, protocol)
         by_gap = by_elo_gap(evaluation, reference_values, method_intervals, reference_intervals, edges, len(folds))
-        ceiling = read_ceiling(settings.ceiling) if settings.ceiling else math.nan
+        reliability, ceiling = read_ceiling(settings.ceiling) if settings.ceiling else (math.nan, math.nan)
         summary_metrics = pd.DataFrame(
             [
                 ("accuracy", evaluation.summary["accuracy"], *method_intervals.iloc[-1][["low", "high"]]),
@@ -410,6 +412,7 @@ def run_evaluate(settings: EvaluateSettings) -> dict[str, object]:
                 ("consistency", by_gap.iloc[-1]["consistency"], *reference_intervals.iloc[-1][["low", "high"]]),
                 ("srocc", evaluation.summary["srocc"], intervals["srocc_low"], intervals["srocc_high"]),
                 ("srocc_ceiling", ceiling, math.nan, math.nan),
+                ("elo_reliability", reliability, math.nan, math.nan),
                 ("log_loss", evaluation.summary["log_loss"], math.nan, math.nan),
             ],
             columns=["metric", "value", "low", "high"],

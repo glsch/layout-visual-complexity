@@ -267,7 +267,8 @@ def by_elo_gap(settings: ReportSettings, run: Run, folder: Path) -> Written:
         "a fold tests the judgments between two of its pages. Accuracy is the mean over the folds of the share of "
         "test judgments whose chosen page the model scores higher; \\emph{Consistency} is the same share for the "
         "final Elo scores, on the same test judgments, and the reference for accuracy. Its $\\rho$ is the ceiling "
-        "for SROCC, the split-half correlation of the Elo scores with its Spearman--Brown correction. "
+        "for SROCC: the square root of the Elo scores' reliability (their split-half correlation with its "
+        "Spearman--Brown correction), the most that scores free of the annotation's noise can reach against them. "
         f"\\emph{{Judgments per fold}} counts the test judgments. In brackets, 95\\% intervals from "
         f"{configuration['bootstrap']:,} resamples of the manuscripts.",
         label="tab:geometry_by_elo_gap",

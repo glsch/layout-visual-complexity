@@ -8,7 +8,7 @@ its scale fitted on the training judgments. An ensemble combines its members' z-
 given or fitted on the fold's training judgments.
 
 The reference for accuracy is the consistency of the same test judgments with the final Elo scores; the reference
-for SROCC is the split-half ceiling.
+for SROCC is its ceiling, the square root of the Elo scores' split-half reliability.
 """
 
 import math

@@ -63,3 +63,8 @@
   maps.
 - In Python, `EvaluateSettings` takes the dataset, the scores and the output first; the feature table is one of three
   methods, given by name.
+- The ceiling for SROCC is the square root of the Elo scores' split-half reliability, no longer the reliability
+  itself: the reliability is the correlation expected between two runs of the annotation, while a method's scores are
+  compared with one run and carry none of its noise. The split-half table gives the reliability and the ceiling;
+  `metrics.tsv` gives both (`elo_reliability`, `srocc_ceiling`). On the dataset the ceiling moves from 0.793 to
+  0.891.
