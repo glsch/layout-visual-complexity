@@ -22,10 +22,9 @@ from dataclasses import dataclass
 import numpy as np
 
 from layout_visual_complexity.features.contract import Family, Group, Need
-from layout_visual_complexity.features.folio_image import InkLayer, InkLayerSettings, ink_layer
+from layout_visual_complexity.features.folio_image import InkLayerSettings, ink_layer
+from layout_visual_complexity.features.ink_colour import HUE_CLASSES, InkColour, hue_class, ink_colour
 from layout_visual_complexity.features.page import Page
-
-HUE_CLASSES = {"red": (330.0, 60.0), "gold": (60.0, 110.0), "green": (110.0, 200.0), "blue": (200.0, 330.0)}
 
 
 @dataclass(frozen=True)
@@ -123,7 +122,7 @@ class InkDistribution(Family):
             side = round(scale * height) if math.isfinite(height) else 0
             row[f"Ink__Lacunarity__lh{scale}"] = lacunarity(layer.ink, inside, side, settings.inside)
         row["Ink__Fragmentation__masses"] = fragmentation(layer.ink, inside, height)
-        row |= ink_colours(layer, settings.chroma, settings.class_area)
+        row |= ink_colours(ink_colour(page, settings), settings.chroma, settings.class_area)
         return [row]
 
 
@@ -162,36 +161,17 @@ def fragmentation(ink: np.ndarray, inside: np.ndarray, line_height: float) -> fl
     return float((count - 1) / (inside.sum() / line_height**2))
 
 
-def neutral_lab(rgb: np.ndarray, paper: np.ndarray) -> np.ndarray:
-    """CIELAB of an RGB image whose paper (the pixels in `paper`) is made neutral: each linear RGB channel divided by
-    the paper's median."""
-    import cv2
-
-    values = rgb.astype(np.float32) / 255.0
-    linear = np.where(values <= 0.04045, values / 12.92, ((values + 0.055) / 1.055) ** 2.4)
-    white = np.median(linear[paper], axis=0) if paper.any() else np.ones(3, np.float32)
-    balanced = np.clip(linear / np.maximum(white, 1e-6), 0, 1).astype(np.float32)
-    return cv2.cvtColor(balanced, cv2.COLOR_LRGB2Lab)
-
-
-def hue_class(hue: np.ndarray, bounds: tuple[float, float]) -> np.ndarray:
-    """Which hue angles (degrees, 0–360) lie in a class from its first bound to its second, round past 360."""
-    start, end = bounds
-    return (hue >= start) & (hue < end) if start < end else (hue >= start) | (hue < end)
-
-
-def ink_colours(layer: InkLayer, chroma: float, class_area: float) -> dict[str, float]:
+def ink_colours(colour: InkColour, chroma: float, class_area: float) -> dict[str, float]:
     """The ink's chromatic share against the parchment, its shares in the hue classes and how many are present."""
     names = ["Ink__ChromaticShare__share", *(f"Ink__HueClasses__{name}" for name in HUE_CLASSES),
              "Ink__HueClasses__count"]  # fmt: skip
-    ink, inside = layer.ink, layer.folio.inside
+    layer = colour.layer
+    ink = layer.ink
     total = int(ink.sum())
     if total == 0:
         return dict.fromkeys(names, math.nan)
-    lab = neutral_lab(layer.folio.rgb, inside & ~ink)
-    a, b = lab[..., 1][ink], lab[..., 2][ink]
-    chromatic = np.hypot(a, b) >= chroma
-    hue = np.degrees(np.arctan2(b, a)) % 360
+    chromatic = colour.chroma[ink] >= chroma
+    hue = colour.hue[ink]
     found = {"Ink__ChromaticShare__share": float(chromatic.sum() / total)}
     least = class_area * layer.line_height**2 if math.isfinite(layer.line_height) else math.inf
     present = 0

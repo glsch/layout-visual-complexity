@@ -35,6 +35,8 @@ BUILT_IN = {
     "generic": "layout_visual_complexity.features.generic.Generic",
     "kyle_davidson": "layout_visual_complexity.features.kyle_davidson.KyleDavidson",
     "ink": "layout_visual_complexity.features.ink.InkDistribution",
+    "line_texture": "layout_visual_complexity.features.line_texture.LineTexture",
+    "colour": "layout_visual_complexity.features.colour.Colour",
     "mean_token": "layout_visual_complexity.features.mean_token.MeanToken",
 }
 AGGREGATIONS = {"median": np.median, "mean": np.mean, "sum": np.sum, "min": np.min, "max": np.max}
