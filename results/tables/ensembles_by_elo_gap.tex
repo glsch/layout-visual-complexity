@@ -1,20 +1,20 @@
 \begin{table}[htbp]
   \centering
-  \caption{Accuracy of pairwise outcome prediction by the absolute difference ($\Delta$) between the two pages' final Elo scores, and Spearman's correlation ($\rho$, SROCC) between the out-of-fold page scores and the Elo scores. \emph{Geometry and ViT}, the mean of the z-scored page scores of \emph{Geometry} and \emph{ViT}; \emph{Geometry, Layout and ViT}, the mean of the z-scored page scores of \emph{Geometry + Layout} and \emph{ViT}; \emph{Geometry and ViT, fitted}, \emph{Geometry} and \emph{ViT} combined, their z-scored page scores weighted as each fold's training judgments fit; \emph{Geometry, Layout and ViT, fitted}, \emph{Geometry + Layout} and \emph{ViT} combined, their z-scored page scores weighted as each fold's training judgments fit; \emph{Geometry}, the pairwise logistic model on the 83 geometric features; \emph{ViT}, the local scoring head on the patch tokens of DINOv2 ViT-S/14 (block 12, 518 pixels on the long edge, the folio crop): an MLP (384--128--1, ReLU, softplus) scoring each patch, the page's score the mean of its patches', trained with RankNet's logistic loss (180 epochs of Adam); \emph{Geometry + Layout}, the pairwise logistic model on the 105 geometric and Layout features. \emph{Consistency} is the share of the same test judgments that agree with the final Elo scores, the reference for accuracy; its $\rho$ is the ceiling for SROCC, the square root of the Elo scores' reliability (their split-half correlation with its Spearman--Brown correction), the most that scores free of the annotation's noise can reach against them. Each method is evaluated by 10-fold cross-validation repeated 10 times, each manuscript's pages in one fold; a fold tests the judgments between two of its pages. \emph{Overall} is the mean over the folds of the share of test judgments whose chosen page the method scores higher. In brackets in the Overall and $\rho$ rows, 95\% intervals from 1,000 resamples of the manuscripts.}
+  \caption{Accuracy of pairwise outcome prediction by the absolute difference ($\Delta$) between the two pages' final Elo scores, and Spearman's correlation ($\rho$, SROCC) between the out-of-fold page scores and the Elo scores. \emph{Geometry and ViT}, the mean of the z-scored page scores of \emph{Geometry} and \emph{ViT}; \emph{Geometry, Layout and ViT}, the mean of the z-scored page scores of \emph{Geometry + Layout} and \emph{ViT}; \emph{Geometry and ViT, fitted}, \emph{Geometry} and \emph{ViT} combined, their z-scored page scores weighted as each fold's training judgments fit; \emph{Geometry, Layout and ViT, fitted}, \emph{Geometry + Layout} and \emph{ViT} combined, their z-scored page scores weighted as each fold's training judgments fit; \emph{Geometry, ViT and colour}, the mean of the z-scored page scores of \emph{Geometry} and \emph{ViT} and \emph{Real colour}; \emph{Geometry}, the pairwise logistic model on the 83 geometric features; \emph{ViT}, the local scoring head on the patch tokens of DINOv2 ViT-S/14 (block 12, 518 pixels on the long edge, the folio crop): an MLP (384--128--1, ReLU, softplus) scoring each patch, the page's score the mean of its patches', trained with RankNet's logistic loss (180 epochs of Adam); \emph{Geometry + Layout}, the pairwise logistic model on the 105 geometric and Layout features; \emph{Real colour}, the pairwise logistic model on the seven real colour measures, chromatic share, hue classes, hue entropy, saturation, colour by zone, colour across lines and coloured initials (18 columns). \emph{Reference} is one limit, measured for accuracy and for $\rho$: for accuracy, the consistency of the same test judgments with the final Elo scores (the share that agree with them); for $\rho$, its ceiling, the square root of the Elo scores' reliability (their split-half correlation with its Spearman--Brown correction), the most that scores free of the annotation's noise can reach against them. Each method is evaluated by 10-fold cross-validation repeated 10 times, each manuscript's pages in one fold; a fold tests the judgments between two of its pages. \emph{Overall} is the mean over the folds of the share of test judgments whose chosen page the method scores higher. In brackets in the Overall and $\rho$ rows, 95\% intervals from 1,000 resamples of the manuscripts.}
   \label{tab:ensembles_by_elo_gap}
-  \begin{tabular}{lccccc}
+  \begin{tabular}{lcccccc}
     \toprule
-    Score $\Delta$ & Consistency & Geometry and ViT & Geometry, Layout and ViT & Geometry and ViT, fitted & Geometry, Layout and ViT, fitted \\
+    Score $\Delta$ & Reference & Geometry and ViT & Geometry, Layout and ViT & Geometry and ViT, fitted & Geometry, Layout and ViT, fitted & Geometry, ViT and colour \\
     \midrule
-    $<$100 & 0.611 & 0.543 & 0.541 & 0.548 & 0.542 \\
-    100--200 & 0.797 & 0.656 & 0.655 & 0.654 & 0.646 \\
-    200--300 & 0.915 & 0.832 & 0.818 & 0.829 & 0.809 \\
-    300--400 & 0.909 & 0.871 & 0.856 & 0.870 & 0.854 \\
-    $\geq 400$ & 0.953 & 0.953 & 0.954 & 0.953 & 0.953 \\
+    $<$100 & 0.611 & 0.543 & 0.541 & 0.548 & 0.542 & 0.533 \\
+    100--200 & 0.797 & 0.656 & 0.655 & 0.654 & 0.646 & 0.622 \\
+    200--300 & 0.915 & 0.832 & 0.818 & 0.829 & 0.809 & 0.770 \\
+    300--400 & 0.909 & 0.871 & 0.856 & 0.870 & 0.854 & 0.805 \\
+    $\geq 400$ & 0.953 & 0.953 & 0.954 & 0.953 & 0.953 & 0.925 \\
     \midrule
-    Overall & 0.812 [0.782, 0.836] & 0.742 [0.700, 0.767] & 0.734 [0.691, 0.761] & 0.742 [0.700, 0.767] & 0.731 [0.687, 0.758] \\
+    Overall & 0.812 [0.782, 0.836] & 0.742 [0.700, 0.767] & 0.734 [0.691, 0.761] & 0.742 [0.700, 0.767] & 0.731 [0.687, 0.758] & 0.707 [0.662, 0.735] \\
     \midrule
-    $\rho$ (SROCC) & 0.891 & 0.819 [0.767, 0.856] & 0.814 [0.761, 0.855] & 0.816 [0.763, 0.855] & 0.805 [0.751, 0.848] \\
+    $\rho$ (SROCC) & 0.891 & 0.819 [0.767, 0.856] & 0.814 [0.761, 0.855] & 0.816 [0.763, 0.855] & 0.805 [0.751, 0.848] & 0.723 [0.645, 0.782] \\
     \bottomrule
   \end{tabular}
 \end{table}

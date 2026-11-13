@@ -1,0 +1,18 @@
+\begin{table}[htbp]
+  \centering
+  \caption{The families of line-texture measures. For each text line, an axis-aligned crop of the gamma-corrected page image, the vertical Sobel response of its red, green and blue channels, partitioned into superpixels by SLIC on a min--max-normalised copy; the measures come from the raw responses and are averaged over the folio's lines. They describe tonal transitions around the strokes, not hue or saturation. Columns are named \texttt{LineTextureFeature\_\_LineSuperpixels\_\_<measure>}.}
+  \label{tab:line_texture_families}
+  \begin{tabular}{lrp{0.6\linewidth}}
+    \toprule
+    Family & $N$ & Measurements \\
+    \midrule
+    Partition size & 1 & Number of connected superpixels. \\
+    Superpixel area & 5 & Mean, standard deviation, minimum, maximum and Shannon entropy of relative superpixel areas. \\
+    Spatial distribution & 8 & Means and standard deviations of horizontal and vertical centroid coordinates and radial distances, together with area-weighted centroids. \\
+    Channel statistics & 18 & Six summaries for each Sobel-transformed RGB channel: local mean and variation, extrema, and pixel-weighted mean and standard deviation. \\
+    Spatial--colour association & 6 & Pearson correlations between horizontal or vertical centroid position and mean superpixel response in each RGB channel. \\
+    \midrule
+    Total & 38 &  \\
+    \bottomrule
+  \end{tabular}
+\end{table}

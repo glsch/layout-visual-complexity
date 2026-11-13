@@ -1,0 +1,419 @@
+{
+  "command": "report",
+  "started": "2026-11-13T17:13:29+00:00",
+  "ended": "2026-11-13T17:13:30+00:00",
+  "inputs": [
+    {
+      "path": "build/evaluate/line_texture/by_elo_gap.tsv",
+      "sha256": "da177d74b00fcb98b36ca24f0098b4e5e85e0b0d707bc7d462e3e95d6e32a233",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/line_texture/metrics.tsv",
+      "sha256": "f884ee680cc3db3ff6f8cd4679c0a76ae71d9080f1afcdf63dd5202b0b133f5b",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/line_texture/manifest.json",
+      "sha256": "9b476782a6311127aed00a88db676bbdd36a10cd884c6e22d54784031d2381ac",
+      "bytes": 8538
+    },
+    {
+      "path": "build/evaluate/colour/by_elo_gap.tsv",
+      "sha256": "4fd2878ef989a83494544a99e3bd2093c5bb4faeb9f577561d667021ec0da92d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/colour/metrics.tsv",
+      "sha256": "4474bdaed432ebd5d8d81b5e8ace7043a0c1bf8f9035626ebd1799fef1c5c3ca",
+      "bytes": 540
+    },
+    {
+      "path": "build/evaluate/colour/manifest.json",
+      "sha256": "48bb15afb001a6aea5439c1b865777f1323442dffae588a855216d4fbdf8eba3",
+      "bytes": 9309
+    },
+    {
+      "path": "build/evaluate/geometry_colour/by_elo_gap.tsv",
+      "sha256": "047b17ecce7eb5d45c67ccc624bd5cf384517d084da7b4491c09dfe1682fb12d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/geometry_colour/metrics.tsv",
+      "sha256": "67d56b3349fb180d293357e775b3a80aa20db33bceab92f70ac01116a700fd90",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/geometry_colour/manifest.json",
+      "sha256": "e703109811d0677b8d6c09cff6b7cd38b10ce4c6e139aa493fe3d161e9fe0f18",
+      "bytes": 10802
+    },
+    {
+      "path": "build/evaluate/geometry/by_elo_gap.tsv",
+      "sha256": "59782a5158994706e32de5e9cb806a3e99fb1a030f80c9a7e505f8ed1691af21",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/geometry/metrics.tsv",
+      "sha256": "a344aa858f054a9270e5ffa67ec7d72015a5ec477faa235a6d3f6e70ebd43ee2",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/geometry/manifest.json",
+      "sha256": "82b635a28f6495a142f834ba87423e6a5ebdb4274e1a742ac34263ae69e104d5",
+      "bytes": 13398
+    },
+    {
+      "path": "build/ranking/scores.tsv",
+      "sha256": "f27050a5b0039c31a3c2bce6766501b6320f14e735602fc02419f40cce9ce684",
+      "bytes": 43825
+    },
+    {
+      "path": "build/evaluate/line_texture/hits.tsv",
+      "sha256": "b312b37a599fbc34e64e9bc0f690fda955074220ad01f421a4f2343ace7c1a9f",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/line_texture/scores.tsv",
+      "sha256": "12b9c7535d4addc36b6c911212e6209615217dcf17f7961b7189eb42dcbde2dd",
+      "bytes": 19058
+    },
+    {
+      "path": "build/evaluate/colour/hits.tsv",
+      "sha256": "a6818a47a894edae2490c0fabe6ef30cd9caa88c02ed9fe3b917ee3490fdd87f",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/colour/scores.tsv",
+      "sha256": "d354676da3eac60aa4d1bec142081bc3a6e6da563621d61663dfef8259cdfb37",
+      "bytes": 19011
+    },
+    {
+      "path": "build/evaluate/geometry_colour/hits.tsv",
+      "sha256": "ccaec044f26fbd0566257539eb66368906c0e9c1fcbd8f7671c8ecae31ff6154",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/geometry_colour/scores.tsv",
+      "sha256": "b248f4c412b449a82cd6b8d903367af39522b40c88a27aee86ea9815a79103b5",
+      "bytes": 19049
+    },
+    {
+      "path": "build/evaluate/geometry/hits.tsv",
+      "sha256": "020f3ea05c940bbcf55dd93e97bf9ff8e0f52088107267f9ef0533f13dd12424",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/geometry/scores.tsv",
+      "sha256": "bfaa96d1b551bd569c71decac99eb10d111b996ee07befa254a4a6cb96a48593",
+      "bytes": 19051
+    }
+  ],
+  "outputs": [
+    "results/tables/colour_by_elo_gap.tsv",
+    "results/tables/colour_by_elo_gap.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "colour_by_elo_gap"
+    ],
+    "name": "table_colour_by_elo_gap",
+    "dataset": "build/dataset",
+    "scores": "build/ranking/scores.tsv",
+    "features": "build/features/dataset/features.parquet",
+    "layout": "build/segment/dataset",
+    "evaluations": {
+      "line_texture": "build/evaluate/line_texture",
+      "colour": "build/evaluate/colour",
+      "geometry_colour": "build/evaluate/geometry_colour",
+      "geometry": "build/evaluate/geometry"
+    },
+    "shown": [
+      "line_texture",
+      "colour",
+      "geometry_colour"
+    ],
+    "labels": {
+      "line_texture": "Line texture",
+      "colour": "Real colour",
+      "geometry_colour": "Geometry with real colour",
+      "geometry": "Geometry"
+    },
+    "colours": {},
+    "comparisons": [
+      [
+        "geometry_colour",
+        "geometry"
+      ]
+    ],
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": "",
+    "colour_pages": []
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "9a9424506c9c11919444c98e781640d808aed810-dirty",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "colour_by_elo_gap": {
+      "rows": [
+        {
+          "row": "<100",
+          "judgments_per_fold": 15.82,
+          "reference": 0.61133,
+          "reference_low": 0.553414,
+          "reference_high": 0.674677,
+          "line_texture": 0.524573,
+          "line_texture_low": 0.472744,
+          "line_texture_high": 0.58769,
+          "colour": 0.478716,
+          "colour_low": 0.412267,
+          "colour_high": 0.520253,
+          "geometry_colour": 0.533198,
+          "geometry_colour_low": 0.477776,
+          "geometry_colour_high": 0.600334
+        },
+        {
+          "row": "100-200",
+          "judgments_per_fold": 15.29,
+          "reference": 0.796688,
+          "reference_low": 0.759575,
+          "reference_high": 0.85075,
+          "line_texture": 0.573363,
+          "line_texture_low": 0.493697,
+          "line_texture_high": 0.616548,
+          "colour": 0.48145,
+          "colour_low": 0.407406,
+          "colour_high": 0.544452,
+          "geometry_colour": 0.624137,
+          "geometry_colour_low": 0.562796,
+          "geometry_colour_high": 0.68872
+        },
+        {
+          "row": "200-300",
+          "judgments_per_fold": 12.58,
+          "reference": 0.915344,
+          "reference_low": 0.893005,
+          "reference_high": 0.953155,
+          "line_texture": 0.731304,
+          "line_texture_low": 0.659123,
+          "line_texture_high": 0.790739,
+          "colour": 0.514725,
+          "colour_low": 0.447672,
+          "colour_high": 0.580243,
+          "geometry_colour": 0.774461,
+          "geometry_colour_low": 0.707605,
+          "geometry_colour_high": 0.832041
+        },
+        {
+          "row": "300-400",
+          "judgments_per_fold": 9.36,
+          "reference": 0.908824,
+          "reference_low": 0.837633,
+          "reference_high": 0.948723,
+          "line_texture": 0.751514,
+          "line_texture_low": 0.63414,
+          "line_texture_high": 0.810169,
+          "colour": 0.551152,
+          "colour_low": 0.464406,
+          "colour_high": 0.640904,
+          "geometry_colour": 0.856523,
+          "geometry_colour_low": 0.77289,
+          "geometry_colour_high": 0.905925
+        },
+        {
+          "row": ">=400",
+          "judgments_per_fold": 12.84,
+          "reference": 0.953114,
+          "reference_low": 0.934285,
+          "reference_high": 0.979258,
+          "line_texture": 0.819069,
+          "line_texture_low": 0.758874,
+          "line_texture_high": 0.908214,
+          "colour": 0.570507,
+          "colour_low": 0.499097,
+          "colour_high": 0.671401,
+          "geometry_colour": 0.905406,
+          "geometry_colour_low": 0.874705,
+          "geometry_colour_high": 0.962526
+        },
+        {
+          "row": "overall",
+          "judgments_per_fold": 65.89,
+          "reference": 0.812007,
+          "reference_low": 0.782028,
+          "reference_high": 0.836214,
+          "line_texture": 0.652714,
+          "line_texture_low": 0.605041,
+          "line_texture_high": 0.686255,
+          "colour": 0.514454,
+          "colour_low": 0.471944,
+          "colour_high": 0.548213,
+          "geometry_colour": 0.708125,
+          "geometry_colour_low": 0.66318,
+          "geometry_colour_high": 0.739043
+        },
+        {
+          "row": "srocc",
+          "judgments_per_fold": NaN,
+          "reference": 0.890535,
+          "reference_low": NaN,
+          "reference_high": NaN,
+          "line_texture": 0.590015,
+          "line_texture_low": 0.508218,
+          "line_texture_high": 0.656457,
+          "colour": 0.138347,
+          "colour_low": 0.02197,
+          "colour_high": 0.24259,
+          "geometry_colour": 0.746598,
+          "geometry_colour_low": 0.665098,
+          "geometry_colour_high": 0.801973
+        },
+        {
+          "row": "accuracy_within",
+          "judgments_per_fold": NaN,
+          "reference": 0.7864709782660496,
+          "reference_low": 0.7247166937879571,
+          "reference_high": 0.8576727892499983,
+          "line_texture": 0.5559294669124241,
+          "line_texture_low": 0.48390435027595724,
+          "line_texture_high": 0.6563416105974736,
+          "colour": 0.48555865349183036,
+          "colour_low": 0.41877203010372016,
+          "colour_high": 0.5579403254161284,
+          "geometry_colour": 0.6319460241113791,
+          "geometry_colour_low": 0.5641788524207785,
+          "geometry_colour_high": 0.7125279484600423
+        },
+        {
+          "row": "srocc_within",
+          "judgments_per_fold": NaN,
+          "reference": NaN,
+          "reference_low": NaN,
+          "reference_high": NaN,
+          "line_texture": 0.340307510268952,
+          "line_texture_low": 0.20412544474608485,
+          "line_texture_high": 0.4511546380092744,
+          "colour": 0.06545369355382985,
+          "colour_low": -0.03890526592311206,
+          "colour_high": 0.16861659417011568,
+          "geometry_colour": 0.5319751890090918,
+          "geometry_colour_low": 0.4194283329380713,
+          "geometry_colour_high": 0.6318500407359393
+        },
+        {
+          "row": "added_accuracy",
+          "judgments_per_fold": NaN,
+          "reference": NaN,
+          "reference_low": NaN,
+          "reference_high": NaN,
+          "line_texture": NaN,
+          "line_texture_low": NaN,
+          "line_texture_high": NaN,
+          "colour": NaN,
+          "colour_low": NaN,
+          "colour_high": NaN,
+          "geometry_colour": -0.015549109999999993,
+          "geometry_colour_low": -0.03338402418415681,
+          "geometry_colour_high": 0.002664357935231137
+        },
+        {
+          "row": "added_srocc",
+          "judgments_per_fold": NaN,
+          "reference": NaN,
+          "reference_low": NaN,
+          "reference_high": NaN,
+          "line_texture": NaN,
+          "line_texture_low": NaN,
+          "line_texture_high": NaN,
+          "colour": NaN,
+          "colour_low": NaN,
+          "colour_high": NaN,
+          "geometry_colour": -0.004636571146703572,
+          "geometry_colour_low": -0.027926251224096667,
+          "geometry_colour_high": 0.020273888813648017
+        },
+        {
+          "row": "added_accuracy_within",
+          "judgments_per_fold": NaN,
+          "reference": NaN,
+          "reference_low": NaN,
+          "reference_high": NaN,
+          "line_texture": NaN,
+          "line_texture_low": NaN,
+          "line_texture_high": NaN,
+          "colour": NaN,
+          "colour_low": NaN,
+          "colour_high": NaN,
+          "geometry_colour": -0.02700996706621645,
+          "geometry_colour_low": -0.057552099101182724,
+          "geometry_colour_high": 0.017126495253359277
+        },
+        {
+          "row": "added_srocc_within",
+          "judgments_per_fold": NaN,
+          "reference": NaN,
+          "reference_low": NaN,
+          "reference_high": NaN,
+          "line_texture": NaN,
+          "line_texture_low": NaN,
+          "line_texture_high": NaN,
+          "colour": NaN,
+          "colour_low": NaN,
+          "colour_high": NaN,
+          "geometry_colour": -0.016706788289536756,
+          "geometry_colour_low": -0.06467773416291574,
+          "geometry_colour_high": 0.035836753036232065
+        }
+      ]
+    },
+    "seconds": {
+      "colour_by_elo_gap": 1.374
+    }
+  }
+}

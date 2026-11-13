@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T11:23:42+00:00",
-  "ended": "2026-11-13T11:23:44+00:00",
+  "started": "2026-11-13T17:08:51+00:00",
+  "ended": "2026-11-13T17:08:53+00:00",
   "inputs": [
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
@@ -10,13 +10,13 @@
     },
     {
       "path": "build/evaluate/geometry/metrics.tsv",
-      "sha256": "952e499c556cb952b604f7a4e1134004d7d669c27edbcbf93bba49b6dd80912a",
-      "bytes": 245
+      "sha256": "a344aa858f054a9270e5ffa67ec7d72015a5ec477faa235a6d3f6e70ebd43ee2",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "e10dbbf350435ee48da864aef8b8c446fdb0cfe3ca7a0a53e99fd93b062a90f8",
-      "bytes": 12338
+      "sha256": "82b635a28f6495a142f834ba87423e6a5ebdb4274e1a742ac34263ae69e104d5",
+      "bytes": 13398
     },
     {
       "path": "build/evaluate/vit/by_elo_gap.tsv",
@@ -40,18 +40,48 @@
     },
     {
       "path": "build/evaluate/ensemble/metrics.tsv",
-      "sha256": "7ba1654cc6a733fb3ce39a679c33b5be3a70722b1c7ca54749b819c1a34f2f20",
-      "bytes": 245
+      "sha256": "57a0f86d3db0acc0fa993a6a52f2aac78316517ea69e83133268efacaee7a3df",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "e345addd74f26d04b4dad649f88c35e0fc24466242fe447a4821a92dc782b1a6",
-      "bytes": 11904
+      "sha256": "0da6dbf3ff9aecfd6da6e824016ba984bb595240fbc733575e4671230919fd91",
+      "bytes": 12963
     },
     {
       "path": "build/ranking/scores.tsv",
       "sha256": "f27050a5b0039c31a3c2bce6766501b6320f14e735602fc02419f40cce9ce684",
       "bytes": 43825
+    },
+    {
+      "path": "build/evaluate/vit/hits.tsv",
+      "sha256": "d317cf3ad5b5205082e7e0338a76d10e5aa5ff67d8e0f694c182df09a13f5d70",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/vit/scores.tsv",
+      "sha256": "a79f6fd6e37f786fd690c937d0f4f2c6131f5dfa19e0912e5e693581086ddec0",
+      "bytes": 19053
+    },
+    {
+      "path": "build/evaluate/geometry/hits.tsv",
+      "sha256": "020f3ea05c940bbcf55dd93e97bf9ff8e0f52088107267f9ef0533f13dd12424",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/geometry/scores.tsv",
+      "sha256": "bfaa96d1b551bd569c71decac99eb10d111b996ee07befa254a4a6cb96a48593",
+      "bytes": 19051
+    },
+    {
+      "path": "build/evaluate/ensemble/hits.tsv",
+      "sha256": "d75033a372712ed9e4a51c20b7bf7e75076cda9323e43bdfca8d7c25374b3ada",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/ensemble/scores.tsv",
+      "sha256": "2e06f23574cc3e2cfa1b22e6d8de8eb79e4471010650c45ce40015e78d5daf02",
+      "bytes": 19040
     }
   ],
   "outputs": [
@@ -73,6 +103,7 @@
       "vit": "build/evaluate/vit",
       "ensemble": "build/evaluate/ensemble"
     },
+    "shown": [],
     "labels": {
       "geometry": "Geometry",
       "vit": "ViT",
@@ -120,7 +151,8 @@
     },
     "levels": {},
     "alone": [],
-    "reference_column": ""
+    "reference_column": "",
+    "colour_pages": []
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -142,7 +174,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "e61d0ed1c440faaa5a5562d508988603b062b92f-dirty",
+  "commit": "2884e8cca226791ca6eb1b845e90909c77c5ebe6-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "paired_differences": {
@@ -155,7 +187,13 @@
           "accuracy_high": 0.042466754868964986,
           "srocc_difference": 0.033260723892725275,
           "srocc_low": -0.028414879112152097,
-          "srocc_high": 0.09146447802229848
+          "srocc_high": 0.09146447802229848,
+          "accuracy_within_difference": 0.035710752435420365,
+          "accuracy_within_low": -0.06092889558675395,
+          "accuracy_within_high": 0.11795260715086868,
+          "srocc_within_difference": 0.06086683685041505,
+          "srocc_within_low": -0.04000044217501191,
+          "srocc_within_high": 0.16479029442468016
         },
         {
           "first": "ensemble",
@@ -165,7 +203,13 @@
           "accuracy_high": 0.036720524863214685,
           "srocc_difference": 0.06770954996338852,
           "srocc_low": 0.034003626431875766,
-          "srocc_high": 0.10502308393082445
+          "srocc_high": 0.10502308393082445,
+          "accuracy_within_difference": 0.02243159164213544,
+          "accuracy_within_low": -0.010814338358373934,
+          "accuracy_within_high": 0.05335370518549305,
+          "srocc_within_difference": 0.07899790972832998,
+          "srocc_within_low": 0.03951114552502983,
+          "srocc_within_high": 0.12197502369607656
         },
         {
           "first": "ensemble",
@@ -175,12 +219,18 @@
           "accuracy_high": 0.036096426911850076,
           "srocc_difference": 0.03444882607066324,
           "srocc_low": 0.0071602711431616745,
-          "srocc_high": 0.06543214747069075
+          "srocc_high": 0.06543214747069075,
+          "accuracy_within_difference": -0.013279160793284927,
+          "accuracy_within_low": -0.0793163449032794,
+          "accuracy_within_high": 0.06357040450516119,
+          "srocc_within_difference": 0.018131072877914933,
+          "srocc_within_low": -0.06581621281346611,
+          "srocc_within_high": 0.1011244161207996
         }
       ]
     },
     "seconds": {
-      "paired_differences": 1.01
+      "paired_differences": 1.685
     }
   }
 }

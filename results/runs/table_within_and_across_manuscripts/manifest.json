@@ -1,0 +1,931 @@
+{
+  "command": "report",
+  "started": "2026-11-13T17:13:34+00:00",
+  "ended": "2026-11-13T17:13:39+00:00",
+  "inputs": [
+    {
+      "path": "build/evaluate/measures/ink_coverage/by_elo_gap.tsv",
+      "sha256": "1013c69b31cc040441cc5e589fa6ba7d394bd961c869912beb5e94b9d12223e7",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/measures/ink_coverage/metrics.tsv",
+      "sha256": "a4e4f09ae5f19cf7d974c2c4f0b3dce8ad965e6e4b457070c30fa6f46782553f",
+      "bytes": 541
+    },
+    {
+      "path": "build/evaluate/measures/ink_coverage/manifest.json",
+      "sha256": "090d0e7ac84c5d33ec678641cbeb127bbc848864b18bf8527e8448396848a36a",
+      "bytes": 8680
+    },
+    {
+      "path": "build/evaluate/measures/text_lines/by_elo_gap.tsv",
+      "sha256": "b0aef546f4c235fda1bf79ecaccb2a8d3603241d8ac4cd6a90bbaaffe70bdb6d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/measures/text_lines/metrics.tsv",
+      "sha256": "4e07e9edbcf31b83e40cadb6de7e14075aee42e3760ae8af15fe370b6589ea46",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/measures/text_lines/manifest.json",
+      "sha256": "550c930500ad79b1e0292014ca91e2437f9289b00e898c728c2496e74d14bfdc",
+      "bytes": 8646
+    },
+    {
+      "path": "build/evaluate/trivial/by_elo_gap.tsv",
+      "sha256": "f4900789079d1ab1847b9d29aeeca6d2dc89a0858730fcc44570ec43506ced80",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/trivial/metrics.tsv",
+      "sha256": "abe82116170550e5e43a05d5a87fd0865a485a7f9c760e1fc69184f0f866c98d",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/trivial/manifest.json",
+      "sha256": "efa18ec3a70852fd3d7119b291b45ca358a83a4949e9477131b18d11409dc661",
+      "bytes": 8600
+    },
+    {
+      "path": "build/evaluate/generic/by_elo_gap.tsv",
+      "sha256": "759093c6c9e224516286e8531c9f4071c26b0b6aa3c2de0afd8c33390ba490a0",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/generic/metrics.tsv",
+      "sha256": "9dec3204d402b5ead7c7945c1d90e469ad3facc6745e278845dc41e62440231e",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/generic/manifest.json",
+      "sha256": "ae08244b164605f0bb45cecc669bc150311722f829109152dfd514639dcb3509",
+      "bytes": 9366
+    },
+    {
+      "path": "build/evaluate/kyle_davidson/by_elo_gap.tsv",
+      "sha256": "9354b3f685c877a95aad94f10ed37e627017a39c68f9fc4e0d3154c0020dfcc1",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/kyle_davidson/metrics.tsv",
+      "sha256": "c4f932b6930fca03ce5fdefae76f7e63a406a9d6273f67f4205a19c9ea39f1c0",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/kyle_davidson/manifest.json",
+      "sha256": "8f32637ed768597d8634cd4f57d0ccf41df0051c0ab8919def96d3d2168af452",
+      "bytes": 8823
+    },
+    {
+      "path": "build/evaluate/ink_distribution/by_elo_gap.tsv",
+      "sha256": "d2bdfb602d5b656e2b67eab1c1e290dfcc50c15f990fc95e20026f51e33a785d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/ink_distribution/metrics.tsv",
+      "sha256": "391eeac5684e75584afa9e7000891329cf729c18ea3ae1d0557e10552327cc27",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/ink_distribution/manifest.json",
+      "sha256": "8cf429f915cc502a0ff9537ee2dfd72c9eb90abe7bbb851d89263302414636c9",
+      "bytes": 9633
+    },
+    {
+      "path": "build/evaluate/line_texture/by_elo_gap.tsv",
+      "sha256": "da177d74b00fcb98b36ca24f0098b4e5e85e0b0d707bc7d462e3e95d6e32a233",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/line_texture/metrics.tsv",
+      "sha256": "f884ee680cc3db3ff6f8cd4679c0a76ae71d9080f1afcdf63dd5202b0b133f5b",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/line_texture/manifest.json",
+      "sha256": "9b476782a6311127aed00a88db676bbdd36a10cd884c6e22d54784031d2381ac",
+      "bytes": 8538
+    },
+    {
+      "path": "build/evaluate/colour/by_elo_gap.tsv",
+      "sha256": "4fd2878ef989a83494544a99e3bd2093c5bb4faeb9f577561d667021ec0da92d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/colour/metrics.tsv",
+      "sha256": "4474bdaed432ebd5d8d81b5e8ace7043a0c1bf8f9035626ebd1799fef1c5c3ca",
+      "bytes": 540
+    },
+    {
+      "path": "build/evaluate/colour/manifest.json",
+      "sha256": "48bb15afb001a6aea5439c1b865777f1323442dffae588a855216d4fbdf8eba3",
+      "bytes": 9309
+    },
+    {
+      "path": "build/evaluate/geometry/by_elo_gap.tsv",
+      "sha256": "59782a5158994706e32de5e9cb806a3e99fb1a030f80c9a7e505f8ed1691af21",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/geometry/metrics.tsv",
+      "sha256": "a344aa858f054a9270e5ffa67ec7d72015a5ec477faa235a6d3f6e70ebd43ee2",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/geometry/manifest.json",
+      "sha256": "82b635a28f6495a142f834ba87423e6a5ebdb4274e1a742ac34263ae69e104d5",
+      "bytes": 13398
+    },
+    {
+      "path": "build/evaluate/geometry_layout/by_elo_gap.tsv",
+      "sha256": "67c1244b75a71f583f49384e505d7c954765644065a57eaa4c4a8fe9a5463120",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/geometry_layout/metrics.tsv",
+      "sha256": "9eb4d3e88a7b115464d5dc0ac93c0d895591981cdd9b31185c9e6f6259b3c485",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/geometry_layout/manifest.json",
+      "sha256": "cc9ecc660070e06328d7194414661adf27de3b7ebf74a3fb72e40be4d3bde8b8",
+      "bytes": 10593
+    },
+    {
+      "path": "build/evaluate/geometry_line_texture/by_elo_gap.tsv",
+      "sha256": "bc04c691b97eb93930632a77a6fd01c03eee25e0525e14f298ba465916c655a6",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/geometry_line_texture/metrics.tsv",
+      "sha256": "37500c7601c4b7bec245eee4dd52045eaec483d95705bfabb5ec6346a3b7218e",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/geometry_line_texture/manifest.json",
+      "sha256": "233e5fbcb27c44361794b447da1c08abc6ee54ceb2b4d3242cd93649d6e6859c",
+      "bytes": 10040
+    },
+    {
+      "path": "build/evaluate/geometry_colour/by_elo_gap.tsv",
+      "sha256": "047b17ecce7eb5d45c67ccc624bd5cf384517d084da7b4491c09dfe1682fb12d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/geometry_colour/metrics.tsv",
+      "sha256": "67d56b3349fb180d293357e775b3a80aa20db33bceab92f70ac01116a700fd90",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/geometry_colour/manifest.json",
+      "sha256": "e703109811d0677b8d6c09cff6b7cd38b10ce4c6e139aa493fe3d161e9fe0f18",
+      "bytes": 10802
+    },
+    {
+      "path": "build/evaluate/mean_token/by_elo_gap.tsv",
+      "sha256": "b18abf7f2604949724f59b994e672f622cbe9c955122a469400c8d9201d783c8",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/mean_token/metrics.tsv",
+      "sha256": "5ce423b84e1401d72aebd9571e9465d3240fb74d698189dde7ab4db89b196d82",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/mean_token/manifest.json",
+      "sha256": "e8e02832eb69ef8a5be0b8137c2568ddae88be961743f0802749d032b8f5a8b1",
+      "bytes": 8489
+    },
+    {
+      "path": "build/evaluate/vit/by_elo_gap.tsv",
+      "sha256": "3ac1c2b8094ba26ed9a0703d2844b743479941a0a0d0c7e9a62601778793165d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/vit/metrics.tsv",
+      "sha256": "9f2cb0e58c18136bfa99e85ebf8b2e68b4e00e020255cb5fc6912db48e2241aa",
+      "bytes": 218
+    },
+    {
+      "path": "build/evaluate/vit/manifest.json",
+      "sha256": "72bf2e7d3014604ef1606182bc1f30de0ed9dea69a9dede931322448bfef1bd4",
+      "bytes": 11241
+    },
+    {
+      "path": "build/evaluate/ensemble/by_elo_gap.tsv",
+      "sha256": "50072af82f24a6954aace94ee9e78cceefbb2fa4e99baa38b405069a2a85a471",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/ensemble/metrics.tsv",
+      "sha256": "57a0f86d3db0acc0fa993a6a52f2aac78316517ea69e83133268efacaee7a3df",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/ensemble/manifest.json",
+      "sha256": "0da6dbf3ff9aecfd6da6e824016ba984bb595240fbc733575e4671230919fd91",
+      "bytes": 12963
+    },
+    {
+      "path": "build/evaluate/ensemble_layout/by_elo_gap.tsv",
+      "sha256": "d0b43a39db3881b4d5d6f7641ad6bd84cddbac7f0f4c513e6835143fdca97723",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/ensemble_layout/metrics.tsv",
+      "sha256": "a2eb72cb1f6689035a56f4802d5707267951bc1bb1ceb8356f40f9df621f75af",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/ensemble_layout/manifest.json",
+      "sha256": "8e8a59a43badc997288824141ed8a4a878affbaa190c64146cd4afc322876028",
+      "bytes": 8981
+    },
+    {
+      "path": "build/evaluate/ensemble_fitted/by_elo_gap.tsv",
+      "sha256": "6e275126823ec879053234d7232c9da402b4a80521826c989eef9051c9184e6d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/ensemble_fitted/metrics.tsv",
+      "sha256": "de85e4a198e993aca9cf615b1184ca80a6dcffcd6afa8892fa8f6c07710c2958",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/ensemble_fitted/manifest.json",
+      "sha256": "6ab829fdd84446936290561f00ddae4f6872478556de0c8f69bba68cd3ef3f6b",
+      "bytes": 8963
+    },
+    {
+      "path": "build/evaluate/ensemble_layout_fitted/by_elo_gap.tsv",
+      "sha256": "7e5dd7fbc08060acc57e585e1c73f89012498c285934228a6c627c05eecad729",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/ensemble_layout_fitted/metrics.tsv",
+      "sha256": "3b768469edd04aecfd49ddbb145746ba9e5747dbcc819d53c13f36d5940de173",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/ensemble_layout_fitted/manifest.json",
+      "sha256": "2c97faf35a9141e673e2ec7c78c3e8133b81433c3c64ec5fef793712c539736d",
+      "bytes": 9078
+    },
+    {
+      "path": "build/evaluate/ensemble_colour/by_elo_gap.tsv",
+      "sha256": "00bc0c3adadbcb97531900cd39cb8b46110fe11a001a579b81a41fe8c2a2ca48",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/ensemble_colour/metrics.tsv",
+      "sha256": "f2cb408ffd0769d55258628efc351bc7b647597397a7850a6d72fedff5ffc88d",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/ensemble_colour/manifest.json",
+      "sha256": "fb8abe923e3bcf11294dfbb7b5515ff35e3d2c1b74725feddfaefad2154aaed0",
+      "bytes": 9408
+    },
+    {
+      "path": "build/ranking/scores.tsv",
+      "sha256": "f27050a5b0039c31a3c2bce6766501b6320f14e735602fc02419f40cce9ce684",
+      "bytes": 43825
+    },
+    {
+      "path": "build/evaluate/measures/ink_coverage/hits.tsv",
+      "sha256": "bccd720009eebbbc2e5dbfa977137fa85228cf995712d0eebabe2f3cbc078def",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/measures/ink_coverage/scores.tsv",
+      "sha256": "83225c81b954a4f1de9f252d32ed4c959c58810899fc62e962749027879e77df",
+      "bytes": 19020
+    },
+    {
+      "path": "build/evaluate/measures/text_lines/hits.tsv",
+      "sha256": "e216c8d69530d6370243a9e66bdb7ae7d5424ac67cc65ce494c8897e93917cdf",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/measures/text_lines/scores.tsv",
+      "sha256": "e2a7ae5fc4f9af85e67147c08c58f6d507b47d30c799d88278eba4e619b9681b",
+      "bytes": 19108
+    },
+    {
+      "path": "build/evaluate/trivial/hits.tsv",
+      "sha256": "412d002f8c83652169c021a9fa2d08c9fb67cbcc934ccf4625ece1b025a475f3",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/trivial/scores.tsv",
+      "sha256": "3b730160484eb86124dab61d55cb9af0778b089e23ca9f51354509eafda64c93",
+      "bytes": 19072
+    },
+    {
+      "path": "build/evaluate/generic/hits.tsv",
+      "sha256": "f47a708ae70062ffe7cd5c574ca176c876cd663600e65512489bc84bfac989f5",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/generic/scores.tsv",
+      "sha256": "91d5d0574eea9881c466b51bc139fb9620c1f448b30e6446b8c4be0f12693a56",
+      "bytes": 19039
+    },
+    {
+      "path": "build/evaluate/kyle_davidson/hits.tsv",
+      "sha256": "60981a7bf26d9fc4608bb7c3f3edd6b847ac4673ce08668fd3aafcd34441a30f",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/kyle_davidson/scores.tsv",
+      "sha256": "d109d5dcd036d58aba117f9aa34ea7abd44d3a818e1a98589e0718c001836e0a",
+      "bytes": 19039
+    },
+    {
+      "path": "build/evaluate/ink_distribution/hits.tsv",
+      "sha256": "58763436238e7c9cc845c70778fd9c3359098ba18e7666f3e16543332e1c53f4",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/ink_distribution/scores.tsv",
+      "sha256": "6a5aec41e6d6b1a3e8e840600e17e7a2bd3a413a18f1d396d1668ef48904f1a4",
+      "bytes": 19068
+    },
+    {
+      "path": "build/evaluate/line_texture/hits.tsv",
+      "sha256": "b312b37a599fbc34e64e9bc0f690fda955074220ad01f421a4f2343ace7c1a9f",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/line_texture/scores.tsv",
+      "sha256": "12b9c7535d4addc36b6c911212e6209615217dcf17f7961b7189eb42dcbde2dd",
+      "bytes": 19058
+    },
+    {
+      "path": "build/evaluate/colour/hits.tsv",
+      "sha256": "a6818a47a894edae2490c0fabe6ef30cd9caa88c02ed9fe3b917ee3490fdd87f",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/colour/scores.tsv",
+      "sha256": "d354676da3eac60aa4d1bec142081bc3a6e6da563621d61663dfef8259cdfb37",
+      "bytes": 19011
+    },
+    {
+      "path": "build/evaluate/geometry/hits.tsv",
+      "sha256": "020f3ea05c940bbcf55dd93e97bf9ff8e0f52088107267f9ef0533f13dd12424",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/geometry/scores.tsv",
+      "sha256": "bfaa96d1b551bd569c71decac99eb10d111b996ee07befa254a4a6cb96a48593",
+      "bytes": 19051
+    },
+    {
+      "path": "build/evaluate/geometry_layout/hits.tsv",
+      "sha256": "bdf12b0bebaaf0d98f1dbe28c3e1e3dada94d45d05714fcbb405ea7b6316fc0d",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/geometry_layout/scores.tsv",
+      "sha256": "6be3a97418bf3477714eaad2bd7d8cbcd64431f1d9db68cbcb21e6ee17e88a93",
+      "bytes": 19057
+    },
+    {
+      "path": "build/evaluate/geometry_line_texture/hits.tsv",
+      "sha256": "e015eb842a50833790589dad1f50bf445e8d38897d8e606b36d6f017d21e14c8",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/geometry_line_texture/scores.tsv",
+      "sha256": "a538426ec27507d7dfb9add340d4da909302f2de39b849fd73f61012e454a2b3",
+      "bytes": 19059
+    },
+    {
+      "path": "build/evaluate/geometry_colour/hits.tsv",
+      "sha256": "ccaec044f26fbd0566257539eb66368906c0e9c1fcbd8f7671c8ecae31ff6154",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/geometry_colour/scores.tsv",
+      "sha256": "b248f4c412b449a82cd6b8d903367af39522b40c88a27aee86ea9815a79103b5",
+      "bytes": 19049
+    },
+    {
+      "path": "build/evaluate/mean_token/hits.tsv",
+      "sha256": "34d7320089cf3d5346c05d1c4698847fea6ae4320effd921b0be97813fc7abd6",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/mean_token/scores.tsv",
+      "sha256": "4fc60d064b7dec5efa2995575ed1c9c2544c689d2aafc729353e66eb767e6ba6",
+      "bytes": 19039
+    },
+    {
+      "path": "build/evaluate/vit/hits.tsv",
+      "sha256": "d317cf3ad5b5205082e7e0338a76d10e5aa5ff67d8e0f694c182df09a13f5d70",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/vit/scores.tsv",
+      "sha256": "a79f6fd6e37f786fd690c937d0f4f2c6131f5dfa19e0912e5e693581086ddec0",
+      "bytes": 19053
+    },
+    {
+      "path": "build/evaluate/ensemble/hits.tsv",
+      "sha256": "d75033a372712ed9e4a51c20b7bf7e75076cda9323e43bdfca8d7c25374b3ada",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/ensemble/scores.tsv",
+      "sha256": "2e06f23574cc3e2cfa1b22e6d8de8eb79e4471010650c45ce40015e78d5daf02",
+      "bytes": 19040
+    },
+    {
+      "path": "build/evaluate/ensemble_layout/hits.tsv",
+      "sha256": "a1dfe3b07c2aa6d421013bffac600704e768f07225620940f4587fba1fb544cb",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/ensemble_layout/scores.tsv",
+      "sha256": "749063f50134852489b2e8b2ecd1eed36c4bc183dfc5ce98770ccf78e9cd09c7",
+      "bytes": 19045
+    },
+    {
+      "path": "build/evaluate/ensemble_fitted/hits.tsv",
+      "sha256": "0bca0a7269fd5b7573c2d15b88af8cda70c6ea89247badeb20173cbe2018d5b1",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/ensemble_fitted/scores.tsv",
+      "sha256": "6b2f263c509e0e3fb32892fdd154fc6df4f268c737b18ca5bf23cfaeba446689",
+      "bytes": 19040
+    },
+    {
+      "path": "build/evaluate/ensemble_layout_fitted/hits.tsv",
+      "sha256": "62e8683747e76bea20e8472fdbc00bed24d12f37ba8e8ac81c12e19a8ea5903a",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/ensemble_layout_fitted/scores.tsv",
+      "sha256": "abfcdbeb3907d7ef0933f37a3dca7902b409f728f773a21a7b9e9f0b14a24151",
+      "bytes": 19047
+    },
+    {
+      "path": "build/evaluate/ensemble_colour/hits.tsv",
+      "sha256": "071a3a02ba8f35154cf1771bff383b5af68d0438c5288e294e19b381925f4f4c",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/ensemble_colour/scores.tsv",
+      "sha256": "46a46a09f3c121a8626025a578e1b20a91018c61c9b9d8ede84437bc5c33b89e",
+      "bytes": 19036
+    }
+  ],
+  "outputs": [
+    "results/tables/within_and_across_manuscripts.tsv",
+    "results/tables/within_and_across_manuscripts.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "within_and_across_manuscripts"
+    ],
+    "name": "table_within_and_across_manuscripts",
+    "dataset": "build/dataset",
+    "scores": "build/ranking/scores.tsv",
+    "features": "build/features/dataset/features.parquet",
+    "layout": "build/segment/dataset",
+    "evaluations": {
+      "ink_coverage": "build/evaluate/measures/ink_coverage",
+      "text_lines": "build/evaluate/measures/text_lines",
+      "trivial": "build/evaluate/trivial",
+      "generic": "build/evaluate/generic",
+      "kyle_davidson": "build/evaluate/kyle_davidson",
+      "ink_distribution": "build/evaluate/ink_distribution",
+      "line_texture": "build/evaluate/line_texture",
+      "colour": "build/evaluate/colour",
+      "geometry": "build/evaluate/geometry",
+      "geometry_layout": "build/evaluate/geometry_layout",
+      "geometry_line_texture": "build/evaluate/geometry_line_texture",
+      "geometry_colour": "build/evaluate/geometry_colour",
+      "mean_token": "build/evaluate/mean_token",
+      "vit": "build/evaluate/vit",
+      "ensemble": "build/evaluate/ensemble",
+      "ensemble_layout": "build/evaluate/ensemble_layout",
+      "ensemble_fitted": "build/evaluate/ensemble_fitted",
+      "ensemble_layout_fitted": "build/evaluate/ensemble_layout_fitted",
+      "ensemble_colour": "build/evaluate/ensemble_colour"
+    },
+    "shown": [],
+    "labels": {
+      "ink_coverage": "Ink coverage",
+      "text_lines": "Text lines",
+      "trivial": "Trivial, both",
+      "generic": "Generic image",
+      "kyle_davidson": "Kyle–Davidson",
+      "ink_distribution": "Ink distribution",
+      "line_texture": "Line texture",
+      "colour": "Real colour",
+      "geometry": "Geometry",
+      "geometry_layout": "Geometry with Layout",
+      "geometry_line_texture": "Geometry with line texture",
+      "geometry_colour": "Geometry with real colour",
+      "mean_token": "Mean ViT token",
+      "vit": "ViT",
+      "ensemble": "Ensemble",
+      "ensemble_layout": "Ensemble with Layout",
+      "ensemble_fitted": "Ensemble, fitted",
+      "ensemble_layout_fitted": "Ensemble with Layout, fitted",
+      "ensemble_colour": "Ensemble with colour"
+    },
+    "colours": {},
+    "comparisons": [],
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": "",
+    "colour_pages": []
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "9a9424506c9c11919444c98e781640d808aed810-dirty",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "within_and_across_manuscripts": {
+      "methods": [
+        {
+          "method": "reference",
+          "label": "Reference",
+          "accuracy_across": 0.81513939131778,
+          "accuracy_across_low": 0.7812908183175323,
+          "accuracy_across_high": 0.8438665971308467,
+          "accuracy_within": 0.7864709782660496,
+          "accuracy_within_low": 0.7247166937879571,
+          "accuracy_within_high": 0.8576727892499983,
+          "srocc": 0.890535,
+          "srocc_low": NaN,
+          "srocc_high": NaN,
+          "srocc_within": NaN,
+          "srocc_within_low": NaN,
+          "srocc_within_high": NaN
+        },
+        {
+          "method": "ink_coverage",
+          "label": "Ink coverage",
+          "accuracy_across": 0.5329571713433383,
+          "accuracy_across_low": 0.47779379283323586,
+          "accuracy_across_high": 0.5731921328776393,
+          "accuracy_within": 0.5575278236299434,
+          "accuracy_within_low": 0.46023802757526,
+          "accuracy_within_high": 0.633868003628624,
+          "srocc": 0.086578,
+          "srocc_low": -0.045256,
+          "srocc_high": 0.214162,
+          "srocc_within": 0.03740087410513085,
+          "srocc_within_low": -0.09392467885015719,
+          "srocc_within_high": 0.15978355259075977
+        },
+        {
+          "method": "text_lines",
+          "label": "Text lines",
+          "accuracy_across": 0.5904393714291584,
+          "accuracy_across_low": 0.5337673070870109,
+          "accuracy_across_high": 0.627588936527866,
+          "accuracy_within": 0.612113320315264,
+          "accuracy_within_low": 0.546340367197314,
+          "accuracy_within_high": 0.7031958834661238,
+          "srocc": 0.279078,
+          "srocc_low": 0.151799,
+          "srocc_high": 0.404629,
+          "srocc_within": 0.33643682947033293,
+          "srocc_within_low": 0.2123184167620548,
+          "srocc_within_high": 0.45157022633711713
+        },
+        {
+          "method": "trivial",
+          "label": "Trivial, both",
+          "accuracy_across": 0.5775355018231485,
+          "accuracy_across_low": 0.5184215761054161,
+          "accuracy_across_high": 0.6202343809658607,
+          "accuracy_within": 0.6078554967038613,
+          "accuracy_within_low": 0.5354911584178518,
+          "accuracy_within_high": 0.6823283091589946,
+          "srocc": 0.218421,
+          "srocc_low": 0.080307,
+          "srocc_high": 0.350503,
+          "srocc_within": 0.24711267676222584,
+          "srocc_within_low": 0.11348484146438373,
+          "srocc_within_high": 0.3679633135896045
+        },
+        {
+          "method": "generic",
+          "label": "Generic image",
+          "accuracy_across": 0.6112874833940911,
+          "accuracy_across_low": 0.561290966117451,
+          "accuracy_across_high": 0.6503475159826653,
+          "accuracy_within": 0.6022375980161484,
+          "accuracy_within_low": 0.5090388576106899,
+          "accuracy_within_high": 0.6750162308599518,
+          "srocc": 0.392507,
+          "srocc_low": 0.269048,
+          "srocc_high": 0.499128,
+          "srocc_within": 0.225803421220162,
+          "srocc_within_low": 0.08790743372663956,
+          "srocc_within_high": 0.35079491025083603
+        },
+        {
+          "method": "kyle_davidson",
+          "label": "Kyle–Davidson",
+          "accuracy_across": 0.6125110017162178,
+          "accuracy_across_low": 0.5645170824282392,
+          "accuracy_across_high": 0.6540317420013667,
+          "accuracy_within": 0.5237909411915729,
+          "accuracy_within_low": 0.42623608615590086,
+          "accuracy_within_high": 0.5956581281161224,
+          "srocc": 0.431091,
+          "srocc_low": 0.309377,
+          "srocc_high": 0.528363,
+          "srocc_within": 0.18581878764243137,
+          "srocc_within_low": 0.06460542922028123,
+          "srocc_within_high": 0.3024140385965215
+        },
+        {
+          "method": "ink_distribution",
+          "label": "Ink distribution",
+          "accuracy_across": 0.6691821547513633,
+          "accuracy_across_low": 0.6283226626481961,
+          "accuracy_across_high": 0.7101943789273368,
+          "accuracy_within": 0.517038881361859,
+          "accuracy_within_low": 0.4362524718693252,
+          "accuracy_within_high": 0.6119154928865816,
+          "srocc": 0.548576,
+          "srocc_low": 0.434793,
+          "srocc_high": 0.628215,
+          "srocc_within": 0.2915531532052347,
+          "srocc_within_low": 0.14037897427913568,
+          "srocc_within_high": 0.4215562070179579
+        },
+        {
+          "method": "line_texture",
+          "label": "Line texture",
+          "accuracy_across": 0.6872859621984483,
+          "accuracy_across_low": 0.6412352278059985,
+          "accuracy_across_high": 0.7240745760289633,
+          "accuracy_within": 0.5559294669124241,
+          "accuracy_within_low": 0.48390435027595724,
+          "accuracy_within_high": 0.6563416105974736,
+          "srocc": 0.590015,
+          "srocc_low": 0.508218,
+          "srocc_high": 0.656457,
+          "srocc_within": 0.340307510268952,
+          "srocc_within_low": 0.20412544474608485,
+          "srocc_within_high": 0.4511546380092744
+        },
+        {
+          "method": "colour",
+          "label": "Real colour",
+          "accuracy_across": 0.5305327450202375,
+          "accuracy_across_low": 0.4866495154499225,
+          "accuracy_across_high": 0.5713589803072175,
+          "accuracy_within": 0.48555865349183036,
+          "accuracy_within_low": 0.41877203010372016,
+          "accuracy_within_high": 0.5579403254161284,
+          "srocc": 0.138347,
+          "srocc_low": 0.02197,
+          "srocc_high": 0.24259,
+          "srocc_within": 0.06545369355382985,
+          "srocc_within_low": -0.03890526592311206,
+          "srocc_within_high": 0.16861659417011568
+        },
+        {
+          "method": "geometry",
+          "label": "Geometry",
+          "accuracy_across": 0.7417778747477558,
+          "accuracy_across_low": 0.70299780829477,
+          "accuracy_across_high": 0.7723353209544861,
+          "accuracy_within": 0.6589559911775954,
+          "accuracy_within_low": 0.5795570566986536,
+          "accuracy_within_high": 0.7411245463729894,
+          "srocc": 0.751235,
+          "srocc_low": 0.677634,
+          "srocc_high": 0.803791,
+          "srocc_within": 0.5486819772986286,
+          "srocc_within_low": 0.43982977971595755,
+          "srocc_within_high": 0.6469585067313648
+        },
+        {
+          "method": "geometry_layout",
+          "label": "Geometry with Layout",
+          "accuracy_across": 0.7316814186653541,
+          "accuracy_across_low": 0.6899425271900387,
+          "accuracy_across_high": 0.7636670484502757,
+          "accuracy_within": 0.6615272965418201,
+          "accuracy_within_low": 0.5764868858492911,
+          "accuracy_within_high": 0.7428170304361316,
+          "srocc": 0.735137,
+          "srocc_low": 0.664044,
+          "srocc_high": 0.789211,
+          "srocc_within": 0.5347340119392812,
+          "srocc_within_low": 0.4199725217227201,
+          "srocc_within_high": 0.6374598775512053
+        },
+        {
+          "method": "geometry_line_texture",
+          "label": "Geometry with line texture",
+          "accuracy_across": 0.728994414339017,
+          "accuracy_across_low": 0.6842303766560663,
+          "accuracy_across_high": 0.7652632001675892,
+          "accuracy_within": 0.629708857062797,
+          "accuracy_within_low": 0.542041560928531,
+          "accuracy_within_high": 0.7185764325206601,
+          "srocc": 0.72959,
+          "srocc_low": 0.655925,
+          "srocc_high": 0.78593,
+          "srocc_within": 0.5423379666484299,
+          "srocc_within_low": 0.429368792426749,
+          "srocc_within_high": 0.6392602437120787
+        },
+        {
+          "method": "geometry_colour",
+          "label": "Geometry with real colour",
+          "accuracy_across": 0.7353707245405784,
+          "accuracy_across_low": 0.693920921291132,
+          "accuracy_across_high": 0.7677118938103747,
+          "accuracy_within": 0.6319460241113791,
+          "accuracy_within_low": 0.5641788524207785,
+          "accuracy_within_high": 0.7125279484600423,
+          "srocc": 0.746598,
+          "srocc_low": 0.665098,
+          "srocc_high": 0.801973,
+          "srocc_within": 0.5319751890090918,
+          "srocc_within_low": 0.4194283329380713,
+          "srocc_within_high": 0.6318500407359393
+        },
+        {
+          "method": "mean_token",
+          "label": "Mean ViT token",
+          "accuracy_across": 0.6370680346512743,
+          "accuracy_across_low": 0.5978753856912244,
+          "accuracy_across_high": 0.6713119451009908,
+          "accuracy_within": 0.584950028572487,
+          "accuracy_within_low": 0.5005671338042093,
+          "accuracy_within_high": 0.6395059106160069,
+          "srocc": 0.497977,
+          "srocc_low": 0.383625,
+          "srocc_high": 0.595057,
+          "srocc_within": 0.3336555650948175,
+          "srocc_within_low": 0.2243668242635066,
+          "srocc_within_high": 0.44401014641792264
+        },
+        {
+          "method": "vit",
+          "label": "ViT",
+          "accuracy_across": 0.7425555337890279,
+          "accuracy_across_low": 0.702244888288071,
+          "accuracy_across_high": 0.7772491558471905,
+          "accuracy_within": 0.694666743613016,
+          "accuracy_within_low": 0.6138308426183365,
+          "accuracy_within_high": 0.7549627236707319,
+          "srocc": 0.784495,
+          "srocc_low": 0.725238,
+          "srocc_high": 0.827712,
+          "srocc_within": 0.6095488141490436,
+          "srocc_within_low": 0.5145515734190875,
+          "srocc_within_high": 0.694566619581706
+        },
+        {
+          "method": "ensemble",
+          "label": "Ensemble",
+          "accuracy_across": 0.761790184231548,
+          "accuracy_across_low": 0.7228843817054078,
+          "accuracy_across_high": 0.7919997056984202,
+          "accuracy_within": 0.681387582819731,
+          "accuracy_within_low": 0.6060250440518256,
+          "accuracy_within_high": 0.7542120595578465,
+          "srocc": 0.818944,
+          "srocc_low": 0.767109,
+          "srocc_high": 0.856341,
+          "srocc_within": 0.6276798870269585,
+          "srocc_within_low": 0.5225397121364864,
+          "srocc_within_high": 0.7166068012245396
+        },
+        {
+          "method": "ensemble_layout",
+          "label": "Ensemble with Layout",
+          "accuracy_across": 0.7578264173545548,
+          "accuracy_across_low": 0.7177153219579606,
+          "accuracy_across_high": 0.7877839474080581,
+          "accuracy_within": 0.6625974538477934,
+          "accuracy_within_low": 0.5766594416793849,
+          "accuracy_within_high": 0.7453536290351404,
+          "srocc": 0.813904,
+          "srocc_low": 0.760693,
+          "srocc_high": 0.855013,
+          "srocc_within": 0.6154699684582737,
+          "srocc_within_low": 0.5021105121484724,
+          "srocc_within_high": 0.705834648416798
+        },
+        {
+          "method": "ensemble_fitted",
+          "label": "Ensemble, fitted",
+          "accuracy_across": 0.7618763264772777,
+          "accuracy_across_low": 0.7229272722087232,
+          "accuracy_across_high": 0.7921949581465989,
+          "accuracy_within": 0.6801483040672943,
+          "accuracy_within_low": 0.6057219757796141,
+          "accuracy_within_high": 0.7536966296876163,
+          "srocc": 0.816192,
+          "srocc_low": 0.762794,
+          "srocc_high": 0.85466,
+          "srocc_within": 0.6239161392423506,
+          "srocc_within_low": 0.5186294907130367,
+          "srocc_within_high": 0.7135677364680492
+        },
+        {
+          "method": "ensemble_layout_fitted",
+          "label": "Ensemble with Layout, fitted",
+          "accuracy_across": 0.7520879459057292,
+          "accuracy_across_low": 0.712090473404948,
+          "accuracy_across_high": 0.7832894472080733,
+          "accuracy_within": 0.6641075419471432,
+          "accuracy_within_low": 0.5781402919824443,
+          "accuracy_within_high": 0.7487845953421887,
+          "srocc": 0.804845,
+          "srocc_low": 0.751057,
+          "srocc_high": 0.848063,
+          "srocc_within": 0.6024525667776179,
+          "srocc_within_low": 0.4904620217238902,
+          "srocc_within_high": 0.6945986858223879
+        },
+        {
+          "method": "ensemble_colour",
+          "label": "Ensemble with colour",
+          "accuracy_across": 0.732881414688714,
+          "accuracy_across_low": 0.6931834386382918,
+          "accuracy_across_high": 0.7647559628198425,
+          "accuracy_within": 0.6263880606687607,
+          "accuracy_within_low": 0.5402934146723308,
+          "accuracy_within_high": 0.7003279599158124,
+          "srocc": 0.723356,
+          "srocc_low": 0.645379,
+          "srocc_high": 0.78202,
+          "srocc_within": 0.5377194150036609,
+          "srocc_within_low": 0.4368287168473236,
+          "srocc_within_high": 0.6283752442991298
+        }
+      ],
+      "judgments_per_fold": [
+        52.19,
+        13.7
+      ]
+    },
+    "seconds": {
+      "within_and_across_manuscripts": 4.699
+    }
+  }
+}

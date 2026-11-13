@@ -1,0 +1,52 @@
+output: results
+outputs:
+- colour_by_elo_gap
+name: table_colour_by_elo_gap
+dataset: build/dataset
+scores: build/ranking/scores.tsv
+features: build/features/dataset/features.parquet
+layout: build/segment/dataset
+evaluations:
+  line_texture: build/evaluate/line_texture
+  colour: build/evaluate/colour
+  geometry_colour: build/evaluate/geometry_colour
+  geometry: build/evaluate/geometry
+shown:
+- line_texture
+- colour
+- geometry_colour
+labels:
+  line_texture: Line texture
+  colour: Real colour
+  geometry_colour: Geometry with real colour
+  geometry: Geometry
+colours: {}
+comparisons:
+- - geometry_colour
+  - geometry
+families:
+- geometry
+- layout
+pages: {}
+bootstrap: 1000
+seed: 20260629
+image_credit: Page images provided by Manuscriptorium (CC BY-NC 4.0).
+tokens: null
+head: null
+map_pages: []
+map_long_edge: 900
+map_range:
+- 0.05
+- 0.95
+cache: null
+http:
+  contact: null
+  interval: 0.5
+  connections: 2
+  retries: 5
+  backoff: 1.0
+  timeout: 60.0
+levels: {}
+alone: []
+reference_column: ''
+colour_pages: []

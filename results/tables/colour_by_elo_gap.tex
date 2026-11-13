@@ -1,0 +1,28 @@
+\begin{table}[htbp]
+  \centering
+  \caption{Accuracy of pairwise outcome prediction by the absolute difference ($\Delta$) between the two pages' final Elo scores, Spearman's correlation ($\rho$) between the out-of-fold page scores and the Elo scores, and both within manuscripts: the accuracy on the test judgments between two pages of one manuscript, and $\rho$ with each manuscript's mean removed from both scores, over the manuscripts with at least two pages. \emph{Line texture}, the pairwise logistic model on the 38 line-texture features; \emph{Real colour}, the pairwise logistic model on the seven real colour measures, chromatic share, hue classes, hue entropy, saturation, colour by zone, colour across lines and coloured initials (18 columns); \emph{Geometry with real colour}, the pairwise logistic model on the 101 geometric and real colour features; \emph{Geometry}, the pairwise logistic model on the 83 geometric features. \emph{Reference} is one limit, measured for accuracy and for $\rho$: for accuracy, the consistency of the same test judgments with the final Elo scores (the share that agree with them); for $\rho$, its ceiling, the square root of the Elo scores' reliability (their split-half correlation with its Spearman--Brown correction), the most that scores free of the annotation's noise can reach against them. Within manuscripts the Reference for accuracy is the consistency of those judgments; $\rho$ has none. \emph{Added}: what colour adds, \emph{Geometry with real colour} minus \emph{Geometry}, on the same folds, with 95\% intervals from the same resamples for both. Each method is evaluated by 10-fold cross-validation repeated 10 times, each manuscript's pages in one fold; a fold tests the judgments between two of its pages. In brackets, 95\% intervals from 1,000 resamples of the manuscripts.}
+  \label{tab:colour_by_elo_gap}
+  \begin{tabular}{lcccc}
+    \toprule
+    Score $\Delta$ & Reference & Line texture & Real colour & Geometry with real colour \\
+    \midrule
+    $<$100 & 0.611 & 0.525 & 0.479 & 0.533 \\
+    100--200 & 0.797 & 0.573 & 0.481 & 0.624 \\
+    200--300 & 0.915 & 0.731 & 0.515 & 0.774 \\
+    300--400 & 0.909 & 0.752 & 0.551 & 0.857 \\
+    $\geq 400$ & 0.953 & 0.819 & 0.571 & 0.905 \\
+    \midrule
+    Overall & 0.812 [0.782, 0.836] & 0.653 [0.605, 0.686] & 0.514 [0.472, 0.548] & 0.708 [0.663, 0.739] \\
+    \midrule
+    $\rho$ (SROCC) & 0.891 & 0.590 [0.508, 0.656] & 0.138 [0.022, 0.243] & 0.747 [0.665, 0.802] \\
+    \midrule
+    Accuracy within & 0.786 [0.725, 0.858] & 0.556 [0.484, 0.656] & 0.486 [0.419, 0.558] & 0.632 [0.564, 0.713] \\
+    $\rho$ within & -- & 0.340 [0.204, 0.451] & 0.065 [-0.039, 0.169] & 0.532 [0.419, 0.632] \\
+    \midrule
+    Added: accuracy &  &  &  & -0.016 [-0.033, +0.003] \\
+    Added: $\rho$ &  &  &  & -0.005 [-0.028, +0.020] \\
+    Added: accuracy within &  &  &  & -0.027 [-0.058, +0.017] \\
+    Added: $\rho$ within &  &  &  & -0.017 [-0.065, +0.036] \\
+    \bottomrule
+  \end{tabular}
+\end{table}

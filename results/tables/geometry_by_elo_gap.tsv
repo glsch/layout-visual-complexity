@@ -1,4 +1,4 @@
-gap	judgments_per_fold	consistency	consistency_low	consistency_high	geometry	geometry_low	geometry_high	geometry_layout	geometry_layout_low	geometry_layout_high
+gap	judgments_per_fold	reference	reference_low	reference_high	geometry	geometry_low	geometry_high	geometry_layout	geometry_layout_low	geometry_layout_high
 <100	15.820000	0.611330	0.553414	0.674677	0.551481	0.494161	0.620947	0.534263	0.475327	0.605326
 100-200	15.290000	0.796688	0.759575	0.850750	0.626432	0.569416	0.701160	0.634915	0.578927	0.708823
 200-300	12.580000	0.915344	0.893005	0.953155	0.787292	0.725239	0.842047	0.770649	0.711885	0.832937

@@ -1,0 +1,120 @@
+{
+  "command": "report",
+  "started": "2026-11-13T17:11:43+00:00",
+  "ended": "2026-11-13T17:11:45+00:00",
+  "inputs": [
+    {
+      "path": "build/features/dataset/features.parquet",
+      "sha256": "2f79dc1b411ba5cd5e1a7197ee76601032c5e9e23a12cac700a8acbcbc3d6616",
+      "bytes": 748876
+    }
+  ],
+  "outputs": [
+    "results/figures/ink_colour_on_page.svg",
+    "results/figures/ink_colour_on_page.png",
+    "results/figures/ink_colour_on_page.tex",
+    "results/tables/ink_colour_on_page.tsv",
+    "results/tables/ink_colour_on_page.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "ink_colour_on_page"
+    ],
+    "name": "figure_ink_colour_on_page",
+    "dataset": "build/dataset",
+    "scores": "build/ranking/scores.tsv",
+    "features": "build/features/dataset/features.parquet",
+    "layout": "build/segment/dataset",
+    "evaluations": {},
+    "shown": [],
+    "labels": {},
+    "colours": {},
+    "comparisons": [],
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": "",
+    "colour_pages": [
+      "xxiiid157_101v",
+      "xviif31_27r",
+      "vc26_50v"
+    ]
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "5bce467d70f56d47244a34e3281a89aecb0ba97b-dirty",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "ink_colour_on_page": {
+      "pages": [
+        {
+          "page": "xxiiid157_101v",
+          "red": 0.06694391582597962,
+          "gold": 0.0,
+          "green": 0.0,
+          "blue": 0.0
+        },
+        {
+          "page": "xviif31_27r",
+          "red": 0.020058118441375356,
+          "gold": 0.0,
+          "green": 0.0,
+          "blue": 0.0
+        },
+        {
+          "page": "vc26_50v",
+          "red": 0.0025703147520281123,
+          "gold": 0.016372458854373995,
+          "green": 0.0,
+          "blue": 0.009437070184348877
+        }
+      ]
+    },
+    "seconds": {
+      "ink_colour_on_page": 1.632
+    }
+  }
+}

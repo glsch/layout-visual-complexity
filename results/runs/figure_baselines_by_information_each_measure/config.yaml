@@ -26,11 +26,21 @@ evaluations:
   fragmentation: build/evaluate/measures/fragmentation
   chromatic_share: build/evaluate/measures/chromatic_share
   hue_classes: build/evaluate/measures/hue_classes
+  line_texture: build/evaluate/line_texture
+  colour: build/evaluate/colour
+  colour_chromatic_share: build/evaluate/measures/colour_chromatic_share
+  colour_hue_classes: build/evaluate/measures/colour_hue_classes
+  colour_hue_entropy: build/evaluate/measures/colour_hue_entropy
+  colour_saturation: build/evaluate/measures/colour_saturation
+  colour_zones: build/evaluate/measures/colour_zones
+  colour_lines: build/evaluate/measures/colour_lines
+  colour_coloured_initials: build/evaluate/measures/colour_coloured_initials
   geometry: build/evaluate/geometry
   geometry_layout: build/evaluate/geometry_layout
   mean_token: build/evaluate/mean_token
   vit: build/evaluate/vit
   ensemble: build/evaluate/ensemble
+shown: []
 labels:
   trivial: Trivial measures, combined
   ink_coverage: Ink coverage
@@ -51,6 +61,15 @@ labels:
   fragmentation: Fragmentation
   chromatic_share: Chromatic share
   hue_classes: Hue classes
+  line_texture: Line texture as published
+  colour: Real colour, combined
+  colour_chromatic_share: Chromatic share
+  colour_hue_classes: Hue classes
+  colour_hue_entropy: Hue entropy
+  colour_saturation: Saturation
+  colour_zones: Colour by zone
+  colour_lines: Colour across lines
+  colour_coloured_initials: Coloured initials
   geometry: Geometry
   geometry_layout: Geometry with Layout
   mean_token: Linear model on the mean ViT token
@@ -75,6 +94,14 @@ colours:
   fragmentation: ink
   chromatic_share: ink
   hue_classes: ink
+  line_texture: colour
+  colour_chromatic_share: colour
+  colour_hue_classes: colour
+  colour_hue_entropy: colour
+  colour_saturation: colour
+  colour_zones: colour
+  colour_lines: colour
+  colour_coloured_initials: colour
   geometry_layout: geometry
   mean_token: vit
 comparisons: []
@@ -120,6 +147,15 @@ levels:
   fragmentation: Ink
   chromatic_share: Ink
   hue_classes: Ink
+  line_texture: Colour
+  colour: Colour
+  colour_chromatic_share: Colour
+  colour_hue_classes: Colour
+  colour_hue_entropy: Colour
+  colour_saturation: Colour
+  colour_zones: Colour
+  colour_lines: Colour
+  colour_coloured_initials: Colour
   geometry: Layout
   geometry_layout: Layout
   mean_token: Learned
@@ -141,4 +177,12 @@ alone:
 - fragmentation
 - chromatic_share
 - hue_classes
+- colour_chromatic_share
+- colour_hue_classes
+- colour_hue_entropy
+- colour_saturation
+- colour_zones
+- colour_lines
+- colour_coloured_initials
 reference_column: ''
+colour_pages: []

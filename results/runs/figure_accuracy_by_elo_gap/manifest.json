@@ -1,22 +1,37 @@
 {
   "command": "report",
-  "started": "2026-11-13T11:23:41+00:00",
-  "ended": "2026-11-13T11:23:41+00:00",
+  "started": "2026-11-13T17:13:27+00:00",
+  "ended": "2026-11-13T17:13:27+00:00",
   "inputs": [
     {
+      "path": "build/evaluate/colour/by_elo_gap.tsv",
+      "sha256": "4fd2878ef989a83494544a99e3bd2093c5bb4faeb9f577561d667021ec0da92d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/colour/metrics.tsv",
+      "sha256": "4474bdaed432ebd5d8d81b5e8ace7043a0c1bf8f9035626ebd1799fef1c5c3ca",
+      "bytes": 540
+    },
+    {
+      "path": "build/evaluate/colour/manifest.json",
+      "sha256": "48bb15afb001a6aea5439c1b865777f1323442dffae588a855216d4fbdf8eba3",
+      "bytes": 9309
+    },
+    {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
       "sha256": "59782a5158994706e32de5e9cb806a3e99fb1a030f80c9a7e505f8ed1691af21",
       "bytes": 735
     },
     {
       "path": "build/evaluate/geometry/metrics.tsv",
-      "sha256": "952e499c556cb952b604f7a4e1134004d7d669c27edbcbf93bba49b6dd80912a",
-      "bytes": 245
+      "sha256": "a344aa858f054a9270e5ffa67ec7d72015a5ec477faa235a6d3f6e70ebd43ee2",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "e10dbbf350435ee48da864aef8b8c446fdb0cfe3ca7a0a53e99fd93b062a90f8",
-      "bytes": 12338
+      "sha256": "82b635a28f6495a142f834ba87423e6a5ebdb4274e1a742ac34263ae69e104d5",
+      "bytes": 13398
     },
     {
       "path": "build/evaluate/vit/by_elo_gap.tsv",
@@ -40,13 +55,28 @@
     },
     {
       "path": "build/evaluate/ensemble/metrics.tsv",
-      "sha256": "7ba1654cc6a733fb3ce39a679c33b5be3a70722b1c7ca54749b819c1a34f2f20",
-      "bytes": 245
+      "sha256": "57a0f86d3db0acc0fa993a6a52f2aac78316517ea69e83133268efacaee7a3df",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "e345addd74f26d04b4dad649f88c35e0fc24466242fe447a4821a92dc782b1a6",
-      "bytes": 11904
+      "sha256": "0da6dbf3ff9aecfd6da6e824016ba984bb595240fbc733575e4671230919fd91",
+      "bytes": 12963
+    },
+    {
+      "path": "build/evaluate/colour/by_elo_gap.tsv",
+      "sha256": "4fd2878ef989a83494544a99e3bd2093c5bb4faeb9f577561d667021ec0da92d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/colour/metrics.tsv",
+      "sha256": "4474bdaed432ebd5d8d81b5e8ace7043a0c1bf8f9035626ebd1799fef1c5c3ca",
+      "bytes": 540
+    },
+    {
+      "path": "build/evaluate/colour/manifest.json",
+      "sha256": "48bb15afb001a6aea5439c1b865777f1323442dffae588a855216d4fbdf8eba3",
+      "bytes": 9309
     },
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
@@ -55,13 +85,13 @@
     },
     {
       "path": "build/evaluate/geometry/metrics.tsv",
-      "sha256": "952e499c556cb952b604f7a4e1134004d7d669c27edbcbf93bba49b6dd80912a",
-      "bytes": 245
+      "sha256": "a344aa858f054a9270e5ffa67ec7d72015a5ec477faa235a6d3f6e70ebd43ee2",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "e10dbbf350435ee48da864aef8b8c446fdb0cfe3ca7a0a53e99fd93b062a90f8",
-      "bytes": 12338
+      "sha256": "82b635a28f6495a142f834ba87423e6a5ebdb4274e1a742ac34263ae69e104d5",
+      "bytes": 13398
     },
     {
       "path": "build/evaluate/vit/by_elo_gap.tsv",
@@ -85,13 +115,13 @@
     },
     {
       "path": "build/evaluate/ensemble/metrics.tsv",
-      "sha256": "7ba1654cc6a733fb3ce39a679c33b5be3a70722b1c7ca54749b819c1a34f2f20",
-      "bytes": 245
+      "sha256": "57a0f86d3db0acc0fa993a6a52f2aac78316517ea69e83133268efacaee7a3df",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "e345addd74f26d04b4dad649f88c35e0fc24466242fe447a4821a92dc782b1a6",
-      "bytes": 11904
+      "sha256": "0da6dbf3ff9aecfd6da6e824016ba984bb595240fbc733575e4671230919fd91",
+      "bytes": 12963
     }
   ],
   "outputs": [
@@ -112,11 +142,14 @@
     "features": "build/features/dataset/features.parquet",
     "layout": "build/segment/dataset",
     "evaluations": {
+      "colour": "build/evaluate/colour",
       "geometry": "build/evaluate/geometry",
       "vit": "build/evaluate/vit",
       "ensemble": "build/evaluate/ensemble"
     },
+    "shown": [],
     "labels": {
+      "colour": "Colour",
       "geometry": "Geometry",
       "vit": "ViT",
       "ensemble": "Ensemble"
@@ -150,7 +183,8 @@
     },
     "levels": {},
     "alone": [],
-    "reference_column": ""
+    "reference_column": "",
+    "colour_pages": []
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -172,7 +206,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "e61d0ed1c440faaa5a5562d508988603b062b92f-dirty",
+  "commit": "9a9424506c9c11919444c98e781640d808aed810-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "accuracy_by_elo_gap": {
@@ -180,9 +214,12 @@
         {
           "gap": "<100",
           "judgments_per_fold": 15.82,
-          "consistency": 0.61133,
-          "consistency_low": 0.553414,
-          "consistency_high": 0.674677,
+          "reference": 0.61133,
+          "reference_low": 0.553414,
+          "reference_high": 0.674677,
+          "colour": 0.478716,
+          "colour_low": 0.412267,
+          "colour_high": 0.520253,
           "geometry": 0.551481,
           "geometry_low": 0.494161,
           "geometry_high": 0.620947,
@@ -196,9 +233,12 @@
         {
           "gap": "100-200",
           "judgments_per_fold": 15.29,
-          "consistency": 0.796688,
-          "consistency_low": 0.759575,
-          "consistency_high": 0.85075,
+          "reference": 0.796688,
+          "reference_low": 0.759575,
+          "reference_high": 0.85075,
+          "colour": 0.48145,
+          "colour_low": 0.407406,
+          "colour_high": 0.544452,
           "geometry": 0.626432,
           "geometry_low": 0.569416,
           "geometry_high": 0.70116,
@@ -212,9 +252,12 @@
         {
           "gap": "200-300",
           "judgments_per_fold": 12.58,
-          "consistency": 0.915344,
-          "consistency_low": 0.893005,
-          "consistency_high": 0.953155,
+          "reference": 0.915344,
+          "reference_low": 0.893005,
+          "reference_high": 0.953155,
+          "colour": 0.514725,
+          "colour_low": 0.447672,
+          "colour_high": 0.580243,
           "geometry": 0.787292,
           "geometry_low": 0.725239,
           "geometry_high": 0.842047,
@@ -228,9 +271,12 @@
         {
           "gap": "300-400",
           "judgments_per_fold": 9.36,
-          "consistency": 0.908824,
-          "consistency_low": 0.837633,
-          "consistency_high": 0.948723,
+          "reference": 0.908824,
+          "reference_low": 0.837633,
+          "reference_high": 0.948723,
+          "colour": 0.551152,
+          "colour_low": 0.464406,
+          "colour_high": 0.640904,
           "geometry": 0.853169,
           "geometry_low": 0.751339,
           "geometry_high": 0.906698,
@@ -244,9 +290,12 @@
         {
           "gap": ">=400",
           "judgments_per_fold": 12.84,
-          "consistency": 0.953114,
-          "consistency_low": 0.934285,
-          "consistency_high": 0.979258,
+          "reference": 0.953114,
+          "reference_low": 0.934285,
+          "reference_high": 0.979258,
+          "colour": 0.570507,
+          "colour_low": 0.499097,
+          "colour_high": 0.671401,
           "geometry": 0.940802,
           "geometry_low": 0.91933,
           "geometry_high": 0.972755,
@@ -260,9 +309,12 @@
         {
           "gap": "overall",
           "judgments_per_fold": 65.89,
-          "consistency": 0.812007,
-          "consistency_low": 0.782028,
-          "consistency_high": 0.836214,
+          "reference": 0.812007,
+          "reference_low": 0.782028,
+          "reference_high": 0.836214,
+          "colour": 0.514454,
+          "colour_low": 0.471944,
+          "colour_high": 0.548213,
           "geometry": 0.723675,
           "geometry_low": 0.679826,
           "geometry_high": 0.752685,
@@ -276,9 +328,12 @@
         {
           "gap": "srocc",
           "judgments_per_fold": NaN,
-          "consistency": 0.890535,
-          "consistency_low": NaN,
-          "consistency_high": NaN,
+          "reference": 0.890535,
+          "reference_low": NaN,
+          "reference_high": NaN,
+          "colour": 0.138347,
+          "colour_low": 0.02197,
+          "colour_high": 0.24259,
           "geometry": 0.751235,
           "geometry_low": 0.677634,
           "geometry_high": 0.803791,
@@ -292,7 +347,7 @@
       ]
     },
     "seconds": {
-      "accuracy_by_elo_gap": 0.37
+      "accuracy_by_elo_gap": 0.413
     }
   }
 }

@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T11:23:30+00:00",
-  "ended": "2026-11-13T11:23:32+00:00",
+  "started": "2026-11-13T17:08:35+00:00",
+  "ended": "2026-11-13T17:08:37+00:00",
   "inputs": [],
   "outputs": [
     "results/figures/geometry_features_on_page.svg",
@@ -19,6 +19,7 @@
     "features": "build/features/dataset/features.parquet",
     "layout": "build/segment/dataset",
     "evaluations": {},
+    "shown": [],
     "labels": {},
     "colours": {},
     "comparisons": [],
@@ -59,7 +60,8 @@
     },
     "levels": {},
     "alone": [],
-    "reference_column": ""
+    "reference_column": "",
+    "colour_pages": []
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -81,7 +83,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "e61d0ed1c440faaa5a5562d508988603b062b92f-dirty",
+  "commit": "2884e8cca226791ca6eb1b845e90909c77c5ebe6-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "geometry_features_on_page": {
@@ -98,7 +100,7 @@
       }
     },
     "seconds": {
-      "geometry_features_on_page": 1.989
+      "geometry_features_on_page": 1.977
     }
   }
 }

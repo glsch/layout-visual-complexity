@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T11:23:11+00:00",
-  "ended": "2026-11-13T11:23:11+00:00",
+  "started": "2026-11-13T17:08:21+00:00",
+  "ended": "2026-11-13T17:08:21+00:00",
   "inputs": [
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
@@ -10,13 +10,13 @@
     },
     {
       "path": "build/evaluate/geometry/metrics.tsv",
-      "sha256": "952e499c556cb952b604f7a4e1134004d7d669c27edbcbf93bba49b6dd80912a",
-      "bytes": 245
+      "sha256": "a344aa858f054a9270e5ffa67ec7d72015a5ec477faa235a6d3f6e70ebd43ee2",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "e10dbbf350435ee48da864aef8b8c446fdb0cfe3ca7a0a53e99fd93b062a90f8",
-      "bytes": 12338
+      "sha256": "82b635a28f6495a142f834ba87423e6a5ebdb4274e1a742ac34263ae69e104d5",
+      "bytes": 13398
     },
     {
       "path": "build/evaluate/geometry_layout/by_elo_gap.tsv",
@@ -25,13 +25,13 @@
     },
     {
       "path": "build/evaluate/geometry_layout/metrics.tsv",
-      "sha256": "4d6088e119c3d26162d8dbf891317d41d65eb55024ef219d9dd7c980e7abc2ee",
-      "bytes": 245
+      "sha256": "9eb4d3e88a7b115464d5dc0ac93c0d895591981cdd9b31185c9e6f6259b3c485",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/geometry_layout/manifest.json",
-      "sha256": "12b5d11dc91e1cb61ac65bf327d5d3215d0742362b24a0a0f8795c5abb52073d",
-      "bytes": 9532
+      "sha256": "cc9ecc660070e06328d7194414661adf27de3b7ebf74a3fb72e40be4d3bde8b8",
+      "bytes": 10593
     }
   ],
   "outputs": [
@@ -52,6 +52,7 @@
       "geometry": "build/evaluate/geometry",
       "geometry_layout": "build/evaluate/geometry_layout"
     },
+    "shown": [],
     "labels": {
       "geometry": "Geometry",
       "geometry_layout": "Geometry + Layout"
@@ -85,7 +86,8 @@
     },
     "levels": {},
     "alone": [],
-    "reference_column": ""
+    "reference_column": "",
+    "colour_pages": []
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -107,7 +109,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "e61d0ed1c440faaa5a5562d508988603b062b92f-dirty",
+  "commit": "2884e8cca226791ca6eb1b845e90909c77c5ebe6-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "geometry_by_elo_gap": {
@@ -115,9 +117,9 @@
         {
           "gap": "<100",
           "judgments_per_fold": 15.82,
-          "consistency": 0.61133,
-          "consistency_low": 0.553414,
-          "consistency_high": 0.674677,
+          "reference": 0.61133,
+          "reference_low": 0.553414,
+          "reference_high": 0.674677,
           "geometry": 0.551481,
           "geometry_low": 0.494161,
           "geometry_high": 0.620947,
@@ -128,9 +130,9 @@
         {
           "gap": "100-200",
           "judgments_per_fold": 15.29,
-          "consistency": 0.796688,
-          "consistency_low": 0.759575,
-          "consistency_high": 0.85075,
+          "reference": 0.796688,
+          "reference_low": 0.759575,
+          "reference_high": 0.85075,
           "geometry": 0.626432,
           "geometry_low": 0.569416,
           "geometry_high": 0.70116,
@@ -141,9 +143,9 @@
         {
           "gap": "200-300",
           "judgments_per_fold": 12.58,
-          "consistency": 0.915344,
-          "consistency_low": 0.893005,
-          "consistency_high": 0.953155,
+          "reference": 0.915344,
+          "reference_low": 0.893005,
+          "reference_high": 0.953155,
           "geometry": 0.787292,
           "geometry_low": 0.725239,
           "geometry_high": 0.842047,
@@ -154,9 +156,9 @@
         {
           "gap": "300-400",
           "judgments_per_fold": 9.36,
-          "consistency": 0.908824,
-          "consistency_low": 0.837633,
-          "consistency_high": 0.948723,
+          "reference": 0.908824,
+          "reference_low": 0.837633,
+          "reference_high": 0.948723,
           "geometry": 0.853169,
           "geometry_low": 0.751339,
           "geometry_high": 0.906698,
@@ -167,9 +169,9 @@
         {
           "gap": ">=400",
           "judgments_per_fold": 12.84,
-          "consistency": 0.953114,
-          "consistency_low": 0.934285,
-          "consistency_high": 0.979258,
+          "reference": 0.953114,
+          "reference_low": 0.934285,
+          "reference_high": 0.979258,
           "geometry": 0.940802,
           "geometry_low": 0.91933,
           "geometry_high": 0.972755,
@@ -180,9 +182,9 @@
         {
           "gap": "overall",
           "judgments_per_fold": 65.89,
-          "consistency": 0.812007,
-          "consistency_low": 0.782028,
-          "consistency_high": 0.836214,
+          "reference": 0.812007,
+          "reference_low": 0.782028,
+          "reference_high": 0.836214,
           "geometry": 0.723675,
           "geometry_low": 0.679826,
           "geometry_high": 0.752685,
@@ -193,9 +195,9 @@
         {
           "gap": "srocc",
           "judgments_per_fold": NaN,
-          "consistency": 0.890535,
-          "consistency_low": NaN,
-          "consistency_high": NaN,
+          "reference": 0.890535,
+          "reference_low": NaN,
+          "reference_high": NaN,
           "geometry": 0.751235,
           "geometry_low": 0.677634,
           "geometry_high": 0.803791,

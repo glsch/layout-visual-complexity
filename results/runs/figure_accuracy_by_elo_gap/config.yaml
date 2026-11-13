@@ -7,10 +7,13 @@ scores: build/ranking/scores.tsv
 features: build/features/dataset/features.parquet
 layout: build/segment/dataset
 evaluations:
+  colour: build/evaluate/colour
   geometry: build/evaluate/geometry
   vit: build/evaluate/vit
   ensemble: build/evaluate/ensemble
+shown: []
 labels:
+  colour: Colour
   geometry: Geometry
   vit: ViT
   ensemble: Ensemble
@@ -41,3 +44,4 @@ http:
 levels: {}
 alone: []
 reference_column: ''
+colour_pages: []

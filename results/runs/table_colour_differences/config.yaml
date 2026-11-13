@@ -1,0 +1,57 @@
+output: results
+outputs:
+- colour_differences
+name: table_colour_differences
+dataset: build/dataset
+scores: build/ranking/scores.tsv
+features: build/features/dataset/features.parquet
+layout: build/segment/dataset
+evaluations:
+  geometry_line_texture: build/evaluate/geometry_line_texture
+  geometry_colour: build/evaluate/geometry_colour
+  geometry: build/evaluate/geometry
+  ensemble_colour: build/evaluate/ensemble_colour
+  ensemble: build/evaluate/ensemble
+shown: []
+labels:
+  geometry_line_texture: Geometry with line texture
+  geometry_colour: Geometry with real colour
+  geometry: Geometry
+  ensemble_colour: Ensemble with colour
+  ensemble: Ensemble
+  vit: ViT
+  colour: Real colour
+colours: {}
+comparisons:
+- - geometry_line_texture
+  - geometry
+- - geometry_colour
+  - geometry
+- - ensemble_colour
+  - ensemble
+families:
+- geometry
+- layout
+pages: {}
+bootstrap: 1000
+seed: 20260629
+image_credit: Page images provided by Manuscriptorium (CC BY-NC 4.0).
+tokens: null
+head: null
+map_pages: []
+map_long_edge: 900
+map_range:
+- 0.05
+- 0.95
+cache: null
+http:
+  contact: null
+  interval: 0.5
+  connections: 2
+  retries: 5
+  backoff: 1.0
+  timeout: 60.0
+levels: {}
+alone: []
+reference_column: ''
+colour_pages: []

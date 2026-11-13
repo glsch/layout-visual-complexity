@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T11:24:42+00:00",
-  "ended": "2026-11-13T11:24:42+00:00",
+  "started": "2026-11-13T17:10:21+00:00",
+  "ended": "2026-11-13T17:10:21+00:00",
   "inputs": [
     {
       "path": "build/evaluate/measures/ink_coverage/by_elo_gap.tsv",
@@ -10,13 +10,13 @@
     },
     {
       "path": "build/evaluate/measures/ink_coverage/metrics.tsv",
-      "sha256": "4e32664a40aa44c3063f506e91391feec2a9529d6f3cb314e3215d121dac5255",
-      "bytes": 246
+      "sha256": "a4e4f09ae5f19cf7d974c2c4f0b3dce8ad965e6e4b457070c30fa6f46782553f",
+      "bytes": 541
     },
     {
       "path": "build/evaluate/measures/ink_coverage/manifest.json",
-      "sha256": "079a28b4cc0f9c58cd45953587ddf5210895f3d6407976d7f68cd5ced83bafa4",
-      "bytes": 7617
+      "sha256": "090d0e7ac84c5d33ec678641cbeb127bbc848864b18bf8527e8448396848a36a",
+      "bytes": 8680
     },
     {
       "path": "build/evaluate/measures/text_lines/by_elo_gap.tsv",
@@ -25,13 +25,13 @@
     },
     {
       "path": "build/evaluate/measures/text_lines/metrics.tsv",
-      "sha256": "d514538aabc1b227383775b90dbdf8a8933619c8d7f3cf2a36b41e013398b921",
-      "bytes": 245
+      "sha256": "4e07e9edbcf31b83e40cadb6de7e14075aee42e3760ae8af15fe370b6589ea46",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/measures/text_lines/manifest.json",
-      "sha256": "0432603480d6cc50b3ff0f3ab6e1f53f2b9b82293d68fc9cd404a5895dc0bdf0",
-      "bytes": 7587
+      "sha256": "550c930500ad79b1e0292014ca91e2437f9289b00e898c728c2496e74d14bfdc",
+      "bytes": 8646
     },
     {
       "path": "build/evaluate/generic/by_elo_gap.tsv",
@@ -40,28 +40,28 @@
     },
     {
       "path": "build/evaluate/generic/metrics.tsv",
-      "sha256": "d412091055073d939a5d46f1ae07ab61e2380aabc70dd1019e298c10155d777e",
-      "bytes": 245
+      "sha256": "9dec3204d402b5ead7c7945c1d90e469ad3facc6745e278845dc41e62440231e",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/generic/manifest.json",
-      "sha256": "fea578471c9a9bdd3143d7ffb7aefdee3b310ee3e86e9f24dd4f69be0b63a3df",
-      "bytes": 8305
+      "sha256": "ae08244b164605f0bb45cecc669bc150311722f829109152dfd514639dcb3509",
+      "bytes": 9366
     },
     {
       "path": "build/evaluate/kyle_davidson/by_elo_gap.tsv",
-      "sha256": "e52e33a230b1f243c2d09155571462dae44465c60c563f6445cddf219e36e4d0",
+      "sha256": "9354b3f685c877a95aad94f10ed37e627017a39c68f9fc4e0d3154c0020dfcc1",
       "bytes": 735
     },
     {
       "path": "build/evaluate/kyle_davidson/metrics.tsv",
-      "sha256": "98ce12e7f91c3db40431b47e7bc2bd60e6e762e0772a66dacf1a16af9aad163d",
-      "bytes": 245
+      "sha256": "c4f932b6930fca03ce5fdefae76f7e63a406a9d6273f67f4205a19c9ea39f1c0",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/kyle_davidson/manifest.json",
-      "sha256": "d5e5c00587f9c354c8fc32fa8651dfcdae911c6aa1d9e481611cd87c5598dbeb",
-      "bytes": 7764
+      "sha256": "8f32637ed768597d8634cd4f57d0ccf41df0051c0ab8919def96d3d2168af452",
+      "bytes": 8823
     },
     {
       "path": "build/evaluate/ink_distribution/by_elo_gap.tsv",
@@ -70,13 +70,13 @@
     },
     {
       "path": "build/evaluate/ink_distribution/metrics.tsv",
-      "sha256": "4b0563a465398215ea512221b18905889d8ba3fc06ff92cc46bfc2d4fad33633",
-      "bytes": 245
+      "sha256": "391eeac5684e75584afa9e7000891329cf729c18ea3ae1d0557e10552327cc27",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/ink_distribution/manifest.json",
-      "sha256": "cd362a5afd51f14c6c1a4e6812c86d8dff1dfc72d9fa6eea9ef0e63ded3d8aa9",
-      "bytes": 8572
+      "sha256": "8cf429f915cc502a0ff9537ee2dfd72c9eb90abe7bbb851d89263302414636c9",
+      "bytes": 9633
     }
   ],
   "outputs": [
@@ -100,6 +100,7 @@
       "kyle_davidson": "build/evaluate/kyle_davidson",
       "ink_distribution": "build/evaluate/ink_distribution"
     },
+    "shown": [],
     "labels": {
       "ink_coverage": "Ink coverage",
       "text_lines": "Text lines",
@@ -136,7 +137,8 @@
     },
     "levels": {},
     "alone": [],
-    "reference_column": ""
+    "reference_column": "",
+    "colour_pages": []
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -158,7 +160,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "e61d0ed1c440faaa5a5562d508988603b062b92f-dirty",
+  "commit": "2884e8cca226791ca6eb1b845e90909c77c5ebe6-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "baselines_by_elo_gap": {
@@ -166,9 +168,9 @@
         {
           "gap": "<100",
           "judgments_per_fold": 15.82,
-          "consistency": 0.61133,
-          "consistency_low": 0.553414,
-          "consistency_high": 0.674677,
+          "reference": 0.61133,
+          "reference_low": 0.553414,
+          "reference_high": 0.674677,
           "ink_coverage": 0.49376,
           "ink_coverage_low": 0.435577,
           "ink_coverage_high": 0.557996,
@@ -178,9 +180,9 @@
           "generic": 0.499322,
           "generic_low": 0.443232,
           "generic_high": 0.566951,
-          "kyle_davidson": 0.482309,
-          "kyle_davidson_low": 0.425034,
-          "kyle_davidson_high": 0.543915,
+          "kyle_davidson": 0.482342,
+          "kyle_davidson_low": 0.42395,
+          "kyle_davidson_high": 0.541685,
           "ink_distribution": 0.482624,
           "ink_distribution_low": 0.422533,
           "ink_distribution_high": 0.538736
@@ -188,9 +190,9 @@
         {
           "gap": "100-200",
           "judgments_per_fold": 15.29,
-          "consistency": 0.796688,
-          "consistency_low": 0.759575,
-          "consistency_high": 0.85075,
+          "reference": 0.796688,
+          "reference_low": 0.759575,
+          "reference_high": 0.85075,
           "ink_coverage": 0.514368,
           "ink_coverage_low": 0.445986,
           "ink_coverage_high": 0.573354,
@@ -200,9 +202,9 @@
           "generic": 0.544223,
           "generic_low": 0.479486,
           "generic_high": 0.607265,
-          "kyle_davidson": 0.552765,
-          "kyle_davidson_low": 0.497209,
-          "kyle_davidson_high": 0.621323,
+          "kyle_davidson": 0.553711,
+          "kyle_davidson_low": 0.497036,
+          "kyle_davidson_high": 0.618795,
           "ink_distribution": 0.564368,
           "ink_distribution_low": 0.499409,
           "ink_distribution_high": 0.650711
@@ -210,9 +212,9 @@
         {
           "gap": "200-300",
           "judgments_per_fold": 12.58,
-          "consistency": 0.915344,
-          "consistency_low": 0.893005,
-          "consistency_high": 0.953155,
+          "reference": 0.915344,
+          "reference_low": 0.893005,
+          "reference_high": 0.953155,
           "ink_coverage": 0.525306,
           "ink_coverage_low": 0.437492,
           "ink_coverage_high": 0.616067,
@@ -222,9 +224,9 @@
           "generic": 0.631,
           "generic_low": 0.565346,
           "generic_high": 0.715164,
-          "kyle_davidson": 0.590634,
-          "kyle_davidson_low": 0.510282,
-          "kyle_davidson_high": 0.663896,
+          "kyle_davidson": 0.591834,
+          "kyle_davidson_low": 0.509955,
+          "kyle_davidson_high": 0.664402,
           "ink_distribution": 0.671147,
           "ink_distribution_low": 0.602007,
           "ink_distribution_high": 0.746427
@@ -232,9 +234,9 @@
         {
           "gap": "300-400",
           "judgments_per_fold": 9.36,
-          "consistency": 0.908824,
-          "consistency_low": 0.837633,
-          "consistency_high": 0.948723,
+          "reference": 0.908824,
+          "reference_low": 0.837633,
+          "reference_high": 0.948723,
           "ink_coverage": 0.539387,
           "ink_coverage_low": 0.444538,
           "ink_coverage_high": 0.640925,
@@ -244,9 +246,9 @@
           "generic": 0.666867,
           "generic_low": 0.601772,
           "generic_high": 0.764838,
-          "kyle_davidson": 0.670205,
-          "kyle_davidson_low": 0.573674,
-          "kyle_davidson_high": 0.769876,
+          "kyle_davidson": 0.663538,
+          "kyle_davidson_low": 0.563635,
+          "kyle_davidson_high": 0.766497,
           "ink_distribution": 0.792389,
           "ink_distribution_low": 0.671478,
           "ink_distribution_high": 0.853716
@@ -254,9 +256,9 @@
         {
           "gap": ">=400",
           "judgments_per_fold": 12.84,
-          "consistency": 0.953114,
-          "consistency_low": 0.934285,
-          "consistency_high": 0.979258,
+          "reference": 0.953114,
+          "reference_low": 0.934285,
+          "reference_high": 0.979258,
           "ink_coverage": 0.620276,
           "ink_coverage_low": 0.474884,
           "ink_coverage_high": 0.700002,
@@ -266,9 +268,9 @@
           "generic": 0.786911,
           "generic_low": 0.665339,
           "generic_high": 0.848233,
-          "kyle_davidson": 0.762611,
-          "kyle_davidson_low": 0.648809,
-          "kyle_davidson_high": 0.831789,
+          "kyle_davidson": 0.771449,
+          "kyle_davidson_low": 0.655858,
+          "kyle_davidson_high": 0.83288,
           "ink_distribution": 0.823593,
           "ink_distribution_low": 0.72413,
           "ink_distribution_high": 0.898261
@@ -276,9 +278,9 @@
         {
           "gap": "overall",
           "judgments_per_fold": 65.89,
-          "consistency": 0.812007,
-          "consistency_low": 0.782028,
-          "consistency_high": 0.836214,
+          "reference": 0.812007,
+          "reference_low": 0.782028,
+          "reference_high": 0.836214,
           "ink_coverage": 0.539712,
           "ink_coverage_low": 0.485709,
           "ink_coverage_high": 0.578079,
@@ -288,9 +290,9 @@
           "generic": 0.609157,
           "generic_low": 0.563068,
           "generic_high": 0.645085,
-          "kyle_davidson": 0.592511,
-          "kyle_davidson_low": 0.543976,
-          "kyle_davidson_high": 0.627247,
+          "kyle_davidson": 0.59264,
+          "kyle_davidson_low": 0.54323,
+          "kyle_davidson_high": 0.626367,
           "ink_distribution": 0.634363,
           "ink_distribution_low": 0.587911,
           "ink_distribution_high": 0.670053
@@ -298,9 +300,9 @@
         {
           "gap": "srocc",
           "judgments_per_fold": NaN,
-          "consistency": 0.890535,
-          "consistency_low": NaN,
-          "consistency_high": NaN,
+          "reference": 0.890535,
+          "reference_low": NaN,
+          "reference_high": NaN,
           "ink_coverage": 0.086578,
           "ink_coverage_low": -0.045256,
           "ink_coverage_high": 0.214162,
@@ -310,9 +312,9 @@
           "generic": 0.392507,
           "generic_low": 0.269048,
           "generic_high": 0.499128,
-          "kyle_davidson": 0.432469,
-          "kyle_davidson_low": 0.311021,
-          "kyle_davidson_high": 0.531871,
+          "kyle_davidson": 0.431091,
+          "kyle_davidson_low": 0.309377,
+          "kyle_davidson_high": 0.528363,
           "ink_distribution": 0.548576,
           "ink_distribution_low": 0.434793,
           "ink_distribution_high": 0.628215
@@ -320,7 +322,7 @@
       ]
     },
     "seconds": {
-      "baselines_by_elo_gap": 0.015
+      "baselines_by_elo_gap": 0.018
     }
   }
 }

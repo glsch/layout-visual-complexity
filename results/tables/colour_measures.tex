@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+  \centering
+  \caption{The real colour measures: what each measures, its parameters and its source. They work on the ink layer of the baseline measures (the folio crop at a fixed long edge, its lightness flattened, Sauvola's threshold, specks removed), each linear RGB channel divided by the paper's so that the parchment is neutral, then in CIELAB: an ink pixel's chroma is the length of its $(a^*, b^*)$ and its hue the angle. Zones and lines are the segmentation's, mapped onto the crop. The ink within stamps is left out: the libraries' stamps are modern.}
+  \label{tab:colour_measures}
+  \begin{tabular}{lp{0.36\linewidth}p{0.24\linewidth}p{0.14\linewidth}}
+    \toprule
+    Measure & Definition & Parameters & Source \\
+    \midrule
+    \emph{Colour} &  &  &  \\
+    Chromatic share & Share of the ink whose chroma, the parchment's colour made neutral, reaches the threshold. & chroma at least 25 & this study \\
+    Hue classes & Shares of the ink in the chromatic hue classes, and the number of classes present. & red 330°--60°, gold 60°--110°, green 110°--200°, blue 200°--330°; present from 1 square line height & this study \\
+    Hue entropy & Entropy of the chromatic ink's hue angles; 0 without chromatic ink. & 24 bins of 15° & this study \\
+    Saturation & Median chroma of the chromatic ink, and its interquartile range. & CIELAB chroma, the parchment made neutral & this study \\
+    Colour by zone & Chromatic share of the ink within each kind of zone: main text, margins, numbering and running titles, decoration, heading lines, and the rest of the folio. & the regions model's zones and heading lines & this study \\
+    Colour across lines & Share of the text lines whose ink is mostly chromatic (rubric lines), and the standard deviation of the lines' chromatic shares. & a rubric line at least 50\% chromatic & this study \\
+    Coloured initials & Number of drop capitals and graphic zones whose ink is mostly chromatic. & at least 50\% of the zone's ink chromatic & this study \\
+    \bottomrule
+  \end{tabular}
+\end{table}

@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T11:23:53+00:00",
-  "ended": "2026-11-13T11:23:53+00:00",
+  "started": "2026-11-13T17:09:06+00:00",
+  "ended": "2026-11-13T17:09:07+00:00",
   "inputs": [
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
@@ -10,13 +10,13 @@
     },
     {
       "path": "build/evaluate/geometry/metrics.tsv",
-      "sha256": "952e499c556cb952b604f7a4e1134004d7d669c27edbcbf93bba49b6dd80912a",
-      "bytes": 245
+      "sha256": "a344aa858f054a9270e5ffa67ec7d72015a5ec477faa235a6d3f6e70ebd43ee2",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "e10dbbf350435ee48da864aef8b8c446fdb0cfe3ca7a0a53e99fd93b062a90f8",
-      "bytes": 12338
+      "sha256": "82b635a28f6495a142f834ba87423e6a5ebdb4274e1a742ac34263ae69e104d5",
+      "bytes": 13398
     },
     {
       "path": "build/evaluate/vit/by_elo_gap.tsv",
@@ -40,13 +40,13 @@
     },
     {
       "path": "build/evaluate/ensemble/metrics.tsv",
-      "sha256": "7ba1654cc6a733fb3ce39a679c33b5be3a70722b1c7ca54749b819c1a34f2f20",
-      "bytes": 245
+      "sha256": "57a0f86d3db0acc0fa993a6a52f2aac78316517ea69e83133268efacaee7a3df",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "e345addd74f26d04b4dad649f88c35e0fc24466242fe447a4821a92dc782b1a6",
-      "bytes": 11904
+      "sha256": "0da6dbf3ff9aecfd6da6e824016ba984bb595240fbc733575e4671230919fd91",
+      "bytes": 12963
     },
     {
       "path": "build/evaluate/geometry/learning_curve.tsv",
@@ -101,6 +101,7 @@
       "vit": "build/evaluate/vit",
       "ensemble": "build/evaluate/ensemble"
     },
+    "shown": [],
     "labels": {
       "geometry": "Geometry",
       "vit": "ViT",
@@ -135,7 +136,8 @@
     },
     "levels": {},
     "alone": [],
-    "reference_column": ""
+    "reference_column": "",
+    "colour_pages": []
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -157,7 +159,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "e61d0ed1c440faaa5a5562d508988603b062b92f-dirty",
+  "commit": "2884e8cca226791ca6eb1b845e90909c77c5ebe6-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "learning_curves_and_calibration": {
@@ -525,7 +527,7 @@
       ]
     },
     "seconds": {
-      "learning_curves_and_calibration": 0.4
+      "learning_curves_and_calibration": 0.453
     }
   }
 }
