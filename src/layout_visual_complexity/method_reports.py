@@ -1,11 +1,14 @@
 """The tables and figures of the methods, for `lvc report`: any number of evaluations (`lvc evaluate` folders) set side
 by side, each defined in the captions from what its run recorded.
 
-- `methods_by_elo_gap` (and `ensembles_by_elo_gap`, the same for the appendix's ensembles): accuracy by Elo gap beside
-  the consistency reference, with SROCC beside its ceiling; intervals in the Overall and ρ rows (every row's in the
-  TSV).
+- `methods_by_elo_gap` (and `ensembles_by_elo_gap`, the same for the appendix's ensembles): accuracy by Elo gap and
+  SROCC beside the Reference (for accuracy, the consistency of the same test judgments with the final Elo scores; for
+  ρ, its ceiling); intervals in the Overall and ρ rows (every row's in the TSV).
 - `accuracy_by_elo_gap`: the same as a figure, and as a table with every row's interval.
-- `paired_differences`: the differences between pairs of methods, in accuracy and SROCC, on the same resamples.
+- `paired_differences`: the differences between pairs of methods, in accuracy and SROCC, overall and within
+  manuscripts, on the same resamples.
+- `within_and_across_manuscripts`: every method's accuracy on the test judgments within one manuscript and across
+  manuscripts, and its ρ overall and within manuscripts.
 - `learning_curves_and_calibration`: accuracy as the training judgments and images grow, and calibration.
 - `local_complexity_maps`: the local ViT head's patch scores over pages.
 """
@@ -19,7 +22,7 @@ import numpy as np
 import pandas as pd
 
 from layout_visual_complexity.evaluate import read_elo, read_evaluation
-from layout_visual_complexity.evaluation.protocol import ProtocolSettings, paired_difference
+from layout_visual_complexity.evaluation.protocol import ProtocolSettings, paired_difference, within_and_across
 from layout_visual_complexity.judgment_reports import Written, decimal
 from layout_visual_complexity.outputs import LatexTable, escape, gap_latex, save_figure, write_table
 from layout_visual_complexity.ranking.dataset import read_dataset
@@ -36,10 +39,12 @@ ADJECTIVES = {
     "generic": "generic image",
     "kyle_davidson": "Kyle--Davidson",
     "ink": "ink distribution",
+    "line_texture": "line-texture",
+    "colour": "real colour",
 }
 NUMBERS = ("no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten")
 # Families described by their measures rather than by their number of features.
-BY_MEASURE = {"trivial", "generic", "kyle_davidson", "ink", "mean_token"}
+BY_MEASURE = {"trivial", "generic", "kyle_davidson", "ink", "mean_token", "colour"}
 KIND_COLOURS = {"features": "geometry", "tokens": "vit", "ensemble": "ensemble"}
 
 
@@ -52,12 +57,18 @@ def needed(settings: Any, name: str, output: str) -> Any:
 
 class Evaluations:
     """The evaluations a table or figure sets side by side: each one's tables, metrics and run record, its label and
-    its colour."""
+    its colour; those the settings name as `shown` are its columns (all by default), the others serve comparisons."""
 
     def __init__(self, settings: Any, run: Run, output: str) -> None:
-        self.settings, self.run = settings, run
+        self.settings, self.run, self.output = settings, run, output
         self.members: dict[str, Path] = {}
         self.folders = {key: Path(path) for key, path in needed(settings, "evaluations", output).items()}
+        unknown = [key for key in getattr(settings, "shown", None) or [] if key not in self.folders]
+        if unknown:
+            raise ValueError(f"{output}: {', '.join(unknown)} isn't among the evaluations")
+        self.splits: dict[str, dict[str, float]] = {}
+        self.loaded: dict[str, Any] = {}
+        self.inputs: tuple | None = None
         self.by_gap, self.metrics, self.manifests = {}, {}, {}
         for key, folder in self.folders.items():
             for name in ("by_elo_gap.tsv", "metrics.tsv", "manifest.json"):
@@ -72,7 +83,40 @@ class Evaluations:
 
     @property
     def keys(self) -> list[str]:
-        return list(self.folders)
+        """The evaluations shown, in the order given."""
+        return list(getattr(self.settings, "shown", None) or self.folders)
+
+    def ceiling(self) -> float:
+        """The ceiling for SROCC, the Reference's ρ."""
+        return float(next(iter(self.metrics.values())).at["srocc_ceiling", "value"])
+
+    def judged(self) -> tuple[pd.DataFrame, pd.Series, pd.Series, ProtocolSettings]:
+        """The judgments, the final Elo scores, each page's manuscript and the protocol's resamples, as the
+        evaluations used them."""
+        if self.inputs is None:
+            dataset = read_dataset(needed(self.settings, "dataset", self.output))
+            elo = read_elo(self.run.read(Path(needed(self.settings, "scores", self.output))))
+            configuration = self.configuration()
+            protocol = ProtocolSettings(bootstrap=int(configuration["bootstrap"]), seed=int(configuration["seed"]))
+            manuscripts = dataset.images.set_index("image")["manuscript"]
+            self.inputs = (dataset.judgments.reset_index(drop=True), elo, manuscripts, protocol)
+        return self.inputs
+
+    def evaluation(self, key: str) -> Any:
+        """An evaluation read back from its hits and scores."""
+        if key not in self.loaded:
+            for name in ("hits.tsv", "scores.tsv"):
+                self.run.read(self.folders[key] / name)
+            self.loaded[key] = read_evaluation(self.folders[key], self.judged()[0])
+        return self.loaded[key]
+
+    def split(self, key: str) -> dict[str, float]:
+        """The evaluation's accuracy within and across manuscripts and its ρ within manuscripts, from its hits and
+        scores (`protocol.within_and_across`)."""
+        if key not in self.splits:
+            judgments, elo, manuscripts, protocol = self.judged()
+            self.splits[key] = within_and_across(self.evaluation(key), judgments, elo, manuscripts, protocol)
+        return self.splits[key]
 
     def label(self, key: str) -> str:
         return self.settings.labels.get(key, key)
@@ -131,9 +175,10 @@ class Evaluations:
         families = [ADJECTIVES.get(name, name) for name in names]
         return f"the pairwise logistic model on the {summary.get('columns')} {' and '.join(families)} features"
 
-    def definitions(self) -> str:
-        """Each evaluation's definition, then those of ensembles' members that aren't among the evaluations."""
-        found = [f"\\emph{{{escape(self.label(key))}}}, {self.definition(key)}" for key in self.keys]
+    def definitions(self, keys: list[str] | None = None) -> str:
+        """Each evaluation's definition (those shown, or those given), then those of ensembles' members that aren't
+        among the evaluations."""
+        found = [f"\\emph{{{escape(self.label(key))}}}, {self.definition(key)}" for key in keys or self.keys]
         for label, folder in self.members.items():
             manifest = json.loads(self.run.read(folder / "manifest.json").read_text(encoding="utf-8"))
             found.append(f"\\emph{{{escape(label)}}}, {self.define(manifest)}")
@@ -186,21 +231,32 @@ def with_interval(value: float, low: float, high: float) -> str:
     return f"{decimal(value)} [{decimal(low)}, {decimal(high)}]"
 
 
+REFERENCE = (
+    r"\emph{Reference} is one limit, measured for accuracy and for $\rho$: for accuracy, the consistency of the same "
+    r"test judgments with the final Elo scores (the share that agree with them); for $\rho$, its ceiling, the square "
+    "root of the Elo scores' reliability (their split-half correlation with its Spearman--Brown correction), the most "
+    "that scores free of the annotation's noise can reach against them."
+)
+
+
 def by_gap_table(evaluations: Evaluations) -> pd.DataFrame:
-    """Per gap bin and overall, then SROCC: the consistency reference and each evaluation's value, with intervals."""
+    """Per gap bin and overall, then SROCC: the Reference (consistency for accuracy, the ceiling for SROCC) and each
+    evaluation's value, with intervals."""
     first = next(iter(evaluations.by_gap.values()))
     rows = []
     for gap in first.index:
         row = {"gap": gap, "judgments_per_fold": first.at[gap, "judgments_per_fold"]}
-        row |= {name: first.at[gap, name] for name in ("consistency", "consistency_low", "consistency_high")}
-        for key, table in evaluations.by_gap.items():
+        row |= {"reference": first.at[gap, "consistency"], "reference_low": first.at[gap, "consistency_low"],
+                "reference_high": first.at[gap, "consistency_high"]}  # fmt: skip
+        for key in evaluations.keys:
+            table = evaluations.by_gap[key]
             row |= {key: table.at[gap, "accuracy"], f"{key}_low": table.at[gap, "accuracy_low"],
                     f"{key}_high": table.at[gap, "accuracy_high"]}  # fmt: skip
         rows.append(row)
-    first_metrics = next(iter(evaluations.metrics.values()))
-    srocc = {"gap": "srocc", "judgments_per_fold": math.nan, "consistency": first_metrics.at["srocc_ceiling", "value"]}
-    srocc |= {"consistency_low": math.nan, "consistency_high": math.nan}
-    for key, found in evaluations.metrics.items():
+    srocc = {"gap": "srocc", "judgments_per_fold": math.nan, "reference": evaluations.ceiling()}
+    srocc |= {"reference_low": math.nan, "reference_high": math.nan}
+    for key in evaluations.keys:
+        found = evaluations.metrics[key]
         srocc |= {key: found.at["srocc", "value"], f"{key}_low": found.at["srocc", "low"],
                   f"{key}_high": found.at["srocc", "high"]}  # fmt: skip
     rows.append(srocc)
@@ -208,8 +264,8 @@ def by_gap_table(evaluations: Evaluations) -> pd.DataFrame:
 
 
 def methods_by_elo_gap(settings: Any, run: Run, folder: Path, name: str, every_row: bool = False) -> Written:
-    """The evaluations' accuracy by Elo gap beside the consistency reference, and their SROCC beside its ceiling: as
-    a table under `name`, intervals in the Overall and ρ rows (in every row when `every_row`; always in the TSV)."""
+    """The evaluations' accuracy by Elo gap and their SROCC beside the Reference: as a table under `name`, intervals in
+    the Overall and ρ rows (in every row when `every_row`; always in the TSV)."""
     evaluations = Evaluations(settings, run, name)
     table = by_gap_table(evaluations)
     latex_rows = []
@@ -217,11 +273,11 @@ def methods_by_elo_gap(settings: Any, run: Run, folder: Path, name: str, every_r
         values = row._asdict()
         shown = every_row or row.gap in {"overall", "srocc"}
         if row.gap == "srocc":
-            cells = [r"$\rho$ (SROCC)", decimal(values["consistency"])]
+            cells = [r"$\rho$ (SROCC)", decimal(values["reference"])]
         else:
             cells = [gap_latex(row.gap)]
-            cells.append(with_interval(row.consistency, row.consistency_low, row.consistency_high) if shown
-                         else decimal(row.consistency))  # fmt: skip
+            cells.append(with_interval(row.reference, row.reference_low, row.reference_high) if shown
+                         else decimal(row.reference))  # fmt: skip
         for key in evaluations.keys:
             value = values[key]
             cells.append(with_interval(value, values[f"{key}_low"], values[f"{key}_high"]) if shown else decimal(value))
@@ -230,16 +286,12 @@ def methods_by_elo_gap(settings: Any, run: Run, folder: Path, name: str, every_r
     caption = (
         r"Accuracy of pairwise outcome prediction by the absolute difference ($\Delta$) between the two pages' final "
         r"Elo scores, and Spearman's correlation ($\rho$, SROCC) between the out-of-fold page scores and the Elo "
-        f"scores. {evaluations.definitions()}. \\emph{{Consistency}} is the share of the same test judgments that "
-        r"agree with the final Elo scores, the reference for accuracy; its $\rho$ is the ceiling for SROCC, the "
-        "square root of the Elo scores' reliability (their split-half correlation with its Spearman--Brown "
-        "correction), the most that scores free of the annotation's noise can reach against them. "
-        f"{evaluations.protocol()} "
+        f"scores. {evaluations.definitions()}. {REFERENCE} {evaluations.protocol()} "
         r"\emph{Overall} is the mean over the folds of the share of test judgments whose chosen page the method "
         f"scores higher. In brackets{where}, 95\\% intervals from {evaluations.resamples()}."
     )
     latex = LatexTable(
-        headers=[r"Score $\Delta$", "Consistency", *[escape(evaluations.label(key)) for key in evaluations.keys]],
+        headers=[r"Score $\Delta$", "Reference", *[escape(evaluations.label(key)) for key in evaluations.keys]],
         rows=latex_rows,
         caption=caption,
         label=f"tab:{name}",
@@ -252,7 +304,7 @@ def methods_by_elo_gap(settings: Any, run: Run, folder: Path, name: str, every_r
 
 def accuracy_by_elo_gap(settings: Any, run: Run, folder: Path, name: str = "accuracy_by_elo_gap") -> Written:
     """The evaluations' accuracy by Elo gap as a figure, each method in its colour with its interval, beside the
-    consistency reference; and the table with every row's interval."""
+    Reference; and the table with every row's interval."""
     from layout_visual_complexity.plots.methods import Shown, plot_accuracy_by_gap
 
     written = methods_by_elo_gap(settings, run, folder, name, every_row=True)
@@ -262,61 +314,128 @@ def accuracy_by_elo_gap(settings: Any, run: Run, folder: Path, name: str = "accu
         table = evaluations.by_gap[key].reset_index()
         table = table.rename(columns={"accuracy_low": "low", "accuracy_high": "high"})
         shown.append(Shown(evaluations.label(key), evaluations.colour(key), table))
-    reference = next(iter(evaluations.by_gap.values())).reset_index()[["gap", "consistency"]]
+    first = next(iter(evaluations.by_gap.values())).reset_index()
+    reference = first[["gap", "consistency"]].rename(columns={"consistency": "reference"})
     figure = plot_accuracy_by_gap(shown, reference)
     caption = (
         r"Pairwise accuracy on the test judgments by the absolute difference ($\Delta$) between the two pages' final "
         f"Elo scores: {evaluations.definitions()}. Bars are the mean over the folds, whiskers 95\\% intervals from "
-        f"{evaluations.resamples()}; diamonds the consistency reference, the share of the same test judgments that "
-        f"agree with the final Elo scores; the dashed line chance. {evaluations.protocol()}"
+        f"{evaluations.resamples()}; diamonds the Reference, the consistency of the same test judgments with the "
+        "final Elo scores (the share that agree with them), which is the limit for accuracy as the ceiling for SROCC "
+        f"({decimal(evaluations.ceiling())}) is for $\\rho$; the dashed line chance. {evaluations.protocol()}"
     )
     paths = save_figure(figure, folder / "figures" / name, caption, f"fig:{name}")
     return Written(written.paths + paths, written.summary)
 
 
-def paired_differences(settings: Any, run: Run, folder: Path, name: str = "paired_differences") -> Written:
-    """For each pair of evaluations, the first's accuracy and SROCC minus the second's, with 95% intervals from the
-    same resamples of the manuscripts for both, as a table under `name`."""
+def paired_differences(
+    settings: Any, run: Run, folder: Path, name: str = "paired_differences", within: bool = False
+) -> Written:
+    """For each pair of evaluations, the first's accuracy and SROCC minus the second's, overall and within
+    manuscripts, with 95% intervals from the same resamples of the manuscripts for both, as a table under `name`; its
+    LaTeX shows the differences within manuscripts too when `within`."""
     evaluations = Evaluations(settings, run, name)
     pairs = needed(settings, "comparisons", name)
-    dataset = read_dataset(needed(settings, "dataset", name))
-    elo = read_elo(run.read(Path(needed(settings, "scores", name))))
-    judgments = dataset.judgments.reset_index(drop=True)
-    manuscripts = dataset.images.set_index("image")["manuscript"]
-    configuration = evaluations.configuration()
-    protocol = ProtocolSettings(bootstrap=int(configuration["bootstrap"]), seed=int(configuration["seed"]))
-    loaded = {key: read_evaluation(evaluations.folders[key], judgments) for key in evaluations.keys}
+    judgments, elo, manuscripts, protocol = evaluations.judged()
     rows = []
     for first, second in pairs:
-        if first not in loaded or second not in loaded:
+        if first not in evaluations.folders or second not in evaluations.folders:
             raise ValueError(f"{name}: {first} or {second} isn't among the evaluations")
         try:
-            found = paired_difference(loaded[first], loaded[second], judgments, manuscripts, protocol, elo)
+            found = paired_difference(evaluations.evaluation(first), evaluations.evaluation(second), judgments,
+                                      manuscripts, protocol, elo)  # fmt: skip
         except ValueError as error:
             raise ValueError(f"{first} and {second}: {error}") from None
         rows.append({"first": first, "second": second, **found})
     table = pd.DataFrame(rows)
+    measures = ["accuracy", "srocc", *(["accuracy_within", "srocc_within"] if within else [])]
     latex_rows = [
-        [
-            f"{escape(evaluations.label(row.first))} -- {escape(evaluations.label(row.second))}",
-            signed_interval(row.accuracy_difference, row.accuracy_low, row.accuracy_high),
-            signed_interval(row.srocc_difference, row.srocc_low, row.srocc_high),
-        ]
-        for row in table.itertuples(index=False)
-    ]
+        [f"{escape(evaluations.label(row['first']))} -- {escape(evaluations.label(row['second']))}"]
+        + [signed_interval(row[f"{measure}_difference"], row[f"{measure}_low"], row[f"{measure}_high"])
+           for measure in measures]
+        for row in table.to_dict("records")
+    ]  # fmt: skip
+    where = (
+        " overall and within manuscripts (on the test judgments between two pages of one manuscript, and Spearman's "
+        "$\\rho$ with each manuscript's mean removed from both scores)"
+        if within
+        else ""
+    )
+    defined = evaluations.definitions(list(dict.fromkeys(key for pair in pairs for key in pair)))
     caption = (
         r"Differences between methods on the same folds: the first's accuracy (the mean over the folds) and SROCC "
-        f"minus the second's, with 95\\% intervals from {evaluations.resamples()}, the same for both methods; an "
-        f"interval that excludes zero marks a difference beyond chance. {evaluations.definitions()}."
+        f"minus the second's{where}, with 95\\% intervals from {evaluations.resamples()}, the same for both methods; "
+        f"an interval that excludes zero marks a difference beyond chance. {defined}."
     )
-    latex = LatexTable(["Methods", "Accuracy", r"$\rho$ (SROCC)"], latex_rows, caption, f"tab:{name}",
-                       align="lcc")  # fmt: skip
+    headers = ["Methods", "Accuracy", r"$\rho$ (SROCC)"]
+    if within:
+        headers += ["Accuracy within", r"$\rho$ within"]
+    latex = LatexTable(headers, latex_rows, caption, f"tab:{name}", align="l" + "c" * len(measures))
     paths = write_table(table, folder / "tables" / name, latex)
     return Written(paths, {"differences": table.to_dict("records")})
 
 
 def signed_interval(value: float, low: float, high: float) -> str:
     return f"{value:+.3f} [{low:+.3f}, {high:+.3f}]"
+
+
+def within_and_across_manuscripts(settings: Any, run: Run, folder: Path) -> Written:
+    """Every evaluation's accuracy on the test judgments across manuscripts and within one, and its ρ overall and
+    within manuscripts, with intervals, below the Reference's (consistency, and the ceiling for ρ overall)."""
+    name = "within_and_across_manuscripts"
+    evaluations = Evaluations(settings, run, name)
+    first = evaluations.split(evaluations.keys[0])
+    rows = [
+        {
+            "method": "reference",
+            "label": "Reference",
+            **{
+                f"accuracy_{kind}{end}": first[f"consistency_{kind}{end}"]
+                for kind in ("across", "within")
+                for end in ("", "_low", "_high")
+            },  # fmt: skip
+            "srocc": evaluations.ceiling(),
+            "srocc_low": math.nan,
+            "srocc_high": math.nan,
+            "srocc_within": math.nan,
+            "srocc_within_low": math.nan,
+            "srocc_within_high": math.nan,
+        }
+    ]
+    for key in evaluations.keys:
+        split, srocc = evaluations.split(key), evaluations.metrics[key].loc["srocc"]
+        row = {"method": key, "label": evaluations.label(key)}
+        row |= {f"accuracy_{kind}{end}": split[f"accuracy_{kind}{end}"] for kind in ("across", "within")
+                for end in ("", "_low", "_high")}  # fmt: skip
+        row |= {"srocc": srocc["value"], "srocc_low": srocc["low"], "srocc_high": srocc["high"]}
+        row |= {f"srocc_within{end}": split[f"srocc_within{end}"] for end in ("", "_low", "_high")}
+        rows.append(row)
+    table = pd.DataFrame(rows)
+    measures = ["accuracy_across", "accuracy_within", "srocc", "srocc_within"]
+    latex_rows = [
+        [escape(row["label"])] + [with_interval(row[measure], row[f"{measure}_low"], row[f"{measure}_high"])
+                                  for measure in measures]
+        for row in table.to_dict("records")
+    ]  # fmt: skip
+    across, within = (first[f"judgments_{kind}_per_fold"] for kind in ("across", "within"))
+    caption = (
+        "Each method across and within manuscripts: accuracy (the mean over the folds) on the test judgments between "
+        f"pages of two manuscripts ({across:.1f} a fold on average) and between two pages of one manuscript "
+        f"({within:.1f}); Spearman's $\\rho$ between the out-of-fold page scores and the Elo scores over all pages, "
+        "and within manuscripts, with each manuscript's mean removed from both, over the manuscripts with at least "
+        f"two pages. In brackets, 95\\% intervals from {evaluations.resamples()}. {REFERENCE} Within manuscripts it "
+        f"has no ceiling for $\\rho$. {evaluations.definitions()}. {evaluations.protocol()}"
+    )
+    latex = LatexTable(
+        ["Method", "Accuracy across", "Accuracy within", r"$\rho$", r"$\rho$ within"],
+        latex_rows,
+        caption,
+        f"tab:{name}",
+        align="lcccc",
+        rules_before=[1],
+    )
+    paths = write_table(table, folder / "tables" / name, latex)
+    return Written(paths, {"methods": table.to_dict("records"), "judgments_per_fold": [across, within]})
 
 
 def learning_curves_and_calibration(settings: Any, run: Run, folder: Path) -> Written:

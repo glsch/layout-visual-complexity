@@ -1,7 +1,7 @@
-"""Figures of the methods: their accuracy by Elo gap beside the consistency reference, their learning curves and
+"""Figures of the methods: their accuracy by Elo gap beside the Reference, their learning curves and
 calibration, and the local ViT head's maps of complexity over pages.
 
-Each method keeps its colour (`style.METHODS`); the consistency reference is black, chance a grey dashed line.
+Each method keeps its colour (`style.METHODS`); the Reference is black, chance a grey dashed line.
 """
 
 from dataclasses import dataclass
@@ -32,10 +32,11 @@ def gap_text(label: str) -> str:
     return label.replace(">=", "≥").replace("-", "–")
 
 
-def plot_accuracy_by_gap(methods: list[Shown], consistency: pd.DataFrame, overall: bool = False) -> Figure:
+def plot_accuracy_by_gap(methods: list[Shown], reference: pd.DataFrame, overall: bool = False) -> Figure:
     """Each method's accuracy by Elo gap (`gap`, `accuracy`, `low`, `high` in its table) as bars from 0.4 with their
-    95% intervals, the consistency reference (`gap`, `consistency`) as diamonds, and chance. Full width."""
-    gaps = [gap for gap in consistency["gap"] if overall or gap != "overall"]
+    95% intervals, the Reference (`gap`, `reference`: the consistency of the same test judgments) as diamonds, and
+    chance. Full width."""
+    gaps = [gap for gap in reference["gap"] if overall or gap != "overall"]
     figure = style.new_figure("full", 7.5)
     axes = figure.subplots()
     width = 0.8 / max(len(methods), 1)
@@ -48,8 +49,8 @@ def plot_accuracy_by_gap(methods: list[Shown], consistency: pd.DataFrame, overal
         axes.bar(place, values - bottom, width * 0.9, bottom=bottom, color=method.colour, label=method.label)
         low, high = table["low"].to_numpy(dtype=float), table["high"].to_numpy(dtype=float)
         axes.vlines(place, low, high, color=style.TEXT, linewidth=0.6)
-    reference = consistency.set_index("gap").reindex(gaps)["consistency"].to_numpy(dtype=float)
-    axes.plot(x, reference, "D", markersize=4.5, markerfacecolor="white", markeredgecolor=style.METHODS["consistency"],
+    limit = reference.set_index("gap").reindex(gaps)["reference"].to_numpy(dtype=float)
+    axes.plot(x, limit, "D", markersize=4.5, markerfacecolor="white", markeredgecolor=style.METHODS["reference"],
               markeredgewidth=0.9, linestyle="none", zorder=4)  # fmt: skip
     axes.axhline(0.5, color=style.METHODS["chance"], linewidth=0.8, linestyle="--", zorder=0)
     axes.set_xticks(x, [gap_text(gap) for gap in gaps])
@@ -61,7 +62,7 @@ def plot_accuracy_by_gap(methods: list[Shown], consistency: pd.DataFrame, overal
     handles = [Patch(facecolor=method.colour, label=method.label) for method in methods]
     handles += [
         Line2D([], [], marker="D", markersize=4.5, markerfacecolor="white", markeredgecolor="black", linestyle="none",
-               label="Consistency reference"),
+               label="Reference"),
         Line2D([], [], color=style.METHODS["chance"], linestyle="--", linewidth=0.8, label="Chance"),
     ]  # fmt: skip
     axes.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 1.0), ncols=min(5, len(handles)))

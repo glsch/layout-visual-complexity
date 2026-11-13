@@ -1,7 +1,7 @@
 """The `lvc report` command: tables and figures of the features and of the rankers evaluated on them.
 
-- `geometry_by_elo_gap`: the accuracy of evaluations by final Elo gap, beside the consistency reference, with SROCC
-  beside its ceiling, each with its 95% interval.
+- `geometry_by_elo_gap`: the accuracy of evaluations by final Elo gap and their SROCC, beside the Reference (the
+  consistency of the same test judgments for accuracy, its ceiling for SROCC), each with its 95% interval.
 - `geometry_feature_hierarchy`: the families' features: family, feature, code name, number of flavours, definition.
 - `geometry_feature_correlations`: each feature's best flavour's Spearman correlation with the Elo scores, with its
   95% interval over manuscripts; the table holds every column's.
@@ -14,6 +14,9 @@
 - The baselines' (`method_reports.py`, `baseline_reports.py`): `baselines_by_elo_gap`, `baseline_differences`,
   `baseline_measures`, `baselines_by_information`, `baselines_by_information_each_measure`,
   `generic_measure_correlations`.
+- Within and across manuscripts, for every method (`method_reports.py`): `within_and_across_manuscripts`.
+- The colour level's (`colour_reports.py`): `colour_by_elo_gap`, `colour_differences`, `line_texture_families`,
+  `colour_measures`, `ink_colour_on_page`.
 """
 
 import json
@@ -26,7 +29,7 @@ from typing import Literal, get_args
 import numpy as np
 import pandas as pd
 
-from layout_visual_complexity import baseline_reports, method_reports
+from layout_visual_complexity import baseline_reports, colour_reports, method_reports
 from layout_visual_complexity.download import HttpSettings
 from layout_visual_complexity.evaluate import read_elo
 from layout_visual_complexity.evaluation import metrics
@@ -62,6 +65,12 @@ Output = Literal[
     "baselines_by_information",
     "baselines_by_information_each_measure",
     "generic_measure_correlations",
+    "within_and_across_manuscripts",
+    "colour_by_elo_gap",
+    "colour_differences",
+    "line_texture_families",
+    "colour_measures",
+    "ink_colour_on_page",
 ]
 ALL_OUTPUTS: list[Output] = list(get_args(Output))
 
@@ -112,6 +121,8 @@ class ReportSettings:
         layout: The segmentation run the features were measured on, for the pages drawn.
         evaluations: Evaluations (`lvc evaluate` folders) to set side by side, under the short names their columns
             take.
+        shown: The evaluations a table shows as its columns, by short name; all by default. The others serve its
+            comparisons.
         labels: Each evaluation's name in the tables.
         colours: Each evaluation's colour in the figures: a method's (`geometry`, `vit`, `ensemble`, …) or a hex
             code; by default its short name's, if it is a method's, else its kind's.
@@ -136,6 +147,7 @@ class ReportSettings:
             the levels in the order they first come.
         alone: The evaluations of one measure alone, drawn as open dots.
         reference_column: The column the generic measures are set against (ink coverage).
+        colour_pages: The pages whose ink colour is drawn.
     """
 
     output: Path
@@ -146,6 +158,7 @@ class ReportSettings:
     features: Path | None = None
     layout: Path | None = None
     evaluations: dict[str, Path] = field(default_factory=dict)
+    shown: list[str] = field(default_factory=list)
     labels: dict[str, str] = field(default_factory=dict)
     colours: dict[str, str] = field(default_factory=dict)
     comparisons: list[list[str]] = field(default_factory=list)
@@ -164,6 +177,7 @@ class ReportSettings:
     levels: dict[str, str] = field(default_factory=dict)
     alone: list[str] = field(default_factory=list)
     reference_column: str = ""
+    colour_pages: list[str] = field(default_factory=list)
 
 
 def needed(settings: ReportSettings, name: str, output: str) -> object:
@@ -231,6 +245,12 @@ METHOD_OUTPUTS = {
         settings, run, folder, "baselines_by_information_each_measure"
     ),
     "generic_measure_correlations": baseline_reports.generic_measure_correlations,
+    "within_and_across_manuscripts": method_reports.within_and_across_manuscripts,
+    "colour_by_elo_gap": colour_reports.colour_by_elo_gap,
+    "colour_differences": colour_reports.colour_differences,
+    "line_texture_families": lambda settings, run, folder: colour_reports.line_texture_families(folder),
+    "colour_measures": colour_reports.colour_measures,
+    "ink_colour_on_page": colour_reports.ink_colour_on_page,
 }
 
 
@@ -246,8 +266,8 @@ def with_interval(value: float, low: float, high: float) -> str:
 
 
 def by_elo_gap(settings: ReportSettings, run: Run, folder: Path) -> Written:
-    """The evaluations' accuracy by final Elo gap beside the consistency reference, and their SROCC beside its
-    ceiling."""
+    """The evaluations' accuracy by final Elo gap and their SROCC beside the Reference: the consistency of the same test
+    judgments for accuracy, its ceiling for SROCC."""
     evaluations = needed(settings, "evaluations", "geometry_by_elo_gap")
     tables, measures = {}, {}
     for key, path in evaluations.items():  # type: ignore[union-attr]
@@ -262,14 +282,15 @@ def by_elo_gap(settings: ReportSettings, run: Run, folder: Path) -> Written:
     rows = []
     for gap in first.index:
         row = {"gap": gap, "judgments_per_fold": first.at[gap, "judgments_per_fold"]}
-        row |= {name: first.at[gap, name] for name in ("consistency", "consistency_low", "consistency_high")}
+        row |= {"reference": first.at[gap, "consistency"], "reference_low": first.at[gap, "consistency_low"],
+                "reference_high": first.at[gap, "consistency_high"]}  # fmt: skip
         for key, table in tables.items():
             row |= {key: table.at[gap, "accuracy"], f"{key}_low": table.at[gap, "accuracy_low"],
                     f"{key}_high": table.at[gap, "accuracy_high"]}  # fmt: skip
         rows.append(row)
     first_metrics = next(iter(measures.values()))
-    srocc = {"gap": "srocc", "judgments_per_fold": math.nan, "consistency": first_metrics.at["srocc_ceiling", "value"]}
-    srocc |= {"consistency_low": math.nan, "consistency_high": math.nan}
+    srocc = {"gap": "srocc", "judgments_per_fold": math.nan, "reference": first_metrics.at["srocc_ceiling", "value"]}
+    srocc |= {"reference_low": math.nan, "reference_high": math.nan}
     for key, found in measures.items():
         srocc |= {key: found.at["srocc", "value"], f"{key}_low": found.at["srocc", "low"],
                   f"{key}_high": found.at["srocc", "high"]}  # fmt: skip
@@ -280,27 +301,28 @@ def by_elo_gap(settings: ReportSettings, run: Run, folder: Path) -> Written:
     for row in table.itertuples(index=False):
         values = row._asdict()
         if row.gap == "srocc":
-            cells = [r"$\rho$ (SROCC)", "", decimal(values["consistency"])]
+            cells = [r"$\rho$ (SROCC)", "", decimal(values["reference"])]
         else:
             cells = [gap_latex(row.gap), f"{row.judgments_per_fold:.1f}"]
-            cells.append(with_interval(row.consistency, row.consistency_low, row.consistency_high))
+            cells.append(with_interval(row.reference, row.reference_low, row.reference_high))
         cells += [with_interval(values[key], values[f"{key}_low"], values[f"{key}_high"]) for key in tables]
         latex_rows.append(cells)
     first_folder = Path(next(iter(evaluations.values())))  # type: ignore[union-attr]
     configuration = json.loads((first_folder / "manifest.json").read_text(encoding="utf-8"))["configuration"]
     folds = configuration["folds"]
     latex = LatexTable(
-        headers=[r"Score $\Delta$", "Judgments per fold", "Consistency", *[escape(label) for label in labels]],
+        headers=[r"Score $\Delta$", "Judgments per fold", "Reference", *[escape(label) for label in labels]],
         rows=latex_rows,
         caption=r"Accuracy of pairwise outcome prediction by the absolute difference ($\Delta$) between the two pages' "
         "final Elo scores, and Spearman's correlation ($\\rho$, SROCC) between the out-of-fold page scores and the "
         f"Elo scores. Each method is the pairwise logistic model fitted to a feature set, evaluated by "
         f"{folds['k']}-fold cross-validation repeated {folds['repeats']} times, each manuscript's pages in one fold; "
         "a fold tests the judgments between two of its pages. Accuracy is the mean over the folds of the share of "
-        "test judgments whose chosen page the model scores higher; \\emph{Consistency} is the same share for the "
-        "final Elo scores, on the same test judgments, and the reference for accuracy. Its $\\rho$ is the ceiling "
-        "for SROCC: the square root of the Elo scores' reliability (their split-half correlation with its "
-        "Spearman--Brown correction), the most that scores free of the annotation's noise can reach against them. "
+        "test judgments whose chosen page the model scores higher. \\emph{Reference} is one limit, measured for "
+        "accuracy and for $\\rho$: for accuracy, the same share for the final Elo scores on the same test judgments "
+        "(their consistency); for $\\rho$, the ceiling for SROCC, the square root of the Elo scores' reliability "
+        "(their split-half correlation with its Spearman--Brown correction), the most that scores free of the "
+        "annotation's noise can reach against them. "
         f"\\emph{{Judgments per fold}} counts the test judgments. In brackets, 95\\% intervals from "
         f"{configuration['bootstrap']:,} resamples of the manuscripts.",
         label="tab:geometry_by_elo_gap",

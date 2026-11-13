@@ -52,8 +52,9 @@ def baselines_by_information(settings: Any, run: Run, folder: Path, name: str) -
                              row["high"], row["srocc"], row["alone"]))  # fmt: skip
     table = pd.DataFrame(rows)
     consistency = float(next(iter(evaluations.by_gap.values())).loc["overall", "consistency"])
+    ceiling = evaluations.ceiling()
     chance = levels[evaluations.keys[0]]
-    figure = plot_by_information(placed, consistency, chance)
+    figure = plot_by_information(placed, consistency, chance, ceiling)
     combined = [key for key in evaluations.keys if key not in alone]
     defined = "; ".join(
         f"\\emph{{{escape(evaluations.label(key))}}}, {evaluations.definition(key)}" for key in combined
@@ -69,8 +70,10 @@ def baselines_by_information(settings: Any, run: Run, folder: Path, name: str) -
         "What each level of information buys: pairwise accuracy on the test judgments (dots, the mean over the "
         f"folds, with 95\\% intervals from {evaluations.resamples()}) and Spearman's $\\rho$ between the out-of-fold "
         f"page scores and the Elo scores (right), the methods grouped by the information they need ({order}).{each} "
-        f"The solid line is the consistency reference ({decimal(consistency)}), the share of the same test judgments "
-        f"that agree with the final Elo scores; the dashed line is chance. {defined}. {evaluations.protocol()}"
+        f"The solid line is the Reference for accuracy ({decimal(consistency)}), the consistency of the same test "
+        "judgments with the final Elo scores (the share that agree with them); the Reference for $\\rho$ is its "
+        f"ceiling ({decimal(ceiling)}), the square root of the Elo scores' reliability: one limit, measured for "
+        f"accuracy and for $\\rho$. The dashed line is chance. {defined}. {evaluations.protocol()}"
     )
     paths = save_figure(figure, folder / "figures" / name, caption, f"fig:{name}")
     latex_rows = [
@@ -87,7 +90,7 @@ def baselines_by_information(settings: Any, run: Run, folder: Path, name: str) -
         align="lllcc",
     )
     paths += write_table(table, folder / "tables" / name, latex)
-    return Written(paths, {"methods": table.to_dict("records"), "consistency": consistency})
+    return Written(paths, {"methods": table.to_dict("records"), "reference": consistency, "ceiling": ceiling})
 
 
 def table_families(settings: Any, run: Run, output: str) -> list:
@@ -102,9 +105,21 @@ def table_families(settings: Any, run: Run, output: str) -> list:
     return [load_family(recorded[name]["class"], recorded[name]["settings"]) for name in settings.families]
 
 
-def baseline_measures(settings: Any, run: Run, folder: Path) -> Written:
-    """Each measure of the families named: its family, name, code name, definition, parameters and source."""
-    families = table_families(settings, run, "baseline_measures")
+BASELINE_MEASURES = (
+    "The baseline measures: what each measures, its parameters and its source. The image measures work on the folio "
+    "crop resized to a fixed long edge: the generic measures and the ink's after the lightness is flattened (divided "
+    "by a smooth surface of the paper's brightness), the ink's on one ink layer (Sauvola's threshold of the flattened "
+    "lightness, specks removed) with scales in line heights, the median spacing of the page's text lines; "
+    "Kyle--Davidson's on the crop as it is, at their images' size."
+)
+
+
+def baseline_measures(
+    settings: Any, run: Run, folder: Path, name: str = "baseline_measures", caption: str = BASELINE_MEASURES
+) -> Written:
+    """Each measure of the families named: its family, name, code name, definition, parameters and source, as a
+    table under `name`."""
+    families = table_families(settings, run, name)
     rows = [
         {
             "family": group.family,
@@ -130,16 +145,12 @@ def baseline_measures(settings: Any, run: Run, folder: Path) -> Written:
     latex = LatexTable(
         headers=["Measure", "Definition", "Parameters", "Source"],
         rows=latex_rows,
-        caption="The baseline measures: what each measures, its parameters and its source. The image measures work "
-        "on the folio crop resized to a fixed long edge: the generic measures and the ink's after the lightness is "
-        "flattened (divided by a smooth surface of the paper's brightness), the ink's on one ink layer (Sauvola's "
-        "threshold of the flattened lightness, specks removed) with scales in line heights, the median spacing of "
-        "the page's text lines; Kyle--Davidson's on the crop as it is, at their images' size.",
-        label="tab:baseline_measures",
+        caption=caption,
+        label=f"tab:{name}",
         align=r"lp{0.36\linewidth}p{0.24\linewidth}p{0.14\linewidth}",
         rules_before=breaks[1:],
     )
-    paths = write_table(table, folder / "tables" / "baseline_measures", latex)
+    paths = write_table(table, folder / "tables" / name, latex)
     return Written(paths, {"measures": len(table)})
 
 

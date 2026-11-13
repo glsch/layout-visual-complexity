@@ -158,6 +158,8 @@ def test_the_baselines_tables_and_figures(tmp_path: Path, dataset_folder: Path) 
     placed = pd.read_csv(output / "tables" / "baselines_by_information_each_measure.tsv", sep="\t")
     assert placed["alone"].tolist() == [True, True, False]
     assert placed["level"].tolist() == ["Trivial", "Trivial", "Image only"]
+    drawn = (output / "figures" / "baselines_by_information.svg").read_text()
+    assert ">Reference<" in drawn and "ceiling" in drawn and "Consistency" not in drawn
     figure = (output / "figures" / "baselines_by_information_each_measure.tex").read_text()
     assert "open dots: one measure alone" in figure and "\\emph{Both}" in figure
     assert "\\emph{Copy alone}" not in figure

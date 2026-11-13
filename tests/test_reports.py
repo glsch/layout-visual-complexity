@@ -93,7 +93,8 @@ def test_the_geometry_tables_and_figures(tmp_path: Path, dataset_folder: Path) -
 
     by_gap = pd.read_csv(output / "tables" / "geometry_by_elo_gap.tsv", sep="\t")
     assert by_gap["gap"].tolist()[-2:] == ["overall", "srocc"]
-    assert {"consistency", "geometry", "geometry_low", "geometry_layout_high"} <= set(by_gap.columns)
+    assert {"reference", "geometry", "geometry_low", "geometry_layout_high"} <= set(by_gap.columns)
+    assert "& Reference &" in (output / "tables" / "geometry_by_elo_gap.tex").read_text()
     hierarchy = pd.read_csv(output / "tables" / "geometry_feature_hierarchy.tsv", sep="\t")
     assert len(hierarchy) == 15 and hierarchy["flavours"].sum() == 105
     assert "83 + 22" in (output / "tables" / "geometry_feature_hierarchy.tex").read_text()
