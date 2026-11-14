@@ -1,7 +1,7 @@
 {
   "command": "judgments report",
-  "started": "2026-11-12T18:08:44+00:00",
-  "ended": "2026-11-12T18:08:44+00:00",
+  "started": "2026-11-14T06:21:07+00:00",
+  "ended": "2026-11-14T06:21:07+00:00",
   "inputs": [
     {
       "path": "build/dataset/judgments.tsv",
@@ -57,6 +57,8 @@
       "repeats": 10,
       "seed": 20260629
     },
+    "bootstrap": 1000,
+    "bootstrap_seed": 20260629,
     "split_half": {
       "repeats": 100,
       "permutations": 100,
@@ -73,8 +75,10 @@
     },
     "position_bias_min_judgments": 100,
     "graph_seed": 20260629,
+    "graph_batches": {},
     "thumbnails": 10,
-    "thumbnail_size": 200,
+    "thumbnail_pages": [],
+    "thumbnail_size": 500,
     "image_credit": "",
     "cache": "~/.cache/layout-visual-complexity",
     "http": {
@@ -103,10 +107,11 @@
     "pyarrow": "26.0.1",
     "shapely": "2.1.2",
     "torch": "2.14.0",
+    "transformers": "5.22.2",
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "526cfd56ba9977b897a949001845fb612602deaf-dirty",
+  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "dataset_categories": {
@@ -191,7 +196,7 @@
       ]
     },
     "seconds": {
-      "dataset_categories": 0.006
+      "dataset_categories": 0.008
     }
   }
 }

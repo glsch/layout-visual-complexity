@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-14T05:28:25+00:00",
-  "ended": "2026-11-14T05:28:30+00:00",
+  "started": "2026-11-14T06:22:23+00:00",
+  "ended": "2026-11-14T06:22:29+00:00",
   "inputs": [
     {
       "path": "build/evaluate/trivial/by_elo_gap.tsv",
@@ -315,7 +315,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "3c42ae0188e7626a100b3718c8ff2c9c82201735-dirty",
+  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "baseline_differences": {
@@ -483,7 +483,7 @@
       ]
     },
     "seconds": {
-      "baseline_differences": 5.495
+      "baseline_differences": 5.913
     }
   }
 }

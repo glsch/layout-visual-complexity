@@ -1,10 +1,10 @@
 """The figures' shared look: one colour per method, the colour scales, the font, the print sizes and panel letters.
 
 Figures never name a colour of their own: they ask for a method's (`METHODS["geometry"]`) or a scale. The palette is
-Okabe and Ito's, told apart with the common colour-vision deficiencies. Text is STIXGeneral, mathematics in STIX, at
-9 pt, ticks and legends at 8 pt, file and code names in DejaVu Sans Mono: all three come with matplotlib, so a figure
-looks the same on every machine. Figures are drawn at their print size, the full width of the text (15 cm) or half of
-it (7.2 cm), and never scaled in LaTeX; nothing is under 6 pt, no line under 0.5 pt.
+Okabe and Ito's, told apart with the common colour-vision deficiencies. Text is DejaVu Sans, mathematics in DejaVu
+Sans too, at 9 pt, ticks and legends at 8 pt, file and code names in DejaVu Sans Mono: both come with matplotlib, so a
+figure looks the same on every machine. Figures are drawn at their print size, the full width of the text (15 cm) or
+half of it (7.2 cm), and never scaled in LaTeX; nothing is under 6 pt, no line under 0.5 pt.
 """
 
 from collections.abc import Iterable
@@ -47,12 +47,12 @@ NEGATIVE, MIDDLE, POSITIVE = "#0072B2", "#F7F7F7", "#D55E00"
 HIGHLIGHT = "#D55E00"
 TEXT, SECONDARY, GRID = "#1F2328", "#57606A", "#E6E9ED"
 PAPER, PAPER_EDGE, WRITING = "#F4EBD9", "#C9B99A", "#5C4E40"
-SERIF, MONOSPACE = "STIXGeneral", "DejaVu Sans Mono"
+SANS, MONOSPACE = "DejaVu Sans", "DejaVu Sans Mono"
 LINE = 0.75  # points
 
 SETTINGS = {
-    "font.family": SERIF,
-    "mathtext.fontset": "stix",
+    "font.family": SANS,
+    "mathtext.fontset": "dejavusans",
     "font.size": 9,
     "axes.labelsize": 9,
     "axes.titlesize": 9,

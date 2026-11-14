@@ -87,7 +87,7 @@ def baselines_by_information(settings: Any, run: Run, folder: Path, name: str) -
         f"The methods grouped by the information they need: accuracy (the mean over the folds) and SROCC, with 95\\% "
         f"intervals from {evaluations.resamples()}. {defined}.",
         f"tab:{name}",
-        align="lllcc",
+        align="lcccc",
     )
     paths += write_table(table, folder / "tables" / name, latex)
     return Written(paths, {"methods": table.to_dict("records"), "reference": consistency, "ceiling": ceiling})

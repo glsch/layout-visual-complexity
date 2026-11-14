@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T17:11:35+00:00",
-  "ended": "2026-11-13T17:11:35+00:00",
+  "started": "2026-11-14T06:23:08+00:00",
+  "ended": "2026-11-14T06:23:08+00:00",
   "inputs": [],
   "outputs": [
     "results/tables/line_texture_families.tsv",
@@ -72,7 +72,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "2884e8cca226791ca6eb1b845e90909c77c5ebe6-dirty",
+  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "line_texture_families": {

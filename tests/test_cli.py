@@ -46,7 +46,8 @@ def test_import_rank_and_report_on_a_tiny_dataset(dataset_folder: Path, tmp_path
     assert manifest["summary"]["permutations"] == 30 and manifest["configuration"]["seed"] == 4
 
     report = ["judgments", "report", "--dataset", str(dataset), "--ranking", str(ranking), "--output", str(results)]
-    small = ["--folds.k", "2", "--folds.repeats", "1", "--split_half.repeats", "3", "--split_half.permutations", "5"]
+    small = ["--folds.k", "2", "--folds.repeats", "1", "--split_half.repeats", "3", "--split_half.permutations", "5",
+             "--bootstrap", "20"]  # fmt: skip
     labels = ["--category_labels", "{A: Handbooks, B: Religious}"]
     assert cli.main(["--quiet", *report, *small, *labels, "--thumbnails", "0", "--jobs", "1", "--name", "tiny"]) == 0
     for stem in [
@@ -54,20 +55,20 @@ def test_import_rank_and_report_on_a_tiny_dataset(dataset_folder: Path, tmp_path
         "tables/reliability_by_elo_gap",
         "tables/position_bias",
         "tables/consistency_reference_by_fold",
-        "tables/split_half_ceiling",
-        "tables/comparison_graph",
     ]:
         assert (results / f"{stem}.tsv").is_file() and (results / f"{stem}.tex").is_file()
-    for stem in ["figures/comparison_graph", "figures/elo_score_distributions"]:
+    for stem in ["tables/split_half_ceiling", "tables/comparison_graph"]:
+        assert (results / f"{stem}.tsv").is_file() and not (results / f"{stem}.tex").exists()
+    for stem in ["comparison_graph", "elo_score_distributions", "elo_score_bands", "position_bias_funnel"]:
         for suffix in (".svg", ".png", ".tex"):
-            assert (results / f"{stem}{suffix}").is_file()
+            assert (results / "figures" / f"{stem}{suffix}").is_file()
     assert (results / "runs" / "tiny" / "manifest.json").is_file()
     assert r"\caption" in (results / "tables" / "reliability_by_elo_gap.tex").read_text()
     assert "A --- Handbooks" in (results / "tables" / "dataset_categories.tex").read_text()
     split = pd.read_csv(results / "tables" / "split_half_ceiling.tsv", sep="\t").set_index("measure")
     reliability = split.at["Spearman-Brown corrected", "median"]
     assert split.at["ceiling for SROCC", "median"] == pytest.approx(max(reliability, 0) ** 0.5)
-    assert "the ceiling for SROCC" in (results / "tables" / "split_half_ceiling.tex").read_text()
+    assert "the ceiling for $\\rho$" in (results / "tables" / "reliability_by_elo_gap.tex").read_text()
 
 
 def test_errors_are_reported_without_a_traceback(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:

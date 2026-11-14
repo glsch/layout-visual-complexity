@@ -40,23 +40,22 @@ DATASET := $(TOP)/build/dataset/judgments.tsv
 RANKING := $(TOP)/build/ranking/scores.tsv
 REPORT := $(RUN) judgments report --config $(CONFIGS)/report.yaml --config $(CONFIGS)
 
-.PHONY: all dataset ranking segment-dataset table-dataset-categories table-reliability figure-comparison-graph \
-	figure-elo-violins features-dataset evaluate-geometry evaluate-geometry-layout table-geometry-by-elo-gap \
-	table-geometry-feature-hierarchy figure-geometry-feature-correlations figure-geometry-features-on-page \
-	figure-geometry-features-on-schematic-page figure-geometry-feature-families embed-dataset evaluate-vit \
-	evaluate-ensembles head-dataset package-head table-methods-by-elo-gap figure-accuracy-by-elo-gap \
-	table-paired-differences table-ensembles-by-elo-gap figure-learning-curves-and-calibration \
+.PHONY: all dataset ranking segment-dataset table-dataset-categories table-reliability figure-position-bias-funnel \
+	figure-comparison-graph figure-elo-violins features-dataset evaluate-geometry evaluate-geometry-layout \
+	table-geometry-by-elo-gap table-geometry-feature-hierarchy figure-geometry-feature-correlations \
+	figure-geometry-features-on-page figure-geometry-features-on-schematic-page figure-geometry-feature-families \
+	embed-dataset evaluate-vit evaluate-ensembles head-dataset package-head table-methods-by-elo-gap \
+	figure-accuracy-by-elo-gap table-paired-differences table-ensembles-by-elo-gap figure-learning-curves-and-calibration \
 	figure-local-complexity-maps codebook-dataset package-codebook features-mean-token evaluate-baselines \
 	evaluate-measures table-baselines-by-elo-gap table-baseline-measures table-baseline-differences \
-	figure-baselines-by-information figure-baselines-by-information-each-measure \
-	figure-generic-measure-correlations evaluate-colour evaluate-colour-measures table-colour-by-elo-gap \
-	table-colour-differences table-line-texture-families table-colour-measures \
-	table-within-and-across-manuscripts figure-ink-colour-on-page clean
+	figure-baselines-by-information figure-baselines-by-information-each-measure figure-generic-measure-correlations \
+	evaluate-colour evaluate-colour-measures table-colour-by-elo-gap table-colour-differences table-line-texture-families \
+	table-colour-measures table-within-and-across-manuscripts figure-ink-colour-on-page clean
 
-all: table-dataset-categories table-reliability figure-comparison-graph figure-elo-violins table-geometry-by-elo-gap \
-	table-geometry-feature-hierarchy figure-geometry-feature-correlations figure-geometry-features-on-page \
-	figure-geometry-features-on-schematic-page figure-geometry-feature-families table-methods-by-elo-gap \
-	figure-accuracy-by-elo-gap table-paired-differences table-ensembles-by-elo-gap \
+all: table-dataset-categories table-reliability figure-position-bias-funnel figure-comparison-graph figure-elo-violins \
+	table-geometry-by-elo-gap table-geometry-feature-hierarchy figure-geometry-feature-correlations \
+	figure-geometry-features-on-page figure-geometry-features-on-schematic-page figure-geometry-feature-families \
+	table-methods-by-elo-gap figure-accuracy-by-elo-gap table-paired-differences table-ensembles-by-elo-gap \
 	figure-learning-curves-and-calibration figure-local-complexity-maps table-baselines-by-elo-gap \
 	table-baseline-measures table-baseline-differences figure-baselines-by-information \
 	figure-baselines-by-information-each-measure figure-generic-measure-correlations table-colour-by-elo-gap \
@@ -87,10 +86,15 @@ table-reliability: $(TOP)/results/tables/reliability_by_elo_gap.tsv
 $(TOP)/results/tables/reliability_by_elo_gap.tsv: $(RANKING) configs/report.yaml configs/table_reliability.yaml
 	$(REPORT)/table_reliability.yaml
 
+figure-position-bias-funnel: $(TOP)/results/figures/position_bias_funnel.svg
+$(TOP)/results/figures/position_bias_funnel.svg: $(RANKING) configs/report.yaml configs/figure_position_bias_funnel.yaml
+	$(REPORT)/figure_position_bias_funnel.yaml
+
 figure-comparison-graph: $(TOP)/results/figures/comparison_graph.svg
 $(TOP)/results/figures/comparison_graph.svg: $(RANKING) configs/report.yaml configs/figure_comparison_graph.yaml
 	$(REPORT)/figure_comparison_graph.yaml
 
+# The score distributions as violins, and as bands (elo_score_bands), with the same thumbnails.
 figure-elo-violins: $(TOP)/results/figures/elo_score_distributions.svg
 $(TOP)/results/figures/elo_score_distributions.svg: $(RANKING) configs/report.yaml configs/figure_elo_violins.yaml
 	$(REPORT)/figure_elo_violins.yaml

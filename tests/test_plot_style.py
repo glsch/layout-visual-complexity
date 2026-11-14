@@ -1,7 +1,8 @@
-"""The figures' style: drawn at their print size, in STIXGeneral, and included in LaTeX at that size."""
+"""The figures' style: drawn at their print size, in DejaVu Sans, and included in LaTeX at that size."""
 
 from pathlib import Path
 
+import matplotlib
 import pytest
 from matplotlib.font_manager import findfont
 from PIL import Image
@@ -11,20 +12,22 @@ from layout_visual_complexity.plots import style
 
 
 @pytest.mark.parametrize(("width", "centimetres"), [("full", 15.0), ("half", 7.2)])
-def test_figures_are_drawn_at_their_print_size_in_stix(width: str, centimetres: float, tmp_path: Path) -> None:
+def test_figures_are_drawn_at_their_print_size_in_dejavu_sans(width: str, centimetres: float, tmp_path: Path) -> None:
     figure = style.new_figure(width, 6)
     axes = figure.subplots()
     axes.plot([0, 1], [0, 1])
-    label = axes.set_xlabel("Elo gap")
+    label = axes.set_xlabel("Elo gap $\\Delta$")
     assert style.print_width_cm(figure) == pytest.approx(centimetres)
     assert figure.get_size_inches()[1] * 2.54 == pytest.approx(6)
-    assert label.get_fontname() == "STIXGeneral" and label.get_fontsize() == 9
+    assert label.get_fontname() == "DejaVu Sans" and label.get_fontsize() == 9
     assert axes.get_xticklabels()[0].get_fontsize() == 8
-    assert "STIX" in findfont(label.get_fontproperties())
+    assert findfont(label.get_fontproperties()).endswith("DejaVuSans.ttf")
+    assert matplotlib.rcParams["mathtext.fontset"] == "dejavusans"
     assert "DejaVuSansMono" in findfont(style.monospace())
     svg, png, tex = save_figure(figure, tmp_path / "figures" / "line", "A line.", "fig:line")
     assert f"width={centimetres:.2f}cm" in tex.read_text()
-    assert "STIXGeneral" in svg.read_text()
+    text = svg.read_text()
+    assert "DejaVu Sans" in text and "STIX" not in text
     with Image.open(png) as image:
         assert image.size[0] == pytest.approx(centimetres / 2.54 * 300, abs=1)
 

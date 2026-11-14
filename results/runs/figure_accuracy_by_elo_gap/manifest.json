@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-14T05:26:56+00:00",
-  "ended": "2026-11-14T05:26:56+00:00",
+  "started": "2026-11-14T06:22:06+00:00",
+  "ended": "2026-11-14T06:22:07+00:00",
   "inputs": [
     {
       "path": "build/evaluate/colour/by_elo_gap.tsv",
@@ -15,7 +15,7 @@
     },
     {
       "path": "build/evaluate/colour/manifest.json",
-      "sha256": "1deb2aa2306aca376bb9322b7cb592d2b1905b703e2a00dfa1191d91aef38fa2",
+      "sha256": "aab95e3c5582adcf7edc5cea4764996902a4fb8fb6d4a3a874023312607ea88f",
       "bytes": 9315
     },
     {
@@ -75,7 +75,7 @@
     },
     {
       "path": "build/evaluate/colour/manifest.json",
-      "sha256": "1deb2aa2306aca376bb9322b7cb592d2b1905b703e2a00dfa1191d91aef38fa2",
+      "sha256": "aab95e3c5582adcf7edc5cea4764996902a4fb8fb6d4a3a874023312607ea88f",
       "bytes": 9315
     },
     {
@@ -206,7 +206,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "3c42ae0188e7626a100b3718c8ff2c9c82201735-dirty",
+  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "accuracy_by_elo_gap": {
@@ -347,7 +347,7 @@
       ]
     },
     "seconds": {
-      "accuracy_by_elo_gap": 0.384
+      "accuracy_by_elo_gap": 0.435
     }
   }
 }

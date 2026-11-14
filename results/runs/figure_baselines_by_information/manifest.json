@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-14T05:28:37+00:00",
-  "ended": "2026-11-14T05:28:38+00:00",
+  "started": "2026-11-14T06:22:37+00:00",
+  "ended": "2026-11-14T06:22:38+00:00",
   "inputs": [
     {
       "path": "build/evaluate/measures/ink_coverage/by_elo_gap.tsv",
@@ -105,7 +105,7 @@
     },
     {
       "path": "build/evaluate/line_texture/manifest.json",
-      "sha256": "7f168c079d947332c3e9fcbfca539659ff0e844dd2cfdadd30591f82ff6c7127",
+      "sha256": "5da8175e2e1847558d660fb6ebaae601c04fddaaf5ba1730c51770f3821cc0f3",
       "bytes": 8538
     },
     {
@@ -120,7 +120,7 @@
     },
     {
       "path": "build/evaluate/colour/manifest.json",
-      "sha256": "1deb2aa2306aca376bb9322b7cb592d2b1905b703e2a00dfa1191d91aef38fa2",
+      "sha256": "aab95e3c5582adcf7edc5cea4764996902a4fb8fb6d4a3a874023312607ea88f",
       "bytes": 9315
     },
     {
@@ -322,7 +322,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "3c42ae0188e7626a100b3718c8ff2c9c82201735-dirty",
+  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "baselines_by_information": {
@@ -488,7 +488,7 @@
       "ceiling": 0.890535
     },
     "seconds": {
-      "baselines_by_information": 0.392
+      "baselines_by_information": 0.547
     }
   }
 }

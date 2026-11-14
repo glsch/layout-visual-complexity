@@ -8,6 +8,9 @@ folds:
   k: 10
   repeats: 10
   seed: 20260629
+# The consistency reference's intervals: the evaluations' resamples of the manuscripts (configs/evaluate.yaml).
+bootstrap: 1000
+bootstrap_seed: 20260629
 split_half:
   repeats: 100
   permutations: 100

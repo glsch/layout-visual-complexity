@@ -1,7 +1,17 @@
-# Figure 3: the Elo scores' distributions over the permutations, with about ten pages at evenly spaced ranks,
-# fetched through their IIIF image services.
+# Figure 3: the Elo scores' distributions over the permutations, as violins and as bands, with ten pages near evenly
+# spaced ranks, fetched through their IIIF image services.
 name: figure_elo_violins
-outputs: [elo_score_distributions]
-thumbnails: 10
-thumbnail_size: 200
+outputs: [elo_score_distributions, elo_score_bands]
+thumbnail_pages:
+  - vig4a_12v
+  - iiih6_47r
+  - ih4_4r
+  - via2_38v
+  - teplamsd19_81r
+  - vf8_15r
+  - iiig2_191v
+  - ivf9_10r
+  - vh14_55r
+  - ive19_14r
+thumbnail_size: 500
 image_credit: "Page images provided by Manuscriptorium (CC BY-NC 4.0)."

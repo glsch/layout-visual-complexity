@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-14T05:29:05+00:00",
-  "ended": "2026-11-14T05:29:10+00:00",
+  "started": "2026-11-14T06:23:11+00:00",
+  "ended": "2026-11-14T06:23:16+00:00",
   "inputs": [
     {
       "path": "build/evaluate/measures/ink_coverage/by_elo_gap.tsv",
@@ -105,7 +105,7 @@
     },
     {
       "path": "build/evaluate/line_texture/manifest.json",
-      "sha256": "7f168c079d947332c3e9fcbfca539659ff0e844dd2cfdadd30591f82ff6c7127",
+      "sha256": "5da8175e2e1847558d660fb6ebaae601c04fddaaf5ba1730c51770f3821cc0f3",
       "bytes": 8538
     },
     {
@@ -120,7 +120,7 @@
     },
     {
       "path": "build/evaluate/colour/manifest.json",
-      "sha256": "1deb2aa2306aca376bb9322b7cb592d2b1905b703e2a00dfa1191d91aef38fa2",
+      "sha256": "aab95e3c5582adcf7edc5cea4764996902a4fb8fb6d4a3a874023312607ea88f",
       "bytes": 9315
     },
     {
@@ -165,7 +165,7 @@
     },
     {
       "path": "build/evaluate/geometry_line_texture/manifest.json",
-      "sha256": "a784b5cbcca2c41c1250029de38d6680d6445924335ee042932df9c9bc8d81a4",
+      "sha256": "5cd3c0d5c9e24d975c490b64685b2b5b9f024530419c7cde230139f2ae2fbbe0",
       "bytes": 10041
     },
     {
@@ -180,7 +180,7 @@
     },
     {
       "path": "build/evaluate/geometry_colour/manifest.json",
-      "sha256": "c449085a3d28ccafb5e9874e36cf6effbce8104576d65d43ac97770490fae746",
+      "sha256": "b1ff6af9b6ce87736d3fea6ab843323aae69b6df2a3a1830582c858f1b66d792",
       "bytes": 10802
     },
     {
@@ -285,7 +285,7 @@
     },
     {
       "path": "build/evaluate/ensemble_colour/manifest.json",
-      "sha256": "c452c2aee483eecd03d9a7fdfda6f333d14bf22ec00cfaa7937335df3d1fe1cf",
+      "sha256": "377417f49c2769c9951edcc5e81ec05eb3122911678f37de2d9c48d4809859a4",
       "bytes": 9402
     },
     {
@@ -593,7 +593,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "3c42ae0188e7626a100b3718c8ff2c9c82201735-dirty",
+  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "within_and_across_manuscripts": {
@@ -925,7 +925,7 @@
       ]
     },
     "seconds": {
-      "within_and_across_manuscripts": 4.656
+      "within_and_across_manuscripts": 5.064
     }
   }
 }

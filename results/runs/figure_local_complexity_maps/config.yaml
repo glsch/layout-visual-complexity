@@ -7,6 +7,7 @@ scores: build/ranking/scores.tsv
 features: build/features/dataset/features.parquet
 layout: build/segment/dataset
 evaluations: {}
+shown: []
 labels: {}
 colours: {}
 comparisons: []
@@ -35,3 +36,7 @@ http:
   retries: 5
   backoff: 1.0
   timeout: 60.0
+levels: {}
+alone: []
+reference_column: ''
+colour_pages: []

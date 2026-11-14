@@ -1,0 +1,120 @@
+{
+  "command": "judgments report",
+  "started": "2026-11-14T06:21:11+00:00",
+  "ended": "2026-11-14T06:21:12+00:00",
+  "inputs": [
+    {
+      "path": "build/dataset/judgments.tsv",
+      "sha256": "1f7bec0935ace0c316a94cb8b161cccb42cfe2a4f5f46f4c790f4e5a585b0c07",
+      "bytes": 526359
+    },
+    {
+      "path": "build/dataset/images.tsv",
+      "sha256": "a6986b39a8e10f9ecd1e0ea5fe24982a7cb303aee957a4cb90b29dcb424aa583",
+      "bytes": 163870
+    },
+    {
+      "path": "build/dataset/manuscripts.tsv",
+      "sha256": "990e1a0481be75405ea1398f16e252f4a0f1342e848550d8bc9b264199a407a6",
+      "bytes": 64171
+    },
+    {
+      "path": "build/ranking/scores.tsv",
+      "sha256": "f27050a5b0039c31a3c2bce6766501b6320f14e735602fc02419f40cce9ce684",
+      "bytes": 43825
+    },
+    {
+      "path": "build/ranking/score_distributions.npz",
+      "sha256": "93ff3b8285164660730a119a7c94dfd67d840f58a567aef4acf820f77b1c36a1",
+      "bytes": 2965118
+    },
+    {
+      "path": "build/ranking/config.yaml",
+      "sha256": "a60e2581725f0d0ec200949804091b64c731ec6186e5fc05e5a1b7c36db035f5",
+      "bytes": 167
+    }
+  ],
+  "outputs": [
+    "results/figures/position_bias_funnel.svg",
+    "results/figures/position_bias_funnel.png",
+    "results/figures/position_bias_funnel.tex"
+  ],
+  "configuration": {
+    "dataset": "build/dataset",
+    "ranking": "build/ranking",
+    "output": "results",
+    "outputs": [
+      "position_bias_funnel"
+    ],
+    "name": "figure_position_bias_funnel",
+    "gap_edges": [
+      100.0,
+      200.0,
+      300.0,
+      400.0
+    ],
+    "folds": {
+      "k": 10,
+      "repeats": 10,
+      "seed": 20260629
+    },
+    "bootstrap": 1000,
+    "bootstrap_seed": 20260629,
+    "split_half": {
+      "repeats": 100,
+      "permutations": 100,
+      "seed": 20260629,
+      "balance": "judgments"
+    },
+    "category_labels": {},
+    "position_bias_min_judgments": 100,
+    "graph_seed": 20260629,
+    "graph_batches": {},
+    "thumbnails": 10,
+    "thumbnail_pages": [],
+    "thumbnail_size": 500,
+    "image_credit": "",
+    "cache": "~/.cache/layout-visual-complexity",
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    },
+    "jobs": 0
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "position_bias_funnel": {
+      "annotators": 101,
+      "outside": 8,
+      "outside_by_chance": 4.718552580349644
+    },
+    "seconds": {
+      "position_bias_funnel": 0.455
+    }
+  }
+}
