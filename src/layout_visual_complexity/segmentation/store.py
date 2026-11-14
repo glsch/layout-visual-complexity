@@ -30,7 +30,7 @@ LAYOUT_SCHEMA = pa.schema(
         ("id", pa.string()),
     ]
 )
-PAGE_COLUMNS = [
+PAGE_COLUMNS_BEFORE = [
     "page",
     "document",
     "label",
@@ -46,10 +46,13 @@ PAGE_COLUMNS = [
     "regions",
     "yolo_lines",
     "lines",
-    *[f"{stage}_seconds" for stage in STAGES],
-    "status",
-    "settings",
 ]
+PAGE_COLUMNS = [*PAGE_COLUMNS_BEFORE, *[f"{stage}_seconds" for stage in STAGES], "status", "settings"]
+
+
+def page_columns(stages: tuple[str, ...] = STAGES) -> list[str]:
+    """The pages table's columns, with the seconds of each stage."""
+    return [*PAGE_COLUMNS_BEFORE, *[f"{stage}_seconds" for stage in stages], "status", "settings"]
 
 
 def scaler(record: PageRecord) -> tuple[float, float]:
@@ -117,7 +120,9 @@ def read_layout(path: Path) -> pd.DataFrame:
     return table
 
 
-def page_row(record: PageRecord, status: str, source: dict[str, Any], settings: str) -> dict[str, Any]:
+def page_row(
+    record: PageRecord, status: str, source: dict[str, Any], settings: str, stages: tuple[str, ...] = STAGES
+) -> dict[str, Any]:
     folio = record.folio
     return {
         "page": record.page,
@@ -135,18 +140,18 @@ def page_row(record: PageRecord, status: str, source: dict[str, Any], settings: 
         "regions": len(record.regions),
         "yolo_lines": len(record.yolo_lines),
         "lines": len(record.lines),
-        **{f"{stage}_seconds": record.seconds.get(stage) for stage in STAGES},
+        **{f"{stage}_seconds": record.seconds.get(stage) for stage in stages},
         "status": status,
         "settings": settings,
     }
 
 
-def write_pages(path: Path, rows: list[dict[str, Any]]) -> Path:
+def write_pages(path: Path, rows: list[dict[str, Any]], stages: tuple[str, ...] = STAGES) -> Path:
     """The pages table, in the order given."""
-    table = pd.DataFrame(rows, columns=PAGE_COLUMNS)
+    table = pd.DataFrame(rows, columns=page_columns(stages))
     for column in ("width", "height", "fetched_width", "fetched_height", "regions", "yolo_lines", "lines"):
         table[column] = table[column].astype("Int32")
-    for column in ("folio_iou", *[f"{stage}_seconds" for stage in STAGES]):
+    for column in ("folio_iou", *[f"{stage}_seconds" for stage in stages]):
         table[column] = table[column].astype("Float64")
     partial = Path(path).with_name(Path(path).name + ".part")
     table.to_parquet(partial, index=False, compression="zstd")
