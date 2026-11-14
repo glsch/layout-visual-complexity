@@ -45,7 +45,7 @@ lvc judgments report --config report.yaml
 `import` reads a dataset of judgments in its published structure, from a folder or from its Zenodo record by DOI,
 checks it, and copies it into the working folder; `rank` computes Elo scores over seeded permutations of the
 judgments' order, and Bradley-Terry scores; `report` writes the reliability tables, position bias by annotator, the
-comparison graph and the score distributions, as violins and as bands, with thumbnails of chosen pages.
+comparison graph and the score distributions as bands, with thumbnails of chosen pages.
 
 Settings come from YAML files, and any of them can be given as an option instead: `--config` can be repeated, later
 files override earlier ones, and options override files. `lvc judgments rank --help` lists every setting. Each run
@@ -56,6 +56,46 @@ depend on it.
 Records, manifests and images are fetched politely: from several servers at once, but from each with at most two
 requests in flight and half a second between their starts, slowing down when a server asks, with retries. Set
 `LVC_CONTACT` (see `.env.example`) to tell the servers who to contact about the requests.
+
+### Scoring and comparing pages
+
+```
+lvc score SOURCES… --output build/score/name [--models FOLDER] [--maps] [--profiles] [--families colour] [--jobs N] [--device auto|cpu|mps]
+lvc compare FIRST SECOND [--first_page 12r] [--second_page CANVAS_ID]
+```
+
+`score` takes the sources `segment` takes (below) and streams each page through every stage at once: it is fetched,
+cropped to its folio, segmented into regions and lines, measured, and its folio's patch tokens are scored by the ViT
+head; its image leaves the bounded download cache once it is done, and the tokens are never stored. It needs both
+extras. The run's folder keeps `scores.tsv` (each page's id, document, label, canvas and place in its document; the
+geometry ranker's, the ViT ranker's and their ensemble's z-scores; and the ensemble's expected Elo score), the layout
+store, the features (`features.parquet`), the report and the run's record, with every model's checksum. On request,
+`--maps` keeps the head's patch scores as small float16 maps (`maps/<document>.npz`), and `--profiles` draws each
+document's profile (its pages coloured by score, the scores along the document, its most and least complex pages)
+and the overview of the documents (each one's mean score against the spread of its pages'). `--families` measures
+more families beside the ranker's, which don't enter the scores (`colour`, to describe the pages' colour). A rerun
+resumes; the scores don't depend on the number of workers.
+
+The package comes with its rankers (`--models` takes others, made by `lvc train --ensemble`): the geometry ranker
+and the ViT head, each trained on the dataset's 397 pages and all their judgments, and their ensemble with equal
+weights. A page's expected Elo score is the regression of the dataset's Elo scores on the ensemble's out-of-fold
+scores, so that it reads on the Elo scale with the spread a prediction has.
+
+`compare` scores two pages (images, image URLs, IIIF image services, or a page of a IIIF manifest by its place, its
+label or its canvas) and prints the probability that the first is judged more complex than the second, by the
+ensemble and by each ranker: a sigmoid of the difference of their z-scores, by a scale fitted on the evaluations'
+out-of-fold scores, so that it holds on new pages. It is symmetric: p(a, b) = 1 − p(b, a). The pages are scored into
+the user cache, where they stay for later comparisons.
+
+```
+lvc models [--config score.yaml]
+lvc cache [--clear images|manifests|tokens|…|all]
+```
+
+`models` lists what a scoring run uses (the regions model, Kraken's model, the ViT backbone at its revision, the
+rankers), where each is, and whether it is there and the one expected; the regions model can't come with the package
+(PyPI refuses files over 100 MB), and is put in `models/` until it is published. `cache` lists the user cache's parts
+(page images, manifests, tokens, thumbnails, …) with their sizes, and clears them by kind.
 
 ### Segmenting pages
 
@@ -218,10 +258,21 @@ weights.
 lvc train --tokens build/embed/name --dataset build/dataset --output build/train/name
 ```
 
-trains the pairwise model (`--features`) or the head (`--tokens`) on every judgment, without the evaluation. The
-package comes with a head trained on the dataset's 397 pages and all their judgments, on DINOv2 ViT-S/14's tokens of
-the folio crop (`layout_visual_complexity.evaluation.vit_head.shipped_head()`); it scores a page with numpy alone, and
-its patch scores make a map of where on the page the head finds complexity.
+trains the pairwise model (`--features`) or the head (`--tokens`) on every judgment, without the evaluation, and writes
+its training pages' z-scores (`scores.tsv`); `--leave_out` leaves manuscripts out, their pages and every judgment
+touching them, so that their pages can be scored out of sample.
+
+```
+lvc train --ensemble "{geometry: build/train/geometry, vit: build/train/vit_head}" --calibration "{geometry: build/evaluate/geometry, vit: build/evaluate/vit, ensemble: build/evaluate/ensemble}" --dataset build/dataset --output build/train/models
+```
+
+makes the rankers `lvc score` and `lvc compare` use: the members' files beside `ensemble.json`, which holds their
+weights (equal by default), the spread of their weighted sum over the training pages, the scales of win
+probabilities fitted on the evaluations' out-of-fold scores (`--calibration`; on the training judgments without it),
+with a table comparing their calibration to the training fit's, and the Elo scale. A page whose out-of-fold z-score
+lies beyond 5 in absolute value (`--fit_bound`), where a linear model extrapolates, is left out of those fits. The
+package's head scores a page with numpy alone (`layout_visual_complexity.evaluation.vit_head.shipped_head()`), and its
+patch scores make a map of where on the page the head finds complexity.
 
 `lvc report` writes the tables and figures of the features and of the methods evaluated on them: accuracy by Elo gap
 (as a table and a figure), the differences between methods on the same resamples, learning curves and calibration,
@@ -230,7 +281,12 @@ drawn on pages; the baselines' (by Elo gap, by the information they need, the me
 measures' correlations with ink coverage); the colour level's (by Elo gap with what colour adds to geometry, the
 measures defined, ink colour drawn on pages); and every method within and across manuscripts, from the hits and
 scores each evaluation keeps. In the methods' tables and figures, the Reference is one limit measured for accuracy
-and for ρ: the consistency of the same test judgments with the final Elo scores, and the ceiling for SROCC.
+and for ρ: the consistency of the same test judgments with the final Elo scores, and the ceiling for SROCC. From a
+`lvc score` run and a table of the collection's catalogue facts, it also draws the manuscripts' profiles (in two
+designs), the strips of all of them, the overview (in two designs), the collection's table and the readings of the
+overview checked against the catalogue (`manuscript_profiles`, `manuscript_profile_strips`, `manuscript_strips`,
+`manuscript_overview`, `manuscript_overview_quadrants`, `manuscripts_table`, `manuscript_readings`); `--min_lines`
+leaves out blank or nearly blank pages.
 
 ## The dataset
 
@@ -269,7 +325,7 @@ learning curves (on the folds of the first two repeats), takes about 25 minutes 
 | `table-reliability` | Table 2: reliability by Elo gap, with the split-half reliability and the ceiling for SROCC as its last row, and position bias; the consistency reference per fold, with its intervals |
 | `figure-position-bias-funnel` | Position bias by annotator, within the bounds of chance |
 | `figure-comparison-graph` | Figure 2: the comparison graph, coloured by batch and by Elo score |
-| `figure-elo-violins` | Figure 3: the distributions of the Elo scores, as violins and as bands |
+| `figure-elo-score-bands` | Figure 3: the distributions of the Elo scores, as bands |
 | `segment-dataset` | `build/segment/dataset/`: the dataset's pages segmented (not part of `all`: it needs the `segment` extra, the models in `models/` and the page images from their servers) |
 | `features-dataset` | `build/features/dataset/`: the geometric and Layout features of the dataset's pages, from their segmentation, the baselines' and the colour level's |
 | `evaluate-geometry`, `evaluate-geometry-layout` | `build/evaluate/`: the geometry ranker, without and with the Layout features |
@@ -281,6 +337,7 @@ learning curves (on the folds of the first two repeats), takes about 25 minutes 
 | `embed-dataset` | `build/embed/dataset/`: the dataset's pages' patch tokens from DINOv2 ViT-S/14, the folio crop |
 | `evaluate-vit`, `evaluate-ensembles` | `build/evaluate/`: the ViT ranker; its ensembles with the geometry ranker (without and with Layout, with equal and fitted weights) |
 | `head-dataset`, `package-head` | `build/train/vit_head/`: the ViT head trained on every judgment; copied into the package |
+| `train-geometry`, `models-dataset`, `package-models` | `build/train/geometry/`, `build/train/models/`: the geometry ranker trained on every judgment, and the rankers that come with the package (the two and their ensemble, with calibrated scales and the Elo scale); copied into the package |
 | `table-methods-by-elo-gap` | Table 4: the generic image baseline, real colour, the geometry ranker, the ViT ranker and their ensemble by Elo gap, beside the Reference |
 | `figure-accuracy-by-elo-gap` | The same as a figure, with each method's interval, and as a table |
 | `table-paired-differences` | The methods' differences in accuracy and SROCC, on the same resamples |
@@ -300,9 +357,17 @@ learning curves (on the folds of the first two repeats), takes about 25 minutes 
 | `table-line-texture-families`, `table-colour-measures` | Appendix B's table of the line-texture measures; the real colour measures defined |
 | `table-within-and-across-manuscripts` | Every method's accuracy across and within manuscripts, and its SROCC overall and within |
 | `figure-ink-colour-on-page` | Ink colour on three pages, drawn by hue class beside the classes' shares |
+| `models-without-crux` | `build/train/models_without_crux/`: the rankers trained without the four of Crux of Telč's manuscripts that gave the dataset pages, for the case study |
+| `score-crux` | `build/score/crux/`: Crux's 23 manuscripts' 14,138 leaf pages scored out of sample (not part of `all`: it needs both extras, the models in `models/`, the network, and three to four hours on an Apple M4 Pro) |
+| `figure-manuscript-profiles` | Figures 4 and 5: the profiles of I D 18 and XI C 1, in the package's design and in the article's |
+| `figure-manuscript-strips` | For the appendix: the strips of all 23 manuscripts |
+| `figure-crux-overview` | Figure 6: the overview of the 23 manuscripts, in the package's design and in the article's |
+| `table-crux-manuscripts`, `table-crux-readings` | The 23 manuscripts' table, the catalogue's facts beside the scores; the article's readings of the overview, checked |
 
 The dataset leaves out the sessions of a public exhibition, whose annotators were mostly not experts, and the
-calibration judgments; so its numbers differ from the article's, which kept them.
+calibration judgments; so its numbers differ from the article's, which kept them. Crux of Telč's catalogue facts
+(`reproduce/crux_manuscripts.tsv`) come from M. Dragoun, A. Ebersonová and L. Doležalová, *Středověké knihovny
+augustiniánských kanonií v Třeboni a Borovanech* (Praha: Scriptorium, 2021).
 
 ## Tests
 

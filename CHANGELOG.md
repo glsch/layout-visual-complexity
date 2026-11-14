@@ -2,6 +2,32 @@
 
 ## Unreleased
 
+- `lvc score`: pages scored as a stream from their sources (manifests, folders, lists, page selections): fetched,
+  cropped to the folio, segmented, measured and scored by the geometry ranker, the ViT head and their ensemble, the
+  stages running at once; it keeps the scores with each page's expected Elo score (`scores.tsv`), the layout store and
+  the features, never the images or the tokens, and on request the head's patch scores as float16 maps (`--maps`),
+  each document's profile and the overview (`--profiles`), and more families beside the ranker's (`--families`).
+  `--other_models` scores the same pages with other rankers too. It resumes, and its results don't depend on the
+  number of workers.
+- `lvc compare`: the probability that one page is judged more complex than another, by the ensemble and each
+  ranker, with scales fitted on out-of-fold scores; symmetric.
+- `lvc models` lists the models a scoring run uses, where each is, and whether it is there and the one expected;
+  `lvc cache` lists the user cache's parts with their sizes and clears them by kind.
+- The package comes with its rankers beside the ViT head: the geometry ranker trained on every judgment
+  (`heads/geometry.json`) and their ensemble (`heads/ensemble.json`), with the scales of win probabilities fitted on
+  the evaluations' out-of-fold scores and the Elo scale of its scores. The head itself is unchanged.
+- `lvc train` leaves manuscripts out (`--leave_out`: their pages and every judgment touching them), writes its
+  training pages' z-scores (`scores.tsv`), and builds an ensemble of trained rankers (`--ensemble`) with calibrated
+  scales (`--calibration`) and a table of their calibration.
+- `lvc report` draws a scored collection: the manuscripts' profiles in two designs, the strips of all of them, the
+  overview in two designs, the collection's table beside its catalogue's facts, and the overview's readings checked
+  against the catalogue.
+- `lvc segment` and `lvc score` commit their state every 30 seconds, so a run that is killed keeps what it had done,
+  and clear the heatmaps a killed run left behind.
+- `reproduce/` draws only the score distributions as bands (`figure-elo-score-bands`); the violins are gone. It makes
+  the package's rankers (`package-models`), the rankers without Crux of Telč's manuscripts, Crux's scores
+  (`score-crux`), and the case study's figures and tables, with Crux's catalogue facts in
+  `reproduce/crux_manuscripts.tsv`.
 - Every table is centred but its first column; paragraph columns stay left-aligned.
 - `lvc judgments report`:
   - draws the comparison graph in two panels with one layout, laid lengthwise: (a) coloured by batch, each image in
