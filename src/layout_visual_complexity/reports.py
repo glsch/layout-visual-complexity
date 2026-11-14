@@ -17,6 +17,9 @@
 - Within and across manuscripts, for every method (`method_reports.py`): `within_and_across_manuscripts`.
 - The colour level's (`colour_reports.py`): `colour_by_elo_gap`, `colour_differences`, `line_texture_families`,
   `colour_measures`, `ink_colour_on_page`.
+- A collection of manuscripts scored by `lvc score` (`manuscript_reports.py`): `manuscript_profiles`,
+  `manuscript_profile_strips`, `manuscript_strips`, `manuscript_overview`, `manuscript_overview_quadrants`,
+  `manuscripts_table`, `manuscript_readings`.
 """
 
 import json
@@ -29,7 +32,7 @@ from typing import Literal, get_args
 import numpy as np
 import pandas as pd
 
-from layout_visual_complexity import baseline_reports, colour_reports, method_reports
+from layout_visual_complexity import baseline_reports, colour_reports, manuscript_reports, method_reports
 from layout_visual_complexity.download import HttpSettings
 from layout_visual_complexity.evaluate import read_elo
 from layout_visual_complexity.evaluation import metrics
@@ -71,6 +74,13 @@ Output = Literal[
     "line_texture_families",
     "colour_measures",
     "ink_colour_on_page",
+    "manuscript_profiles",
+    "manuscript_profile_strips",
+    "manuscript_strips",
+    "manuscript_overview",
+    "manuscript_overview_quadrants",
+    "manuscripts_table",
+    "manuscript_readings",
 ]
 ALL_OUTPUTS: list[Output] = list(get_args(Output))
 
@@ -148,6 +158,16 @@ class ReportSettings:
         alone: The evaluations of one measure alone, drawn as open dots.
         reference_column: The column the generic measures are set against (ink coverage).
         colour_pages: The pages whose ink colour is drawn.
+        score_run: A `lvc score` folder, for a collection's profiles, strips, overview, table and readings.
+        catalogue: The collection's catalogue facts (a TSV by manuscript id: shelfmark, catalogue number, date,
+            folios, hands, texts, languages, homogeneity, colours).
+        profiles: The manuscripts whose profiles are drawn, by id; all by default.
+        collection: The collection's name, which its overview, table and readings are named by.
+        catalogue_credit: A line crediting the catalogue, added to the captions that use its facts.
+        thumbnail_size: The profiles' thumbnails' longer edge, in pixels, as fetched from the IIIF image service.
+        named: The manuscripts whose places by interquartile range the readings give, by id.
+        min_lines: A collection's pages with fewer of Kraken's text lines than this are left out of its outputs
+            (blank or nearly blank leaves).
     """
 
     output: Path
@@ -178,6 +198,14 @@ class ReportSettings:
     alone: list[str] = field(default_factory=list)
     reference_column: str = ""
     colour_pages: list[str] = field(default_factory=list)
+    score_run: Path | None = None
+    catalogue: Path | None = None
+    profiles: list[str] = field(default_factory=list)
+    collection: str = "manuscripts"
+    catalogue_credit: str = ""
+    thumbnail_size: int = 400
+    named: list[str] = field(default_factory=list)
+    min_lines: int = 0
 
 
 def needed(settings: ReportSettings, name: str, output: str) -> object:
@@ -192,6 +220,7 @@ def run_report(settings: ReportSettings) -> dict[str, object]:
     run = Run("report", settings)
     folder = Path(settings.output)
     timings = {}
+    collection = None
     for output in dict.fromkeys(settings.outputs):
         began = time.perf_counter()
         logger.info("report: %s", output)
@@ -209,6 +238,13 @@ def run_report(settings: ReportSettings) -> dict[str, object]:
             written = feature_families(folder)
         elif output in METHOD_OUTPUTS:
             written = METHOD_OUTPUTS[output](settings, run, folder)
+        elif output in manuscript_reports.OUTPUTS:
+            given = collection_settings(settings, output)
+            if collection is None:
+                collection = manuscript_reports.load_collection(
+                    given.score_run, given.catalogue, given.bootstrap, given.seed, run, min_lines=given.min_lines
+                )
+            written = manuscript_reports.make(output, given, collection, folder)
         else:
             raise ValueError(f"unknown output {output!r}")
         timings[output] = round(time.perf_counter() - began, 3)
@@ -218,6 +254,27 @@ def run_report(settings: ReportSettings) -> dict[str, object]:
     run.summary["seconds"] = timings
     run.wrote(run.finish(folder / "runs" / settings.name))
     return run.summary
+
+
+def collection_settings(settings: ReportSettings, output: str) -> "manuscript_reports.CollectionSettings":
+    """What a collection's outputs need, from the report's settings."""
+    from layout_visual_complexity.download import DEFAULT_CACHE
+
+    return manuscript_reports.CollectionSettings(
+        score_run=needed(settings, "score_run", output),  # type: ignore[arg-type]
+        catalogue=settings.catalogue,
+        profiles=list(settings.profiles),
+        collection=settings.collection,
+        image_credit=settings.image_credit,
+        catalogue_credit=settings.catalogue_credit,
+        thumbnail_size=settings.thumbnail_size,
+        named=list(settings.named),
+        min_lines=settings.min_lines,
+        bootstrap=settings.bootstrap,
+        seed=settings.seed,
+        cache=Path(settings.cache or DEFAULT_CACHE),
+        http=settings.http,
+    )
 
 
 METHOD_OUTPUTS = {
