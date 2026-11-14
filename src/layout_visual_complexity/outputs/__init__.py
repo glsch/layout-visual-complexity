@@ -53,7 +53,8 @@ def gap_latex(label: str) -> str:
 class LatexTable:
     """A LaTeX table: headers, rows of cells already formatted, a caption above, and rules.
 
-    `rules_before` holds the row numbers a `\\midrule` goes above.
+    Columns are centred but the first, which is left-aligned, unless `align` says otherwise. `rules_before` holds the
+    row numbers a `\\midrule` goes above.
     """
 
     headers: Sequence[str]
@@ -64,7 +65,7 @@ class LatexTable:
     rules_before: Sequence[int] = field(default_factory=tuple)
 
     def render(self) -> str:
-        align = self.align or "l" + "r" * (len(self.headers) - 1)
+        align = self.align or "l" + "c" * (len(self.headers) - 1)
         lines = [
             r"\begin{table}[htbp]",
             r"  \centering",
@@ -83,12 +84,15 @@ class LatexTable:
         return "\n".join(lines)
 
 
-def write_table(table: pd.DataFrame, stem: Path, latex: LatexTable, float_format: str = "%.6f") -> list[Path]:
-    """`<stem>.tsv` and `<stem>.tex`."""
+def write_table(table: pd.DataFrame, stem: Path, latex: LatexTable | None, float_format: str = "%.6f") -> list[Path]:
+    """`<stem>.tsv` and `<stem>.tex`; without `latex`, the TSV alone, and a `<stem>.tex` left from before is removed."""
     stem = Path(stem)
     stem.parent.mkdir(parents=True, exist_ok=True)
     tsv, tex = stem.with_suffix(".tsv"), stem.with_suffix(".tex")
     table.to_csv(tsv, sep="\t", index=False, lineterminator="\n", float_format=float_format)
+    if latex is None:
+        tex.unlink(missing_ok=True)
+        return [tsv]
     tex.write_text(latex.render(), encoding="utf-8")
     return [tsv, tex]
 

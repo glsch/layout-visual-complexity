@@ -95,9 +95,10 @@ def plot_by_information(
 
 def plot_correlation_matrix(matrix: pd.DataFrame, labels: list[str]) -> Figure:
     """The lower triangle of a matrix of Spearman correlations, each cell coloured blue (negative) to vermillion
-    (positive) with its value, the rows and columns labelled by `labels` in the matrix's order. Full width."""
+    (positive) with its value, the rows and columns labelled by `labels` in the matrix's order; the colour bar in the
+    empty upper triangle, so the cells are wide enough for a signed value at 6 pt. Full width."""
     count = len(matrix)
-    figure = style.new_figure("full", 4.0 + 0.47 * count)
+    figure = style.new_figure("full", 5.6 + 0.58 * count)
     axes = figure.subplots()
     values = matrix.to_numpy(dtype=float)
     lower = np.tril(np.ones_like(values, dtype=bool), k=-1)
@@ -122,7 +123,7 @@ def plot_correlation_matrix(matrix: pd.DataFrame, labels: list[str]) -> Figure:
     axes.tick_params(length=0)
     for spine in axes.spines.values():
         spine.set_visible(False)
-    bar = figure.colorbar(image, ax=axes, shrink=0.5, pad=0.02)
+    bar = figure.colorbar(image, cax=axes.inset_axes((0.76, 0.55, 0.03, 0.4)))
     bar.set_label(r"Spearman's $\rho$")
     bar.outline.set_linewidth(0.5)
     return figure

@@ -153,7 +153,7 @@ def line_texture_families(folder: Path) -> Written:
         f"\\texttt{{{escape(PREFIX)}\\_\\_<measure>}}."
     )
     latex = LatexTable(["Family", "$N$", "Measurements"], latex_rows, caption, "tab:line_texture_families",
-                       align=r"lrp{0.6\linewidth}", rules_before=[len(latex_rows) - 1])  # fmt: skip
+                       align=r"lcp{0.6\linewidth}", rules_before=[len(latex_rows) - 1])  # fmt: skip
     paths = write_table(table, folder / "tables" / "line_texture_families", latex)
     return Written(paths, {"families": len(rows), "measures": int(table["count"].sum())})
 

@@ -491,7 +491,7 @@ def learning_curves_and_calibration(settings: Any, run: Run, folder: Path) -> Wr
         "Learning curves: accuracy (the mean over the folds, with its 95\\% interval) and SROCC when each method is "
         "trained on a share of each fold's training judgments or images.",
         "tab:learning_curves",
-        align="llcccc",
+        align="lccccc",
     )
     paths += write_table(table, folder / "tables" / "learning_curves", latex)
     return Written(paths, {"learning_curves": table.to_dict("records")})
