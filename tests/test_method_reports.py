@@ -26,7 +26,7 @@ def evaluations(folder: Path, dataset_folder: Path) -> tuple[dict[str, Path], Pa
     features, scores = setup(folder, dataset_folder)
     pages = read_dataset(dataset_folder).images["image"].tolist()
     tokens = write_token_set(folder / "tokens", dict(zip(pages, np.linspace(-2, 2, len(pages)), strict=True)))
-    curves = LearningCurveSettings(shares=[0.5])
+    curves = LearningCurveSettings(shares=[0.5], repeats=1)
     common = {"folds": FOLDS, "bootstrap": 50, "jobs": 1, "learning_curves": curves}
     methods = {
         "geometry": {"features": features, "families": "signal"},
@@ -85,6 +85,9 @@ def test_the_methods_tables_and_figures(tmp_path: Path, dataset_folder: Path) ->
     assert (differences["srocc_low"] <= differences["srocc_high"]).all()
     assert (differences["srocc_within_low"] <= differences["srocc_within_high"]).all()
     assert {"accuracy_within_difference", "accuracy_within_low"} <= set(differences.columns)
+    drawn = (output / "figures" / "learning_curves_and_calibration.tex").read_text()
+    assert "drawn on the folds of the first of the two repeats (2 folds)" in drawn
+    assert "on the test judgments of all 4 folds" in drawn and "as whiskers" in drawn
     curves = pd.read_csv(output / "tables" / "learning_curves.tsv", sep="\t")
     assert len(curves) == 3 * 4 and set(curves["method"]) == {"geometry", "vit", "ensemble"}
     assert "learning_curves_and_calibration" in summary

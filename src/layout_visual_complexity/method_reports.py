@@ -203,8 +203,11 @@ def measure_name(feature: str) -> str:
 
 
 def counted(count: int, noun: str) -> str:
-    word = NUMBERS[count] if count < len(NUMBERS) else f"{count:,}"
-    return f"{word} {noun}{'' if count == 1 else 's'}"
+    return f"{number_word(count)} {noun}{'' if count == 1 else 's'}"
+
+
+def number_word(count: int) -> str:
+    return NUMBERS[count] if count < len(NUMBERS) else f"{count:,}"
 
 
 def measures_described(summary: dict[str, Any], families: list[str]) -> str:
@@ -459,14 +462,18 @@ def learning_curves_and_calibration(settings: Any, run: Run, folder: Path) -> Wr
     whole = rows[0][rows[0]["share"] == 1.0]
     judgments = float(whole["train_per_fold"].iloc[0]) if len(whole) else math.nan
     pages = float(whole["train_pages_per_fold"].iloc[0]) if len(whole) else math.nan
+    folds = evaluations.configuration()["folds"]
+    tested = int(calibrations[0].table["judgments"].sum())
     caption = (
         "Learning curves and calibration. (a) Accuracy on each fold's test judgments when the methods are trained on "
         f"a share of the fold's training judgments (all of them, {judgments:,.0f} on average) between all its "
         f"training images; (b) on a share of its training images ({pages:,.0f} on average), with the judgments "
-        f"between them; the mean over the folds, with 95\\% intervals from {evaluations.resamples()} as bands. "
-        "(c) Calibration of the predicted win probabilities: per tenth of the predicted probability that the left "
-        "page is chosen, the share of the test judgments that chose it; the dashed diagonal is perfect "
-        f"calibration. {evaluations.definitions()}. {evaluations.protocol()}"
+        f"between them; each share is drawn at random within each fold. The curves are drawn on "
+        f"{curve_folds(evaluations)}, each point the mean over them, with its 95\\% interval from "
+        f"{evaluations.resamples()} as whiskers. (c) Calibration of the predicted win probabilities, on the test "
+        f"judgments of all {folds['k'] * folds['repeats']:,} folds ({tested:,} tests): per tenth of the predicted "
+        "probability that the left page is chosen, the share of the test judgments that chose it; the dashed diagonal "
+        f"is perfect calibration. {evaluations.definitions()}. {evaluations.protocol()}"
     )
     paths = save_figure(figure, folder / "figures" / name, caption, f"fig:{name}")
     table = pd.concat(rows, ignore_index=True)
@@ -488,6 +495,21 @@ def learning_curves_and_calibration(settings: Any, run: Run, folder: Path) -> Wr
     )
     paths += write_table(table, folder / "tables" / "learning_curves", latex)
     return Written(paths, {"learning_curves": table.to_dict("records")})
+
+
+def curve_folds(evaluations: Evaluations) -> str:
+    """The folds the evaluations' learning curves were drawn on, in words: those of the first repeats, or all."""
+    chosen = {key: evaluations.manifests[key]["configuration"].get("learning_curves", {}).get("repeats")
+              for key in evaluations.keys}  # fmt: skip
+    if len(set(chosen.values())) > 1:
+        raise ValueError(f"learning curves drawn on different repeats: {chosen}")
+    folds = evaluations.configuration()["folds"]
+    k, repeats = int(folds["k"]), int(folds["repeats"])
+    first = next(iter(chosen.values()))
+    if first is None or first >= repeats:
+        return f"all {k * repeats:,} folds"
+    named = "first" if first == 1 else f"first {number_word(first)}"
+    return f"the folds of the {named} of the {number_word(repeats)} repeats ({k * first:,} folds)"
 
 
 def local_complexity_maps(settings: Any, run: Run, folder: Path) -> Written:
