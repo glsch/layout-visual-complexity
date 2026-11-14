@@ -83,3 +83,23 @@ def describe(judgments: pd.DataFrame, images: list[str], anchor_factor: float = 
         anchor_factor=anchor_factor,
         anchors=anchors,
     )
+
+
+def batches_by_first_judgment(judgments: pd.DataFrame, images: list[str], starts: dict[str, str]) -> pd.Series:
+    """Each image's batch: the last of the batches, given by their first days (ISO dates, `{name: day}`), that began
+    on or before the day the image was first judged. Without batches, every image is in one, `Images`. A categorical
+    series, its categories in the order of their first days; images never judged are missing."""
+    if not starts:
+        return pd.Series(pd.Categorical(["Images"] * len(images)), index=images)
+    ordered = sorted(starts.items(), key=lambda item: item[1])
+    shown = pd.concat(
+        [judgments[["left", "date"]].set_axis(["image", "date"], axis=1),
+         judgments[["right", "date"]].set_axis(["image", "date"], axis=1)]
+    )  # fmt: skip
+    first = shown.groupby("image")["date"].min().reindex(images)
+    days = [day for _, day in ordered]
+    position = np.searchsorted(np.asarray(days, dtype=object), first.fillna("").to_numpy(dtype=object), side="right")
+    names = [name for name, _ in ordered]
+    batch = [names[number - 1] if number > 0 and isinstance(day, str) else None
+             for number, day in zip(position, first, strict=True)]  # fmt: skip
+    return pd.Series(pd.Categorical(batch, categories=names), index=images)

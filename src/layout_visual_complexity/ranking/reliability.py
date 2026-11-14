@@ -3,7 +3,9 @@
 - consistency: the share of judgments that chose the image with the higher final score (ties count half);
 - agreement: over image pairs judged by at least two different annotators, the share of pairs of their judgments
   (one judgment from each of two different annotators) that chose the same image;
-- position bias: the share of judgments that chose the image on the left.
+- position bias: the share of judgments that chose the image on the left; an annotator leans to one side beyond
+  chance when the 95% interval of their share leaves out one half, which is when the share lies outside the bounds
+  of chance, one half ± z √(1/4n) for n judgments.
 """
 
 import math
@@ -13,6 +15,7 @@ import pandas as pd
 
 DEFAULT_GAP_EDGES = (100.0, 200.0, 300.0, 400.0)
 OVERALL = "overall"
+Z95 = 1.959963984540054  # the normal quantile of a two-sided 95% interval
 
 
 def gap_bins(edges: tuple[float, ...] = DEFAULT_GAP_EDGES) -> list[tuple[float, float]]:
@@ -96,14 +99,16 @@ def pair_agreement(judgments: pd.DataFrame) -> pd.DataFrame:
 def reliability_by_gap(
     judgments: pd.DataFrame, scores: pd.Series, edges: tuple[float, ...] = DEFAULT_GAP_EDGES
 ) -> pd.DataFrame:
-    """Table 2 of the article: per gap bin and overall, the possible pairs among the scored images, the judgments,
-    their consistency, the pairs judged by two annotators or more, and their agreement.
+    """Table 2 of the article: per gap bin and overall, the possible pairs among the scored images, the pairs judged,
+    the judgments, their consistency, the pairs judged by two annotators or more, and their agreement.
 
     `scores` holds one final score per image; all of them count for the possible pairs.
     """
     gaps = judgment_gaps(judgments, scores)
     hits = agrees_with_scores(judgments, scores)
     bins = gap_bin(gaps, edges)
+    left, right = judgments["left"].to_numpy(dtype=object), judgments["right"].to_numpy(dtype=object)
+    pair = pd.Series(list(zip(np.where(left < right, left, right), np.where(left < right, right, left), strict=True)))
     rejudged = pair_agreement(judgments)
     rejudged_bins = gap_bin(np.abs(rejudged["first"].map(scores) - rejudged["second"].map(scores)), edges)
     values = scores.to_numpy(dtype=float)
@@ -115,6 +120,7 @@ def reliability_by_gap(
             {
                 "gap": gap_label(low, high),
                 "possible": possible_pairs_below(values, high) - possible_pairs_below(values, low),
+                "pairs": int(pair[here].nunique()),
                 "annotated": int(here.sum()),
                 "consistency": float(hits[here].mean()) if here.any() else math.nan,
                 "rejudged": int(pairs_here.sum()),
@@ -128,6 +134,7 @@ def reliability_by_gap(
         {
             "gap": OVERALL,
             "possible": possible_pairs_below(values, math.inf),
+            "pairs": int(pair.nunique()),
             "annotated": len(judgments),
             "consistency": float(hits.mean()) if len(hits) else math.nan,
             "rejudged": len(rejudged),
@@ -137,7 +144,7 @@ def reliability_by_gap(
     return pd.DataFrame(rows)
 
 
-def wilson_interval(successes: int, trials: int, z: float = 1.959963984540054) -> tuple[float, float]:
+def wilson_interval(successes: int, trials: int, z: float = Z95) -> tuple[float, float]:
     """The Wilson score interval of a proportion, 95% by default."""
     if trials == 0:
         return math.nan, math.nan
@@ -159,6 +166,25 @@ def position_bias(judgments: pd.DataFrame) -> pd.DataFrame:
         share = float(chose_left.mean()) if len(chose_left) else math.nan
         rows.append({"annotator": name, "judgments": len(chose_left), "left": share, "low": low, "high": high})
     return pd.DataFrame(rows)
+
+
+def chance_bounds(judgments: np.ndarray, z: float = Z95) -> tuple[np.ndarray, np.ndarray]:
+    """The bounds within which the share of left choices of `judgments` judgments falls by chance alone, with no
+    preference for either side: one half ± z √(1/4n). A share outside them is one whose Wilson interval leaves out
+    one half."""
+    half_width = z * np.sqrt(0.25 / np.asarray(judgments, dtype=float))
+    return 0.5 - half_width, 0.5 + half_width
+
+
+def expected_outside(judgments: np.ndarray, z: float = Z95) -> float:
+    """How many annotators with these numbers of judgments would lie outside the bounds of chance by chance alone,
+    each choosing either side with probability one half: the sum of their binomial probabilities of doing so."""
+    expected = 0.0
+    for n in (int(count) for count in np.asarray(judgments)):
+        low, high = (float(bound[0]) for bound in chance_bounds(np.array([n]), z))
+        ways = sum(math.comb(n, lefts) for lefts in range(n + 1) if not low <= lefts / n <= high)
+        expected += ways / 2**n
+    return expected
 
 
 def spearman(a: np.ndarray, b: np.ndarray) -> float:

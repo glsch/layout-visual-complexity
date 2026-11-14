@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+- Every table is centred but its first column; paragraph columns stay left-aligned.
+- `lvc judgments report`:
+  - draws the comparison graph in two panels with one layout, laid lengthwise: (a) coloured by batch, each image in
+    the one in which it was first judged (`graph_batches`), with the pairs judged in the bridge sessions apart;
+    (b) coloured by Elo score. Anchors are ringed. Its statistics go into the caption; the table describing the graph
+    is a TSV alone;
+  - draws the score distributions as violins and, new, as bands (`elo_score_bands`), with bigger thumbnails in two
+    rows, labelled with their page ids, their pages' violins marked; `thumbnail_pages` chooses the pages;
+  - draws position bias as a funnel (`position_bias_funnel`), and the captions say what lying outside chance means;
+  - gives the split-half reliability and the ceiling for SROCC as the reliability table's last row, which also counts
+    the pairs judged (`pairs`); the split-half table is a TSV alone;
+  - gives the consistency reference per fold with the 95% interval of its mean over the folds, from resamples of the
+    manuscripts as the evaluations draw them (`bootstrap`, `bootstrap_seed`; columns `low` and `high`).
+- `reproduce/` draws the position-bias funnel (`figure-position-bias-funnel`) and the score distributions as bands.
+- A table written without LaTeX removes the `.tex` an earlier run left beside it.
 - Two new feature families, the colour level: `line_texture`, the article's 38 line-texture measures as its Appendix
   B defines them and under its names, and `colour`, real colour on the ink layer (chromatic share, hue classes, hue
   entropy, saturation, the colour by kind of zone and across the text lines, coloured initials), the ink within
@@ -63,8 +78,8 @@
   trained on every judgment, which refuses features computed with other settings.
 - `lvc report` writes the features' tables and figures: accuracy by Elo gap, the features' table, each feature's
   correlation with the Elo scores, and the features drawn on pages.
-- Every figure has one style: a colour per method, STIX text, drawn at its print width (15 or 7.2 cm) and included in
-  LaTeX at that width. The comparison graph and the score distributions are redrawn with it.
+- Every figure has one style: a colour per method, text and mathematics in DejaVu Sans (file and code names in DejaVu
+  Sans Mono), drawn at its print width (15 or 7.2 cm) and included in LaTeX at that width. The comparison graph and the score distributions are redrawn with it.
 - `reproduce/` regenerates Table 4's geometry column, Appendix A's table and Figure 9's successor, and draws the
   features on pages.
 - `lvc embed` gives each page's patch tokens from a vision transformer: any `transformers` model with patch tokens, at

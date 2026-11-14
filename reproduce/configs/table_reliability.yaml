@@ -1,5 +1,6 @@
-# Table 2: reliability by the final Elo gap, with position bias as an extra table; the consistency reference per
-# fold (the "Consistency" column of Table 3); the split-half reliability and the ceiling for SROCC.
+# Table 2: reliability by the final Elo gap, with the split-half reliability and the ceiling for SROCC as its last row
+# and position bias as an extra table; the consistency reference per fold (the "Consistency" column of Table 3); the
+# split-half table, whose TSV the evaluations read the ceiling from.
 name: table_reliability
 outputs: [reliability_by_elo_gap, consistency_reference_by_fold, split_half_ceiling]
 position_bias_min_judgments: 100

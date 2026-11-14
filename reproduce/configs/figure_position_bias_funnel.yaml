@@ -1,0 +1,3 @@
+# Position bias as a funnel: each annotator's share of left choices against their number of judgments.
+name: figure_position_bias_funnel
+outputs: [position_bias_funnel]

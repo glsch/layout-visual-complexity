@@ -44,8 +44,8 @@ lvc judgments report --config report.yaml
 
 `import` reads a dataset of judgments in its published structure, from a folder or from its Zenodo record by DOI,
 checks it, and copies it into the working folder; `rank` computes Elo scores over seeded permutations of the
-judgments' order, and Bradley-Terry scores; `report` writes the reliability tables, the comparison graph and the
-score distributions.
+judgments' order, and Bradley-Terry scores; `report` writes the reliability tables, position bias by annotator, the
+comparison graph and the score distributions, as violins and as bands, with thumbnails of chosen pages.
 
 Settings come from YAML files, and any of them can be given as an option instead: `--config` can be repeated, later
 files override earlier ones, and options override files. `lvc judgments rank --help` lists every setting. Each run
@@ -266,9 +266,10 @@ learning curves (on the folds of the first two repeats), takes about 25 minutes 
 | `dataset` | `build/dataset/`: the dataset, checked |
 | `ranking` | `build/ranking/`: Elo scores over 1,000 permutations, and Bradley-Terry |
 | `table-dataset-categories` | Table 1: the dataset by text category |
-| `table-reliability` | Table 2: reliability by Elo gap, with position bias; the consistency reference per fold; the split-half reliability and the ceiling for SROCC |
-| `figure-comparison-graph` | Figure 2: the comparison graph |
-| `figure-elo-violins` | Figure 3: the distributions of the Elo scores |
+| `table-reliability` | Table 2: reliability by Elo gap, with the split-half reliability and the ceiling for SROCC as its last row, and position bias; the consistency reference per fold, with its intervals |
+| `figure-position-bias-funnel` | Position bias by annotator, within the bounds of chance |
+| `figure-comparison-graph` | Figure 2: the comparison graph, coloured by batch and by Elo score |
+| `figure-elo-violins` | Figure 3: the distributions of the Elo scores, as violins and as bands |
 | `segment-dataset` | `build/segment/dataset/`: the dataset's pages segmented (not part of `all`: it needs the `segment` extra, the models in `models/` and the page images from their servers) |
 | `features-dataset` | `build/features/dataset/`: the geometric and Layout features of the dataset's pages, from their segmentation, the baselines' and the colour level's |
 | `evaluate-geometry`, `evaluate-geometry-layout` | `build/evaluate/`: the geometry ranker, without and with the Layout features |

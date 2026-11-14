@@ -17,19 +17,22 @@ from layout_visual_complexity.ranking.dataset import copy_dataset, read_dataset,
 from layout_visual_complexity.ranking.elo import BLOCK, EloSettings, workers
 from layout_visual_complexity.ranking.reliability import DEFAULT_GAP_EDGES, spearman
 from layout_visual_complexity.ranking.scores import compute_scores, read_scores, write_scores
-from layout_visual_complexity.ranking.split_half import SplitHalfSettings
+from layout_visual_complexity.ranking.split_half import SplitHalfSettings, split_half_correlations
 from layout_visual_complexity.runs import Run
 from layout_visual_complexity.zenodo import fetch_record, record_of
 
 Output = Literal[
     "dataset_categories",
     "reliability_by_elo_gap",
+    "position_bias_funnel",
     "consistency_reference_by_fold",
     "split_half_ceiling",
     "comparison_graph",
     "elo_score_distributions",
+    "elo_score_bands",
 ]
 ALL_OUTPUTS: list[Output] = list(get_args(Output))
+SCORE_FIGURES = ("elo_score_distributions", "elo_score_bands")
 
 
 @dataclass(frozen=True)
@@ -87,12 +90,17 @@ class ReportSettings:
         name: The run's name, for its record.
         gap_edges: The edges of the bins of the final Elo gap.
         folds: The folds of the consistency reference.
-        split_half: The split-half ceiling.
+        bootstrap: Resamples of the manuscripts for the consistency reference's intervals.
+        bootstrap_seed: The seed of those resamples; with the evaluations' seed, the intervals are theirs.
+        split_half: The split-half reliability and the ceiling for SROCC.
         category_labels: Names of the categories for the tables, by letter; by default the letters alone.
         position_bias_min_judgments: The annotators the position-bias table shows by name have at least this many
             judgments.
         graph_seed: The seed of the comparison graph's layout.
-        thumbnails: How many page thumbnails the score distributions show.
+        graph_batches: The batches of images the comparison graph colours, by name, each with the first day of its
+            judgments (an ISO date): an image is in the last batch begun by the day it was first judged.
+        thumbnails: How many page thumbnails the score distributions show, at evenly spaced ranks.
+        thumbnail_pages: The pages the score distributions show instead, by id.
         thumbnail_size: The thumbnails' longer edge, in pixels, as fetched from the IIIF image service.
         image_credit: A line crediting the page images, added to the captions of figures that show them.
         cache: The download cache; thumbnails are kept in its `thumbnails` folder.
@@ -107,12 +115,16 @@ class ReportSettings:
     name: str = "report"
     gap_edges: list[float] = field(default_factory=lambda: list(DEFAULT_GAP_EDGES))
     folds: FoldSettings = field(default_factory=FoldSettings)
+    bootstrap: int = 1000
+    bootstrap_seed: int = 1
     split_half: SplitHalfSettings = field(default_factory=SplitHalfSettings)
     category_labels: dict[str, str] = field(default_factory=dict)
     position_bias_min_judgments: int = 100
     graph_seed: int = 1
+    graph_batches: dict[str, str] = field(default_factory=dict)
     thumbnails: int = 10
-    thumbnail_size: int = 200
+    thumbnail_pages: list[str] = field(default_factory=list)
+    thumbnail_size: int = 500
     image_credit: str = ""
     cache: Path = DEFAULT_CACHE
     http: HttpSettings = field(default_factory=HttpSettings)
@@ -210,41 +222,56 @@ def run_report(settings: ReportSettings, transport: httpx2.BaseTransport | None 
     edges = tuple(float(edge) for edge in settings.gap_edges)
     folder = Path(settings.output)
     client = HttpClient(settings.http, transport)
+    outputs = list(dict.fromkeys(settings.outputs))
+    score_kinds = [output for output in outputs if output in SCORE_FIGURES]
+    score_figures: dict[str, judgment_reports.Written] = {}
+    repeats = None
     timings = {}
     try:
-        for output in dict.fromkeys(settings.outputs):
+        for output in outputs:
             began = time.perf_counter()
             logger.info("report: %s", output)
+            if output in ("reliability_by_elo_gap", "split_half_ceiling") and repeats is None:
+                images = dataset.images["image"].tolist()
+                repeats = split_half_correlations(dataset.judgments, images, settings.split_half, elo, settings.jobs)
             if output == "dataset_categories":
                 written = judgment_reports.dataset_categories(dataset, dict(settings.category_labels), folder)
             elif output == "reliability_by_elo_gap":
                 written = judgment_reports.reliability_by_elo_gap(
-                    dataset, scores, edges, settings.position_bias_min_judgments, folder
+                    dataset, scores, edges, settings.position_bias_min_judgments, repeats, settings.split_half, folder
                 )
+            elif output == "position_bias_funnel":
+                written = judgment_reports.position_bias_funnel(dataset, folder)
             elif output == "consistency_reference_by_fold":
                 f = settings.folds
                 written = judgment_reports.consistency_reference_by_fold(
-                    dataset, scores, f.k, f.repeats, f.seed, edges, folder
+                    dataset, scores, f.k, f.repeats, f.seed, edges, settings.bootstrap, settings.bootstrap_seed, folder
                 )
             elif output == "split_half_ceiling":
-                written = judgment_reports.split_half_ceiling(dataset, settings.split_half, elo, settings.jobs, folder)
+                written = judgment_reports.split_half_ceiling(repeats, settings.split_half, folder)
             elif output == "comparison_graph":
                 anchor_factor = yaml.safe_load((Path(settings.ranking) / "config.yaml").read_text("utf-8")).get(
                     "anchor_factor", 3.0
                 )
-                written = judgment_reports.comparison_graph(dataset, scores, anchor_factor, settings.graph_seed, folder)
-            elif output == "elo_score_distributions":
-                cache = Cache(Path(settings.cache) / "thumbnails", ".jpg")
-                written = judgment_reports.elo_score_distributions(
-                    dataset,
-                    scores,
-                    settings.thumbnails,
-                    settings.thumbnail_size,
-                    settings.image_credit,
-                    client,
-                    cache,
-                    folder,
+                written = judgment_reports.comparison_graph(
+                    dataset, scores, anchor_factor, dict(settings.graph_batches), settings.graph_seed, folder
                 )
+            elif output in SCORE_FIGURES:
+                if not score_figures:
+                    cache = Cache(Path(settings.cache) / "thumbnails", ".jpg")
+                    score_figures = judgment_reports.score_figures(
+                        dataset,
+                        scores,
+                        score_kinds,
+                        settings.thumbnails,
+                        list(settings.thumbnail_pages),
+                        settings.thumbnail_size,
+                        settings.image_credit,
+                        client,
+                        cache,
+                        folder,
+                    )
+                written = score_figures[output]
             else:
                 raise ValueError(f"unknown output {output!r}")
             timings[output] = round(time.perf_counter() - began, 3)
