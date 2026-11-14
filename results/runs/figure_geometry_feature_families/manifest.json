@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-12T19:05:29+00:00",
-  "ended": "2026-11-12T19:05:29+00:00",
+  "started": "2026-11-14T06:22:00+00:00",
+  "ended": "2026-11-14T06:22:00+00:00",
   "inputs": [],
   "outputs": [
     "results/figures/geometry_feature_families.svg",
@@ -19,7 +19,10 @@
     "features": "build/features/dataset/features.parquet",
     "layout": "build/segment/dataset",
     "evaluations": {},
+    "shown": [],
     "labels": {},
+    "colours": {},
+    "comparisons": [],
     "families": [
       "geometry",
       "layout"
@@ -28,6 +31,14 @@
     "bootstrap": 1000,
     "seed": 20260629,
     "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
     "cache": null,
     "http": {
       "contact": null,
@@ -36,7 +47,11 @@
       "retries": 5,
       "backoff": 1.0,
       "timeout": 60.0
-    }
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": "",
+    "colour_pages": []
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -54,10 +69,11 @@
     "pyarrow": "26.0.1",
     "shapely": "2.1.2",
     "torch": "2.14.0",
+    "transformers": "5.22.2",
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "cc6651bca2dfd241de32572eb7e462c7742077cd-dirty",
+  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "geometry_feature_families": {
@@ -65,7 +81,7 @@
       "layout": "layout"
     },
     "seconds": {
-      "geometry_feature_families": 0.604
+      "geometry_feature_families": 0.658
     }
   }
 }

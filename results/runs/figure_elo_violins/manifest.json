@@ -1,7 +1,7 @@
 {
   "command": "judgments report",
-  "started": "2026-11-12T18:08:51+00:00",
-  "ended": "2026-11-12T18:08:52+00:00",
+  "started": "2026-11-14T06:25:16+00:00",
+  "ended": "2026-11-14T06:25:17+00:00",
   "inputs": [
     {
       "path": "build/dataset/judgments.tsv",
@@ -37,14 +37,18 @@
   "outputs": [
     "results/figures/elo_score_distributions.svg",
     "results/figures/elo_score_distributions.png",
-    "results/figures/elo_score_distributions.tex"
+    "results/figures/elo_score_distributions.tex",
+    "results/figures/elo_score_bands.svg",
+    "results/figures/elo_score_bands.png",
+    "results/figures/elo_score_bands.tex"
   ],
   "configuration": {
     "dataset": "build/dataset",
     "ranking": "build/ranking",
     "output": "results",
     "outputs": [
-      "elo_score_distributions"
+      "elo_score_distributions",
+      "elo_score_bands"
     ],
     "name": "figure_elo_violins",
     "gap_edges": [
@@ -58,6 +62,8 @@
       "repeats": 10,
       "seed": 20260629
     },
+    "bootstrap": 1000,
+    "bootstrap_seed": 20260629,
     "split_half": {
       "repeats": 100,
       "permutations": 100,
@@ -67,8 +73,21 @@
     "category_labels": {},
     "position_bias_min_judgments": 100,
     "graph_seed": 20260629,
+    "graph_batches": {},
     "thumbnails": 10,
-    "thumbnail_size": 200,
+    "thumbnail_pages": [
+      "vig4a_12v",
+      "iiih6_47r",
+      "ih4_4r",
+      "via2_38v",
+      "teplamsd19_81r",
+      "vf8_15r",
+      "iiig2_191v",
+      "ivf9_10r",
+      "vh14_55r",
+      "ive19_14r"
+    ],
+    "thumbnail_size": 500,
     "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
     "cache": "~/.cache/layout-visual-complexity",
     "http": {
@@ -97,59 +116,106 @@
     "pyarrow": "26.0.1",
     "shapely": "2.1.2",
     "torch": "2.14.0",
+    "transformers": "5.22.2",
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "526cfd56ba9977b897a949001845fb612602deaf-dirty",
+  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "elo_score_distributions": {
       "permutations": 1000,
       "thumbnails": [
         {
-          "rank": 1,
-          "image": "xiiig10_36v"
+          "rank": 4,
+          "image": "vig4a_12v"
         },
         {
-          "rank": 45,
-          "image": "xie5_159r"
+          "rank": 55,
+          "image": "iiih6_47r"
         },
         {
-          "rank": 89,
-          "image": "if11_20v"
+          "rank": 98,
+          "image": "ih4_4r"
         },
         {
-          "rank": 133,
-          "image": "id27_234v"
+          "rank": 136,
+          "image": "via2_38v"
         },
         {
-          "rank": 177,
-          "image": "xviie15_1r"
+          "rank": 171,
+          "image": "teplamsd19_81r"
         },
         {
-          "rank": 221,
-          "image": "if49_6v"
+          "rank": 224,
+          "image": "vf8_15r"
         },
         {
-          "rank": 265,
-          "image": "vig6_259v"
+          "rank": 270,
+          "image": "iiig2_191v"
         },
         {
-          "rank": 309,
-          "image": "teplamsc6_150r"
+          "rank": 313,
+          "image": "ivf9_10r"
         },
         {
-          "rank": 353,
-          "image": "xvic15_171v"
+          "rank": 349,
+          "image": "vh14_55r"
         },
         {
-          "rank": 397,
-          "image": "teplamsd16_38r"
+          "rank": 390,
+          "image": "ive19_14r"
+        }
+      ]
+    },
+    "elo_score_bands": {
+      "permutations": 1000,
+      "thumbnails": [
+        {
+          "rank": 4,
+          "image": "vig4a_12v"
+        },
+        {
+          "rank": 55,
+          "image": "iiih6_47r"
+        },
+        {
+          "rank": 98,
+          "image": "ih4_4r"
+        },
+        {
+          "rank": 136,
+          "image": "via2_38v"
+        },
+        {
+          "rank": 171,
+          "image": "teplamsd19_81r"
+        },
+        {
+          "rank": 224,
+          "image": "vf8_15r"
+        },
+        {
+          "rank": 270,
+          "image": "iiig2_191v"
+        },
+        {
+          "rank": 313,
+          "image": "ivf9_10r"
+        },
+        {
+          "rank": 349,
+          "image": "vh14_55r"
+        },
+        {
+          "rank": 390,
+          "image": "ive19_14r"
         }
       ]
     },
     "seconds": {
-      "elo_score_distributions": 0.976
+      "elo_score_distributions": 1.558,
+      "elo_score_bands": 0.0
     }
   }
 }

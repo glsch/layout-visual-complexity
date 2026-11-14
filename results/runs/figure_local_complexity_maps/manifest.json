@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-12T21:22:43+00:00",
-  "ended": "2026-11-12T21:22:44+00:00",
+  "started": "2026-11-14T06:22:17+00:00",
+  "ended": "2026-11-14T06:22:19+00:00",
   "inputs": [
     {
       "path": "build/embed/dataset/tokens.json",
@@ -35,6 +35,7 @@
     "features": "build/features/dataset/features.parquet",
     "layout": "build/segment/dataset",
     "evaluations": {},
+    "shown": [],
     "labels": {},
     "colours": {},
     "comparisons": [],
@@ -66,7 +67,11 @@
       "retries": 5,
       "backoff": 1.0,
       "timeout": 60.0
-    }
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": "",
+    "colour_pages": []
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -88,7 +93,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "17cbf3a081c9bfee09ebc7ef0972a91849389a5d",
+  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "local_complexity_maps": {
@@ -103,7 +108,7 @@
       ]
     },
     "seconds": {
-      "local_complexity_maps": 1.156
+      "local_complexity_maps": 1.721
     }
   }
 }

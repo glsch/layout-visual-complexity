@@ -1,18 +1,20 @@
 \begin{table}[htbp]
   \centering
-  \caption{Reliability of the judgments by the difference ($\Delta$) between the two images' final Elo scores (means over the permutations). $N_{\mathrm{possible}}$ counts all pairs of the 397 images in each bin, and $N_{\mathrm{annotated}}$ the judgments. \emph{Consistency} is the share of judgments that chose the image with the higher final score; $N_{\mathrm{rejudged}}$ counts the image pairs judged by at least two different annotators; \emph{Agreement} is the share of pairs of their judgments, by two different annotators, that chose the same image.}
+  \caption{Reliability of the judgments by the difference ($\Delta$) between the two images' final Elo scores (means over the permutations). \emph{Possible pairs} are all theoretically possible pairs of the 397 images whose scores differ by $\Delta$; \emph{pairs judged}, those actually judged, once or more; \emph{judgments}, how often they were judged, a pair judged twice counting twice. \emph{Consistency} is the share of judgments that chose the image with the higher final score. \emph{Pairs rejudged} are the pairs judged by at least two different annotators; \emph{agreement}, how often two of their judgments by different annotators chose the same image. \emph{Split-half}: the annotators split at random into two halves with about as many judgments each, 100 times; Elo scores from each half's judgments (100 permutations), and Spearman's correlation between the two halves' scores over the images judged in both, raised by the Spearman--Brown correction, $2\rho/(1+\rho)$, to the full set of annotators. This is the reliability $r$ of the scores: the correlation expected between two independent runs of the whole annotation (the median over the splits, and their 5th to 95th percentiles in brackets). A method's scores carry none of the annotation's noise and are compared with one run, not two, so the most their $\rho$ with the Elo scores can reach is $\sqrt{r}$, the correlation of the observed scores with the true ones: the ceiling for $\rho$.}
   \label{tab:reliability_by_elo_gap}
-  \begin{tabular}{crrrrr}
+  \begin{tabular}{lcccccc}
     \toprule
-    Score $\Delta$ & $N_{\mathrm{possible}}$ & $N_{\mathrm{annotated}}$ & Consistency & $N_{\mathrm{rejudged}}$ & Agreement \\
+    Score $\Delta$ & Possible pairs & Pairs judged & Judgments & Consistency & Pairs rejudged & Agreement \\
     \midrule
-    $<$100 & 20,726 & 1,294 & 0.604 & 238 & 0.479 \\
-    100--200 & 18,772 & 1,269 & 0.777 & 220 & 0.653 \\
-    200--300 & 15,034 & 1,013 & 0.872 & 177 & 0.713 \\
-    300--400 & 10,866 & 783 & 0.918 & 136 & 0.808 \\
-    $\geq 400$ & 13,208 & 1,203 & 0.944 & 218 & 0.829 \\
+    $<$100 & 20,726 & 918 & 1,294 & 0.604 & 238 & 0.479 \\
+    100--200 & 18,772 & 888 & 1,269 & 0.777 & 220 & 0.653 \\
+    200--300 & 15,034 & 735 & 1,013 & 0.872 & 177 & 0.713 \\
+    300--400 & 10,866 & 530 & 783 & 0.918 & 136 & 0.808 \\
+    $\geq 400$ & 13,208 & 716 & 1,203 & 0.944 & 218 & 0.829 \\
     \midrule
-    Overall & 78,606 & 5,562 & 0.810 & 989 & 0.700 \\
+    Overall & 78,606 & 3,787 & 5,562 & 0.810 & 989 & 0.700 \\
+    \midrule
+    Split-half & \multicolumn{6}{c}{$r$ = 0.793 [0.760, 0.832]; ceiling for $\rho$: $\sqrt{r}$ = 0.891 [0.872, 0.912]} \\
     \bottomrule
   \end{tabular}
 \end{table}

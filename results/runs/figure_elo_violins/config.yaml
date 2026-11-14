@@ -3,6 +3,7 @@ ranking: build/ranking
 output: results
 outputs:
 - elo_score_distributions
+- elo_score_bands
 name: figure_elo_violins
 gap_edges:
 - 100.0
@@ -13,6 +14,8 @@ folds:
   k: 10
   repeats: 10
   seed: 20260629
+bootstrap: 1000
+bootstrap_seed: 20260629
 split_half:
   repeats: 100
   permutations: 100
@@ -21,8 +24,20 @@ split_half:
 category_labels: {}
 position_bias_min_judgments: 100
 graph_seed: 20260629
+graph_batches: {}
 thumbnails: 10
-thumbnail_size: 200
+thumbnail_pages:
+- vig4a_12v
+- iiih6_47r
+- ih4_4r
+- via2_38v
+- teplamsd19_81r
+- vf8_15r
+- iiig2_191v
+- ivf9_10r
+- vh14_55r
+- ive19_14r
+thumbnail_size: 500
 image_credit: Page images provided by Manuscriptorium (CC BY-NC 4.0).
 cache: ~/.cache/layout-visual-complexity
 http:

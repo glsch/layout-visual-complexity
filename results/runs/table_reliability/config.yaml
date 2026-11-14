@@ -15,6 +15,8 @@ folds:
   k: 10
   repeats: 10
   seed: 20260629
+bootstrap: 1000
+bootstrap_seed: 20260629
 split_half:
   repeats: 100
   permutations: 100
@@ -23,8 +25,10 @@ split_half:
 category_labels: {}
 position_bias_min_judgments: 100
 graph_seed: 20260629
+graph_batches: {}
 thumbnails: 10
-thumbnail_size: 200
+thumbnail_pages: []
+thumbnail_size: 500
 image_credit: ''
 cache: ~/.cache/layout-visual-complexity
 http:
