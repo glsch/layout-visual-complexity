@@ -1,0 +1,17 @@
+# The rankers that score Crux of Telč's pages out of sample: the geometry ranker and the ViT head trained without
+# Crux's four manuscripts in the dataset, with equal weights, as train_models.yaml combines the shipped ones. The
+# scales of win probabilities and the Elo scale come from the same evaluations, which measure the methods, not one
+# training of them.
+dataset: build/dataset
+ensemble:
+  geometry: build/train/geometry_without_crux
+  vit: build/train/vit_head_without_crux
+files:
+  geometry: geometry.json
+  vit: dinov2_vits14.npz
+calibration:
+  geometry: build/evaluate/geometry
+  vit: build/evaluate/vit
+  ensemble: build/evaluate/ensemble
+leave_out: [xiiig10, ie36, ia29a, ia38]
+output: build/train/models_without_crux

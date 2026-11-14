@@ -1,0 +1,7 @@
+# The geometry ranker trained on every judgment of the dataset's 397 pages: the pairwise logistic model on the 83
+# geometric features, as evaluate_geometry.yaml trains it on each fold. A member of the rankers that come with the
+# package (train_models.yaml).
+dataset: build/dataset
+features: build/features/dataset/features.parquet
+families: geometry
+output: build/train/geometry

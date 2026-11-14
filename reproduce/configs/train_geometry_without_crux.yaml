@@ -1,0 +1,7 @@
+# The geometry ranker for Crux of Telč's case study, out of sample: trained as train_geometry.yaml trains it, without
+# the four of Crux's manuscripts that gave the dataset pages (five pages in all), and every judgment touching them.
+dataset: build/dataset
+features: build/features/dataset/features.parquet
+families: geometry
+leave_out: [xiiig10, ie36, ia29a, ia38]
+output: build/train/geometry_without_crux
