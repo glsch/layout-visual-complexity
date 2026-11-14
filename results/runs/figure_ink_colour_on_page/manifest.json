@@ -1,12 +1,12 @@
 {
   "command": "report",
-  "started": "2026-11-13T17:18:45+00:00",
-  "ended": "2026-11-13T17:18:46+00:00",
+  "started": "2026-11-14T05:32:06+00:00",
+  "ended": "2026-11-14T05:32:08+00:00",
   "inputs": [
     {
       "path": "build/features/dataset/features.parquet",
-      "sha256": "2f79dc1b411ba5cd5e1a7197ee76601032c5e9e23a12cac700a8acbcbc3d6616",
-      "bytes": 748876
+      "sha256": "299d6b9902edcf2332e9130258318ceecc065f645138ec7f28a395d5b26f42ba",
+      "bytes": 738319
     }
   ],
   "outputs": [
@@ -85,7 +85,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "f3ba6a66be74733376d5b233d8badc00d8f62e6f-dirty",
+  "commit": "3c42ae0188e7626a100b3718c8ff2c9c82201735-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "ink_colour_on_page": {
@@ -93,28 +93,25 @@
         {
           "page": "xxiiid157_101v",
           "red": 0.06694391582597962,
-          "gold": 0.0,
           "green": 0.0,
           "blue": 0.0
         },
         {
           "page": "xviif31_27r",
           "red": 0.020058118441375356,
-          "gold": 0.0,
           "green": 0.0,
           "blue": 0.0
         },
         {
           "page": "xviie15_127v",
           "red": 0.039496587893103535,
-          "gold": 0.00031070199934864884,
           "green": 0.0,
           "blue": 0.021730422966492847
         }
       ]
     },
     "seconds": {
-      "ink_colour_on_page": 1.51
+      "ink_colour_on_page": 1.67
     }
   }
 }

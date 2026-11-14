@@ -13,6 +13,6 @@ Kyle–Davidson	Entropy	KyleDavidson__Entropy	3	Shannon entropy of each HSV chan
 Ink	Coverage	Ink__Coverage	1	Share of the folio covered by ink.	the ink layer at 1,400 px	Sauvola and Pietikäinen 2000	ink
 Ink	Lacunarity	Ink__Lacunarity	5	Gaps in the ink: the mean squared ink mass of gliding square boxes over its squared mean.	boxes 1, 2, 4, 8, 16 line heights wide	Plotnick et al. 1996	ink
 Ink	Fragmentation	Ink__Fragmentation	1	Ink masses after closing by one line height, per square line height of the folio.	a disc one line height across	this study	ink
-Ink	Chromatic share	Ink__ChromaticShare	1	Share of the ink whose chroma, the parchment's colour made neutral, reaches the threshold.	chroma at least 25	this study	ink
-Ink	Hue classes	Ink__HueClasses	5	Shares of the ink in the chromatic hue classes, and the number of classes present.	red, gold, green, blue; present from 1 square line height	this study	ink
+Ink	Chromatic share	Ink__ChromaticShare	1	Share of the ink whose chroma, the parchment's colour made neutral, reaches the threshold, its hue outside the excluded range.	chroma at least 25, hue outside 60°–110°	this study	ink
+Ink	Hue classes	Ink__HueClasses	4	Shares of the ink in the chromatic hue classes, and the number of classes present.	red 330°–60°, green 110°–200°, blue 200°–330°; hues 60°–110° not chromatic; present from 1 square line height	this study	ink
 Ink	Line height	Ink__LineHeight	2	The line height as a share of the folio's height, and whether it came from the text lines.	the text lines' median spacing, else the ink profile's period	this study	ink

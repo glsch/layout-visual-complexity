@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T17:09:06+00:00",
-  "ended": "2026-11-13T17:09:07+00:00",
+  "started": "2026-11-14T05:27:13+00:00",
+  "ended": "2026-11-14T05:27:13+00:00",
   "inputs": [
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
@@ -15,8 +15,8 @@
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "82b635a28f6495a142f834ba87423e6a5ebdb4274e1a742ac34263ae69e104d5",
-      "bytes": 13398
+      "sha256": "340fc53c747ff4cc5393959ec043fb44288a8ecbf0ab268cbd7354ecdce98208",
+      "bytes": 13397
     },
     {
       "path": "build/evaluate/vit/by_elo_gap.tsv",
@@ -45,7 +45,7 @@
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "0da6dbf3ff9aecfd6da6e824016ba984bb595240fbc733575e4671230919fd91",
+      "sha256": "0383426efa10545091743e81133245eb2f22c891bcfaa40b86f1ba758f474070",
       "bytes": 12963
     },
     {
@@ -159,7 +159,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "2884e8cca226791ca6eb1b845e90909c77c5ebe6-dirty",
+  "commit": "3c42ae0188e7626a100b3718c8ff2c9c82201735-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "learning_curves_and_calibration": {
@@ -527,7 +527,7 @@
       ]
     },
     "seconds": {
-      "learning_curves_and_calibration": 0.453
+      "learning_curves_and_calibration": 0.393
     }
   }
 }

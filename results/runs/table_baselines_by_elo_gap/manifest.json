@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T17:10:21+00:00",
-  "ended": "2026-11-13T17:10:21+00:00",
+  "started": "2026-11-14T05:28:22+00:00",
+  "ended": "2026-11-14T05:28:22+00:00",
   "inputs": [
     {
       "path": "build/evaluate/measures/ink_coverage/by_elo_gap.tsv",
@@ -15,7 +15,7 @@
     },
     {
       "path": "build/evaluate/measures/ink_coverage/manifest.json",
-      "sha256": "090d0e7ac84c5d33ec678641cbeb127bbc848864b18bf8527e8448396848a36a",
+      "sha256": "b86ca0cad47553bf3dc1952e71fe4e77e1acb7b85636e6ef257b05c1da0e72f0",
       "bytes": 8680
     },
     {
@@ -30,7 +30,7 @@
     },
     {
       "path": "build/evaluate/measures/text_lines/manifest.json",
-      "sha256": "550c930500ad79b1e0292014ca91e2437f9289b00e898c728c2496e74d14bfdc",
+      "sha256": "68e6ab33c394b25e73950a8205f7e3a35b2362606eb191ea654d19b36c3200ae",
       "bytes": 8646
     },
     {
@@ -45,7 +45,7 @@
     },
     {
       "path": "build/evaluate/generic/manifest.json",
-      "sha256": "ae08244b164605f0bb45cecc669bc150311722f829109152dfd514639dcb3509",
+      "sha256": "c4ece9fef7b3e1b04881f02b5235084901b669bd44f44a272c714a6b7ac4431c",
       "bytes": 9366
     },
     {
@@ -60,23 +60,23 @@
     },
     {
       "path": "build/evaluate/kyle_davidson/manifest.json",
-      "sha256": "8f32637ed768597d8634cd4f57d0ccf41df0051c0ab8919def96d3d2168af452",
-      "bytes": 8823
+      "sha256": "e673d901efd71228fd7700ed04ce9f85a59b859e5730cea687035626d11bc7a0",
+      "bytes": 8824
     },
     {
       "path": "build/evaluate/ink_distribution/by_elo_gap.tsv",
-      "sha256": "d2bdfb602d5b656e2b67eab1c1e290dfcc50c15f990fc95e20026f51e33a785d",
+      "sha256": "573a0630b52955a0f259c26cc8d44e76cb11248c6dd1dbf3fc86f263f40ee46c",
       "bytes": 735
     },
     {
       "path": "build/evaluate/ink_distribution/metrics.tsv",
-      "sha256": "391eeac5684e75584afa9e7000891329cf729c18ea3ae1d0557e10552327cc27",
+      "sha256": "719fa556c43b818f5f5599324a34f70b5ab1accc1c5dd618758653c3c3b15c49",
       "bytes": 539
     },
     {
       "path": "build/evaluate/ink_distribution/manifest.json",
-      "sha256": "8cf429f915cc502a0ff9537ee2dfd72c9eb90abe7bbb851d89263302414636c9",
-      "bytes": 9633
+      "sha256": "1c490dea0de25fa2bf6125e97b5120784ad36c4b1687027e8efdf9de77aabd55",
+      "bytes": 9604
     }
   ],
   "outputs": [
@@ -160,7 +160,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "2884e8cca226791ca6eb1b845e90909c77c5ebe6-dirty",
+  "commit": "3c42ae0188e7626a100b3718c8ff2c9c82201735-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "baselines_by_elo_gap": {
@@ -183,9 +183,9 @@
           "kyle_davidson": 0.482342,
           "kyle_davidson_low": 0.42395,
           "kyle_davidson_high": 0.541685,
-          "ink_distribution": 0.482624,
-          "ink_distribution_low": 0.422533,
-          "ink_distribution_high": 0.538736
+          "ink_distribution": 0.491854,
+          "ink_distribution_low": 0.43183,
+          "ink_distribution_high": 0.555445
         },
         {
           "gap": "100-200",
@@ -205,9 +205,9 @@
           "kyle_davidson": 0.553711,
           "kyle_davidson_low": 0.497036,
           "kyle_davidson_high": 0.618795,
-          "ink_distribution": 0.564368,
-          "ink_distribution_low": 0.499409,
-          "ink_distribution_high": 0.650711
+          "ink_distribution": 0.568581,
+          "ink_distribution_low": 0.501254,
+          "ink_distribution_high": 0.647106
         },
         {
           "gap": "200-300",
@@ -227,9 +227,9 @@
           "kyle_davidson": 0.591834,
           "kyle_davidson_low": 0.509955,
           "kyle_davidson_high": 0.664402,
-          "ink_distribution": 0.671147,
-          "ink_distribution_low": 0.602007,
-          "ink_distribution_high": 0.746427
+          "ink_distribution": 0.679028,
+          "ink_distribution_low": 0.603933,
+          "ink_distribution_high": 0.756544
         },
         {
           "gap": "300-400",
@@ -249,9 +249,9 @@
           "kyle_davidson": 0.663538,
           "kyle_davidson_low": 0.563635,
           "kyle_davidson_high": 0.766497,
-          "ink_distribution": 0.792389,
-          "ink_distribution_low": 0.671478,
-          "ink_distribution_high": 0.853716
+          "ink_distribution": 0.782036,
+          "ink_distribution_low": 0.664542,
+          "ink_distribution_high": 0.854117
         },
         {
           "gap": ">=400",
@@ -271,9 +271,9 @@
           "kyle_davidson": 0.771449,
           "kyle_davidson_low": 0.655858,
           "kyle_davidson_high": 0.83288,
-          "ink_distribution": 0.823593,
-          "ink_distribution_low": 0.72413,
-          "ink_distribution_high": 0.898261
+          "ink_distribution": 0.831688,
+          "ink_distribution_low": 0.727574,
+          "ink_distribution_high": 0.902935
         },
         {
           "gap": "overall",
@@ -293,9 +293,9 @@
           "kyle_davidson": 0.59264,
           "kyle_davidson_low": 0.54323,
           "kyle_davidson_high": 0.626367,
-          "ink_distribution": 0.634363,
-          "ink_distribution_low": 0.587911,
-          "ink_distribution_high": 0.670053
+          "ink_distribution": 0.641574,
+          "ink_distribution_low": 0.593552,
+          "ink_distribution_high": 0.676524
         },
         {
           "gap": "srocc",
@@ -315,14 +315,14 @@
           "kyle_davidson": 0.431091,
           "kyle_davidson_low": 0.309377,
           "kyle_davidson_high": 0.528363,
-          "ink_distribution": 0.548576,
-          "ink_distribution_low": 0.434793,
-          "ink_distribution_high": 0.628215
+          "ink_distribution": 0.554986,
+          "ink_distribution_low": 0.437785,
+          "ink_distribution_high": 0.633357
         }
       ]
     },
     "seconds": {
-      "baselines_by_elo_gap": 0.018
+      "baselines_by_elo_gap": 0.01
     }
   }
 }

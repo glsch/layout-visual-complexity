@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T17:09:05+00:00",
-  "ended": "2026-11-13T17:09:05+00:00",
+  "started": "2026-11-14T05:27:12+00:00",
+  "ended": "2026-11-14T05:27:12+00:00",
   "inputs": [
     {
       "path": "build/evaluate/ensemble/by_elo_gap.tsv",
@@ -15,7 +15,7 @@
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "0da6dbf3ff9aecfd6da6e824016ba984bb595240fbc733575e4671230919fd91",
+      "sha256": "0383426efa10545091743e81133245eb2f22c891bcfaa40b86f1ba758f474070",
       "bytes": 12963
     },
     {
@@ -30,7 +30,7 @@
     },
     {
       "path": "build/evaluate/ensemble_layout/manifest.json",
-      "sha256": "8e8a59a43badc997288824141ed8a4a878affbaa190c64146cd4afc322876028",
+      "sha256": "e77190605c546e31eeaf71c54a35be2de9ee0eef65e2ca073179da399b9ea9e9",
       "bytes": 8981
     },
     {
@@ -45,7 +45,7 @@
     },
     {
       "path": "build/evaluate/ensemble_fitted/manifest.json",
-      "sha256": "6ab829fdd84446936290561f00ddae4f6872478556de0c8f69bba68cd3ef3f6b",
+      "sha256": "3ccb2a6f3054b597e4f9196b219530b18fa194594f518a2ce998239b244a72a7",
       "bytes": 8963
     },
     {
@@ -60,28 +60,28 @@
     },
     {
       "path": "build/evaluate/ensemble_layout_fitted/manifest.json",
-      "sha256": "2c97faf35a9141e673e2ec7c78c3e8133b81433c3c64ec5fef793712c539736d",
-      "bytes": 9078
+      "sha256": "217c5a4aeeb81fbe480e154742fa95abbfc4e9114fc7919cea71c19f549b21eb",
+      "bytes": 9076
     },
     {
       "path": "build/evaluate/ensemble_colour/by_elo_gap.tsv",
-      "sha256": "00bc0c3adadbcb97531900cd39cb8b46110fe11a001a579b81a41fe8c2a2ca48",
+      "sha256": "a411ee589ff19b869e51dcbd4091953c9fa19b67796ab0a2b8915ac6e7a84e75",
       "bytes": 735
     },
     {
       "path": "build/evaluate/ensemble_colour/metrics.tsv",
-      "sha256": "f2cb408ffd0769d55258628efc351bc7b647597397a7850a6d72fedff5ffc88d",
+      "sha256": "1d61ceb5fa7ba3e81a87aa8f16486158ca0aadf99868d74e3304dc6a5a999b46",
       "bytes": 539
     },
     {
       "path": "build/evaluate/ensemble_colour/manifest.json",
-      "sha256": "fb8abe923e3bcf11294dfbb7b5515ff35e3d2c1b74725feddfaefad2154aaed0",
-      "bytes": 9408
+      "sha256": "c452c2aee483eecd03d9a7fdfda6f333d14bf22ec00cfaa7937335df3d1fe1cf",
+      "bytes": 9402
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "82b635a28f6495a142f834ba87423e6a5ebdb4274e1a742ac34263ae69e104d5",
-      "bytes": 13398
+      "sha256": "340fc53c747ff4cc5393959ec043fb44288a8ecbf0ab268cbd7354ecdce98208",
+      "bytes": 13397
     },
     {
       "path": "build/evaluate/vit/manifest.json",
@@ -90,13 +90,13 @@
     },
     {
       "path": "build/evaluate/geometry_layout/manifest.json",
-      "sha256": "cc9ecc660070e06328d7194414661adf27de3b7ebf74a3fb72e40be4d3bde8b8",
-      "bytes": 10593
+      "sha256": "ffdf0ecdf24ee20675ab84fa9d9e232d0f5e1af1fd14c361c5b587f9a41c52dd",
+      "bytes": 10594
     },
     {
       "path": "build/evaluate/colour/manifest.json",
-      "sha256": "48bb15afb001a6aea5439c1b865777f1323442dffae588a855216d4fbdf8eba3",
-      "bytes": 9309
+      "sha256": "1deb2aa2306aca376bb9322b7cb592d2b1905b703e2a00dfa1191d91aef38fa2",
+      "bytes": 9315
     }
   ],
   "outputs": [
@@ -184,7 +184,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "2884e8cca226791ca6eb1b845e90909c77c5ebe6-dirty",
+  "commit": "3c42ae0188e7626a100b3718c8ff2c9c82201735-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "ensembles_by_elo_gap": {
@@ -207,9 +207,9 @@
           "ensemble_layout_fitted": 0.541868,
           "ensemble_layout_fitted_low": 0.483802,
           "ensemble_layout_fitted_high": 0.608344,
-          "ensemble_colour": 0.533225,
-          "ensemble_colour_low": 0.470053,
-          "ensemble_colour_high": 0.584921
+          "ensemble_colour": 0.533895,
+          "ensemble_colour_low": 0.471605,
+          "ensemble_colour_high": 0.585081
         },
         {
           "gap": "100-200",
@@ -229,9 +229,9 @@
           "ensemble_layout_fitted": 0.646196,
           "ensemble_layout_fitted_low": 0.587724,
           "ensemble_layout_fitted_high": 0.714172,
-          "ensemble_colour": 0.621669,
-          "ensemble_colour_low": 0.561843,
-          "ensemble_colour_high": 0.676883
+          "ensemble_colour": 0.599079,
+          "ensemble_colour_low": 0.529703,
+          "ensemble_colour_high": 0.647489
         },
         {
           "gap": "200-300",
@@ -251,9 +251,9 @@
           "ensemble_layout_fitted": 0.809388,
           "ensemble_layout_fitted_low": 0.742569,
           "ensemble_layout_fitted_high": 0.866708,
-          "ensemble_colour": 0.77037,
-          "ensemble_colour_low": 0.70594,
-          "ensemble_colour_high": 0.833577
+          "ensemble_colour": 0.764832,
+          "ensemble_colour_low": 0.69109,
+          "ensemble_colour_high": 0.821876
         },
         {
           "gap": "300-400",
@@ -273,9 +273,9 @@
           "ensemble_layout_fitted": 0.854499,
           "ensemble_layout_fitted_low": 0.753159,
           "ensemble_layout_fitted_high": 0.914115,
-          "ensemble_colour": 0.804766,
-          "ensemble_colour_low": 0.711897,
-          "ensemble_colour_high": 0.869788
+          "ensemble_colour": 0.779322,
+          "ensemble_colour_low": 0.676186,
+          "ensemble_colour_high": 0.85927
         },
         {
           "gap": ">=400",
@@ -295,9 +295,9 @@
           "ensemble_layout_fitted": 0.953039,
           "ensemble_layout_fitted_low": 0.934667,
           "ensemble_layout_fitted_high": 0.979032,
-          "ensemble_colour": 0.925274,
-          "ensemble_colour_low": 0.901562,
-          "ensemble_colour_high": 0.970019
+          "ensemble_colour": 0.933449,
+          "ensemble_colour_low": 0.909483,
+          "ensemble_colour_high": 0.970167
         },
         {
           "gap": "overall",
@@ -317,9 +317,9 @@
           "ensemble_layout_fitted": 0.730609,
           "ensemble_layout_fitted_low": 0.686641,
           "ensemble_layout_fitted_high": 0.758067,
-          "ensemble_colour": 0.706963,
-          "ensemble_colour_low": 0.661551,
-          "ensemble_colour_high": 0.735025
+          "ensemble_colour": 0.695689,
+          "ensemble_colour_low": 0.648048,
+          "ensemble_colour_high": 0.723287
         },
         {
           "gap": "srocc",
@@ -339,14 +339,14 @@
           "ensemble_layout_fitted": 0.804845,
           "ensemble_layout_fitted_low": 0.751057,
           "ensemble_layout_fitted_high": 0.848063,
-          "ensemble_colour": 0.723356,
-          "ensemble_colour_low": 0.645379,
-          "ensemble_colour_high": 0.78202
+          "ensemble_colour": 0.733098,
+          "ensemble_colour_low": 0.658484,
+          "ensemble_colour_high": 0.790143
         }
       ]
     },
     "seconds": {
-      "ensembles_by_elo_gap": 0.014
+      "ensembles_by_elo_gap": 0.011
     }
   }
 }

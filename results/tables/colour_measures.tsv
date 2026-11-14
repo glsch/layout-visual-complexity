@@ -1,6 +1,6 @@
 family	measure	code_name	columns	definition	parameters	source	family_name
-Colour	Chromatic share	Colour__ChromaticShare	1	Share of the ink whose chroma, the parchment's colour made neutral, reaches the threshold.	chroma at least 25	this study	colour
-Colour	Hue classes	Colour__HueClasses	5	Shares of the ink in the chromatic hue classes, and the number of classes present.	red 330°–60°, gold 60°–110°, green 110°–200°, blue 200°–330°; present from 1 square line height	this study	colour
+Colour	Chromatic share	Colour__ChromaticShare	1	Share of the ink whose chroma, the parchment's colour made neutral, reaches the threshold, its hue outside the excluded range.	chroma at least 25, hue outside 60°–110°	this study	colour
+Colour	Hue classes	Colour__HueClasses	4	Shares of the ink in the chromatic hue classes, and the number of classes present.	red 330°–60°, green 110°–200°, blue 200°–330°; hues 60°–110° not chromatic; present from 1 square line height	this study	colour
 Colour	Hue entropy	Colour__HueEntropy	1	Entropy of the chromatic ink's hue angles; 0 without chromatic ink.	24 bins of 15°	this study	colour
 Colour	Saturation	Colour__Saturation	2	Median chroma of the chromatic ink, and its interquartile range.	CIELAB chroma, the parchment made neutral	this study	colour
 Colour	Colour by zone	Colour__Zones	6	Chromatic share of the ink within each kind of zone: main text, margins, numbering and running titles, decoration, heading lines, and the rest of the folio.	the regions model's zones and heading lines	this study	colour

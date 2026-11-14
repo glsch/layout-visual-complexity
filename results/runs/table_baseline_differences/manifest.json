@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T17:10:51+00:00",
-  "ended": "2026-11-13T17:10:57+00:00",
+  "started": "2026-11-14T05:28:25+00:00",
+  "ended": "2026-11-14T05:28:30+00:00",
   "inputs": [
     {
       "path": "build/evaluate/trivial/by_elo_gap.tsv",
@@ -15,7 +15,7 @@
     },
     {
       "path": "build/evaluate/trivial/manifest.json",
-      "sha256": "efa18ec3a70852fd3d7119b291b45ca358a83a4949e9477131b18d11409dc661",
+      "sha256": "0d4bd29428d7f30a7c4770210ae85088c09ae3957f2aabe54077abc8bfef19ee",
       "bytes": 8600
     },
     {
@@ -30,7 +30,7 @@
     },
     {
       "path": "build/evaluate/generic/manifest.json",
-      "sha256": "ae08244b164605f0bb45cecc669bc150311722f829109152dfd514639dcb3509",
+      "sha256": "c4ece9fef7b3e1b04881f02b5235084901b669bd44f44a272c714a6b7ac4431c",
       "bytes": 9366
     },
     {
@@ -45,23 +45,23 @@
     },
     {
       "path": "build/evaluate/kyle_davidson/manifest.json",
-      "sha256": "8f32637ed768597d8634cd4f57d0ccf41df0051c0ab8919def96d3d2168af452",
-      "bytes": 8823
+      "sha256": "e673d901efd71228fd7700ed04ce9f85a59b859e5730cea687035626d11bc7a0",
+      "bytes": 8824
     },
     {
       "path": "build/evaluate/ink_distribution/by_elo_gap.tsv",
-      "sha256": "d2bdfb602d5b656e2b67eab1c1e290dfcc50c15f990fc95e20026f51e33a785d",
+      "sha256": "573a0630b52955a0f259c26cc8d44e76cb11248c6dd1dbf3fc86f263f40ee46c",
       "bytes": 735
     },
     {
       "path": "build/evaluate/ink_distribution/metrics.tsv",
-      "sha256": "391eeac5684e75584afa9e7000891329cf729c18ea3ae1d0557e10552327cc27",
+      "sha256": "719fa556c43b818f5f5599324a34f70b5ab1accc1c5dd618758653c3c3b15c49",
       "bytes": 539
     },
     {
       "path": "build/evaluate/ink_distribution/manifest.json",
-      "sha256": "8cf429f915cc502a0ff9537ee2dfd72c9eb90abe7bbb851d89263302414636c9",
-      "bytes": 9633
+      "sha256": "1c490dea0de25fa2bf6125e97b5120784ad36c4b1687027e8efdf9de77aabd55",
+      "bytes": 9604
     },
     {
       "path": "build/evaluate/mean_token/by_elo_gap.tsv",
@@ -90,8 +90,8 @@
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "82b635a28f6495a142f834ba87423e6a5ebdb4274e1a742ac34263ae69e104d5",
-      "bytes": 13398
+      "sha256": "340fc53c747ff4cc5393959ec043fb44288a8ecbf0ab268cbd7354ecdce98208",
+      "bytes": 13397
     },
     {
       "path": "build/evaluate/ensemble/by_elo_gap.tsv",
@@ -105,7 +105,7 @@
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "0da6dbf3ff9aecfd6da6e824016ba984bb595240fbc733575e4671230919fd91",
+      "sha256": "0383426efa10545091743e81133245eb2f22c891bcfaa40b86f1ba758f474070",
       "bytes": 12963
     },
     {
@@ -155,13 +155,13 @@
     },
     {
       "path": "build/evaluate/ink_distribution/hits.tsv",
-      "sha256": "58763436238e7c9cc845c70778fd9c3359098ba18e7666f3e16543332e1c53f4",
+      "sha256": "e698bb427af65811997112018f64d6b0184d591a8e9b5f97561a209234c9a746",
       "bytes": 403018
     },
     {
       "path": "build/evaluate/ink_distribution/scores.tsv",
-      "sha256": "6a5aec41e6d6b1a3e8e840600e17e7a2bd3a413a18f1d396d1668ef48904f1a4",
-      "bytes": 19068
+      "sha256": "754f8c6a44d676ab0312ff04aa14270406a0f1aab883c74ef1deb02e257e097a",
+      "bytes": 19065
     },
     {
       "path": "build/evaluate/mean_token/hits.tsv",
@@ -315,7 +315,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "2884e8cca226791ca6eb1b845e90909c77c5ebe6-dirty",
+  "commit": "3c42ae0188e7626a100b3718c8ff2c9c82201735-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "baseline_differences": {
@@ -371,18 +371,18 @@
         {
           "first": "ink_distribution",
           "second": "geometry",
-          "accuracy_difference": -0.08931127000000001,
-          "accuracy_low": -0.12386846155804973,
-          "accuracy_high": -0.053568853337430625,
-          "srocc_difference": -0.20265839540424047,
-          "srocc_low": -0.30315919978355377,
-          "srocc_high": -0.1224251412182938,
-          "accuracy_within_difference": -0.1419171098157366,
-          "accuracy_within_low": -0.21684580831456857,
-          "accuracy_within_high": -0.050030750742971426,
-          "srocc_within_difference": -0.2571288240933938,
-          "srocc_within_low": -0.40734873599476795,
-          "srocc_within_high": -0.11232174542908294
+          "accuracy_difference": -0.08210054000000001,
+          "accuracy_low": -0.11717639950721237,
+          "accuracy_high": -0.04336029704986712,
+          "srocc_difference": -0.19624897251696227,
+          "srocc_low": -0.2986107745836274,
+          "srocc_high": -0.1139851081207161,
+          "accuracy_within_difference": -0.12199253388999969,
+          "accuracy_within_low": -0.21144129388177063,
+          "accuracy_within_high": -0.02456044078947637,
+          "srocc_within_difference": -0.24108079656437376,
+          "srocc_within_low": -0.39856857241855154,
+          "srocc_within_high": -0.09133434147891538
         },
         {
           "first": "mean_token",
@@ -451,18 +451,18 @@
         {
           "first": "ink_distribution",
           "second": "ensemble",
-          "accuracy_difference": -0.10793721999999999,
-          "accuracy_low": -0.1416549956620455,
-          "accuracy_high": -0.07359617137139957,
-          "srocc_difference": -0.270367945367629,
-          "srocc_low": -0.3673499209049604,
-          "srocc_high": -0.1964949184529215,
-          "accuracy_within_difference": -0.16434870145787206,
-          "accuracy_within_low": -0.23691002057107774,
-          "accuracy_within_high": -0.06931828678904003,
-          "srocc_within_difference": -0.3361267338217238,
-          "srocc_within_low": -0.48739819825232134,
-          "srocc_within_high": -0.194511900876451
+          "accuracy_difference": -0.10072649,
+          "accuracy_low": -0.13709253464014134,
+          "accuracy_high": -0.06129475082192964,
+          "srocc_difference": -0.2639585224803508,
+          "srocc_low": -0.3594497264445964,
+          "srocc_high": -0.1907868234529701,
+          "accuracy_within_difference": -0.14442412553213513,
+          "accuracy_within_low": -0.2329356796388904,
+          "accuracy_within_high": -0.0451225630804225,
+          "srocc_within_difference": -0.32007870629270374,
+          "srocc_within_low": -0.47247409052178263,
+          "srocc_within_high": -0.175176951770109
         },
         {
           "first": "mean_token",
@@ -483,7 +483,7 @@
       ]
     },
     "seconds": {
-      "baseline_differences": 5.984
+      "baseline_differences": 5.495
     }
   }
 }

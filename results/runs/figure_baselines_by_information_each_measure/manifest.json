@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T17:11:07+00:00",
-  "ended": "2026-11-13T17:11:07+00:00",
+  "started": "2026-11-14T05:28:39+00:00",
+  "ended": "2026-11-14T05:28:39+00:00",
   "inputs": [
     {
       "path": "build/evaluate/trivial/by_elo_gap.tsv",
@@ -15,7 +15,7 @@
     },
     {
       "path": "build/evaluate/trivial/manifest.json",
-      "sha256": "efa18ec3a70852fd3d7119b291b45ca358a83a4949e9477131b18d11409dc661",
+      "sha256": "0d4bd29428d7f30a7c4770210ae85088c09ae3957f2aabe54077abc8bfef19ee",
       "bytes": 8600
     },
     {
@@ -30,7 +30,7 @@
     },
     {
       "path": "build/evaluate/measures/ink_coverage/manifest.json",
-      "sha256": "090d0e7ac84c5d33ec678641cbeb127bbc848864b18bf8527e8448396848a36a",
+      "sha256": "b86ca0cad47553bf3dc1952e71fe4e77e1acb7b85636e6ef257b05c1da0e72f0",
       "bytes": 8680
     },
     {
@@ -45,7 +45,7 @@
     },
     {
       "path": "build/evaluate/measures/text_lines/manifest.json",
-      "sha256": "550c930500ad79b1e0292014ca91e2437f9289b00e898c728c2496e74d14bfdc",
+      "sha256": "68e6ab33c394b25e73950a8205f7e3a35b2362606eb191ea654d19b36c3200ae",
       "bytes": 8646
     },
     {
@@ -60,7 +60,7 @@
     },
     {
       "path": "build/evaluate/generic/manifest.json",
-      "sha256": "ae08244b164605f0bb45cecc669bc150311722f829109152dfd514639dcb3509",
+      "sha256": "c4ece9fef7b3e1b04881f02b5235084901b669bd44f44a272c714a6b7ac4431c",
       "bytes": 9366
     },
     {
@@ -75,7 +75,7 @@
     },
     {
       "path": "build/evaluate/measures/edge_orientation_entropy/manifest.json",
-      "sha256": "2d287b053277e6792e64fcab1238a1b66b8b02adca0d0ec36b13d33f6fe1a80f",
+      "sha256": "a77ab276aa2dc1aa13a4c6e11329ec7e0389ca61b1b70c2b300f7b3b5c045e0b",
       "bytes": 8840
     },
     {
@@ -90,7 +90,7 @@
     },
     {
       "path": "build/evaluate/measures/mssc/manifest.json",
-      "sha256": "89ec2a069744540371b99e757ac1dbfa3321b6aabbf4c8ec764846e455ed1f52",
+      "sha256": "443158250f184b7500d5a19025a6e473f78643961dd94615257235da93e1dc46",
       "bytes": 8753
     },
     {
@@ -105,7 +105,7 @@
     },
     {
       "path": "build/evaluate/measures/compressibility/manifest.json",
-      "sha256": "510a9e2d53d13776ca1dfc135603d463edd3da5ccb50d51a3e0f47dc3be47deb",
+      "sha256": "9be9b3dbe63f2e7d26f19613ea075eb1c55cac8e4f1090a358635fd104a0c4cc",
       "bytes": 8730
     },
     {
@@ -120,8 +120,8 @@
     },
     {
       "path": "build/evaluate/measures/feature_congestion/manifest.json",
-      "sha256": "20ad33f6cd245de7c47353a56d908bb864673f16ff6271c541c427a2bb773e38",
-      "bytes": 8852
+      "sha256": "012e8f88ff9617780414e4096ff46673025b521e688079ad17cf461a4b471577",
+      "bytes": 8851
     },
     {
       "path": "build/evaluate/measures/colourfulness/by_elo_gap.tsv",
@@ -135,7 +135,7 @@
     },
     {
       "path": "build/evaluate/measures/colourfulness/manifest.json",
-      "sha256": "992a5457110688de3c8e02303acd92813d2adb3e14f599f56874823e9856d7ec",
+      "sha256": "3a794d6a67d6a7476bc08f61bb81af7bf3c85a837546c98ce21a12fbd1e3be5a",
       "bytes": 8691
     },
     {
@@ -150,7 +150,7 @@
     },
     {
       "path": "build/evaluate/measures/codebook_variety/manifest.json",
-      "sha256": "5df9f7c72156428b677fd164c93bf95dd17ad8304ae6e5b44b8841c2c51ec045",
+      "sha256": "4b66e8655a7b6f55121fddc13b5bda383f65aab903e0f8e66d29cb49d06bb53a",
       "bytes": 8791
     },
     {
@@ -165,8 +165,8 @@
     },
     {
       "path": "build/evaluate/kyle_davidson/manifest.json",
-      "sha256": "8f32637ed768597d8634cd4f57d0ccf41df0051c0ab8919def96d3d2168af452",
-      "bytes": 8823
+      "sha256": "e673d901efd71228fd7700ed04ce9f85a59b859e5730cea687035626d11bc7a0",
+      "bytes": 8824
     },
     {
       "path": "build/evaluate/measures/clutter/by_elo_gap.tsv",
@@ -180,8 +180,8 @@
     },
     {
       "path": "build/evaluate/measures/clutter/manifest.json",
-      "sha256": "7766b4f32b6ac7e9228603111a1703155c49f13f709b198e9e7a2296ee888afe",
-      "bytes": 8646
+      "sha256": "ec8ba73f040156d93b5b844d23b6d7d51d7cd19d21f9a11ae32887baeddfe2fe",
+      "bytes": 8647
     },
     {
       "path": "build/evaluate/measures/symmetry/by_elo_gap.tsv",
@@ -195,7 +195,7 @@
     },
     {
       "path": "build/evaluate/measures/symmetry/manifest.json",
-      "sha256": "659321fd1a5523399e49944b7387f293dd71ffcfdb7f5f87bb8f3e5b386ce4e4",
+      "sha256": "18e8f0e61f9152914fe631ed864c86b6b76ebda1c31f9bf1dff654aca3d57822",
       "bytes": 8730
     },
     {
@@ -210,23 +210,23 @@
     },
     {
       "path": "build/evaluate/measures/entropy/manifest.json",
-      "sha256": "92410a69bc2aa64b36ada820c7043bde84798d9dc8a4aff823b3e6d4babeb731",
+      "sha256": "51ac0b0ddbe3e7fcde02fa5364352b580cfdb83f018f97e2950e7f85af89477f",
       "bytes": 8720
     },
     {
       "path": "build/evaluate/ink_distribution/by_elo_gap.tsv",
-      "sha256": "d2bdfb602d5b656e2b67eab1c1e290dfcc50c15f990fc95e20026f51e33a785d",
+      "sha256": "573a0630b52955a0f259c26cc8d44e76cb11248c6dd1dbf3fc86f263f40ee46c",
       "bytes": 735
     },
     {
       "path": "build/evaluate/ink_distribution/metrics.tsv",
-      "sha256": "391eeac5684e75584afa9e7000891329cf729c18ea3ae1d0557e10552327cc27",
+      "sha256": "719fa556c43b818f5f5599324a34f70b5ab1accc1c5dd618758653c3c3b15c49",
       "bytes": 539
     },
     {
       "path": "build/evaluate/ink_distribution/manifest.json",
-      "sha256": "8cf429f915cc502a0ff9537ee2dfd72c9eb90abe7bbb851d89263302414636c9",
-      "bytes": 9633
+      "sha256": "1c490dea0de25fa2bf6125e97b5120784ad36c4b1687027e8efdf9de77aabd55",
+      "bytes": 9604
     },
     {
       "path": "build/evaluate/measures/lacunarity/by_elo_gap.tsv",
@@ -240,7 +240,7 @@
     },
     {
       "path": "build/evaluate/measures/lacunarity/manifest.json",
-      "sha256": "c8b2030591bf5853c21ffadb7c06166af57d86d959557ecfaf748a5f86d695a3",
+      "sha256": "a2417c752ac3edce8562247a6caa083daab59f5f70adf1370e8ff39b8d10fc9c",
       "bytes": 8741
     },
     {
@@ -255,38 +255,38 @@
     },
     {
       "path": "build/evaluate/measures/fragmentation/manifest.json",
-      "sha256": "59567ef7799935c945f93480f65e2f1920600354576fb8abc4f8e1acf90fe851",
+      "sha256": "b541a854354d4164508d8853a86b4b66da4a145da9f52d118ea9574badfddb9f",
       "bytes": 8676
     },
     {
       "path": "build/evaluate/measures/chromatic_share/by_elo_gap.tsv",
-      "sha256": "c004938d23cd33162ecbbb96308758975d317dfa88e742221ccef60bc4649b26",
+      "sha256": "feec0a2ce1fef88bdde3d540d94b4d2f97088b37c7f8d261b5e58f094bf84402",
       "bytes": 735
     },
     {
       "path": "build/evaluate/measures/chromatic_share/metrics.tsv",
-      "sha256": "028707b7234d4f38d01aa7472b7b8a791b2241de71b79d703a0b5ea1c7dc9ff0",
-      "bytes": 543
+      "sha256": "e8ed266d9747417fe867f6b9ce211af387042d01d5aae49702d6347ab0dcf9f1",
+      "bytes": 542
     },
     {
       "path": "build/evaluate/measures/chromatic_share/manifest.json",
-      "sha256": "bfa249f021e8b6982fee701d85625c1e0b57654d8150d6c986e414f3296cb2e9",
-      "bytes": 8719
+      "sha256": "b10118545023207d74283050c93c5e0d0da346614183c8646e573481b48e11c0",
+      "bytes": 8711
     },
     {
       "path": "build/evaluate/measures/hue_classes/by_elo_gap.tsv",
-      "sha256": "2b30418fa1b1d7e639ae08a082aa4bb61b76c7afd80af5dd2ce4ce0a133675d6",
+      "sha256": "9cb7d3648342bca1397bd4b83a668b09910b0595f4b7338d5b95a25c97225c92",
       "bytes": 735
     },
     {
       "path": "build/evaluate/measures/hue_classes/metrics.tsv",
-      "sha256": "dba27d3279c4eb889b422f2c6a35a568a7b96f930bc4256af3272955ceb3eab5",
-      "bytes": 541
+      "sha256": "1396953f1fec6a509346ead97b0bf0df011d37e415863de4605f48df5eb9c22f",
+      "bytes": 542
     },
     {
       "path": "build/evaluate/measures/hue_classes/manifest.json",
-      "sha256": "58e17fca50784a7f31f31315e9bcea03554ab427661ae12296771f633e6437b7",
-      "bytes": 8781
+      "sha256": "87ed384b46d8239c46489c776ad9a9dcdfc890e427ec30ddb29c607c72df4281",
+      "bytes": 8736
     },
     {
       "path": "build/evaluate/line_texture/by_elo_gap.tsv",
@@ -300,128 +300,128 @@
     },
     {
       "path": "build/evaluate/line_texture/manifest.json",
-      "sha256": "9b476782a6311127aed00a88db676bbdd36a10cd884c6e22d54784031d2381ac",
+      "sha256": "7f168c079d947332c3e9fcbfca539659ff0e844dd2cfdadd30591f82ff6c7127",
       "bytes": 8538
     },
     {
       "path": "build/evaluate/colour/by_elo_gap.tsv",
-      "sha256": "4fd2878ef989a83494544a99e3bd2093c5bb4faeb9f577561d667021ec0da92d",
+      "sha256": "63dbb17d39a04552158c3f2ea0f2dda60643988cfc1ea05453ca61753190e375",
       "bytes": 735
     },
     {
       "path": "build/evaluate/colour/metrics.tsv",
-      "sha256": "4474bdaed432ebd5d8d81b5e8ace7043a0c1bf8f9035626ebd1799fef1c5c3ca",
-      "bytes": 540
+      "sha256": "169442c60d5de204f2e1d89e42573bba167c6cf2ecf1dbdf4e25e3e04bf413a4",
+      "bytes": 541
     },
     {
       "path": "build/evaluate/colour/manifest.json",
-      "sha256": "48bb15afb001a6aea5439c1b865777f1323442dffae588a855216d4fbdf8eba3",
-      "bytes": 9309
+      "sha256": "1deb2aa2306aca376bb9322b7cb592d2b1905b703e2a00dfa1191d91aef38fa2",
+      "bytes": 9315
     },
     {
       "path": "build/evaluate/measures/colour_chromatic_share/by_elo_gap.tsv",
-      "sha256": "feb760ae841db040c4a54c902ee1d81b591c7f4e57f575265befb348f680f862",
+      "sha256": "feec0a2ce1fef88bdde3d540d94b4d2f97088b37c7f8d261b5e58f094bf84402",
       "bytes": 735
     },
     {
       "path": "build/evaluate/measures/colour_chromatic_share/metrics.tsv",
-      "sha256": "1fda436339f4b36ba05e28029b1c0fc8142739e6246d20984451a9a2be796a3a",
-      "bytes": 543
+      "sha256": "b9f0ccb71d19fd4e1b1bf7a548f62eccc163a3e9f8f5dbf038deeb1b00a24727",
+      "bytes": 542
     },
     {
       "path": "build/evaluate/measures/colour_chromatic_share/manifest.json",
-      "sha256": "3d2343eed5a684a39e2fde56de578973a1420b718690f4555992bf7491e91ded",
-      "bytes": 8801
+      "sha256": "3cce9a6bd3e28f42b9b040487e8137b323adda9c19652ea9e5f9ef24401013df",
+      "bytes": 8797
     },
     {
       "path": "build/evaluate/measures/colour_hue_classes/by_elo_gap.tsv",
-      "sha256": "95bf16b1bde29b0e1b80180a0c6f26805820ee8854ebd53b71dd461ef7b9b847",
+      "sha256": "3c082411c096f1415f4a0540838ca1c735027cb1b1a5c2a18530402820036c82",
       "bytes": 735
     },
     {
       "path": "build/evaluate/measures/colour_hue_classes/metrics.tsv",
-      "sha256": "763edb1a9deec708df4673316fd2f74575de13c830a48593988a3b395a1706f3",
-      "bytes": 541
+      "sha256": "eb6f3e3c6a909b6a9385b0cf33391ae77befd430b4d68ed6b9e627fe0266ac12",
+      "bytes": 542
     },
     {
       "path": "build/evaluate/measures/colour_hue_classes/manifest.json",
-      "sha256": "98f8a02565229f1515e877539de2e8a4a4ea76fc244de961828883905ad6b473",
-      "bytes": 8874
+      "sha256": "bab1772be39cf31a81cb637e3b9408f06375f497bf87ff3eb0386145a50c9958",
+      "bytes": 8836
     },
     {
       "path": "build/evaluate/measures/colour_hue_entropy/by_elo_gap.tsv",
-      "sha256": "0bb5bacfa9c70f38c0ed69b4cb3e37b3993db355380b49e8288b0efdcd7dba80",
+      "sha256": "7fb4a481182f70442f7a6d55bd93d9ee48fd7c45b5ac406a81db9ee7051aa571",
       "bytes": 735
     },
     {
       "path": "build/evaluate/measures/colour_hue_entropy/metrics.tsv",
-      "sha256": "407a96db62eb6ac9f4a71f577f5c62edd5eec5e1e51af986f3f10f51059468e3",
+      "sha256": "d2fe28f26a5051e81dcff1d3640d414fdf5785e0e98a7abc65d864ea78f9726f",
       "bytes": 542
     },
     {
       "path": "build/evaluate/measures/colour_hue_entropy/manifest.json",
-      "sha256": "d87f8261d5ceb3c8872771be7c221e40f93ce4331e74a40348fc478eee45eae3",
-      "bytes": 8732
+      "sha256": "bd39186a4019ac18aad0b790ac9779a3cbc8b7bcb7fdbc7c8aa7c59456195722",
+      "bytes": 8735
     },
     {
       "path": "build/evaluate/measures/colour_saturation/by_elo_gap.tsv",
-      "sha256": "eae2de2e55de90a4e00d18a49b77caabcf562b264b8e5e29110ee96e6d3ec1ee",
+      "sha256": "720ad0c54b72ea6706082c8925482db3261a5a3703e706c84e3ed69d1ea9d779",
       "bytes": 735
     },
     {
       "path": "build/evaluate/measures/colour_saturation/metrics.tsv",
-      "sha256": "58f534ef1a16ee1fab5d9fbdeaa709423b277f7f5acf9850810e19ad4e630790",
+      "sha256": "6ea7ceef22ee3b5074683e9b4f732a02ff9fc330d41ca97e7dc5799bd2196efa",
       "bytes": 541
     },
     {
       "path": "build/evaluate/measures/colour_saturation/manifest.json",
-      "sha256": "02d0b4e5732ad5eead3128e07787c65bdbf2b570caef70963b34e0b37a7c151b",
-      "bytes": 8758
+      "sha256": "e624f7eeab5ae11e3f6a6a313504886f2622af3577e12eec53a79fc061cf9ee4",
+      "bytes": 8757
     },
     {
       "path": "build/evaluate/measures/colour_zones/by_elo_gap.tsv",
-      "sha256": "2d3c4a1dfcf6685c397096b60a7de7e1402daa486990aad79d074dc59840127c",
+      "sha256": "d1b535980502c1fb97692df9a0ebd5177b9d787e7892002cbaf39a5f12a255e9",
       "bytes": 735
     },
     {
       "path": "build/evaluate/measures/colour_zones/metrics.tsv",
-      "sha256": "18171c52dea0f9c0955632120518932b0d7b937dbfff9193ae5d51cc3f4cd0c7",
+      "sha256": "6cad34a67cbe00ec4cf2650baee1a729140d0911a43379576a7bb943f193ed40",
       "bytes": 541
     },
     {
       "path": "build/evaluate/measures/colour_zones/manifest.json",
-      "sha256": "179d3ad7ac2fc2ec2fcb6f1855285c5e3e19679e1e63561293be7d3d923367ee",
-      "bytes": 8821
+      "sha256": "a948fcfdad57cceae41a38b42607b4d9ee9e6f7ac77def2c31464ecc67f97453",
+      "bytes": 8818
     },
     {
       "path": "build/evaluate/measures/colour_lines/by_elo_gap.tsv",
-      "sha256": "615345cb042f431955e1c0f37de3b5f658cda5d6311b74e1e4f4756860f42c9b",
+      "sha256": "8f901ac2da48e3aec3483202c280e8d3e0fdcb7e9ee405dac677f95532cc1180",
       "bytes": 735
     },
     {
       "path": "build/evaluate/measures/colour_lines/metrics.tsv",
-      "sha256": "f5d7eb9ab8334d19ca1d1cb9ff741e8a407601f387a762469602ef1fea3ee78b",
+      "sha256": "5e6b4683e3505596dccba79712d8b7fedba146fdb2edec64fd9258cb70498bd0",
       "bytes": 542
     },
     {
       "path": "build/evaluate/measures/colour_lines/manifest.json",
-      "sha256": "7e7b54c206bb321b3245aff7719737c92b3ff64f1060abfd0cd36dc523ed2e33",
-      "bytes": 8709
+      "sha256": "ea2caaf5992cbffe4a3f1f25930572ea3696e9db46fb879e4c1c5fc4b9f58f33",
+      "bytes": 8704
     },
     {
       "path": "build/evaluate/measures/colour_coloured_initials/by_elo_gap.tsv",
-      "sha256": "866b3faedd3a45cf609c221c72e9da0cc4861848888e5839d424d4dc77822477",
+      "sha256": "65d2dec3a02242989bed20d3b40acf660b8c795f837e20811a3d71e4a648c85b",
       "bytes": 735
     },
     {
       "path": "build/evaluate/measures/colour_coloured_initials/metrics.tsv",
-      "sha256": "30a9a533e462ca9a675cc835ed14a4e469f916dfd426c7022a8968a09700694f",
+      "sha256": "aafc6035f36cd9ddd3bc09ae1ffa86fd2c1736f6bdf6f6ebc2da39c7d9e19a69",
       "bytes": 540
     },
     {
       "path": "build/evaluate/measures/colour_coloured_initials/manifest.json",
-      "sha256": "4478a5ed8527068b8fb959b55860bee47b9f2bf4329579a8cb4c52810ed7e0a0",
-      "bytes": 8806
+      "sha256": "f189343d68461c6f9e9536f50600841bdd832bfd6d429c2fdf88d73b2f490d1a",
+      "bytes": 8813
     },
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
@@ -435,8 +435,8 @@
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "82b635a28f6495a142f834ba87423e6a5ebdb4274e1a742ac34263ae69e104d5",
-      "bytes": 13398
+      "sha256": "340fc53c747ff4cc5393959ec043fb44288a8ecbf0ab268cbd7354ecdce98208",
+      "bytes": 13397
     },
     {
       "path": "build/evaluate/geometry_layout/by_elo_gap.tsv",
@@ -450,8 +450,8 @@
     },
     {
       "path": "build/evaluate/geometry_layout/manifest.json",
-      "sha256": "cc9ecc660070e06328d7194414661adf27de3b7ebf74a3fb72e40be4d3bde8b8",
-      "bytes": 10593
+      "sha256": "ffdf0ecdf24ee20675ab84fa9d9e232d0f5e1af1fd14c361c5b587f9a41c52dd",
+      "bytes": 10594
     },
     {
       "path": "build/evaluate/mean_token/by_elo_gap.tsv",
@@ -495,7 +495,7 @@
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "0da6dbf3ff9aecfd6da6e824016ba984bb595240fbc733575e4671230919fd91",
+      "sha256": "0383426efa10545091743e81133245eb2f22c891bcfaa40b86f1ba758f474070",
       "bytes": 12963
     }
   ],
@@ -725,7 +725,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "2884e8cca226791ca6eb1b845e90909c77c5ebe6-dirty",
+  "commit": "3c42ae0188e7626a100b3718c8ff2c9c82201735-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "baselines_by_information_each_measure": {
@@ -903,12 +903,12 @@
           "evaluation": "ink_distribution",
           "label": "Ink distribution, combined",
           "alone": false,
-          "accuracy": 0.634363,
-          "low": 0.587911,
-          "high": 0.670053,
-          "srocc": 0.548576,
-          "srocc_low": 0.434793,
-          "srocc_high": 0.628215
+          "accuracy": 0.641574,
+          "low": 0.593552,
+          "high": 0.676524,
+          "srocc": 0.554986,
+          "srocc_low": 0.437785,
+          "srocc_high": 0.633357
         },
         {
           "level": "Ink",
@@ -939,24 +939,24 @@
           "evaluation": "chromatic_share",
           "label": "Chromatic share",
           "alone": true,
-          "accuracy": 0.446768,
-          "low": 0.401213,
-          "high": 0.488058,
-          "srocc": 0.097661,
-          "srocc_low": -0.027901,
-          "srocc_high": 0.215967
+          "accuracy": 0.463443,
+          "low": 0.420339,
+          "high": 0.503686,
+          "srocc": 0.143564,
+          "srocc_low": 0.008654,
+          "srocc_high": 0.273827
         },
         {
           "level": "Ink",
           "evaluation": "hue_classes",
           "label": "Hue classes",
           "alone": true,
-          "accuracy": 0.474329,
-          "low": 0.435403,
-          "high": 0.514823,
-          "srocc": 0.027233,
-          "srocc_low": -0.091751,
-          "srocc_high": 0.156376
+          "accuracy": 0.477226,
+          "low": 0.438464,
+          "high": 0.518999,
+          "srocc": 0.033082,
+          "srocc_low": -0.088747,
+          "srocc_high": 0.165869
         },
         {
           "level": "Colour",
@@ -975,96 +975,96 @@
           "evaluation": "colour",
           "label": "Real colour, combined",
           "alone": false,
-          "accuracy": 0.514454,
-          "low": 0.471944,
-          "high": 0.548213,
-          "srocc": 0.138347,
-          "srocc_low": 0.02197,
-          "srocc_high": 0.24259
+          "accuracy": 0.509726,
+          "low": 0.465864,
+          "high": 0.54987,
+          "srocc": 0.138975,
+          "srocc_low": 0.029019,
+          "srocc_high": 0.240144
         },
         {
           "level": "Colour",
           "evaluation": "colour_chromatic_share",
           "label": "Chromatic share",
           "alone": true,
-          "accuracy": 0.447201,
-          "low": 0.40215,
-          "high": 0.488506,
-          "srocc": 0.097793,
-          "srocc_low": -0.027595,
-          "srocc_high": 0.216146
+          "accuracy": 0.463443,
+          "low": 0.420339,
+          "high": 0.503686,
+          "srocc": 0.143701,
+          "srocc_low": 0.00867,
+          "srocc_high": 0.273965
         },
         {
           "level": "Colour",
           "evaluation": "colour_hue_classes",
           "label": "Hue classes",
           "alone": true,
-          "accuracy": 0.475088,
-          "low": 0.435128,
-          "high": 0.515258,
-          "srocc": 0.027729,
-          "srocc_low": -0.090981,
-          "srocc_high": 0.156332
+          "accuracy": 0.477338,
+          "low": 0.438186,
+          "high": 0.518821,
+          "srocc": 0.033419,
+          "srocc_low": -0.088979,
+          "srocc_high": 0.165654
         },
         {
           "level": "Colour",
           "evaluation": "colour_hue_entropy",
           "label": "Hue entropy",
           "alone": true,
-          "accuracy": 0.484311,
-          "low": 0.441067,
-          "high": 0.526822,
-          "srocc": 0.075596,
-          "srocc_low": -0.049872,
-          "srocc_high": 0.200913
+          "accuracy": 0.484114,
+          "low": 0.441256,
+          "high": 0.523954,
+          "srocc": 0.110775,
+          "srocc_low": -0.01724,
+          "srocc_high": 0.238022
         },
         {
           "level": "Colour",
           "evaluation": "colour_saturation",
           "label": "Saturation",
           "alone": true,
-          "accuracy": 0.517409,
-          "low": 0.469252,
-          "high": 0.557286,
-          "srocc": 0.085031,
-          "srocc_low": -0.03904,
-          "srocc_high": 0.201027
+          "accuracy": 0.523147,
+          "low": 0.479152,
+          "high": 0.564122,
+          "srocc": 0.080995,
+          "srocc_low": -0.030731,
+          "srocc_high": 0.192223
         },
         {
           "level": "Colour",
           "evaluation": "colour_zones",
           "label": "Colour by zone",
           "alone": true,
-          "accuracy": 0.507437,
-          "low": 0.465565,
-          "high": 0.54881,
-          "srocc": 0.098736,
-          "srocc_low": -0.015161,
-          "srocc_high": 0.2076
+          "accuracy": 0.510393,
+          "low": 0.466426,
+          "high": 0.551571,
+          "srocc": 0.122246,
+          "srocc_low": -7.1e-05,
+          "srocc_high": 0.228072
         },
         {
           "level": "Colour",
           "evaluation": "colour_lines",
           "label": "Colour across lines",
           "alone": true,
-          "accuracy": 0.476341,
-          "low": 0.43002,
-          "high": 0.520722,
-          "srocc": 0.05874,
-          "srocc_low": -0.056774,
-          "srocc_high": 0.176902
+          "accuracy": 0.497727,
+          "low": 0.453822,
+          "high": 0.539353,
+          "srocc": 0.100273,
+          "srocc_low": -0.017542,
+          "srocc_high": 0.219662
         },
         {
           "level": "Colour",
           "evaluation": "colour_coloured_initials",
           "label": "Coloured initials",
           "alone": true,
-          "accuracy": 0.526695,
-          "low": 0.491283,
-          "high": 0.556744,
-          "srocc": 0.236865,
-          "srocc_low": 0.115485,
-          "srocc_high": 0.348901
+          "accuracy": 0.528262,
+          "low": 0.493811,
+          "high": 0.558263,
+          "srocc": 0.235357,
+          "srocc_low": 0.115692,
+          "srocc_high": 0.34789
         },
         {
           "level": "Layout",
@@ -1131,7 +1131,7 @@
       "ceiling": 0.890535
     },
     "seconds": {
-      "baselines_by_information_each_measure": 0.593
+      "baselines_by_information_each_measure": 0.524
     }
   }
 }

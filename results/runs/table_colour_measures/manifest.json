@@ -1,12 +1,12 @@
 {
   "command": "report",
-  "started": "2026-11-13T17:11:36+00:00",
-  "ended": "2026-11-13T17:11:36+00:00",
+  "started": "2026-11-14T05:29:04+00:00",
+  "ended": "2026-11-14T05:29:04+00:00",
   "inputs": [
     {
       "path": "build/features/dataset/features.parquet",
-      "sha256": "2f79dc1b411ba5cd5e1a7197ee76601032c5e9e23a12cac700a8acbcbc3d6616",
-      "bytes": 748876
+      "sha256": "299d6b9902edcf2332e9130258318ceecc065f645138ec7f28a395d5b26f42ba",
+      "bytes": 738319
     }
   ],
   "outputs": [
@@ -77,14 +77,14 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "2884e8cca226791ca6eb1b845e90909c77c5ebe6-dirty",
+  "commit": "3c42ae0188e7626a100b3718c8ff2c9c82201735-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "colour_measures": {
       "measures": 7
     },
     "seconds": {
-      "colour_measures": 0.061
+      "colour_measures": 0.059
     }
   }
 }

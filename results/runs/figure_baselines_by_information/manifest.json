@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T17:11:05+00:00",
-  "ended": "2026-11-13T17:11:05+00:00",
+  "started": "2026-11-14T05:28:37+00:00",
+  "ended": "2026-11-14T05:28:38+00:00",
   "inputs": [
     {
       "path": "build/evaluate/measures/ink_coverage/by_elo_gap.tsv",
@@ -15,7 +15,7 @@
     },
     {
       "path": "build/evaluate/measures/ink_coverage/manifest.json",
-      "sha256": "090d0e7ac84c5d33ec678641cbeb127bbc848864b18bf8527e8448396848a36a",
+      "sha256": "b86ca0cad47553bf3dc1952e71fe4e77e1acb7b85636e6ef257b05c1da0e72f0",
       "bytes": 8680
     },
     {
@@ -30,7 +30,7 @@
     },
     {
       "path": "build/evaluate/measures/text_lines/manifest.json",
-      "sha256": "550c930500ad79b1e0292014ca91e2437f9289b00e898c728c2496e74d14bfdc",
+      "sha256": "68e6ab33c394b25e73950a8205f7e3a35b2362606eb191ea654d19b36c3200ae",
       "bytes": 8646
     },
     {
@@ -45,7 +45,7 @@
     },
     {
       "path": "build/evaluate/trivial/manifest.json",
-      "sha256": "efa18ec3a70852fd3d7119b291b45ca358a83a4949e9477131b18d11409dc661",
+      "sha256": "0d4bd29428d7f30a7c4770210ae85088c09ae3957f2aabe54077abc8bfef19ee",
       "bytes": 8600
     },
     {
@@ -60,7 +60,7 @@
     },
     {
       "path": "build/evaluate/generic/manifest.json",
-      "sha256": "ae08244b164605f0bb45cecc669bc150311722f829109152dfd514639dcb3509",
+      "sha256": "c4ece9fef7b3e1b04881f02b5235084901b669bd44f44a272c714a6b7ac4431c",
       "bytes": 9366
     },
     {
@@ -75,23 +75,23 @@
     },
     {
       "path": "build/evaluate/kyle_davidson/manifest.json",
-      "sha256": "8f32637ed768597d8634cd4f57d0ccf41df0051c0ab8919def96d3d2168af452",
-      "bytes": 8823
+      "sha256": "e673d901efd71228fd7700ed04ce9f85a59b859e5730cea687035626d11bc7a0",
+      "bytes": 8824
     },
     {
       "path": "build/evaluate/ink_distribution/by_elo_gap.tsv",
-      "sha256": "d2bdfb602d5b656e2b67eab1c1e290dfcc50c15f990fc95e20026f51e33a785d",
+      "sha256": "573a0630b52955a0f259c26cc8d44e76cb11248c6dd1dbf3fc86f263f40ee46c",
       "bytes": 735
     },
     {
       "path": "build/evaluate/ink_distribution/metrics.tsv",
-      "sha256": "391eeac5684e75584afa9e7000891329cf729c18ea3ae1d0557e10552327cc27",
+      "sha256": "719fa556c43b818f5f5599324a34f70b5ab1accc1c5dd618758653c3c3b15c49",
       "bytes": 539
     },
     {
       "path": "build/evaluate/ink_distribution/manifest.json",
-      "sha256": "8cf429f915cc502a0ff9537ee2dfd72c9eb90abe7bbb851d89263302414636c9",
-      "bytes": 9633
+      "sha256": "1c490dea0de25fa2bf6125e97b5120784ad36c4b1687027e8efdf9de77aabd55",
+      "bytes": 9604
     },
     {
       "path": "build/evaluate/line_texture/by_elo_gap.tsv",
@@ -105,23 +105,23 @@
     },
     {
       "path": "build/evaluate/line_texture/manifest.json",
-      "sha256": "9b476782a6311127aed00a88db676bbdd36a10cd884c6e22d54784031d2381ac",
+      "sha256": "7f168c079d947332c3e9fcbfca539659ff0e844dd2cfdadd30591f82ff6c7127",
       "bytes": 8538
     },
     {
       "path": "build/evaluate/colour/by_elo_gap.tsv",
-      "sha256": "4fd2878ef989a83494544a99e3bd2093c5bb4faeb9f577561d667021ec0da92d",
+      "sha256": "63dbb17d39a04552158c3f2ea0f2dda60643988cfc1ea05453ca61753190e375",
       "bytes": 735
     },
     {
       "path": "build/evaluate/colour/metrics.tsv",
-      "sha256": "4474bdaed432ebd5d8d81b5e8ace7043a0c1bf8f9035626ebd1799fef1c5c3ca",
-      "bytes": 540
+      "sha256": "169442c60d5de204f2e1d89e42573bba167c6cf2ecf1dbdf4e25e3e04bf413a4",
+      "bytes": 541
     },
     {
       "path": "build/evaluate/colour/manifest.json",
-      "sha256": "48bb15afb001a6aea5439c1b865777f1323442dffae588a855216d4fbdf8eba3",
-      "bytes": 9309
+      "sha256": "1deb2aa2306aca376bb9322b7cb592d2b1905b703e2a00dfa1191d91aef38fa2",
+      "bytes": 9315
     },
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
@@ -135,8 +135,8 @@
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "82b635a28f6495a142f834ba87423e6a5ebdb4274e1a742ac34263ae69e104d5",
-      "bytes": 13398
+      "sha256": "340fc53c747ff4cc5393959ec043fb44288a8ecbf0ab268cbd7354ecdce98208",
+      "bytes": 13397
     },
     {
       "path": "build/evaluate/geometry_layout/by_elo_gap.tsv",
@@ -150,8 +150,8 @@
     },
     {
       "path": "build/evaluate/geometry_layout/manifest.json",
-      "sha256": "cc9ecc660070e06328d7194414661adf27de3b7ebf74a3fb72e40be4d3bde8b8",
-      "bytes": 10593
+      "sha256": "ffdf0ecdf24ee20675ab84fa9d9e232d0f5e1af1fd14c361c5b587f9a41c52dd",
+      "bytes": 10594
     },
     {
       "path": "build/evaluate/mean_token/by_elo_gap.tsv",
@@ -195,7 +195,7 @@
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "0da6dbf3ff9aecfd6da6e824016ba984bb595240fbc733575e4671230919fd91",
+      "sha256": "0383426efa10545091743e81133245eb2f22c891bcfaa40b86f1ba758f474070",
       "bytes": 12963
     }
   ],
@@ -322,7 +322,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "2884e8cca226791ca6eb1b845e90909c77c5ebe6-dirty",
+  "commit": "3c42ae0188e7626a100b3718c8ff2c9c82201735-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "baselines_by_information": {
@@ -392,12 +392,12 @@
           "evaluation": "ink_distribution",
           "label": "Ink distribution",
           "alone": false,
-          "accuracy": 0.634363,
-          "low": 0.587911,
-          "high": 0.670053,
-          "srocc": 0.548576,
-          "srocc_low": 0.434793,
-          "srocc_high": 0.628215
+          "accuracy": 0.641574,
+          "low": 0.593552,
+          "high": 0.676524,
+          "srocc": 0.554986,
+          "srocc_low": 0.437785,
+          "srocc_high": 0.633357
         },
         {
           "level": "Colour",
@@ -416,12 +416,12 @@
           "evaluation": "colour",
           "label": "Real colour",
           "alone": false,
-          "accuracy": 0.514454,
-          "low": 0.471944,
-          "high": 0.548213,
-          "srocc": 0.138347,
-          "srocc_low": 0.02197,
-          "srocc_high": 0.24259
+          "accuracy": 0.509726,
+          "low": 0.465864,
+          "high": 0.54987,
+          "srocc": 0.138975,
+          "srocc_low": 0.029019,
+          "srocc_high": 0.240144
         },
         {
           "level": "Layout",
@@ -488,7 +488,7 @@
       "ceiling": 0.890535
     },
     "seconds": {
-      "baselines_by_information": 0.47
+      "baselines_by_information": 0.392
     }
   }
 }
