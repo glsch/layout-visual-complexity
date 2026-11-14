@@ -1,0 +1,5 @@
+# Real colour: the pairwise logistic model on the colour measures (chromatic share, hue classes, hue entropy,
+# saturation, colour by zone, across lines, coloured initials).
+features: build/features/dataset/features.parquet
+families: colour
+output: build/evaluate/colour

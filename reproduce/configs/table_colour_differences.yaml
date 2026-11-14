@@ -1,0 +1,22 @@
+# What colour adds, on the same folds and resamples: geometry with line texture and with real colour against geometry,
+# the ensemble with colour against the ensemble, in accuracy and SROCC, overall and within manuscripts.
+name: table_colour_differences
+outputs: [colour_differences]
+evaluations:
+  geometry_line_texture: build/evaluate/geometry_line_texture
+  geometry_colour: build/evaluate/geometry_colour
+  geometry: build/evaluate/geometry
+  ensemble_colour: build/evaluate/ensemble_colour
+  ensemble: build/evaluate/ensemble
+labels:
+  geometry_line_texture: Geometry with line texture
+  geometry_colour: Geometry with real colour
+  geometry: Geometry
+  ensemble_colour: Ensemble with colour
+  ensemble: Ensemble
+  vit: ViT
+  colour: Real colour
+comparisons:
+  - [geometry_line_texture, geometry]
+  - [geometry_colour, geometry]
+  - [ensemble_colour, ensemble]

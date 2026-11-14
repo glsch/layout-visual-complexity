@@ -1,0 +1,17 @@
+# Appendix B's successor: line texture, real colour and geometry with real colour by Elo gap, beside the Reference,
+# with SROCC, accuracy and SROCC within manuscripts, and the value real colour adds to geometry.
+name: table_colour_by_elo_gap
+outputs: [colour_by_elo_gap]
+evaluations:
+  line_texture: build/evaluate/line_texture
+  colour: build/evaluate/colour
+  geometry_colour: build/evaluate/geometry_colour
+  geometry: build/evaluate/geometry
+shown: [line_texture, colour, geometry_colour]
+labels:
+  line_texture: Line texture
+  colour: Real colour
+  geometry_colour: Geometry with real colour
+  geometry: Geometry
+comparisons:
+  - [geometry_colour, geometry]

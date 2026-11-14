@@ -9,15 +9,24 @@ Image only	compressibility	Lossless compressibility	True	0.567396	0.520474	0.608
 Image only	feature_congestion	Feature congestion	True	0.565070	0.517374	0.604242	0.267089	0.113397	0.393992
 Image only	colourfulness	Colourfulness	True	0.554604	0.510826	0.603915	-0.013807	-0.157114	0.130885
 Image only	codebook_variety	Patch-codebook variety	True	0.458180	0.429606	0.495580	-0.152787	-0.263702	-0.042439
-Kyle–Davidson	kyle_davidson	Kyle–Davidson as published, combined	False	0.592511	0.543976	0.627247	0.432469	0.311021	0.531871
-Kyle–Davidson	clutter	Clutter (normalised cut)	True	0.505329	0.458043	0.536715	-0.047770	-0.156425	0.067856
+Kyle–Davidson	kyle_davidson	Kyle–Davidson as published, combined	False	0.592640	0.543230	0.626367	0.431091	0.309377	0.528363
+Kyle–Davidson	clutter	Clutter (normalised cut)	True	0.505071	0.457416	0.536275	-0.044337	-0.153027	0.073941
 Kyle–Davidson	symmetry	Patch symmetry	True	0.602702	0.550982	0.637226	0.424763	0.293037	0.532878
 Kyle–Davidson	entropy	HSV entropy	True	0.527291	0.476358	0.565306	0.182531	0.046325	0.310609
-Ink	ink_distribution	Ink distribution, combined	False	0.634363	0.587911	0.670053	0.548576	0.434793	0.628215
+Ink	ink_distribution	Ink distribution, combined	False	0.641574	0.593552	0.676524	0.554986	0.437785	0.633357
 Ink	lacunarity	Lacunarity	True	0.661824	0.621793	0.694054	0.563843	0.451668	0.642980
 Ink	fragmentation	Fragmentation	True	0.526574	0.478163	0.571560	0.135203	0.001864	0.262575
-Ink	chromatic_share	Chromatic share	True	0.446768	0.401213	0.488058	0.097661	-0.027901	0.215967
-Ink	hue_classes	Hue classes	True	0.474329	0.435403	0.514823	0.027233	-0.091751	0.156376
+Ink	chromatic_share	Chromatic share	True	0.463443	0.420339	0.503686	0.143564	0.008654	0.273827
+Ink	hue_classes	Hue classes	True	0.477226	0.438464	0.518999	0.033082	-0.088747	0.165869
+Colour	line_texture	Line texture as published	False	0.652714	0.605041	0.686255	0.590015	0.508218	0.656457
+Colour	colour	Real colour, combined	False	0.509726	0.465864	0.549870	0.138975	0.029019	0.240144
+Colour	colour_chromatic_share	Chromatic share	True	0.463443	0.420339	0.503686	0.143701	0.008670	0.273965
+Colour	colour_hue_classes	Hue classes	True	0.477338	0.438186	0.518821	0.033419	-0.088979	0.165654
+Colour	colour_hue_entropy	Hue entropy	True	0.484114	0.441256	0.523954	0.110775	-0.017240	0.238022
+Colour	colour_saturation	Saturation	True	0.523147	0.479152	0.564122	0.080995	-0.030731	0.192223
+Colour	colour_zones	Colour by zone	True	0.510393	0.466426	0.551571	0.122246	-0.000071	0.228072
+Colour	colour_lines	Colour across lines	True	0.497727	0.453822	0.539353	0.100273	-0.017542	0.219662
+Colour	colour_coloured_initials	Coloured initials	True	0.528262	0.493811	0.558263	0.235357	0.115692	0.347890
 Layout	geometry	Geometry	False	0.723675	0.679826	0.752685	0.751235	0.677634	0.803791
 Layout	geometry_layout	Geometry with Layout	False	0.714445	0.669470	0.743352	0.735137	0.664044	0.789211
 Learned	mean_token	Linear model on the mean ViT token	False	0.623678	0.580208	0.651572	0.497977	0.383625	0.595057

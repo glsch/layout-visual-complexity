@@ -1,0 +1,302 @@
+{
+  "command": "report",
+  "started": "2026-11-14T05:29:01+00:00",
+  "ended": "2026-11-14T05:29:03+00:00",
+  "inputs": [
+    {
+      "path": "build/evaluate/geometry_line_texture/by_elo_gap.tsv",
+      "sha256": "bc04c691b97eb93930632a77a6fd01c03eee25e0525e14f298ba465916c655a6",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/geometry_line_texture/metrics.tsv",
+      "sha256": "37500c7601c4b7bec245eee4dd52045eaec483d95705bfabb5ec6346a3b7218e",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/geometry_line_texture/manifest.json",
+      "sha256": "a784b5cbcca2c41c1250029de38d6680d6445924335ee042932df9c9bc8d81a4",
+      "bytes": 10041
+    },
+    {
+      "path": "build/evaluate/geometry_colour/by_elo_gap.tsv",
+      "sha256": "ea69a601497577919bcfc2a46a4d1615c2a37d755004b132dc63f28a21bfd7ed",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/geometry_colour/metrics.tsv",
+      "sha256": "e6c7390f7bac4fcb07508b7ff2ee815c165c1a4690317184f9e280188b9fd3c2",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/geometry_colour/manifest.json",
+      "sha256": "c449085a3d28ccafb5e9874e36cf6effbce8104576d65d43ac97770490fae746",
+      "bytes": 10802
+    },
+    {
+      "path": "build/evaluate/geometry/by_elo_gap.tsv",
+      "sha256": "59782a5158994706e32de5e9cb806a3e99fb1a030f80c9a7e505f8ed1691af21",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/geometry/metrics.tsv",
+      "sha256": "a344aa858f054a9270e5ffa67ec7d72015a5ec477faa235a6d3f6e70ebd43ee2",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/geometry/manifest.json",
+      "sha256": "340fc53c747ff4cc5393959ec043fb44288a8ecbf0ab268cbd7354ecdce98208",
+      "bytes": 13397
+    },
+    {
+      "path": "build/evaluate/ensemble_colour/by_elo_gap.tsv",
+      "sha256": "a411ee589ff19b869e51dcbd4091953c9fa19b67796ab0a2b8915ac6e7a84e75",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/ensemble_colour/metrics.tsv",
+      "sha256": "1d61ceb5fa7ba3e81a87aa8f16486158ca0aadf99868d74e3304dc6a5a999b46",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/ensemble_colour/manifest.json",
+      "sha256": "c452c2aee483eecd03d9a7fdfda6f333d14bf22ec00cfaa7937335df3d1fe1cf",
+      "bytes": 9402
+    },
+    {
+      "path": "build/evaluate/ensemble/by_elo_gap.tsv",
+      "sha256": "50072af82f24a6954aace94ee9e78cceefbb2fa4e99baa38b405069a2a85a471",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/ensemble/metrics.tsv",
+      "sha256": "57a0f86d3db0acc0fa993a6a52f2aac78316517ea69e83133268efacaee7a3df",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/ensemble/manifest.json",
+      "sha256": "0383426efa10545091743e81133245eb2f22c891bcfaa40b86f1ba758f474070",
+      "bytes": 12963
+    },
+    {
+      "path": "build/ranking/scores.tsv",
+      "sha256": "f27050a5b0039c31a3c2bce6766501b6320f14e735602fc02419f40cce9ce684",
+      "bytes": 43825
+    },
+    {
+      "path": "build/evaluate/geometry_line_texture/hits.tsv",
+      "sha256": "e015eb842a50833790589dad1f50bf445e8d38897d8e606b36d6f017d21e14c8",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/geometry_line_texture/scores.tsv",
+      "sha256": "a538426ec27507d7dfb9add340d4da909302f2de39b849fd73f61012e454a2b3",
+      "bytes": 19059
+    },
+    {
+      "path": "build/evaluate/geometry/hits.tsv",
+      "sha256": "020f3ea05c940bbcf55dd93e97bf9ff8e0f52088107267f9ef0533f13dd12424",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/geometry/scores.tsv",
+      "sha256": "bfaa96d1b551bd569c71decac99eb10d111b996ee07befa254a4a6cb96a48593",
+      "bytes": 19051
+    },
+    {
+      "path": "build/evaluate/geometry_colour/hits.tsv",
+      "sha256": "30ec6949ce10ddfcc95c92a693c0d649f4eaf409507628ec9595020c2c100973",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/geometry_colour/scores.tsv",
+      "sha256": "926ea3d92ed132cc92e024e65762dc50ecee31ddb8c9f3ad9c7119a5afb148af",
+      "bytes": 19047
+    },
+    {
+      "path": "build/evaluate/ensemble_colour/hits.tsv",
+      "sha256": "98195a3c22d86a4b1d045b10c165c1fc14d3efcd0205657536230fa1d2e460f9",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/ensemble_colour/scores.tsv",
+      "sha256": "cb53df813b36aad91428b18f2085ec186433b06a79f1569e62e8ff7aec42664e",
+      "bytes": 19056
+    },
+    {
+      "path": "build/evaluate/ensemble/hits.tsv",
+      "sha256": "d75033a372712ed9e4a51c20b7bf7e75076cda9323e43bdfca8d7c25374b3ada",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/ensemble/scores.tsv",
+      "sha256": "2e06f23574cc3e2cfa1b22e6d8de8eb79e4471010650c45ce40015e78d5daf02",
+      "bytes": 19040
+    },
+    {
+      "path": "build/evaluate/vit/manifest.json",
+      "sha256": "72bf2e7d3014604ef1606182bc1f30de0ed9dea69a9dede931322448bfef1bd4",
+      "bytes": 11241
+    },
+    {
+      "path": "build/evaluate/colour/manifest.json",
+      "sha256": "1deb2aa2306aca376bb9322b7cb592d2b1905b703e2a00dfa1191d91aef38fa2",
+      "bytes": 9315
+    }
+  ],
+  "outputs": [
+    "results/tables/colour_differences.tsv",
+    "results/tables/colour_differences.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "colour_differences"
+    ],
+    "name": "table_colour_differences",
+    "dataset": "build/dataset",
+    "scores": "build/ranking/scores.tsv",
+    "features": "build/features/dataset/features.parquet",
+    "layout": "build/segment/dataset",
+    "evaluations": {
+      "geometry_line_texture": "build/evaluate/geometry_line_texture",
+      "geometry_colour": "build/evaluate/geometry_colour",
+      "geometry": "build/evaluate/geometry",
+      "ensemble_colour": "build/evaluate/ensemble_colour",
+      "ensemble": "build/evaluate/ensemble"
+    },
+    "shown": [],
+    "labels": {
+      "geometry_line_texture": "Geometry with line texture",
+      "geometry_colour": "Geometry with real colour",
+      "geometry": "Geometry",
+      "ensemble_colour": "Ensemble with colour",
+      "ensemble": "Ensemble",
+      "vit": "ViT",
+      "colour": "Real colour"
+    },
+    "colours": {},
+    "comparisons": [
+      [
+        "geometry_line_texture",
+        "geometry"
+      ],
+      [
+        "geometry_colour",
+        "geometry"
+      ],
+      [
+        "ensemble_colour",
+        "ensemble"
+      ]
+    ],
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": "",
+    "colour_pages": []
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "3c42ae0188e7626a100b3718c8ff2c9c82201735-dirty",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "colour_differences": {
+      "differences": [
+        {
+          "first": "geometry_line_texture",
+          "second": "geometry",
+          "accuracy_difference": -0.01648868,
+          "accuracy_low": -0.03657381484979254,
+          "accuracy_high": 0.003560311552679217,
+          "srocc_difference": -0.021644172315665733,
+          "srocc_low": -0.044432139542396824,
+          "srocc_high": -0.0006293939930864416,
+          "accuracy_within_difference": -0.02924713411479865,
+          "accuracy_within_low": -0.06796095286631605,
+          "accuracy_within_high": 0.008622420996212412,
+          "srocc_within_difference": -0.006344010650198628,
+          "srocc_within_low": -0.04416484450248684,
+          "srocc_within_high": 0.028888308154392625
+        },
+        {
+          "first": "geometry_colour",
+          "second": "geometry",
+          "accuracy_difference": -0.015737630000000006,
+          "accuracy_low": -0.03429952995029842,
+          "accuracy_high": 0.0028023301701275488,
+          "srocc_difference": -0.0070419266778898315,
+          "srocc_low": -0.031705167532181014,
+          "srocc_high": 0.020126919246032413,
+          "accuracy_within_difference": -0.03518277780094669,
+          "accuracy_within_low": -0.06272570587896731,
+          "accuracy_within_high": 0.007581595631725121,
+          "srocc_within_difference": -0.008944786943576033,
+          "srocc_within_low": -0.057677262527422536,
+          "srocc_within_high": 0.04039505070683397
+        },
+        {
+          "first": "ensemble_colour",
+          "second": "ensemble",
+          "accuracy_difference": -0.04661207000000001,
+          "accuracy_low": -0.07361535225590878,
+          "accuracy_high": -0.025374597075722663,
+          "srocc_difference": -0.08584656739157215,
+          "srocc_low": -0.12496232509831888,
+          "srocc_high": -0.05456386388865915,
+          "accuracy_within_difference": -0.08001770432176654,
+          "accuracy_within_low": -0.1458018461445595,
+          "accuracy_within_high": -0.02589990212677379,
+          "srocc_within_difference": -0.10101208124343064,
+          "srocc_within_low": -0.16500339755353807,
+          "srocc_within_high": -0.03960966160301703
+        }
+      ]
+    },
+    "seconds": {
+      "colour_differences": 1.693
+    }
+  }
+}

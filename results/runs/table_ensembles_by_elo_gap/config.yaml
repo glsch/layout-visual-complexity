@@ -11,14 +11,18 @@ evaluations:
   ensemble_layout: build/evaluate/ensemble_layout
   ensemble_fitted: build/evaluate/ensemble_fitted
   ensemble_layout_fitted: build/evaluate/ensemble_layout_fitted
+  ensemble_colour: build/evaluate/ensemble_colour
+shown: []
 labels:
   ensemble: Geometry and ViT
   ensemble_layout: Geometry, Layout and ViT
   ensemble_fitted: Geometry and ViT, fitted
   ensemble_layout_fitted: Geometry, Layout and ViT, fitted
+  ensemble_colour: Geometry, ViT and colour
   geometry: Geometry
   geometry_layout: Geometry + Layout
   vit: ViT
+  colour: Real colour
 colours: {}
 comparisons: []
 families:
@@ -46,3 +50,4 @@ http:
 levels: {}
 alone: []
 reference_column: ''
+colour_pages: []

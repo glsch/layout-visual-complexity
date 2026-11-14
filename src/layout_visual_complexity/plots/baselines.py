@@ -2,7 +2,7 @@
 grouped by the information it needs), and the generic image measures' correlations with each other and with ink
 coverage.
 
-Each method keeps its colour (`style.METHODS`); the consistency reference is black, chance a grey dashed line.
+Each method keeps its colour (`style.METHODS`); the Reference is black, chance a grey dashed line.
 """
 
 from dataclasses import dataclass
@@ -36,10 +36,13 @@ def signed(text: str) -> str:
     return text.replace("-", "\u2212")
 
 
-def plot_by_information(methods: list[Placed], consistency: float, chance: str = "") -> Figure:
+def plot_by_information(
+    methods: list[Placed], reference: float, chance: str = "", ceiling: float | None = None
+) -> Figure:
     """Each method's accuracy as a dot with its 95% interval, one row each, grouped under its level of information in
-    the order given, its ρ to the right; the consistency reference as a black line and chance as a dashed one, a
-    "Chance" row under the level named `chance`. Full width."""
+    the order given, its ρ to the right under a header giving the `ceiling` for ρ; the Reference for accuracy (the
+    consistency of the test judgments) as a black line and chance as a dashed one, a "Chance" row under the level
+    named `chance`. Full width."""
     rows: list[tuple[str, Placed | None]] = []
     for level in dict.fromkeys(method.level for method in methods):
         rows.append((level, None))
@@ -61,8 +64,9 @@ def plot_by_information(methods: list[Placed], consistency: float, chance: str =
             axes.text(1.015, position, signed(f"{method.rho:.2f}"), transform=axes.get_yaxis_transform(),
                       va="center", ha="left", fontsize=8)  # fmt: skip
     axes.axvline(0.5, color=style.METHODS["chance"], linewidth=0.8, linestyle="--", zorder=1)
-    axes.axvline(consistency, color=style.METHODS["consistency"], linewidth=1.0, zorder=1)
-    axes.text(1.015, y[0], r"$\rho$", transform=axes.get_yaxis_transform(), va="center", ha="left", fontsize=9)
+    axes.axvline(reference, color=style.METHODS["reference"], linewidth=1.0, zorder=1)
+    header = r"$\rho$" if ceiling is None else rf"$\rho$, ceiling {ceiling:.2f}"
+    axes.text(1.015, y[0], header, transform=axes.get_yaxis_transform(), va="center", ha="left", fontsize=9)
     axes.set_yticks(y, [label for label, _ in rows])
     for label, (_, method) in zip(axes.get_yticklabels(), rows, strict=True):
         if method is None:
@@ -71,11 +75,11 @@ def plot_by_information(methods: list[Placed], consistency: float, chance: str =
     axes.spines["left"].set_visible(False)
     axes.set_ylim(-0.7, len(rows) - 0.3)
     low = min([0.45, *(method.low - 0.01 for method in methods if np.isfinite(method.low))])
-    axes.set_xlim(np.floor(low * 40) / 40, max(0.85, np.ceil((consistency + 0.02) * 20) / 20))
+    axes.set_xlim(np.floor(low * 40) / 40, max(0.85, np.ceil((reference + 0.02) * 20) / 20))
     axes.set_xlabel("Pairwise accuracy on the test judgments")
     style.light_grid(axes, "x")
     handles = [
-        Line2D([], [], color=style.METHODS["consistency"], linewidth=1.0, label="Consistency reference"),
+        Line2D([], [], color=style.METHODS["reference"], linewidth=1.0, label="Reference"),
         Line2D([], [], color=style.METHODS["chance"], linewidth=0.8, linestyle="--", label="Chance"),
     ]
     if any(method.alone for method in methods):

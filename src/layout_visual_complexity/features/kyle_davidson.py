@@ -6,7 +6,9 @@ Openness, a GIST "open scene", means nothing for a page and is left out.
   SLIC superpixels, each region of one mean colour, counted on the folio. The paper names the cut but not the
   superpixels' parameters; these are scikit-image's for its normalised cut (400 superpixels, compactness 30, the
   edges' similarity exp(−d²/255) of the mean colours' distance d, a cut kept while its value is under 0.001, ten
-  cuts tried at each step), the cut's random start seeded.
+  cuts tried at each step), the cut's random start seeded. Each cut's eigenvectors are solved densely: ARPACK, which
+  scikit-image calls, keeps state from one call to the next, so the regions of a page depended on the pages its
+  process had cut before.
 - Symmetry: square patches of 100, 50 and 25 pixels (a seventh, a fourteenth and a twenty-eighth of the long edge),
   stepped by half their side over the crop, those at least 90% on the folio; each patch's left half against its
   right half mirrored, and its top half against its bottom half, as one minus the root mean square difference of
@@ -17,6 +19,8 @@ Openness, a GIST "open scene", means nothing for a page and is left out.
 """
 
 import math
+from collections.abc import Iterator
+from contextlib import contextmanager
 from dataclasses import dataclass
 
 import numpy as np
@@ -60,7 +64,7 @@ class KyleDavidson(Family):
 
     name = "kyle_davidson"
     scope = "page"
-    version = "1"
+    version = "2"
     Settings = KyleDavidsonSettings
 
     @property
@@ -126,8 +130,35 @@ def normalised_cut(image: np.ndarray, settings: KyleDavidsonSettings) -> np.ndar
     if labels.max() < 2:
         return labels
     adjacency = graph.rag_mean_color(image, labels, mode="similarity")
-    return graph.cut_normalized(labels, adjacency, thresh=settings.cut_threshold, num_cuts=settings.cuts,
-                                rng=settings.seed)  # fmt: skip
+    with dense_eigenvectors():
+        return graph.cut_normalized(labels, adjacency, thresh=settings.cut_threshold, num_cuts=settings.cuts,
+                                    rng=settings.seed)  # fmt: skip
+
+
+class DenseEigenvectors:
+    """`scipy.sparse.linalg` as scikit-image's normalised cut calls it, its `eigsh` solved densely: the `k` smallest
+    eigenvalues of the (small) graph's matrix and their eigenvectors, the same on every call."""
+
+    @staticmethod
+    def eigsh(matrix: object, k: int = 6, which: str = "SM", v0: object = None) -> tuple[np.ndarray, np.ndarray]:
+        import scipy.linalg
+
+        dense = matrix.toarray() if hasattr(matrix, "toarray") else np.asarray(matrix)
+        values, vectors = scipy.linalg.eigh(dense)
+        return values[:k], vectors[:, :k]
+
+
+@contextmanager
+def dense_eigenvectors() -> Iterator[None]:
+    """Within the block, scikit-image's normalised cut solves its eigenvectors densely (`DenseEigenvectors`)."""
+    from skimage.graph import _graph_cut
+
+    solver = _graph_cut.linalg
+    _graph_cut.linalg = DenseEigenvectors
+    try:
+        yield
+    finally:
+        _graph_cut.linalg = solver
 
 
 def clutter(image: np.ndarray, inside: np.ndarray, settings: KyleDavidsonSettings) -> float:

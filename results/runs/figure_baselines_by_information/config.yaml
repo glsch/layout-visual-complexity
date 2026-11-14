@@ -13,11 +13,14 @@ evaluations:
   generic: build/evaluate/generic
   kyle_davidson: build/evaluate/kyle_davidson
   ink_distribution: build/evaluate/ink_distribution
+  line_texture: build/evaluate/line_texture
+  colour: build/evaluate/colour
   geometry: build/evaluate/geometry
   geometry_layout: build/evaluate/geometry_layout
   mean_token: build/evaluate/mean_token
   vit: build/evaluate/vit
   ensemble: build/evaluate/ensemble
+shown: []
 labels:
   ink_coverage: Ink coverage alone
   text_lines: Number of text lines
@@ -25,6 +28,8 @@ labels:
   generic: Generic image measures
   kyle_davidson: Kyle–Davidson as published
   ink_distribution: Ink distribution
+  line_texture: Line texture as published
+  colour: Real colour
   geometry: Geometry
   geometry_layout: Geometry with Layout
   mean_token: Linear model on the mean ViT token
@@ -36,6 +41,7 @@ colours:
   trivial: trivial
   generic: generic_image
   ink_distribution: ink
+  line_texture: colour
   geometry_layout: geometry
   mean_token: vit
 comparisons: []
@@ -68,6 +74,8 @@ levels:
   generic: Image only
   kyle_davidson: Image only
   ink_distribution: Ink
+  line_texture: Colour
+  colour: Colour
   geometry: Layout
   geometry_layout: Layout
   mean_token: Learned
@@ -75,3 +83,4 @@ levels:
   ensemble: Learned
 alone: []
 reference_column: ''
+colour_pages: []

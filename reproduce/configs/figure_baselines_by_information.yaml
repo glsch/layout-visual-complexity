@@ -1,5 +1,5 @@
 # What each level of information buys: each method's accuracy with its interval and its SROCC, grouped by the
-# information it needs, from trivial to learned, beside chance and the consistency reference.
+# information it needs, from trivial to learned, beside chance and the Reference.
 name: figure_baselines_by_information
 outputs: [baselines_by_information]
 evaluations:
@@ -9,6 +9,8 @@ evaluations:
   generic: build/evaluate/generic
   kyle_davidson: build/evaluate/kyle_davidson
   ink_distribution: build/evaluate/ink_distribution
+  line_texture: build/evaluate/line_texture
+  colour: build/evaluate/colour
   geometry: build/evaluate/geometry
   geometry_layout: build/evaluate/geometry_layout
   mean_token: build/evaluate/mean_token
@@ -21,6 +23,8 @@ labels:
   generic: Generic image measures
   kyle_davidson: Kyle–Davidson as published
   ink_distribution: Ink distribution
+  line_texture: Line texture as published
+  colour: Real colour
   geometry: Geometry
   geometry_layout: Geometry with Layout
   mean_token: Linear model on the mean ViT token
@@ -33,6 +37,8 @@ levels:
   generic: Image only
   kyle_davidson: Image only
   ink_distribution: Ink
+  line_texture: Colour
+  colour: Colour
   geometry: Layout
   geometry_layout: Layout
   mean_token: Learned
@@ -44,5 +50,6 @@ colours:
   trivial: trivial
   generic: generic_image
   ink_distribution: ink
+  line_texture: colour
   geometry_layout: geometry
   mean_token: vit

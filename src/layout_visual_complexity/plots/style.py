@@ -20,7 +20,8 @@ CENTIMETRE = 1 / 2.54
 FULL_WIDTH = 15 * CENTIMETRE
 HALF_WIDTH = 7.2 * CENTIMETRE
 
-# One colour per method, in every figure; the consistency reference black, chance a grey dashed line.
+# One colour per method, in every figure; the Reference (consistency for accuracy, the ceiling for ρ) black, chance a
+# grey dashed line.
 METHODS = {
     "trivial": "#999999",
     "generic_image": "#56B4E9",
@@ -30,10 +31,18 @@ METHODS = {
     "colour": "#D55E00",
     "vit": "#0072B2",
     "ensemble": "#1B2A49",
-    "consistency": "#000000",
+    "reference": "#000000",
     "chance": "#999999",
 }
 BATCHES = ("#000000", "#E69F00", "#0072B2")
+# The ink drawn by hue class: plain ink, then the chromatic classes as the pigments look, and ink left out.
+HUE_CLASS_COLOURS = {
+    "plain": "#5C4E40",
+    "red": "#D55E00",
+    "green": "#009E73",
+    "blue": "#0072B2",
+    "left out": "#C8C8C8",
+}
 NEGATIVE, MIDDLE, POSITIVE = "#0072B2", "#F7F7F7", "#D55E00"
 HIGHLIGHT = "#D55E00"
 TEXT, SECONDARY, GRID = "#1F2328", "#57606A", "#E6E9ED"

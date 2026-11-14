@@ -1,4 +1,4 @@
-first	second	accuracy_difference	accuracy_low	accuracy_high	srocc_difference	srocc_low	srocc_high
-vit	geometry	0.006462	-0.027839	0.042467	0.033261	-0.028415	0.091464
-ensemble	geometry	0.018626	-0.000248	0.036721	0.067710	0.034004	0.105023
-ensemble	vit	0.012164	-0.017848	0.036096	0.034449	0.007160	0.065432
+first	second	accuracy_difference	accuracy_low	accuracy_high	srocc_difference	srocc_low	srocc_high	accuracy_within_difference	accuracy_within_low	accuracy_within_high	srocc_within_difference	srocc_within_low	srocc_within_high
+vit	geometry	0.006462	-0.027839	0.042467	0.033261	-0.028415	0.091464	0.035711	-0.060929	0.117953	0.060867	-0.040000	0.164790
+ensemble	geometry	0.018626	-0.000248	0.036721	0.067710	0.034004	0.105023	0.022432	-0.010814	0.053354	0.078998	0.039511	0.121975
+ensemble	vit	0.012164	-0.017848	0.036096	0.034449	0.007160	0.065432	-0.013279	-0.079316	0.063570	0.018131	-0.065816	0.101124

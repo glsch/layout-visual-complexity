@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-13T11:25:20+00:00",
-  "ended": "2026-11-13T11:25:20+00:00",
+  "started": "2026-11-14T05:28:37+00:00",
+  "ended": "2026-11-14T05:28:38+00:00",
   "inputs": [
     {
       "path": "build/evaluate/measures/ink_coverage/by_elo_gap.tsv",
@@ -10,13 +10,13 @@
     },
     {
       "path": "build/evaluate/measures/ink_coverage/metrics.tsv",
-      "sha256": "4e32664a40aa44c3063f506e91391feec2a9529d6f3cb314e3215d121dac5255",
-      "bytes": 246
+      "sha256": "a4e4f09ae5f19cf7d974c2c4f0b3dce8ad965e6e4b457070c30fa6f46782553f",
+      "bytes": 541
     },
     {
       "path": "build/evaluate/measures/ink_coverage/manifest.json",
-      "sha256": "079a28b4cc0f9c58cd45953587ddf5210895f3d6407976d7f68cd5ced83bafa4",
-      "bytes": 7617
+      "sha256": "b86ca0cad47553bf3dc1952e71fe4e77e1acb7b85636e6ef257b05c1da0e72f0",
+      "bytes": 8680
     },
     {
       "path": "build/evaluate/measures/text_lines/by_elo_gap.tsv",
@@ -25,13 +25,13 @@
     },
     {
       "path": "build/evaluate/measures/text_lines/metrics.tsv",
-      "sha256": "d514538aabc1b227383775b90dbdf8a8933619c8d7f3cf2a36b41e013398b921",
-      "bytes": 245
+      "sha256": "4e07e9edbcf31b83e40cadb6de7e14075aee42e3760ae8af15fe370b6589ea46",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/measures/text_lines/manifest.json",
-      "sha256": "0432603480d6cc50b3ff0f3ab6e1f53f2b9b82293d68fc9cd404a5895dc0bdf0",
-      "bytes": 7587
+      "sha256": "68e6ab33c394b25e73950a8205f7e3a35b2362606eb191ea654d19b36c3200ae",
+      "bytes": 8646
     },
     {
       "path": "build/evaluate/trivial/by_elo_gap.tsv",
@@ -40,13 +40,13 @@
     },
     {
       "path": "build/evaluate/trivial/metrics.tsv",
-      "sha256": "b82cf7180eebbeba10fa36e2f55639cd9b42e64c1b443218228a1e1237ee37f0",
-      "bytes": 245
+      "sha256": "abe82116170550e5e43a05d5a87fd0865a485a7f9c760e1fc69184f0f866c98d",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/trivial/manifest.json",
-      "sha256": "71314c29842adf91f97e3c248d116311c1799bfd7cf1214bebc4bc7a78dbe3f8",
-      "bytes": 7536
+      "sha256": "0d4bd29428d7f30a7c4770210ae85088c09ae3957f2aabe54077abc8bfef19ee",
+      "bytes": 8600
     },
     {
       "path": "build/evaluate/generic/by_elo_gap.tsv",
@@ -55,43 +55,73 @@
     },
     {
       "path": "build/evaluate/generic/metrics.tsv",
-      "sha256": "d412091055073d939a5d46f1ae07ab61e2380aabc70dd1019e298c10155d777e",
-      "bytes": 245
+      "sha256": "9dec3204d402b5ead7c7945c1d90e469ad3facc6745e278845dc41e62440231e",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/generic/manifest.json",
-      "sha256": "fea578471c9a9bdd3143d7ffb7aefdee3b310ee3e86e9f24dd4f69be0b63a3df",
-      "bytes": 8305
+      "sha256": "c4ece9fef7b3e1b04881f02b5235084901b669bd44f44a272c714a6b7ac4431c",
+      "bytes": 9366
     },
     {
       "path": "build/evaluate/kyle_davidson/by_elo_gap.tsv",
-      "sha256": "e52e33a230b1f243c2d09155571462dae44465c60c563f6445cddf219e36e4d0",
+      "sha256": "9354b3f685c877a95aad94f10ed37e627017a39c68f9fc4e0d3154c0020dfcc1",
       "bytes": 735
     },
     {
       "path": "build/evaluate/kyle_davidson/metrics.tsv",
-      "sha256": "98ce12e7f91c3db40431b47e7bc2bd60e6e762e0772a66dacf1a16af9aad163d",
-      "bytes": 245
+      "sha256": "c4f932b6930fca03ce5fdefae76f7e63a406a9d6273f67f4205a19c9ea39f1c0",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/kyle_davidson/manifest.json",
-      "sha256": "d5e5c00587f9c354c8fc32fa8651dfcdae911c6aa1d9e481611cd87c5598dbeb",
-      "bytes": 7764
+      "sha256": "e673d901efd71228fd7700ed04ce9f85a59b859e5730cea687035626d11bc7a0",
+      "bytes": 8824
     },
     {
       "path": "build/evaluate/ink_distribution/by_elo_gap.tsv",
-      "sha256": "d2bdfb602d5b656e2b67eab1c1e290dfcc50c15f990fc95e20026f51e33a785d",
+      "sha256": "573a0630b52955a0f259c26cc8d44e76cb11248c6dd1dbf3fc86f263f40ee46c",
       "bytes": 735
     },
     {
       "path": "build/evaluate/ink_distribution/metrics.tsv",
-      "sha256": "4b0563a465398215ea512221b18905889d8ba3fc06ff92cc46bfc2d4fad33633",
-      "bytes": 245
+      "sha256": "719fa556c43b818f5f5599324a34f70b5ab1accc1c5dd618758653c3c3b15c49",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/ink_distribution/manifest.json",
-      "sha256": "cd362a5afd51f14c6c1a4e6812c86d8dff1dfc72d9fa6eea9ef0e63ded3d8aa9",
-      "bytes": 8572
+      "sha256": "1c490dea0de25fa2bf6125e97b5120784ad36c4b1687027e8efdf9de77aabd55",
+      "bytes": 9604
+    },
+    {
+      "path": "build/evaluate/line_texture/by_elo_gap.tsv",
+      "sha256": "da177d74b00fcb98b36ca24f0098b4e5e85e0b0d707bc7d462e3e95d6e32a233",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/line_texture/metrics.tsv",
+      "sha256": "f884ee680cc3db3ff6f8cd4679c0a76ae71d9080f1afcdf63dd5202b0b133f5b",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/line_texture/manifest.json",
+      "sha256": "7f168c079d947332c3e9fcbfca539659ff0e844dd2cfdadd30591f82ff6c7127",
+      "bytes": 8538
+    },
+    {
+      "path": "build/evaluate/colour/by_elo_gap.tsv",
+      "sha256": "63dbb17d39a04552158c3f2ea0f2dda60643988cfc1ea05453ca61753190e375",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/colour/metrics.tsv",
+      "sha256": "169442c60d5de204f2e1d89e42573bba167c6cf2ecf1dbdf4e25e3e04bf413a4",
+      "bytes": 541
+    },
+    {
+      "path": "build/evaluate/colour/manifest.json",
+      "sha256": "1deb2aa2306aca376bb9322b7cb592d2b1905b703e2a00dfa1191d91aef38fa2",
+      "bytes": 9315
     },
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
@@ -100,13 +130,13 @@
     },
     {
       "path": "build/evaluate/geometry/metrics.tsv",
-      "sha256": "952e499c556cb952b604f7a4e1134004d7d669c27edbcbf93bba49b6dd80912a",
-      "bytes": 245
+      "sha256": "a344aa858f054a9270e5ffa67ec7d72015a5ec477faa235a6d3f6e70ebd43ee2",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "e10dbbf350435ee48da864aef8b8c446fdb0cfe3ca7a0a53e99fd93b062a90f8",
-      "bytes": 12338
+      "sha256": "340fc53c747ff4cc5393959ec043fb44288a8ecbf0ab268cbd7354ecdce98208",
+      "bytes": 13397
     },
     {
       "path": "build/evaluate/geometry_layout/by_elo_gap.tsv",
@@ -115,13 +145,13 @@
     },
     {
       "path": "build/evaluate/geometry_layout/metrics.tsv",
-      "sha256": "4d6088e119c3d26162d8dbf891317d41d65eb55024ef219d9dd7c980e7abc2ee",
-      "bytes": 245
+      "sha256": "9eb4d3e88a7b115464d5dc0ac93c0d895591981cdd9b31185c9e6f6259b3c485",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/geometry_layout/manifest.json",
-      "sha256": "12b5d11dc91e1cb61ac65bf327d5d3215d0742362b24a0a0f8795c5abb52073d",
-      "bytes": 9532
+      "sha256": "ffdf0ecdf24ee20675ab84fa9d9e232d0f5e1af1fd14c361c5b587f9a41c52dd",
+      "bytes": 10594
     },
     {
       "path": "build/evaluate/mean_token/by_elo_gap.tsv",
@@ -130,13 +160,13 @@
     },
     {
       "path": "build/evaluate/mean_token/metrics.tsv",
-      "sha256": "d7000c1d2cfe397bc82a30ed97da1807cf81cf345f466113c802fc0c5896e1ef",
-      "bytes": 245
+      "sha256": "5ce423b84e1401d72aebd9571e9465d3240fb74d698189dde7ab4db89b196d82",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/mean_token/manifest.json",
-      "sha256": "c75f398b22eae32406f5faa7927b07cda0f58ea6dd6e399ccb84fa8b579e4c3c",
-      "bytes": 7429
+      "sha256": "e8e02832eb69ef8a5be0b8137c2568ddae88be961743f0802749d032b8f5a8b1",
+      "bytes": 8489
     },
     {
       "path": "build/evaluate/vit/by_elo_gap.tsv",
@@ -160,13 +190,13 @@
     },
     {
       "path": "build/evaluate/ensemble/metrics.tsv",
-      "sha256": "7ba1654cc6a733fb3ce39a679c33b5be3a70722b1c7ca54749b819c1a34f2f20",
-      "bytes": 245
+      "sha256": "57a0f86d3db0acc0fa993a6a52f2aac78316517ea69e83133268efacaee7a3df",
+      "bytes": 539
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "e345addd74f26d04b4dad649f88c35e0fc24466242fe447a4821a92dc782b1a6",
-      "bytes": 11904
+      "sha256": "0383426efa10545091743e81133245eb2f22c891bcfaa40b86f1ba758f474070",
+      "bytes": 12963
     }
   ],
   "outputs": [
@@ -193,12 +223,15 @@
       "generic": "build/evaluate/generic",
       "kyle_davidson": "build/evaluate/kyle_davidson",
       "ink_distribution": "build/evaluate/ink_distribution",
+      "line_texture": "build/evaluate/line_texture",
+      "colour": "build/evaluate/colour",
       "geometry": "build/evaluate/geometry",
       "geometry_layout": "build/evaluate/geometry_layout",
       "mean_token": "build/evaluate/mean_token",
       "vit": "build/evaluate/vit",
       "ensemble": "build/evaluate/ensemble"
     },
+    "shown": [],
     "labels": {
       "ink_coverage": "Ink coverage alone",
       "text_lines": "Number of text lines",
@@ -206,6 +239,8 @@
       "generic": "Generic image measures",
       "kyle_davidson": "Kyle–Davidson as published",
       "ink_distribution": "Ink distribution",
+      "line_texture": "Line texture as published",
+      "colour": "Real colour",
       "geometry": "Geometry",
       "geometry_layout": "Geometry with Layout",
       "mean_token": "Linear model on the mean ViT token",
@@ -218,6 +253,7 @@
       "trivial": "trivial",
       "generic": "generic_image",
       "ink_distribution": "ink",
+      "line_texture": "colour",
       "geometry_layout": "geometry",
       "mean_token": "vit"
     },
@@ -254,6 +290,8 @@
       "generic": "Image only",
       "kyle_davidson": "Image only",
       "ink_distribution": "Ink",
+      "line_texture": "Colour",
+      "colour": "Colour",
       "geometry": "Layout",
       "geometry_layout": "Layout",
       "mean_token": "Learned",
@@ -261,7 +299,8 @@
       "ensemble": "Learned"
     },
     "alone": [],
-    "reference_column": ""
+    "reference_column": "",
+    "colour_pages": []
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -283,7 +322,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "e61d0ed1c440faaa5a5562d508988603b062b92f-dirty",
+  "commit": "3c42ae0188e7626a100b3718c8ff2c9c82201735-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "baselines_by_information": {
@@ -341,24 +380,48 @@
           "evaluation": "kyle_davidson",
           "label": "Kyle–Davidson as published",
           "alone": false,
-          "accuracy": 0.592511,
-          "low": 0.543976,
-          "high": 0.627247,
-          "srocc": 0.432469,
-          "srocc_low": 0.311021,
-          "srocc_high": 0.531871
+          "accuracy": 0.59264,
+          "low": 0.54323,
+          "high": 0.626367,
+          "srocc": 0.431091,
+          "srocc_low": 0.309377,
+          "srocc_high": 0.528363
         },
         {
           "level": "Ink",
           "evaluation": "ink_distribution",
           "label": "Ink distribution",
           "alone": false,
-          "accuracy": 0.634363,
-          "low": 0.587911,
-          "high": 0.670053,
-          "srocc": 0.548576,
-          "srocc_low": 0.434793,
-          "srocc_high": 0.628215
+          "accuracy": 0.641574,
+          "low": 0.593552,
+          "high": 0.676524,
+          "srocc": 0.554986,
+          "srocc_low": 0.437785,
+          "srocc_high": 0.633357
+        },
+        {
+          "level": "Colour",
+          "evaluation": "line_texture",
+          "label": "Line texture as published",
+          "alone": false,
+          "accuracy": 0.652714,
+          "low": 0.605041,
+          "high": 0.686255,
+          "srocc": 0.590015,
+          "srocc_low": 0.508218,
+          "srocc_high": 0.656457
+        },
+        {
+          "level": "Colour",
+          "evaluation": "colour",
+          "label": "Real colour",
+          "alone": false,
+          "accuracy": 0.509726,
+          "low": 0.465864,
+          "high": 0.54987,
+          "srocc": 0.138975,
+          "srocc_low": 0.029019,
+          "srocc_high": 0.240144
         },
         {
           "level": "Layout",
@@ -421,10 +484,11 @@
           "srocc_high": 0.856341
         }
       ],
-      "consistency": 0.812007
+      "reference": 0.812007,
+      "ceiling": 0.890535
     },
     "seconds": {
-      "baselines_by_information": 0.45
+      "baselines_by_information": 0.392
     }
   }
 }

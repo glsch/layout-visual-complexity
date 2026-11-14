@@ -1,0 +1,4 @@
+# Geometry with real colour: one pairwise logistic model on the 83 geometric features and the colour measures.
+features: build/features/dataset/features.parquet
+families: [geometry, colour]
+output: build/evaluate/geometry_colour

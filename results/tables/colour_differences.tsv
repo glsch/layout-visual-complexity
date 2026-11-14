@@ -1,0 +1,4 @@
+first	second	accuracy_difference	accuracy_low	accuracy_high	srocc_difference	srocc_low	srocc_high	accuracy_within_difference	accuracy_within_low	accuracy_within_high	srocc_within_difference	srocc_within_low	srocc_within_high
+geometry_line_texture	geometry	-0.016489	-0.036574	0.003560	-0.021644	-0.044432	-0.000629	-0.029247	-0.067961	0.008622	-0.006344	-0.044165	0.028888
+geometry_colour	geometry	-0.015738	-0.034300	0.002802	-0.007042	-0.031705	0.020127	-0.035183	-0.062726	0.007582	-0.008945	-0.057677	0.040395
+ensemble_colour	ensemble	-0.046612	-0.073615	-0.025375	-0.085847	-0.124962	-0.054564	-0.080018	-0.145802	-0.025900	-0.101012	-0.165003	-0.039610

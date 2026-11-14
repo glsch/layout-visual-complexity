@@ -83,7 +83,7 @@ def test_families_are_picked_by_short_name_or_python_path_with_their_settings() 
     with pytest.raises(FeatureError, match="no setting"):
         load_family("geometry", {"min_line": 3})
     with pytest.raises(FeatureError, match="unknown feature family"):
-        load_family("colour")
+        load_family("hue")
     with pytest.raises(FeatureError, match="not chosen"):
         load_families(["geometry"], {"layout": {"resolution": 64}})
 

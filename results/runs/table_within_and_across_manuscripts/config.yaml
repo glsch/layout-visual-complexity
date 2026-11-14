@@ -1,0 +1,77 @@
+output: results
+outputs:
+- within_and_across_manuscripts
+name: table_within_and_across_manuscripts
+dataset: build/dataset
+scores: build/ranking/scores.tsv
+features: build/features/dataset/features.parquet
+layout: build/segment/dataset
+evaluations:
+  ink_coverage: build/evaluate/measures/ink_coverage
+  text_lines: build/evaluate/measures/text_lines
+  trivial: build/evaluate/trivial
+  generic: build/evaluate/generic
+  kyle_davidson: build/evaluate/kyle_davidson
+  ink_distribution: build/evaluate/ink_distribution
+  line_texture: build/evaluate/line_texture
+  colour: build/evaluate/colour
+  geometry: build/evaluate/geometry
+  geometry_layout: build/evaluate/geometry_layout
+  geometry_line_texture: build/evaluate/geometry_line_texture
+  geometry_colour: build/evaluate/geometry_colour
+  mean_token: build/evaluate/mean_token
+  vit: build/evaluate/vit
+  ensemble: build/evaluate/ensemble
+  ensemble_layout: build/evaluate/ensemble_layout
+  ensemble_fitted: build/evaluate/ensemble_fitted
+  ensemble_layout_fitted: build/evaluate/ensemble_layout_fitted
+  ensemble_colour: build/evaluate/ensemble_colour
+shown: []
+labels:
+  ink_coverage: Ink coverage
+  text_lines: Text lines
+  trivial: Trivial, both
+  generic: Generic image
+  kyle_davidson: Kyle–Davidson
+  ink_distribution: Ink distribution
+  line_texture: Line texture
+  colour: Real colour
+  geometry: Geometry
+  geometry_layout: Geometry with Layout
+  geometry_line_texture: Geometry with line texture
+  geometry_colour: Geometry with real colour
+  mean_token: Mean ViT token
+  vit: ViT
+  ensemble: Ensemble
+  ensemble_layout: Ensemble with Layout
+  ensemble_fitted: Ensemble, fitted
+  ensemble_layout_fitted: Ensemble with Layout, fitted
+  ensemble_colour: Ensemble with colour
+colours: {}
+comparisons: []
+families:
+- geometry
+- layout
+pages: {}
+bootstrap: 1000
+seed: 20260629
+image_credit: Page images provided by Manuscriptorium (CC BY-NC 4.0).
+tokens: null
+head: null
+map_pages: []
+map_long_edge: 900
+map_range:
+- 0.05
+- 0.95
+cache: null
+http:
+  contact: null
+  interval: 0.5
+  connections: 2
+  retries: 5
+  backoff: 1.0
+  timeout: 60.0
+levels: {}
+alone: []
+reference_column: ''
+colour_pages: []

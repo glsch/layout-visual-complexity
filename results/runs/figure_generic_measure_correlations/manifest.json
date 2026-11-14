@@ -1,12 +1,12 @@
 {
   "command": "report",
-  "started": "2026-11-13T11:25:23+00:00",
-  "ended": "2026-11-13T11:25:25+00:00",
+  "started": "2026-11-14T05:28:40+00:00",
+  "ended": "2026-11-14T05:28:43+00:00",
   "inputs": [
     {
       "path": "build/features/dataset/features.parquet",
-      "sha256": "4ad7732ebad225b65ea3c017da76840648998339cb9ccbe7878b042d160172fd",
-      "bytes": 528333
+      "sha256": "299d6b9902edcf2332e9130258318ceecc065f645138ec7f28a395d5b26f42ba",
+      "bytes": 738319
     },
     {
       "path": "build/evaluate/generic/restating.tsv",
@@ -35,6 +35,7 @@
     "evaluations": {
       "generic": "build/evaluate/generic"
     },
+    "shown": [],
     "labels": {},
     "colours": {},
     "comparisons": [],
@@ -64,7 +65,8 @@
     },
     "levels": {},
     "alone": [],
-    "reference_column": "Trivial__InkCoverage__share"
+    "reference_column": "Trivial__InkCoverage__share",
+    "colour_pages": []
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -86,7 +88,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "e61d0ed1c440faaa5a5562d508988603b062b92f-dirty",
+  "commit": "3c42ae0188e7626a100b3718c8ff2c9c82201735-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "generic_measure_correlations": {
@@ -154,7 +156,7 @@
       ]
     },
     "seconds": {
-      "generic_measure_correlations": 2.209
+      "generic_measure_correlations": 2.175
     }
   }
 }

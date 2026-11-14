@@ -23,6 +23,23 @@ def test_a_two_colour_image_gives_two_regions_after_the_normalised_cut() -> None
     assert len(np.unique(labels[:, :70])) == 1 and len(np.unique(labels[:, 90:])) == 1
 
 
+def test_the_normalised_cut_is_the_same_on_every_call() -> None:
+    """ARPACK keeps state between calls; the cut solves its eigenvectors densely, so repeated cuts agree."""
+    rng = np.random.default_rng(0)
+    image = np.full((210, 150, 3), (225, 215, 190), np.uint8)
+    for y in range(15, 200, 9):
+        image[y : y + 4, 15:135] = (60, 50, 40)
+    image += rng.integers(0, 12, image.shape).astype(np.uint8)
+    image[20:50, 15:45] = (190, 40, 40)
+    settings = KyleDavidsonSettings()
+    first = kyle_davidson.normalised_cut(image, settings)
+    for _ in range(3):
+        assert (kyle_davidson.normalised_cut(image, settings) == first).all()
+    from skimage.graph import _graph_cut
+
+    assert _graph_cut.linalg is not kyle_davidson.DenseEigenvectors
+
+
 def test_a_mirrored_patch_gives_full_symmetry_and_noise_less() -> None:
     half = RNG.random((8, 4, 3))
     patch = np.concatenate([half, half[:, ::-1]], axis=1)

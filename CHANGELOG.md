@@ -2,6 +2,30 @@
 
 ## Unreleased
 
+- Two new feature families, the colour level: `line_texture`, the article's 38 line-texture measures as its Appendix
+  B defines them and under its names, and `colour`, real colour on the ink layer (chromatic share, hue classes, hue
+  entropy, saturation, the colour by kind of zone and across the text lines, coloured initials), the ink within
+  stamps left out. It shares the ink family's colour code.
+- The ink family's and the colour family's chromatic ink leaves out the hues from 60° to 110° (yellow, gold and
+  olive), where brown writing reaches the chroma threshold against the parchment, whatever their chroma (a setting,
+  `excluded_hues`); the hue classes are red, green and blue, and `Ink__HueClasses__gold` is gone. The ink family's
+  chromatic share and hue classes change on the pages with such ink; its version is 2, so earlier feature tables are
+  measured again.
+- Every evaluation now gives its accuracy on the test judgments within one manuscript and across manuscripts, apart,
+  and its SROCC within manuscripts, each with its interval (`metrics.tsv`); `lvc report` computes them from the hits
+  and scores of any evaluation, an older one too, and paired differences give them on the same resamples.
+- The methods' tables and figures name the consistency reference and the ceiling for SROCC as one "Reference"; their
+  TSVs call its column `reference` (was `consistency`). Values don't change.
+- `lvc report` writes the colour level's tables and figure (`colour_by_elo_gap`, `colour_differences`,
+  `line_texture_families`, `colour_measures`, `ink_colour_on_page`) and `within_and_across_manuscripts`, and takes
+  `shown`, the evaluations a table shows as columns while the others serve its comparisons.
+- Kyle-Davidson's clutter no longer depends on the pages a worker measured before: the normalised cut solves its
+  eigenvectors densely instead of with ARPACK, which keeps state between calls. Its values move on about a quarter of
+  the dataset's pages, by four regions at most; the family's version is 2, so earlier feature tables are measured
+  again.
+- `reproduce/` regenerates Appendix B's successor, the colour level's tables and figure, the table of every method
+  within and across manuscripts, and Table 4, the accuracy figure, the ensembles and the information figures with
+  the colour level.
 - The command is `lvc`. Settings come from YAML files and options; every run writes its configuration and a manifest
   of its inputs, their checksums and the versions it used.
 - `lvc judgments import` reads a dataset of judgments in its published structure (judgments, pages and manuscripts as

@@ -350,13 +350,20 @@ def paired_difference(
 ) -> dict[str, float]:
     """The first method's accuracy (the mean over folds) and SROCC minus the second's, on the same folds, each with
     its 95% interval from the same resamples of the manuscripts for both: accuracy's as `fold_mean_intervals` draws
-    it (each fold's mean difference of hits, then their mean)."""
+    it (each fold's mean difference of hits, then their mean). The same within manuscripts: the accuracy on the test
+    judgments between two pages of one manuscript, and ρ within manuscripts (`within_and_across`)."""
     merged = first.tested.merge(second.tested, on=["fold_number", "row"], suffixes=("_a", "_b"))
     if len(merged) != len(first.tested) or len(merged) != len(second.tested):
         raise ValueError("the two evaluations ran on other folds")
     values = merged.assign(value=merged["hit_a"] - merged["hit_b"], gap=merged["gap_a"])
     interval = fold_mean_intervals(values, judgments, manuscripts, settings.gap_edges, settings).iloc[-1]
     found = paired_comparison(first, second, judgments, manuscripts, settings, reference=reference)
+    within = within_manuscripts(judgments, manuscripts)[values["row"].to_numpy()]
+    accuracy_within = fold_mean(values[within], judgments, manuscripts, settings)
+    multiplicities, number = manuscript_resamples(manuscripts, settings)
+    rho = [centred_srocc(evaluation.scores, reference, manuscripts, multiplicities, number) for evaluation in
+           (first, second)]  # fmt: skip
+    rho_low, rho_high = metrics.interval(rho[0][1] - rho[1][1])
     return {
         "accuracy_difference": found["difference"],
         "accuracy_low": float(interval["low"]),
@@ -364,7 +371,95 @@ def paired_difference(
         "srocc_difference": found["srocc_difference"],
         "srocc_low": found["srocc_low"],
         "srocc_high": found["srocc_high"],
+        "accuracy_within_difference": accuracy_within[0],
+        "accuracy_within_low": accuracy_within[1],
+        "accuracy_within_high": accuracy_within[2],
+        "srocc_within_difference": rho[0][0] - rho[1][0],
+        "srocc_within_low": rho_low,
+        "srocc_within_high": rho_high,
     }
+
+
+# Within and across manuscripts.
+
+
+def within_manuscripts(judgments: pd.DataFrame, manuscripts: pd.Series) -> np.ndarray:
+    """Which judgments are between two pages of one manuscript."""
+    left = judgments["left"].map(manuscripts).to_numpy()
+    return left == judgments["right"].map(manuscripts).to_numpy()
+
+
+def manuscript_resamples(manuscripts: pd.Series, settings: ProtocolSettings) -> tuple[np.ndarray, dict[str, int]]:
+    """The resamples of the manuscripts `bootstrap` draws, and each manuscript's number in them."""
+    names = sorted(manuscripts.unique())
+    multiplicities = metrics.manuscript_multiplicities(names, settings.bootstrap, settings.seed)
+    return multiplicities, {name: index for index, name in enumerate(names)}
+
+
+def fold_mean(
+    values: pd.DataFrame, judgments: pd.DataFrame, manuscripts: pd.Series, settings: ProtocolSettings
+) -> tuple[float, float, float]:
+    """The mean over folds of each fold's mean `value` (the folds without any left out), with its 95% interval as
+    `fold_mean_intervals` draws it."""
+    if not len(values):
+        return math.nan, math.nan, math.nan
+    estimate = float(values.groupby("fold_number")["value"].mean().mean())
+    interval = fold_mean_intervals(values, judgments, manuscripts, settings.gap_edges, settings).iloc[-1]
+    return estimate, float(interval["low"]), float(interval["high"])
+
+
+def centred(scores: pd.Series, manuscripts: pd.Series) -> pd.Series:
+    """Scores less their manuscript's mean, over the manuscripts with at least two pages scored."""
+    groups = manuscripts.reindex(scores.index)
+    counts = groups.map(groups.value_counts())
+    kept = scores[(counts >= 2).to_numpy()]
+    return kept - kept.groupby(groups[kept.index]).transform("mean")
+
+
+def centred_srocc(
+    scores: pd.Series, reference: pd.Series, manuscripts: pd.Series, multiplicities: np.ndarray, number: dict
+) -> tuple[float, np.ndarray]:
+    """Spearman's ρ within manuscripts: between the scores and the reference scores, both centred on each manuscript's
+    mean, over the pages of the manuscripts with at least two pages that have both; and its value in each resample of
+    the manuscripts (a page as often as its manuscript is drawn)."""
+    pages = scores.dropna().index.intersection(reference.dropna().index)
+    found, target = centred(scores[pages], manuscripts), centred(reference[pages], manuscripts)
+    if len(found) < 3:
+        return math.nan, np.full(len(multiplicities), math.nan)
+    page_manuscript = manuscripts.reindex(found.index).map(number).to_numpy()
+    values, aims = found.to_numpy(dtype=float), target[found.index].to_numpy(dtype=float)
+    rho = metrics.spearman(values, aims)
+    return rho, metrics.bootstrap_srocc(values, aims, page_manuscript, multiplicities)
+
+
+def within_and_across(
+    evaluation: Evaluation,
+    judgments: pd.DataFrame,
+    reference: pd.Series,
+    manuscripts: pd.Series,
+    settings: ProtocolSettings | None = None,
+) -> dict[str, float]:
+    """A method's accuracy on the test judgments between two pages of one manuscript and on those across manuscripts,
+    apart (each the mean over folds, with its 95% interval), the consistency of the same judgments with the reference
+    scores, and its ρ within manuscripts with its 95% interval, all on the same resamples of the manuscripts as
+    `bootstrap`; with how many test judgments of each kind a fold holds."""
+    settings = settings or ProtocolSettings()
+    tested = evaluation.tested
+    rows = tested["row"].to_numpy()
+    within = within_manuscripts(judgments, manuscripts)[rows]
+    agreement = metrics.hits(judgments, reference)[rows]
+    folds = tested["fold_number"].nunique()
+    found: dict[str, float] = {}
+    for kind, chosen in (("within", within), ("across", ~within)):
+        for name, value in (("accuracy", tested["hit"].to_numpy()), ("consistency", agreement)):
+            part = tested[chosen].assign(value=value[chosen])
+            estimate, low, high = fold_mean(part, judgments, manuscripts, settings)
+            found |= {f"{name}_{kind}": estimate, f"{name}_{kind}_low": low, f"{name}_{kind}_high": high}
+        found[f"judgments_{kind}_per_fold"] = float(chosen.sum()) / max(folds, 1)
+    multiplicities, number = manuscript_resamples(manuscripts, settings)
+    rho, resampled = centred_srocc(evaluation.scores, reference, manuscripts, multiplicities, number)
+    low, high = metrics.interval(resampled)
+    return found | {"srocc_within": rho, "srocc_within_low": low, "srocc_within_high": high}
 
 
 # Folds as a method is trained on them, with the number of the learning curve's share (0 for the evaluation itself),

@@ -1,15 +1,17 @@
-# Table 4's successor: the generic image baseline, the geometry ranker, the ViT ranker and their ensemble by Elo gap,
-# beside the consistency reference, with intervals in the Overall and SROCC rows. Further methods join as further
+# Table 4's successor: the generic image baseline, real colour, the geometry ranker, the ViT ranker and their ensemble
+# by Elo gap, beside the Reference, with intervals in the Overall and SROCC rows. Further methods join as further
 # evaluations.
 name: table_methods_by_elo_gap
 outputs: [methods_by_elo_gap]
 evaluations:
   baseline: build/evaluate/generic
+  colour: build/evaluate/colour
   geometry: build/evaluate/geometry
   vit: build/evaluate/vit
   ensemble: build/evaluate/ensemble
 labels:
   baseline: Baseline
+  colour: Colour
   geometry: Geometry
   vit: ViT
   ensemble: Ensemble

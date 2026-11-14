@@ -36,6 +36,7 @@ from layout_visual_complexity.evaluation.protocol import (
     paired_difference,
     pairwise_fold_scores,
     reduced_folds,
+    within_and_across,
 )
 from layout_visual_complexity.evaluation.vit_head import HeadSettings
 from layout_visual_complexity.features.extraction import family_names, read_feature_table
@@ -420,6 +421,15 @@ class EnsembleMethod(Method):
         return path, combined, {"members": list(self.members), "weights": description["weights"]}
 
 
+def split_rows(split: dict[str, float]) -> list[tuple[str, float, float, float]]:
+    """The metrics within and across manuscripts as rows of `metrics.tsv`: accuracy and consistency within and
+    across, ρ within, each with its interval, and the test judgments of each kind per fold."""
+    names = ["accuracy_within", "accuracy_across", "consistency_within", "consistency_across", "srocc_within"]
+    rows = [(name, split[name], split[f"{name}_low"], split[f"{name}_high"]) for name in names]
+    counts = ["judgments_within_per_fold", "judgments_across_per_fold"]
+    return rows + [(name, split[name], math.nan, math.nan) for name in counts]
+
+
 def restates(difference: dict[str, float]) -> bool:
     """Whether a measure adds nothing to the reference it is set against: neither its accuracy's nor its SROCC's
     difference lies beyond chance above zero."""
@@ -505,6 +515,7 @@ def run_evaluate(settings: EvaluateSettings) -> dict[str, object]:
         method_intervals = fold_mean_intervals(method_values, judgments, manuscripts, edges, protocol)
         reference_intervals = fold_mean_intervals(reference_values, judgments, manuscripts, edges, protocol)
         intervals = bootstrap(evaluation, judgments, elo, manuscripts, protocol)
+        split = within_and_across(evaluation, judgments, elo, manuscripts, protocol)
         by_gap = by_elo_gap(evaluation, reference_values, method_intervals, reference_intervals, edges, len(folds))
         reliability, ceiling = read_ceiling(settings.ceiling) if settings.ceiling else (math.nan, math.nan)
         summary_metrics = pd.DataFrame(
@@ -517,6 +528,7 @@ def run_evaluate(settings: EvaluateSettings) -> dict[str, object]:
                 ("srocc_ceiling", ceiling, math.nan, math.nan),
                 ("elo_reliability", reliability, math.nan, math.nan),
                 ("log_loss", evaluation.summary["log_loss"], math.nan, math.nan),
+                *split_rows(split),
             ],
             columns=["metric", "value", "low", "high"],
         )  # fmt: skip

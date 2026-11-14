@@ -14,6 +14,7 @@ evaluations:
   mean_token: build/evaluate/mean_token
   geometry: build/evaluate/geometry
   ensemble: build/evaluate/ensemble
+shown: []
 labels:
   trivial: Trivial
   generic: Generic image
@@ -69,3 +70,4 @@ http:
 levels: {}
 alone: []
 reference_column: ''
+colour_pages: []

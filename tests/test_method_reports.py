@@ -26,7 +26,7 @@ def evaluations(folder: Path, dataset_folder: Path) -> tuple[dict[str, Path], Pa
     features, scores = setup(folder, dataset_folder)
     pages = read_dataset(dataset_folder).images["image"].tolist()
     tokens = write_token_set(folder / "tokens", dict(zip(pages, np.linspace(-2, 2, len(pages)), strict=True)))
-    curves = LearningCurveSettings(shares=[0.5])
+    curves = LearningCurveSettings(shares=[0.5], repeats=1)
     common = {"folds": FOLDS, "bootstrap": 50, "jobs": 1, "learning_curves": curves}
     methods = {
         "geometry": {"features": features, "families": "signal"},
@@ -64,9 +64,11 @@ def test_the_methods_tables_and_figures(tmp_path: Path, dataset_folder: Path) ->
     summary = run_report(settings)
     table = pd.read_csv(output / "tables" / "methods_by_elo_gap.tsv", sep="\t")
     assert table["gap"].tolist()[-2:] == ["overall", "srocc"]
-    assert {"consistency", "geometry", "vit_low", "ensemble_high"} <= set(table.columns)
+    assert {"reference", "geometry", "vit_low", "ensemble_high"} <= set(table.columns)
+    assert "consistency" not in table.columns
     latex = (output / "tables" / "methods_by_elo_gap.tex").read_text()
-    assert latex.count("[") == 1 + 4 + 3  # [htbp], then intervals in Overall (with consistency) and SROCC
+    assert latex.count("[") == 1 + 4 + 3  # [htbp], then intervals in Overall (with the Reference) and SROCC
+    assert "Score $\\Delta$ & Reference & Geometry" in latex and "one limit, measured for accuracy and for" in latex
     assert "the mean of the z-scored page scores of \\emph{Geometry} and \\emph{ViT}" in latex
     assert "the local scoring head on the patch tokens of tiny" in latex
     assert "the pairwise logistic model on the 2 signal features" in latex
@@ -75,10 +77,17 @@ def test_the_methods_tables_and_figures(tmp_path: Path, dataset_folder: Path) ->
     for suffix in (".svg", ".png", ".tex"):
         assert (output / "figures" / f"accuracy_by_elo_gap{suffix}").is_file()
         assert (output / "figures" / f"learning_curves_and_calibration{suffix}").is_file()
+    legend = (output / "figures" / "accuracy_by_elo_gap.svg").read_text()
+    assert ">Reference<" in legend and "Consistency" not in legend
     differences = pd.read_csv(output / "tables" / "paired_differences.tsv", sep="\t")
     assert differences[["first", "second"]].values.tolist() == [["vit", "geometry"], ["ensemble", "geometry"]]
     assert (differences["accuracy_low"] <= differences["accuracy_difference"]).all()
     assert (differences["srocc_low"] <= differences["srocc_high"]).all()
+    assert (differences["srocc_within_low"] <= differences["srocc_within_high"]).all()
+    assert {"accuracy_within_difference", "accuracy_within_low"} <= set(differences.columns)
+    drawn = (output / "figures" / "learning_curves_and_calibration.tex").read_text()
+    assert "drawn on the folds of the first of the two repeats (2 folds)" in drawn
+    assert "on the test judgments of all 4 folds" in drawn and "as whiskers" in drawn
     curves = pd.read_csv(output / "tables" / "learning_curves.tsv", sep="\t")
     assert len(curves) == 3 * 4 and set(curves["method"]) == {"geometry", "vit", "ensemble"}
     assert "learning_curves_and_calibration" in summary
