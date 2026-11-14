@@ -17,9 +17,9 @@ def box(x0: float, y0: float, x1: float, y1: float) -> np.ndarray:
     return np.array([[x0, y0], [x1, y0], [x1, y1], [x0, y1]], dtype=float)
 
 
-def written_page(tmp_path: Path, red: bool = True) -> Page:
+def written_page(tmp_path: Path, red: bool = True, olive: bool = False) -> Page:
     """A parchment-coloured 400 × 600 page with black strokes (a tenth of the folio) every 30 pixels and, at the
-    top, a red stroke."""
+    top, a red stroke; and an olive one, of hue 90° and chroma 52 against the parchment, below it."""
     pixels = np.full((600, 400, 3), (232, 222, 196), np.uint8)
     lines = []
     for y in range(90, 570, 30):
@@ -27,6 +27,8 @@ def written_page(tmp_path: Path, red: bool = True) -> Page:
         lines.append(TextLine(f"l{y}", box(50, y - 12, 350, y + 2), np.array([[50.0, y], [350.0, y]]), "r1"))
     if red:
         pixels[54:60, 50:350] = (190, 35, 30)
+    if olive:
+        pixels[66:72, 50:350] = (150, 120, 30)
     path = tmp_path / "page.png"
     Image.fromarray(pixels).save(path)
     return Page("ms_1r", 400, 600, box(0, 0, 400, 600), lines=lines, image_path=path)
@@ -74,7 +76,7 @@ def test_a_red_stroke_is_chromatic_ink_of_the_red_class(tmp_path: Path) -> None:
     red_share = 6 * 300 / (17 * 6 * 300)
     assert values["Ink__ChromaticShare__share"] == pytest.approx(red_share, rel=0.15)
     assert values["Ink__HueClasses__red"] == pytest.approx(values["Ink__ChromaticShare__share"])
-    assert values["Ink__HueClasses__blue"] == values["Ink__HueClasses__gold"] == values["Ink__HueClasses__green"] == 0
+    assert values["Ink__HueClasses__blue"] == values["Ink__HueClasses__green"] == 0
     assert values["Ink__HueClasses__count"] == 1
     plain = measure(written_page(tmp_path, red=False))
     assert plain["Ink__ChromaticShare__share"] < 0.01 and plain["Ink__HueClasses__count"] == 0
@@ -84,3 +86,22 @@ def test_hue_classes_wrap_round_360() -> None:
     hue = np.array([350.0, 10.0, 70.0, 150.0, 250.0])
     assert ink.hue_class(hue, ink.HUE_CLASSES["red"]).tolist() == [True, True, False, False, False]
     assert ink.hue_class(hue, ink.HUE_CLASSES["blue"]).tolist() == [False, False, False, False, True]
+
+
+def test_the_ink_familys_columns_without_gold_and_unchanged_without_ink_of_its_hues(tmp_path: Path) -> None:
+    family = InkDistribution()
+    assert [column for column in family.columns() if "HueClasses" in column] == [
+        "Ink__HueClasses__red", "Ink__HueClasses__green", "Ink__HueClasses__blue", "Ink__HueClasses__count"
+    ]  # fmt: skip
+    assert len(family.columns()) == 14
+    page = written_page(tmp_path)
+    assert measure(page) == measure(page, excluded_hues=())
+
+
+def test_olive_ink_isnt_chromatic(tmp_path: Path) -> None:
+    page = written_page(tmp_path, red=False, olive=True)
+    values = measure(page)
+    assert values["Ink__ChromaticShare__share"] < 0.01 and values["Ink__HueClasses__count"] == 0
+    counted = measure(page, excluded_hues=())
+    assert counted["Ink__ChromaticShare__share"] == pytest.approx(1 / 17, rel=0.15)
+    assert counted["Ink__HueClasses__red"] + counted["Ink__HueClasses__green"] + counted["Ink__HueClasses__blue"] < 0.01

@@ -2,8 +2,10 @@
 
 The parchment is made neutral: each linear RGB channel of the normalised crop is divided by the paper's (the median
 of the folio's pixels that aren't ink), then converted to CIELAB. An ink pixel's chroma is the length of its (a*, b*)
-and its hue the angle, in degrees from 0 to 360; ink of chroma at least a threshold is chromatic, and its hue puts it
-in one of four classes: red (330–60), gold (60–110), green (110–200) and blue (200–330).
+and its hue the angle, in degrees from 0 to 360. Ink of chroma at least a threshold is chromatic unless its hue lies in
+an excluded range, by default 60–110: yellow, gold and olive, where brown iron-gall writing reaches the threshold
+against the parchment. The hue of chromatic ink puts it in one of three classes: red (330–60), green (110–200) and
+blue (200–330).
 
 The chroma and hue are made once per page and ink layer and shared by the families with the same ink layer, so their
 shared measures give the same values.
@@ -17,7 +19,9 @@ import numpy as np
 from layout_visual_complexity.features.folio_image import InkLayer, InkLayerSettings, ink_layer
 from layout_visual_complexity.features.page import Page
 
-HUE_CLASSES = {"red": (330.0, 60.0), "gold": (60.0, 110.0), "green": (110.0, 200.0), "blue": (200.0, 330.0)}
+HUE_CLASSES = {"red": (330.0, 60.0), "green": (110.0, 200.0), "blue": (200.0, 330.0)}
+# Hues whose ink isn't chromatic, whatever its chroma: on most pages, ink of these hues is brown writing.
+EXCLUDED_HUES = (60.0, 110.0)
 
 
 @dataclass
@@ -28,9 +32,9 @@ class InkColour:
     chroma: np.ndarray
     hue: np.ndarray
 
-    def chromatic(self, chroma: float) -> np.ndarray:
-        """The ink whose chroma reaches `chroma`."""
-        return self.layer.ink & (self.chroma >= chroma)
+    def chromatic(self, chroma: float, excluded: tuple[float, ...] = EXCLUDED_HUES) -> np.ndarray:
+        """The chromatic ink: its chroma reaches `chroma`, its hue lies outside `excluded`."""
+        return self.layer.ink & chromatic(self.chroma, self.hue, chroma, excluded)
 
 
 def ink_colour(page: Page, settings: Any) -> InkColour:
@@ -61,3 +65,21 @@ def hue_class(hue: np.ndarray, bounds: tuple[float, float]) -> np.ndarray:
     """Which hue angles (degrees, 0–360) lie in a class from its first bound to its second, round past 360."""
     start, end = bounds
     return (hue >= start) & (hue < end) if start < end else (hue >= start) | (hue < end)
+
+
+def chromatic(chroma: np.ndarray, hue: np.ndarray, least: float, excluded: tuple[float, ...]) -> np.ndarray:
+    """Which colours are chromatic: their chroma at least `least`, their hue outside the excluded range (its first
+    bound to its second, round past 360; none when empty)."""
+    found = chroma >= least
+    return found & ~hue_class(hue, excluded) if excluded else found
+
+
+def chroma_words(chroma: float, excluded: tuple[float, ...]) -> str:
+    """What makes ink chromatic, in words."""
+    return f"chroma at least {chroma:g}" + (f", hue outside {excluded[0]:g}°–{excluded[1]:g}°" if excluded else "")
+
+
+def hue_words(excluded: tuple[float, ...]) -> str:
+    """The hue classes' ranges and the excluded one, in words."""
+    classes = ", ".join(f"{name} {start:g}°–{end:g}°" for name, (start, end) in HUE_CLASSES.items())
+    return f"{classes}; hues {excluded[0]:g}°–{excluded[1]:g}° not chromatic" if excluded else classes

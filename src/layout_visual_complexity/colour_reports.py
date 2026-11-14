@@ -169,7 +169,7 @@ def ink_colour_on_page(settings: Any, run: Run, folder: Path) -> Written:
     from layout_visual_complexity.features.colour import Colour, ColourSettings, colour_layer
     from layout_visual_complexity.features.contract import aggregate, load_family
     from layout_visual_complexity.features.extraction import SegmentationImages, read_feature_table
-    from layout_visual_complexity.features.ink_colour import HUE_CLASSES, hue_class
+    from layout_visual_complexity.features.ink_colour import HUE_CLASSES, chroma_words, hue_class
     from layout_visual_complexity.plots.colour import ColourPanel, plot_ink_colour
     from layout_visual_complexity.reports import read_page
 
@@ -209,11 +209,13 @@ def ink_colour_on_page(settings: Any, run: Run, folder: Path) -> Written:
             )
     figure = plot_ink_colour(panels)
     letters = "; ".join(f"({chr(ord('a') + number)}) {text}" for number, text in enumerate(described))
+    names = [*HUE_CLASSES]
+    chromatic = escape(chroma_words(colour_settings.chroma, colour_settings.excluded_hues))
     caption = (
         "Ink colour on three pages: each page's ink as the colour measures see it, the parchment made neutral "
-        f"(plain ink brown, chromatic ink, of chroma at least {colour_settings.chroma:g}, in the colour of its hue "
-        "class: red, gold, green or blue), beside the classes' shares of the ink. "
-        f"{letters}. Ink within stamps, left out of the measures, is light grey."
+        f"(plain ink brown, chromatic ink, of {chromatic}, in the colour of its hue class: {', '.join(names[:-1])} "
+        f"or {names[-1]}), beside the classes' shares of the ink. {letters}. Ink within stamps, left out of the "
+        "measures, is light grey."
     )
     if settings.image_credit:
         caption += f" {escape(settings.image_credit)}"
@@ -225,7 +227,7 @@ def ink_colour_on_page(settings: Any, run: Run, folder: Path) -> Written:
         [[escape(row["page"]), *[f"{100 * row[cls]:.1f}" for cls in HUE_CLASSES]] for row in rows],
         "The hue classes' shares of the ink (\\%) on the pages of Figure~\\ref{fig:ink_colour_on_page}.",
         "tab:ink_colour_on_page",
-        align="lcccc",
+        align="l" + "c" * len(HUE_CLASSES),
     )
     paths += write_table(table, folder / "tables" / name, latex)
     return Written(paths, {"pages": rows})

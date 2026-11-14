@@ -6,15 +6,16 @@ import numpy as np
 from matplotlib.colors import to_rgb
 from matplotlib.figure import Figure
 
+from layout_visual_complexity.features.ink_colour import HUE_CLASSES
 from layout_visual_complexity.plots import style
 
-CLASSES = ("red", "gold", "green", "blue")
+CLASSES = tuple(HUE_CLASSES)
 
 
 @dataclass
 class ColourPanel:
-    """A page as the figure draws it: its id, each crop pixel's class (0 paper, 1 plain ink, 2–5 red, gold, green
-    and blue, −1 ink left out), the folio within the crop, and each hue class's share of the ink."""
+    """A page as the figure draws it: its id, each crop pixel's class (0 paper, 1 plain ink, 2–4 red, green and
+    blue, −1 ink left out), the folio within the crop, and each hue class's share of the ink."""
 
     page: str
     classes: np.ndarray

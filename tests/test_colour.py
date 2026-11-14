@@ -9,10 +9,10 @@ from PIL import Image
 
 from layout_visual_complexity.features import colour as colour_module
 from layout_visual_complexity.features.colour import Colour, ColourSettings
-from layout_visual_complexity.features.contract import aggregate
+from layout_visual_complexity.features.contract import aggregate, load_family
 from layout_visual_complexity.features.folio_image import InkLayer, NormalisedFolio, ink_layer
-from layout_visual_complexity.features.ink import InkDistribution, InkSettings
-from layout_visual_complexity.features.ink_colour import InkColour, neutral_lab
+from layout_visual_complexity.features.ink import InkDistribution, InkSettings, ink_colours
+from layout_visual_complexity.features.ink_colour import HUE_CLASSES, InkColour, neutral_lab
 from layout_visual_complexity.features.page import Page, TextLine, Zone
 
 PARCHMENT, BLACK, RED, BLUE = (232, 222, 196), (35, 30, 25), (190, 35, 30), (40, 60, 170)
@@ -80,6 +80,50 @@ def test_the_chroma_statistics_of_a_known_mix() -> None:
     assert math.isnan(plain["Colour__Saturation__median"])
 
 
+def test_three_hue_classes() -> None:
+    assert HUE_CLASSES == {"red": (330.0, 60.0), "green": (110.0, 200.0), "blue": (200.0, 330.0)}
+    hues = [column for column in Colour().columns() if "HueClasses" in column]
+    assert hues == ["Colour__HueClasses__red", "Colour__HueClasses__green", "Colour__HueClasses__blue",
+                    "Colour__HueClasses__count"]  # fmt: skip
+    assert len(Colour().columns()) == 17
+
+
+def test_ink_of_hue_80_and_chroma_60_isnt_chromatic() -> None:
+    colour = known_colour(np.full((1, 20), 60.0), np.full((1, 20), 80.0))
+    settings = ColourSettings()
+    chromatic = colour.chromatic(settings.chroma)
+    assert not chromatic.any()
+    found = colour_module.hue_measures(colour, colour.layer.ink, chromatic, settings)
+    assert found["Colour__ChromaticShare__share"] == 0 and found["Colour__HueEntropy__bits"] == 0
+    assert all(found[f"Colour__HueClasses__{name}"] == 0 for name in HUE_CLASSES)
+    assert found["Colour__HueClasses__count"] == 0 and math.isnan(found["Colour__Saturation__median"])
+    ink = ink_colours(colour, settings.chroma, settings.excluded_hues, settings.class_area)
+    assert ink["Ink__ChromaticShare__share"] == 0 and ink["Ink__HueClasses__count"] == 0
+    assert all(ink[f"Ink__HueClasses__{name}"] == 0 for name in HUE_CLASSES)
+
+
+def test_red_green_and_blue_ink_in_their_classes() -> None:
+    hue = np.array([[20.0] * 10 + [345.0] * 10 + [150.0] * 10 + [250.0] * 10])
+    colour = known_colour(np.full(hue.shape, 40.0), hue)
+    settings = ColourSettings()
+    found = colour_module.hue_measures(colour, colour.layer.ink, colour.chromatic(settings.chroma), settings)
+    assert found["Colour__ChromaticShare__share"] == 1
+    assert [found[f"Colour__HueClasses__{name}"] for name in HUE_CLASSES] == [0.5, 0.25, 0.25]
+    assert found["Colour__HueClasses__count"] == 3
+    ink = ink_colours(colour, settings.chroma, settings.excluded_hues, settings.class_area)
+    assert [ink[f"Ink__HueClasses__{name}"] for name in HUE_CLASSES] == [0.5, 0.25, 0.25]
+
+
+def test_the_settings_hashes_change_with_the_excluded_hues() -> None:
+    for name, settings in (("ink", InkSettings), ("colour", ColourSettings)):
+        family = load_family(name)
+        assert family.describe()["settings"]["excluded_hues"] == [60.0, 110.0]
+        assert load_family(name, {"excluded_hues": [60.0, 110.0]}).settings_hash() == family.settings_hash()
+        assert load_family(name, {"excluded_hues": [50.0, 120.0]}).settings_hash() != family.settings_hash()
+        assert load_family(name, {"excluded_hues": []}).settings_hash() != family.settings_hash()
+        assert settings().excluded_hues == (60.0, 110.0)
+
+
 def text(lines: int = 10, red: tuple[int, ...] = ()) -> list[tuple[int, tuple]]:
     return [(90 + 30 * number, RED if number in red else BLACK) for number in range(lines)]
 
@@ -143,8 +187,8 @@ def test_the_ink_familys_colour_columns_are_unchanged_by_the_shared_code(tmp_pat
     layer = ink_layer(page, settings)
     lab = neutral_lab(layer.folio.rgb, layer.folio.inside & ~layer.ink)
     a, b = lab[..., 1][layer.ink], lab[..., 2][layer.ink]
-    chromatic = np.hypot(a, b) >= settings.chroma
     hue = np.degrees(np.arctan2(b, a)) % 360
+    chromatic = (np.hypot(a, b) >= settings.chroma) & ~((hue >= 60) & (hue < 110))
     red = chromatic & ((hue >= 330) | (hue < 60))
     assert values["Ink__ChromaticShare__share"] == chromatic.sum() / layer.ink.sum()
     assert values["Ink__HueClasses__red"] == red.sum() / layer.ink.sum()

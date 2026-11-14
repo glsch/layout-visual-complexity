@@ -8,10 +8,11 @@ scales in line heights estimated from the page itself.
 - Fragmentation: the number of ink masses (8-connected) left after closing the ink by a disc one line height across,
   per area of the folio in square line heights.
 - Chromatic share: the share of the ink whose chroma, once the parchment's own colour is made neutral (each linear
-  RGB channel divided by the paper's), is at least `chroma`.
-- Hue classes: the share of the ink in each of four classes of the chromatic ink's hue angle (CIELAB, in degrees):
-  red (330–60), gold (60–110), green (110–200) and blue (200–330); and how many classes cover at least
-  `class_area` square line heights.
+  RGB channel divided by the paper's), is at least `chroma`, and whose hue lies outside `excluded_hues` (60–110,
+  where brown writing reaches the threshold).
+- Hue classes: the share of the ink in each of three classes of the chromatic ink's hue angle (CIELAB, in degrees):
+  red (330–60), green (110–200) and blue (200–330); and how many classes cover at least `class_area` square line
+  heights.
 - Line height: the line height as a share of the folio crop's height, and whether it came from the text lines (1)
   or from the ink's vertical profile (0); recorded, not a measure of the ink.
 """
@@ -23,7 +24,16 @@ import numpy as np
 
 from layout_visual_complexity.features.contract import Family, Group, Need
 from layout_visual_complexity.features.folio_image import InkLayerSettings, ink_layer
-from layout_visual_complexity.features.ink_colour import HUE_CLASSES, InkColour, hue_class, ink_colour
+from layout_visual_complexity.features.ink_colour import (
+    EXCLUDED_HUES,
+    HUE_CLASSES,
+    InkColour,
+    chroma_words,
+    chromatic,
+    hue_class,
+    hue_words,
+    ink_colour,
+)
 from layout_visual_complexity.features.page import Page
 
 
@@ -39,6 +49,8 @@ class InkSettings:
         scales: The lacunarity's box sides, in line heights.
         inside: A lacunarity box counts when at least this share of it lies on the folio.
         chroma: The least chroma (CIELAB, the parchment made neutral) of chromatic ink.
+        excluded_hues: Hue angles (degrees, from the first to the second) whose ink isn't chromatic, whatever its
+            chroma; none when empty.
         class_area: A hue class counts as present when its ink covers at least this many square line heights.
     """
 
@@ -49,6 +61,7 @@ class InkSettings:
     scales: tuple[int, ...] = (1, 2, 4, 8, 16)
     inside: float = 0.95
     chroma: float = 25.0
+    excluded_hues: tuple[float, ...] = EXCLUDED_HUES
     class_area: float = 1.0
 
 
@@ -57,7 +70,7 @@ class InkDistribution(Family):
 
     name = "ink"
     scope = "page"
-    version = "1"
+    version = "2"
     Settings = InkSettings
 
     @property
@@ -77,11 +90,12 @@ class InkDistribution(Family):
                   "Ink masses after closing by one line height, per square line height of the folio.",
                   "a disc one line height across", "this study"),
             Group("Ink", "Chromatic share", "Ink__ChromaticShare", ("share",),
-                  "Share of the ink whose chroma, the parchment's colour made neutral, reaches the threshold.",
-                  f"chroma at least {settings.chroma:g}", "this study"),
+                  "Share of the ink whose chroma, the parchment's colour made neutral, reaches the threshold, its hue "
+                  "outside the excluded range.",
+                  chroma_words(settings.chroma, settings.excluded_hues), "this study"),
             Group("Ink", "Hue classes", "Ink__HueClasses", (*HUE_CLASSES, "count"),
                   "Shares of the ink in the chromatic hue classes, and the number of classes present.",
-                  "red, gold, green, blue; present from "
+                  f"{hue_words(settings.excluded_hues)}; present from "
                   f"{settings.class_area:g} square line height{'s' if settings.class_area != 1 else ''}",
                   "this study"),
             Group("Ink", "Line height", "Ink__LineHeight", ("folio_share", "from_lines"),
@@ -122,7 +136,7 @@ class InkDistribution(Family):
             side = round(scale * height) if math.isfinite(height) else 0
             row[f"Ink__Lacunarity__lh{scale}"] = lacunarity(layer.ink, inside, side, settings.inside)
         row["Ink__Fragmentation__masses"] = fragmentation(layer.ink, inside, height)
-        row |= ink_colours(ink_colour(page, settings), settings.chroma, settings.class_area)
+        row |= ink_colours(ink_colour(page, settings), settings.chroma, settings.excluded_hues, settings.class_area)
         return [row]
 
 
@@ -161,7 +175,7 @@ def fragmentation(ink: np.ndarray, inside: np.ndarray, line_height: float) -> fl
     return float((count - 1) / (inside.sum() / line_height**2))
 
 
-def ink_colours(colour: InkColour, chroma: float, class_area: float) -> dict[str, float]:
+def ink_colours(colour: InkColour, chroma: float, excluded: tuple[float, ...], class_area: float) -> dict[str, float]:
     """The ink's chromatic share against the parchment, its shares in the hue classes and how many are present."""
     names = ["Ink__ChromaticShare__share", *(f"Ink__HueClasses__{name}" for name in HUE_CLASSES),
              "Ink__HueClasses__count"]  # fmt: skip
@@ -170,13 +184,13 @@ def ink_colours(colour: InkColour, chroma: float, class_area: float) -> dict[str
     total = int(ink.sum())
     if total == 0:
         return dict.fromkeys(names, math.nan)
-    chromatic = colour.chroma[ink] >= chroma
     hue = colour.hue[ink]
-    found = {"Ink__ChromaticShare__share": float(chromatic.sum() / total)}
+    is_chromatic = chromatic(colour.chroma[ink], hue, chroma, excluded)
+    found = {"Ink__ChromaticShare__share": float(is_chromatic.sum() / total)}
     least = class_area * layer.line_height**2 if math.isfinite(layer.line_height) else math.inf
     present = 0
     for name, bounds in HUE_CLASSES.items():
-        pixels = int((chromatic & hue_class(hue, bounds)).sum())
+        pixels = int((is_chromatic & hue_class(hue, bounds)).sum())
         found[f"Ink__HueClasses__{name}"] = pixels / total
         present += pixels >= least
     found["Ink__HueClasses__count"] = float(present) if math.isfinite(least) else math.nan

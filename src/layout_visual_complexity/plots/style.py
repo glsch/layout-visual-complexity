@@ -39,7 +39,6 @@ BATCHES = ("#000000", "#E69F00", "#0072B2")
 HUE_CLASS_COLOURS = {
     "plain": "#5C4E40",
     "red": "#D55E00",
-    "gold": "#E69F00",
     "green": "#009E73",
     "blue": "#0072B2",
     "left out": "#C8C8C8",

@@ -92,4 +92,5 @@ def test_the_colour_measures_and_the_ink_colour_figure(tmp_path: Path) -> None:
     caption = (output / "figures" / "ink_colour_on_page.tex").read_text()
     assert "(a) ms\\_1r" in caption and "Synthetic pages." in caption
     shares = pd.read_csv(output / "tables" / "ink_colour_on_page.tsv", sep="\t")
-    assert shares["page"].tolist() == pages[:2] and (shares[["red", "gold", "green", "blue"]] >= 0).all().all()
+    assert shares["page"].tolist() == pages[:2] and (shares[["red", "green", "blue"]] >= 0).all().all()
+    assert "gold" not in shares.columns and "hue outside 60°--110°" in caption

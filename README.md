@@ -131,17 +131,19 @@ then one column per feature, named `Family__Feature__Flavour` (`AreaFeature__Lin
 - **`ink`**: ink distribution, on one ink layer (Sauvola's threshold of the flattened lightness, specks removed), with
   scales in line heights estimated from the page (the text lines' spacing, else the period of the ink's rows): coverage,
   lacunarity at 1 to 16 line heights, fragmentation, the share of chromatic ink against the parchment's own colour,
-  and the shares of red, gold, green and blue ink.
+  and the shares of red, green and blue ink. Ink of hues between 60° and 110° (yellow, gold and olive), where brown
+  writing reaches the chroma threshold, isn't counted as chromatic.
 - **`mean_token`**: the mean of a page's patch tokens from a token set (`--tokens`), for a linear model on them.
 - **`line_texture`**: the article's 38 line-texture measures (its Appendix B), named as the article names them
   (`LineTextureFeature__LineSuperpixels__…`): for each text line, the vertical Sobel responses of the gamma-corrected
   red, green and blue channels, partitioned into SLIC superpixels, and their number, areas, positions, channel
   statistics and position–response correlations, averaged over the folio's lines. They describe texture, not hue.
-- **`colour`**: real colour, on the ink layer with the parchment made neutral: the chromatic share of the ink, the
-  shares of red, gold, green and blue ink and the number of classes present, the entropy of the chromatic ink's hues,
-  its median chroma and spread, its chromatic share within each kind of zone (main text, margins, numbering and
-  running titles, decoration, heading lines, the rest), the share of rubric lines and the spread of the lines'
-  chromatic shares, and the number of coloured initials. The ink within the libraries' stamps is left out.
+- **`colour`**: real colour, on the ink layer with the parchment made neutral: the chromatic share of the ink (hues
+  60°–110° left out, as in `ink`), the shares of red, green and blue ink and the number of classes present, the
+  entropy of the chromatic ink's hues, its median chroma and spread, its chromatic share within each kind of zone
+  (main text, margins, numbering and running titles, decoration, heading lines, the rest), the share of rubric lines
+  and the spread of the lines' chromatic shares, and the number of coloured initials. The ink within the libraries'
+  stamps is left out.
 - **Your own family**: a subclass of `layout_visual_complexity.features.contract.Family`, named by its Python path
   (`--families geometry,mypackage.features.Darkness`). It names its columns, declares its scope (page, region or
   line) and what it needs (the image, the folio crop, the regions, the lines, a ViT's patch tokens from a token set

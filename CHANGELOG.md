@@ -5,7 +5,12 @@
 - Two new feature families, the colour level: `line_texture`, the article's 38 line-texture measures as its Appendix
   B defines them and under its names, and `colour`, real colour on the ink layer (chromatic share, hue classes, hue
   entropy, saturation, the colour by kind of zone and across the text lines, coloured initials), the ink within
-  stamps left out. The ink family's colour code is shared with it; the ink family's values are unchanged.
+  stamps left out. It shares the ink family's colour code.
+- The ink family's and the colour family's chromatic ink leaves out the hues from 60° to 110° (yellow, gold and
+  olive), where brown writing reaches the chroma threshold against the parchment, whatever their chroma (a setting,
+  `excluded_hues`); the hue classes are red, green and blue, and `Ink__HueClasses__gold` is gone. The ink family's
+  chromatic share and hue classes change on the pages with such ink; its version is 2, so earlier feature tables are
+  measured again.
 - Every evaluation now gives its accuracy on the test judgments within one manuscript and across manuscripts, apart,
   and its SROCC within manuscripts, each with its interval (`metrics.tsv`); `lvc report` computes them from the hits
   and scores of any evaluation, an older one too, and paired differences give them on the same resamples.

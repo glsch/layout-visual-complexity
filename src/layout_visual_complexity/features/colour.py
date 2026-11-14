@@ -1,9 +1,10 @@
 """Real colour: how much of the ink is coloured, in which hues, how saturated, and where on the page it sits, on the ink
 layer (`folio_image.py`) with the parchment made neutral (`ink_colour.py`).
 
-- Chromatic share: the share of the ink whose chroma reaches `chroma`.
-- Hue classes: the share of the ink in each hue class of the chromatic ink (red, gold, green, blue), and how many
-  classes cover at least `class_area` square line heights.
+- Chromatic share: the share of the ink whose chroma reaches `chroma` and whose hue lies outside `excluded_hues`
+  (60–110, where brown writing reaches the threshold). Every measure below is of this chromatic ink.
+- Hue classes: the share of the ink in each hue class of the chromatic ink (red, green, blue), and how many classes
+  cover at least `class_area` square line heights.
 - Hue entropy: the entropy, in bits, of the chromatic ink's hue angles in `bins` bins over 360°; 0 without chromatic
   ink.
 - Saturation: the chromatic ink's median chroma and its spread (the interquartile range).
@@ -26,7 +27,16 @@ import numpy as np
 
 from layout_visual_complexity.features.contract import Family, Group, Need
 from layout_visual_complexity.features.folio_image import InkLayerSettings
-from layout_visual_complexity.features.ink_colour import HUE_CLASSES, InkColour, hue_class, ink_colour
+from layout_visual_complexity.features.ink_colour import (
+    EXCLUDED_HUES,
+    HUE_CLASSES,
+    InkColour,
+    chroma_words,
+    chromatic,
+    hue_class,
+    hue_words,
+    ink_colour,
+)
 from layout_visual_complexity.features.page import Page, polygon_mask
 
 ZONE_KINDS = {
@@ -58,6 +68,8 @@ class ColourSettings:
         k: Sauvola's k.
         speck: Ink components smaller than this share of the folio's pixels are removed.
         chroma: The least chroma (CIELAB, the parchment made neutral) of chromatic ink.
+        excluded_hues: Hue angles (degrees, from the first to the second) whose ink isn't chromatic, whatever its
+            chroma; none when empty.
         class_area: A hue class counts as present when its ink covers at least this many square line heights.
         bins: The hue entropy's bins over 360°.
         rubric: A text line is a rubric line when at least this share of its ink is chromatic.
@@ -70,6 +82,7 @@ class ColourSettings:
     k: float = InkLayerSettings.k
     speck: float = InkLayerSettings.speck
     chroma: float = 25.0
+    excluded_hues: tuple[float, ...] = EXCLUDED_HUES
     class_area: float = 1.0
     bins: int = 24
     rubric: float = 0.5
@@ -82,7 +95,7 @@ class Colour(Family):
 
     name = "colour"
     scope = "page"
-    version = "1"
+    version = "2"
     Settings = ColourSettings
 
     @property
@@ -94,11 +107,12 @@ class Colour(Family):
         bins = 360 / settings.bins
         return [
             Group("Colour", "Chromatic share", "Colour__ChromaticShare", ("share",),
-                  "Share of the ink whose chroma, the parchment's colour made neutral, reaches the threshold.",
-                  f"chroma at least {settings.chroma:g}", "this study"),
+                  "Share of the ink whose chroma, the parchment's colour made neutral, reaches the threshold, its hue "
+                  "outside the excluded range.",
+                  chroma_words(settings.chroma, settings.excluded_hues), "this study"),
             Group("Colour", "Hue classes", "Colour__HueClasses", (*HUE_CLASSES, "count"),
                   "Shares of the ink in the chromatic hue classes, and the number of classes present.",
-                  "red 330°–60°, gold 60°–110°, green 110°–200°, blue 200°–330°; present from "
+                  f"{hue_words(settings.excluded_hues)}; present from "
                   f"{settings.class_area:g} square line height{'s' if settings.class_area != 1 else ''}",
                   "this study"),
             Group("Colour", "Hue entropy", "Colour__HueEntropy", ("bits",),
@@ -265,4 +279,4 @@ def colour_layer(page: Page, settings: ColourSettings) -> tuple[InkColour, np.nd
     colour = ink_colour(page, settings)
     stamps = zone_mask(page, LEFT_OUT, page.folio_bounds, colour.layer.ink.shape)
     ink = colour.layer.ink & ~stamps
-    return colour, ink, ink & (colour.chroma >= settings.chroma)
+    return colour, ink, ink & chromatic(colour.chroma, colour.hue, settings.chroma, settings.excluded_hues)
