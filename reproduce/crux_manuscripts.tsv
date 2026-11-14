@@ -1,0 +1,29 @@
+# Crux of Telč's 23 manuscripts in the case study, as catalogued in M. Dragoun, A. Ebersonová and L. Doležalová,
+# Středověké knihovny augustiniánských kanonií v Třeboni a Borovanech (Praha: Scriptorium, 2021). One row per
+# manuscript: its id (the shelfmark in lower case, without spaces), shelfmark, catalogue number, date as
+# catalogued, folios, hands, texts counted coarsely and finely, languages (ISO 639-3), whether it is homogeneous
+# (1 yes, 0 no, ? undecided) and the number of colours besides plain ink.
+manuscript	shelfmark	catalogue_number	date	folios	hands	texts_coarse	texts_fine	languages	homogeneous	colours
+ie32	I E 32	K14	1463	276	2	2	3	lat	1	1
+ig40	I G 40	K30	1383	164	5	10	10	lat|ces	1	3
+xiiie5	XIII E 5	K37	1427–1428	300	3	43	51	lat	1	1
+xiiig10	XIII G 10	K38	1428–1429	150	4	14	27	lat	1	1
+xic1	XI C 1	K34	1502 + XV med. (a part dated 1436) + XV ex. (parts dated 1477, 1478, 1479, 1484) + XV in.	444	16	72	101	lat|ces	0	1
+ie42	I E 42	K18	XIV/XV	140	4	51	53	lat|ces	1	0
+vif21	VI F 21	K33	XV in.	276	5	3	4	lat|ces	1	2
+xivd24	XIV D 24	K40	XV1 + XV (part dated 1468)	278	21	54	97	lat|ces|deu	0	1
+ig11a	I G 11a	K27	XV + XV2 (parts dated 1461, 1491)	210	29	62	72	lat|ces	0	1
+xive31	XIV E 31	K41	XIII + XV2 (parts dated 1460, 1474) + XIV1 + XIV ex.	403	20	127	185	lat|ces	0	1
+xiiig18	XIII G 18	K39	XV2 (parts dated 1456, 1469 and 1481)	279	6	101	160	lat|ces	0	1
+if18	I F 18	K20	XV2 (parts dated 1463, 1492)	320	6	145	165	lat|ces	?	1
+xic8	XI C 8	K35	XV2 (parts dated 1463, 1465, 1477?)	312	8	164	171	lat|ces	0	1
+ie36	I E 36	K15	XV2 + XV1 + XIV (med.?)	392	18	227	279	lat|ces	0	1
+ia29a	I A 29a	K5	XV in. (one part dated 1412) + XIV. ex.	439	10	2	42	lat	0	2
+ib7	I B 7	K8	XV2 (one part dated 1478) + XV in.	396	9	10	17	lat	0	1
+ic16	I C 16	K10	XV2 (parts dated 1465, 1466, 1477)	350	3	30	34	lat	1	2
+ic29	I C 29	K11	1401	200	2	15	15	lat	1	1
+id18	I D 18	K12	XV in. + XV2	310	5	26	102	lat|ces	0	2
+ia38	I A 38	K6	XV in. + XV2 (parts dated 1466, 1468, 1469, 1470, 1472)	464	6	28	75	lat|ces	0	1
+ib33	I B 33	K9	XIV ex. (1377?)	257	4	6	83	lat|ces|deu	1	1
+ia41	I A 41	K7	XV2 (parts dated 1468, 1470, 1472, 1477),	521	2	22	240	lat|ces|gre	0	4
+xiiic17	XIII C 17	K36	XV2 (parts dated 1486, 1494, probably 1467) + XIV ex. (one part dated 1387)	204	23	60	202	lat	0	1

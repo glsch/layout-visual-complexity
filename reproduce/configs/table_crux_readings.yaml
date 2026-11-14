@@ -1,0 +1,6 @@
+# The article's readings of the overview, checked against the catalogue: hands against the mean and the spread,
+# composite volumes against homogeneous ones, the places of I D 18 and XI C 1 by spread, and the colour measures
+# against the catalogue's colours.
+name: table_crux_readings
+outputs: [manuscript_readings]
+named: [id18, xic1]
