@@ -75,8 +75,14 @@ class Material:
         return any(value > SKEWED for value in self.skew.values())
 
 
+def analysed(rows: pd.DataFrame) -> pd.DataFrame:
+    """The measured pages whose ground truth has text lines: on a page whose lines are all drop capitals' or music's,
+    line F1 would count only the found lines matched to none of them."""
+    return rows[(rows["status"] == "done") & rows["line_f1"].notna() & (rows["lines"] > 0)]
+
+
 def load(settings: DifficultySettings, run: Run | None = None) -> Material:
-    """The runs' rows, measured pages only, with the table of manuscripts joined anew when given."""
+    """The runs' rows, with the table of manuscripts joined anew when given, and the pages analysed."""
     facts = read_manuscript_table(settings.manuscripts)
     if run is not None and settings.manuscripts is not None:
         run.read(Path(settings.manuscripts))
@@ -90,7 +96,7 @@ def load(settings: DifficultySettings, run: Run | None = None) -> Material:
             rows = rows.join(facts, on="document")
         by_run[name] = rows.assign(run=name)
     rows = pd.concat(by_run.values(), ignore_index=True)
-    measured = rows[(rows["status"] == "done") & rows["line_f1"].notna()]
+    measured = analysed(rows)
     main = analysis.prepared(measured[measured["run"] == settings.main])
     comparison = analysis.prepared(measured[measured["comparison"].astype(str) == "yes"])
     skew = {measure: analysis.skewness(main[measure]) for measure in ("cer_lines", "cer_end_to_end")}
@@ -505,8 +511,15 @@ def figure(settings: DifficultySettings, material: Material, folder: Path) -> Wr
     from layout_visual_complexity.plots.difficulty import Panel, draw
 
     main = material.main
-    others = material.rows[(material.rows["run"] != settings.main) & (material.rows["status"] == "done")]
-    others = analysis.prepared(others[others["line_f1"].notna()])
+    measured = material.rows[(material.rows["status"] == "done") & material.rows["line_f1"].notna()]
+    others = analysis.prepared(analysed(measured[measured["run"] != settings.main]))
+    without = len(measured) - len(main) - len(others)
+    without_note = (
+        f" Left out: {without} {'page' if without == 1 else 'pages'} whose ground truth has no text line (every line "
+        "a drop capital's or music's)."
+        if without
+        else ""
+    )
     both = pd.concat([main, others[others["comparison"].astype(str) == "yes"]], ignore_index=True)
     in_comparison = both["comparison"].astype(str) == "yes"
     everything = pd.Series(True, index=main.index)
@@ -528,7 +541,8 @@ def figure(settings: DifficultySettings, material: Material, folder: Path) -> Wr
             "(c) line F1 of Kraken's lines and (d) zone F1 of the regions model's zones, against the ground truth. "
             f"(a) and (b) show CREMMA's {len(main):,} pages, (c) and (d) also the "
             f"{len(compared[compared['run'] != settings.main]):,} "
-            "pages of CATMuS's test split from its handwritten manuscripts of the 14th to 16th century. Grey: pages "
+            f"pages of CATMuS's test split from its handwritten manuscripts of the 14th to 16th century.{without_note} "
+            "Grey: pages "
             "CATMuS's models trained on; vermillion: held out, in CATMuS's test split "
             f"({len(held)} of CREMMA's, from {held['document'].nunique()} manuscripts). The lines are running medians "
             "over about an eighth of each group's pages, ordered by complexity; in (c) and (d) over the pages of the "

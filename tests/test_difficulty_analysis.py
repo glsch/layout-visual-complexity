@@ -42,6 +42,25 @@ def test_the_mixed_model_finds_the_coefficients_with_wald_intervals() -> None:
         estimate, low, high = fit.coefficients[term]
         assert low <= value <= high and estimate == pytest.approx(value, abs=0.03)
     assert 0 < fit.r2 < 1
+    assert not any("Powell" in note for note in fit.notes)
+
+
+def test_the_mixed_model_is_fitted_again_by_powells_method_when_it_doesnt_converge(monkeypatch) -> None:
+    import statsmodels.api as sm
+
+    fit = sm.MixedLM.fit
+
+    def failing(self, *args, **kwargs):
+        result = fit(self, *args, **kwargs)
+        if "method" not in kwargs:
+            result.converged = False
+        return result
+
+    monkeypatch.setattr(sm.MixedLM, "fit", failing)
+    found = analysis.mixed_model(analysis.prepared(synthetic()), "measure")
+    assert any("Powell" in note for note in found.notes) and "did not converge" not in found.notes
+    estimate, low, high = found.coefficients["complexity"]
+    assert low <= TRUE["complexity"] <= high
 
 
 def test_least_squares_across_and_within_find_the_coefficients_and_resample_by_the_seed() -> None:
@@ -110,6 +129,8 @@ def test_the_report_writes_the_figures_and_tables(tmp_path: Path) -> None:
     test = synthetic(manuscripts=6, pages=5, seed=3)
     test["document"] = "t" + test["document"]
     test["page"] = "t" + test["page"]
+    no_text_lines = test.index[test["century"] >= 14][0]
+    test.loc[no_text_lines, "lines"] = 0
     runs = {"main": write_run(tmp_path / "main", main, True), "test": write_run(tmp_path / "test", test, False)}
     facts = pd.concat([main, test]).groupby("document").first().reset_index()
     table = pd.DataFrame({"source": "S", "folder": facts["document"], "shelfmark": "Shelf " + facts["document"],
@@ -136,3 +157,11 @@ def test_the_report_writes_the_figures_and_tables(tmp_path: Path) -> None:
     assert set(regression["measure"]) >= {"zone_f1", "line_f1", "baseline_distance", "cer_lines", "cer_end_to_end"}
     material = pd.read_csv(tmp_path / "results" / "tables" / "difficulty_material.tsv", sep="\t")
     assert material["pages"].sum() == len(main) + len(test)
+    from layout_visual_complexity.difficulty_reports import DifficultySettings, load
+
+    loaded = load(DifficultySettings(runs, "main", tmp_path / "manuscripts.tsv"))
+    assert len(loaded.rows) == len(main) + len(test)
+    assert test.loc[no_text_lines, "page"] not in set(loaded.comparison["page"])
+    assert len(loaded.comparison) == (test["century"] >= 14).sum() - 1 + (main["century"] >= 14).sum()
+    caption = (tmp_path / "results" / "figures" / "difficulty_against_complexity.tex").read_text(encoding="utf-8")
+    assert "Left out: 1 page whose ground truth has no text line" in caption

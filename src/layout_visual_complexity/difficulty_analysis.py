@@ -87,7 +87,8 @@ def varying(data: pd.DataFrame, terms: list[str], within: bool = False) -> list[
 
 
 def mixed_model(data: pd.DataFrame, measure: str, terms: list[str] = TERMS) -> Fit:
-    """The measure on the terms with a random intercept for the manuscript, by REML, with Wald intervals."""
+    """The measure on the terms with a random intercept for the manuscript, by REML, with Wald intervals. Where the
+    default optimisers don't converge (a few extreme pages can stop them), it is fitted again by Powell's method."""
     import warnings
 
     import statsmodels.api as sm
@@ -97,10 +98,15 @@ def mixed_model(data: pd.DataFrame, measure: str, terms: list[str] = TERMS) -> F
     exog = sm.add_constant(used[kept].to_numpy(dtype=float), has_constant="add")
     model = sm.MixedLM(used[measure].to_numpy(dtype=float), exog, groups=used["manuscript"].to_numpy())
     notes = []
-    with warnings.catch_warnings(record=True) as caught:
-        warnings.simplefilter("always")
-        result = model.fit(reml=True)
+    for options in ({}, {"method": "powell", "maxiter": 5000}):
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            result = model.fit(reml=True, **options)
+        if result.converged:
+            break
     notes += sorted({str(item.message).split("\n")[0] for item in caught})
+    if options:
+        notes.append("fitted by Powell's method, the default optimisers having failed to converge")
     if not result.converged:
         notes.append("did not converge")
     fixed = np.asarray(result.fe_params, dtype=float)
