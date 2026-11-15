@@ -230,7 +230,9 @@ lvc evaluate --ensemble "{geometry: build/evaluate/geometry, vit: build/evaluate
 evaluates a method, cross-validated on folds by manuscript (10 × 10 by default):
 
 - **the pairwise logistic model** on a feature table: all its columns, some families' (`--families`), or some
-  columns (`--columns`, by name or by their measure's prefix, `Generic__Mssc`). With `--restating.reference`, a
+  columns (`--columns`, by name or by their measure's prefix, `Generic__Mssc`). Each feature is clipped to the
+  training pages' 1st and 99th percentiles, in training and when the model scores pages, so a page unlike any
+  training page (a diagram, a page of three lines) scores no further out than the training pages' extremes would. With `--restating.reference`, a
   column whose Spearman correlation with that reference column reaches `--restating.threshold` (0.9) in absolute
   value, and which adds nothing to it on the same folds, is left out (`restating.tsv` says which);
 - **the local ViT head** on a token set: a small network (the tokens' width, 128, 1, with a ReLU) gives each patch a
@@ -270,7 +272,8 @@ makes the rankers `lvc score` and `lvc compare` use: the members' files beside `
 weights (equal by default), the spread of their weighted sum over the training pages, the scales of win
 probabilities fitted on the evaluations' out-of-fold scores (`--calibration`; on the training judgments without it),
 with a table comparing their calibration to the training fit's, and the Elo scale. A page whose out-of-fold z-score
-lies beyond 5 in absolute value (`--fit_bound`), where a linear model extrapolates, is left out of those fits. The
+lies beyond 5 in absolute value (`--fit_bound`) is left out of those fits, so one page far from the others can't bend
+them. The
 package's head scores a page with numpy alone (`layout_visual_complexity.evaluation.vit_head.shipped_head()`), and its
 patch scores make a map of where on the page the head finds complexity.
 

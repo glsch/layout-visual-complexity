@@ -16,6 +16,11 @@
 - The package comes with its rankers beside the ViT head: the geometry ranker trained on every judgment
   (`heads/geometry.json`) and their ensemble (`heads/ensemble.json`), with the scales of win probabilities fitted on
   the evaluations' out-of-fold scores and the Elo scale of its scores. The head itself is unchanged.
+- The pairwise logistic model clips each feature to its training pages' 1st and 99th percentiles, in training and
+  when it scores pages, so a page unlike any training page (a diagram, a page of three lines or of 264) no longer gets
+  an extreme score: on Crux of Telč's 14,138 pages the geometry ranker's z-scores reached −53 and +79, and now stay
+  within ±4. Every evaluation of a model on features changes a little (the geometry ranker: accuracy 0.724 → 0.720,
+  ρ 0.751 → 0.760). Models saved without the bounds load and score as before.
 - `lvc train` leaves manuscripts out (`--leave_out`: their pages and every judgment touching them), writes its
   training pages' z-scores (`scores.tsv`), and builds an ensemble of trained rankers (`--ensemble`) with calibrated
   scales (`--calibration`) and a table of their calibration.

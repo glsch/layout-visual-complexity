@@ -22,7 +22,7 @@ from sklearn.linear_model import LogisticRegression
 
 from layout_visual_complexity.evaluation import metrics
 from layout_visual_complexity.evaluation.folds import Fold, judgments_within
-from layout_visual_complexity.evaluation.model import fit_pairwise_model
+from layout_visual_complexity.evaluation.model import WINSORISE, fit_pairwise_model
 from layout_visual_complexity.ranking.reliability import DEFAULT_GAP_EDGES, judgment_gaps, other_image
 
 
@@ -33,6 +33,8 @@ class ProtocolSettings:
     Args:
         gap_edges: The edges of the bins of the final Elo gap.
         regularisation: The logistic regression's C: smaller is stronger.
+        winsorise: The pairwise model clips each feature to its training pages' quantiles at this share and at one
+            minus it; 0 doesn't clip.
         bootstrap: Resamples of manuscripts for the intervals.
         reliability_bins: Bins of the predicted probability in the reliability curve.
         seed: The seed of the bootstrap and of the learning curves' subsamples.
@@ -43,6 +45,7 @@ class ProtocolSettings:
     bootstrap: int = 1000
     reliability_bins: int = 10
     seed: int = 1
+    winsorise: float = WINSORISE
 
 
 @dataclass
@@ -98,7 +101,11 @@ def _summarise_by_gap(
 
 
 def pairwise_fold_scores(
-    features: pd.DataFrame, judgments: pd.DataFrame, folds: list[Fold], regularisation: float = 1.0
+    features: pd.DataFrame,
+    judgments: pd.DataFrame,
+    folds: list[Fold],
+    regularisation: float = 1.0,
+    winsorise: float = WINSORISE,
 ) -> FoldScores:
     """The pairwise model fitted on each fold's training judgments: its raw scores of the fold's pages."""
     found: FoldScores = []
@@ -106,7 +113,8 @@ def pairwise_fold_scores(
         if not len(fold.train) or not len(fold.test):
             found.append(None)
             continue
-        model = fit_pairwise_model(features.loc[fold.train_pages], judgments.iloc[fold.train], regularisation)
+        model = fit_pairwise_model(features.loc[fold.train_pages], judgments.iloc[fold.train], regularisation,
+                                   winsorise)  # fmt: skip
         found.append(model.scores(features.loc[np.concatenate([fold.train_pages, fold.test_pages])]))
     return found
 
@@ -120,7 +128,7 @@ def evaluate(
 ) -> Evaluation:
     """Fit and test the pairwise model on every fold. `features` is pages × features; `reference` the final Elo."""
     settings = settings or ProtocolSettings()
-    scores = pairwise_fold_scores(features, judgments, folds, settings.regularisation)
+    scores = pairwise_fold_scores(features, judgments, folds, settings.regularisation, settings.winsorise)
     return evaluate_fold_scores(scores, judgments, reference, folds, settings)
 
 
@@ -508,7 +516,7 @@ def learning_curve_runs(
         features = method
 
         def method(chosen: list[Fold], share_number: int) -> FoldScores:
-            return pairwise_fold_scores(features, judgments, chosen, settings.regularisation)
+            return pairwise_fold_scores(features, judgments, chosen, settings.regularisation, settings.winsorise)
 
     runs = []
     for share_number, share in enumerate(shares):

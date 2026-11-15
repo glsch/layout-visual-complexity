@@ -1,22 +1,22 @@
 {
   "command": "report",
-  "started": "2026-11-14T06:22:16+00:00",
-  "ended": "2026-11-14T06:22:16+00:00",
+  "started": "2026-11-15T09:20:05+00:00",
+  "ended": "2026-11-15T09:20:05+00:00",
   "inputs": [
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
-      "sha256": "59782a5158994706e32de5e9cb806a3e99fb1a030f80c9a7e505f8ed1691af21",
+      "sha256": "6de02cf79026efd8e70a84e3bda8ac24d4f978ad7578a2bd08bcb469475ce68f",
       "bytes": 735
     },
     {
       "path": "build/evaluate/geometry/metrics.tsv",
-      "sha256": "a344aa858f054a9270e5ffa67ec7d72015a5ec477faa235a6d3f6e70ebd43ee2",
+      "sha256": "f3caf808cc849ed1ae9b5ed813c0acf8d2535816055bcfa599425f1621d8b074",
       "bytes": 539
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "340fc53c747ff4cc5393959ec043fb44288a8ecbf0ab268cbd7354ecdce98208",
-      "bytes": 13397
+      "sha256": "bdb87a1e6516098ef69e149da6efdb3e3c77e287c777bb4508ce8e05853b9044",
+      "bytes": 13409
     },
     {
       "path": "build/evaluate/vit/by_elo_gap.tsv",
@@ -35,27 +35,27 @@
     },
     {
       "path": "build/evaluate/ensemble/by_elo_gap.tsv",
-      "sha256": "50072af82f24a6954aace94ee9e78cceefbb2fa4e99baa38b405069a2a85a471",
+      "sha256": "90e2c499da6283af1138c3f1e5af970e57cfc0eeaf793e920cb519d1faa516d4",
       "bytes": 735
     },
     {
       "path": "build/evaluate/ensemble/metrics.tsv",
-      "sha256": "57a0f86d3db0acc0fa993a6a52f2aac78316517ea69e83133268efacaee7a3df",
+      "sha256": "e191598168277e285c85966f249114db272af00368045c5cc8f0c23a54bb8ff7",
       "bytes": 539
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "0383426efa10545091743e81133245eb2f22c891bcfaa40b86f1ba758f474070",
-      "bytes": 12963
+      "sha256": "12b7b6667bc19196b4962ade939080f291d37aab4c3111facd8a056c7966b67e",
+      "bytes": 12962
     },
     {
       "path": "build/evaluate/geometry/learning_curve.tsv",
-      "sha256": "a6281458c7f9ffee8a2f36fe88289c7939eab408d0a86eb3267685aef9fb8611",
+      "sha256": "9d1f3668456fbb95fbab3cfe297c10bcaab25cd8a8d57b054e39751aa646fc4c",
       "bytes": 963
     },
     {
       "path": "build/evaluate/geometry/calibration.tsv",
-      "sha256": "92f8a6070e50222477b76b4c471af7263e216ecdf5416697b3682e671535620b",
+      "sha256": "0e6002d657ca5806921bcb7015e888cc4fab858b75fb7b38fcc256bf98ceb808",
       "bytes": 438
     },
     {
@@ -70,12 +70,12 @@
     },
     {
       "path": "build/evaluate/ensemble/learning_curve.tsv",
-      "sha256": "19d2937b207a97a58e9edf7ee313f5de59f344c48130ebd522de50cb4abefc21",
+      "sha256": "faa664913cb0344b172c66d56e4541aec898adba9237de1c409bd8b2321b697c",
       "bytes": 963
     },
     {
       "path": "build/evaluate/ensemble/calibration.tsv",
-      "sha256": "1d39385d8b1bddd52db01d2a31d93313a36904aa3f9b5f5df9ac577895b7e180",
+      "sha256": "8289abdf2ef247be949f29b1d604cca335e1e344c102fbd4aa387729245f64f8",
       "bytes": 438
     }
   ],
@@ -137,7 +137,15 @@
     "levels": {},
     "alone": [],
     "reference_column": "",
-    "colour_pages": []
+    "colour_pages": [],
+    "score_run": null,
+    "catalogue": null,
+    "profiles": [],
+    "collection": "manuscripts",
+    "catalogue_credit": "",
+    "thumbnail_size": 400,
+    "named": [],
+    "min_lines": 0
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -159,7 +167,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
+  "commit": "01298e25c9fb0281e54e9a0ed7ac14beab07268e-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "learning_curves_and_calibration": {
@@ -170,11 +178,11 @@
           "share": 0.1,
           "train_per_fold": 41.1,
           "train_pages_per_fold": 35.9,
-          "accuracy": 0.601329,
-          "accuracy_sd": 0.089748,
-          "low": 0.54434,
-          "high": 0.657439,
-          "srocc": 0.496853
+          "accuracy": 0.625717,
+          "accuracy_sd": 0.081103,
+          "low": 0.564926,
+          "high": 0.677185,
+          "srocc": 0.572212
         },
         {
           "method": "geometry",
@@ -182,11 +190,11 @@
           "share": 0.25,
           "train_per_fold": 278.85,
           "train_pages_per_fold": 89.5,
-          "accuracy": 0.64321,
-          "accuracy_sd": 0.090662,
-          "low": 0.582099,
-          "high": 0.694252,
-          "srocc": 0.629377
+          "accuracy": 0.648345,
+          "accuracy_sd": 0.071945,
+          "low": 0.584963,
+          "high": 0.704935,
+          "srocc": 0.627525
         },
         {
           "method": "geometry",
@@ -194,11 +202,11 @@
           "share": 0.5,
           "train_per_fold": 1147.6,
           "train_pages_per_fold": 178.7,
-          "accuracy": 0.6955,
-          "accuracy_sd": 0.080689,
-          "low": 0.636702,
-          "high": 0.746329,
-          "srocc": 0.719461
+          "accuracy": 0.688282,
+          "accuracy_sd": 0.079487,
+          "low": 0.6228,
+          "high": 0.740521,
+          "srocc": 0.722775
         },
         {
           "method": "geometry",
@@ -206,11 +214,11 @@
           "share": 0.75,
           "train_per_fold": 2563.35,
           "train_pages_per_fold": 267.8,
-          "accuracy": 0.710807,
-          "accuracy_sd": 0.053478,
-          "low": 0.645599,
-          "high": 0.760686,
-          "srocc": 0.733955
+          "accuracy": 0.69778,
+          "accuracy_sd": 0.061836,
+          "low": 0.631951,
+          "high": 0.753915,
+          "srocc": 0.732316
         },
         {
           "method": "geometry",
@@ -218,11 +226,11 @@
           "share": 1.0,
           "train_per_fold": 4514.95,
           "train_pages_per_fold": 357.3,
-          "accuracy": 0.718792,
-          "accuracy_sd": 0.054194,
-          "low": 0.654176,
-          "high": 0.768792,
-          "srocc": 0.754849
+          "accuracy": 0.719564,
+          "accuracy_sd": 0.065381,
+          "low": 0.651732,
+          "high": 0.767041,
+          "srocc": 0.763538
         },
         {
           "method": "geometry",
@@ -230,11 +238,11 @@
           "share": 0.1,
           "train_per_fold": 451.6,
           "train_pages_per_fold": 357.3,
-          "accuracy": 0.671725,
-          "accuracy_sd": 0.081197,
-          "low": 0.601799,
-          "high": 0.715453,
-          "srocc": 0.709342
+          "accuracy": 0.678491,
+          "accuracy_sd": 0.089815,
+          "low": 0.61134,
+          "high": 0.72067,
+          "srocc": 0.724297
         },
         {
           "method": "geometry",
@@ -242,11 +250,11 @@
           "share": 0.25,
           "train_per_fold": 1128.7,
           "train_pages_per_fold": 357.3,
-          "accuracy": 0.72268,
-          "accuracy_sd": 0.044016,
-          "low": 0.657078,
-          "high": 0.769689,
-          "srocc": 0.749576
+          "accuracy": 0.726189,
+          "accuracy_sd": 0.068319,
+          "low": 0.663513,
+          "high": 0.775975,
+          "srocc": 0.753146
         },
         {
           "method": "geometry",
@@ -254,11 +262,11 @@
           "share": 0.5,
           "train_per_fold": 2257.5,
           "train_pages_per_fold": 357.3,
-          "accuracy": 0.721944,
-          "accuracy_sd": 0.059021,
-          "low": 0.659398,
-          "high": 0.765981,
-          "srocc": 0.752541
+          "accuracy": 0.724718,
+          "accuracy_sd": 0.057685,
+          "low": 0.664359,
+          "high": 0.773524,
+          "srocc": 0.760014
         },
         {
           "method": "geometry",
@@ -266,11 +274,11 @@
           "share": 0.75,
           "train_per_fold": 3386.25,
           "train_pages_per_fold": 357.3,
-          "accuracy": 0.719931,
-          "accuracy_sd": 0.06169,
-          "low": 0.654713,
-          "high": 0.76844,
-          "srocc": 0.749681
+          "accuracy": 0.724199,
+          "accuracy_sd": 0.063221,
+          "low": 0.656451,
+          "high": 0.774052,
+          "srocc": 0.760609
         },
         {
           "method": "geometry",
@@ -278,11 +286,11 @@
           "share": 1.0,
           "train_per_fold": 4514.95,
           "train_pages_per_fold": 357.3,
-          "accuracy": 0.718792,
-          "accuracy_sd": 0.054194,
-          "low": 0.654176,
-          "high": 0.768792,
-          "srocc": 0.754849
+          "accuracy": 0.719564,
+          "accuracy_sd": 0.065381,
+          "low": 0.651732,
+          "high": 0.767041,
+          "srocc": 0.763538
         },
         {
           "method": "vit",
@@ -410,11 +418,11 @@
           "share": 0.1,
           "train_per_fold": 41.1,
           "train_pages_per_fold": 35.9,
-          "accuracy": 0.660191,
-          "accuracy_sd": 0.091027,
-          "low": 0.593289,
-          "high": 0.71123,
-          "srocc": 0.622503
+          "accuracy": 0.653826,
+          "accuracy_sd": 0.093195,
+          "low": 0.593931,
+          "high": 0.701536,
+          "srocc": 0.670229
         },
         {
           "method": "ensemble",
@@ -422,11 +430,11 @@
           "share": 0.25,
           "train_per_fold": 278.85,
           "train_pages_per_fold": 89.5,
-          "accuracy": 0.676126,
-          "accuracy_sd": 0.068246,
-          "low": 0.610876,
-          "high": 0.726292,
-          "srocc": 0.738558
+          "accuracy": 0.68285,
+          "accuracy_sd": 0.075335,
+          "low": 0.623295,
+          "high": 0.734583,
+          "srocc": 0.744878
         },
         {
           "method": "ensemble",
@@ -434,11 +442,11 @@
           "share": 0.5,
           "train_per_fold": 1147.6,
           "train_pages_per_fold": 178.7,
-          "accuracy": 0.710692,
-          "accuracy_sd": 0.070204,
-          "low": 0.648779,
-          "high": 0.759137,
-          "srocc": 0.784171
+          "accuracy": 0.718776,
+          "accuracy_sd": 0.066473,
+          "low": 0.65724,
+          "high": 0.767414,
+          "srocc": 0.791127
         },
         {
           "method": "ensemble",
@@ -446,11 +454,11 @@
           "share": 0.75,
           "train_per_fold": 2563.35,
           "train_pages_per_fold": 267.8,
-          "accuracy": 0.735109,
-          "accuracy_sd": 0.065784,
-          "low": 0.673926,
-          "high": 0.78318,
-          "srocc": 0.811754
+          "accuracy": 0.733673,
+          "accuracy_sd": 0.064841,
+          "low": 0.667955,
+          "high": 0.784584,
+          "srocc": 0.8076
         },
         {
           "method": "ensemble",
@@ -458,11 +466,11 @@
           "share": 1.0,
           "train_per_fold": 4514.95,
           "train_pages_per_fold": 357.3,
-          "accuracy": 0.739192,
-          "accuracy_sd": 0.068585,
-          "low": 0.675323,
-          "high": 0.786237,
-          "srocc": 0.817115
+          "accuracy": 0.740234,
+          "accuracy_sd": 0.066095,
+          "low": 0.676393,
+          "high": 0.784254,
+          "srocc": 0.820593
         },
         {
           "method": "ensemble",
@@ -470,11 +478,11 @@
           "share": 0.1,
           "train_per_fold": 451.6,
           "train_pages_per_fold": 357.3,
-          "accuracy": 0.702715,
-          "accuracy_sd": 0.063324,
-          "low": 0.625118,
-          "high": 0.744155,
-          "srocc": 0.800271
+          "accuracy": 0.712388,
+          "accuracy_sd": 0.067467,
+          "low": 0.638422,
+          "high": 0.751682,
+          "srocc": 0.805265
         },
         {
           "method": "ensemble",
@@ -482,11 +490,11 @@
           "share": 0.25,
           "train_per_fold": 1128.7,
           "train_pages_per_fold": 357.3,
-          "accuracy": 0.729615,
-          "accuracy_sd": 0.07092,
-          "low": 0.6614,
-          "high": 0.775243,
-          "srocc": 0.812153
+          "accuracy": 0.734745,
+          "accuracy_sd": 0.063546,
+          "low": 0.665289,
+          "high": 0.783828,
+          "srocc": 0.8143
         },
         {
           "method": "ensemble",
@@ -494,11 +502,11 @@
           "share": 0.5,
           "train_per_fold": 2257.5,
           "train_pages_per_fold": 357.3,
-          "accuracy": 0.73827,
-          "accuracy_sd": 0.069542,
-          "low": 0.676932,
-          "high": 0.783127,
-          "srocc": 0.819785
+          "accuracy": 0.744959,
+          "accuracy_sd": 0.065374,
+          "low": 0.682152,
+          "high": 0.789139,
+          "srocc": 0.822362
         },
         {
           "method": "ensemble",
@@ -506,11 +514,11 @@
           "share": 0.75,
           "train_per_fold": 3386.25,
           "train_pages_per_fold": 357.3,
-          "accuracy": 0.73651,
-          "accuracy_sd": 0.067388,
-          "low": 0.670519,
-          "high": 0.782538,
-          "srocc": 0.81548
+          "accuracy": 0.737723,
+          "accuracy_sd": 0.064746,
+          "low": 0.673137,
+          "high": 0.783721,
+          "srocc": 0.818784
         },
         {
           "method": "ensemble",
@@ -518,16 +526,16 @@
           "share": 1.0,
           "train_per_fold": 4514.95,
           "train_pages_per_fold": 357.3,
-          "accuracy": 0.739192,
-          "accuracy_sd": 0.068585,
-          "low": 0.675323,
-          "high": 0.786237,
-          "srocc": 0.817115
+          "accuracy": 0.740234,
+          "accuracy_sd": 0.066095,
+          "low": 0.676393,
+          "high": 0.784254,
+          "srocc": 0.820593
         }
       ]
     },
     "seconds": {
-      "learning_curves_and_calibration": 0.445
+      "learning_curves_and_calibration": 0.218
     }
   }
 }

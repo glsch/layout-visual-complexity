@@ -1,82 +1,82 @@
 {
   "command": "report",
-  "started": "2026-11-14T06:22:21+00:00",
-  "ended": "2026-11-14T06:22:21+00:00",
+  "started": "2026-11-15T09:18:45+00:00",
+  "ended": "2026-11-15T09:18:45+00:00",
   "inputs": [
     {
       "path": "build/evaluate/measures/ink_coverage/by_elo_gap.tsv",
-      "sha256": "1013c69b31cc040441cc5e589fa6ba7d394bd961c869912beb5e94b9d12223e7",
+      "sha256": "d4244cd4945fe022d53d3845a9f18a00b4fc601d4dfcb83413bc793d3c5f66ab",
       "bytes": 735
     },
     {
       "path": "build/evaluate/measures/ink_coverage/metrics.tsv",
-      "sha256": "a4e4f09ae5f19cf7d974c2c4f0b3dce8ad965e6e4b457070c30fa6f46782553f",
+      "sha256": "eee1e39db0f292aec7ed7c7c4f9b411bea2cd8e44ee3a7e4e4603437d782edb4",
       "bytes": 541
     },
     {
       "path": "build/evaluate/measures/ink_coverage/manifest.json",
-      "sha256": "b86ca0cad47553bf3dc1952e71fe4e77e1acb7b85636e6ef257b05c1da0e72f0",
-      "bytes": 8680
+      "sha256": "04e5104b629f9aceb8a4337bf803a97d13bd0f358894d842e12a97cd0f9d00e9",
+      "bytes": 8671
     },
     {
       "path": "build/evaluate/measures/text_lines/by_elo_gap.tsv",
-      "sha256": "b0aef546f4c235fda1bf79ecaccb2a8d3603241d8ac4cd6a90bbaaffe70bdb6d",
+      "sha256": "03a280ad9a977855ae3d6b5af8ce1095f42755bc8237c5bd0ef6cbe23ba40e98",
       "bytes": 735
     },
     {
       "path": "build/evaluate/measures/text_lines/metrics.tsv",
-      "sha256": "4e07e9edbcf31b83e40cadb6de7e14075aee42e3760ae8af15fe370b6589ea46",
+      "sha256": "5e645ef197aad5194d2421cdd9eb1edffc625c98794e4d3425e44ac38c2ce849",
       "bytes": 539
     },
     {
       "path": "build/evaluate/measures/text_lines/manifest.json",
-      "sha256": "68e6ab33c394b25e73950a8205f7e3a35b2362606eb191ea654d19b36c3200ae",
-      "bytes": 8646
+      "sha256": "0b2cd61f19edd11a1b8042c4619a66a2a0ffcd83c3addf003b6c727481e3f842",
+      "bytes": 8651
     },
     {
       "path": "build/evaluate/generic/by_elo_gap.tsv",
-      "sha256": "759093c6c9e224516286e8531c9f4071c26b0b6aa3c2de0afd8c33390ba490a0",
+      "sha256": "c403a00e87f266c8a4c4bd830c559bd85ee4413312eeeedb5c51ed6cdee5d7a2",
       "bytes": 735
     },
     {
       "path": "build/evaluate/generic/metrics.tsv",
-      "sha256": "9dec3204d402b5ead7c7945c1d90e469ad3facc6745e278845dc41e62440231e",
+      "sha256": "d19a5daab295d5ddca57f86b8b360b40dde372d58cc53496f7dc8b042fd95683",
       "bytes": 539
     },
     {
       "path": "build/evaluate/generic/manifest.json",
-      "sha256": "c4ece9fef7b3e1b04881f02b5235084901b669bd44f44a272c714a6b7ac4431c",
+      "sha256": "9af2b056fc0361639de0ffd8ddc50de0b61ec61515a2ff4b896c5f658bb26391",
       "bytes": 9366
     },
     {
       "path": "build/evaluate/kyle_davidson/by_elo_gap.tsv",
-      "sha256": "9354b3f685c877a95aad94f10ed37e627017a39c68f9fc4e0d3154c0020dfcc1",
+      "sha256": "3ea0abc1dae78391c66e3c7ed42089f9b15a71ca1d138a0c8b825d627a803d80",
       "bytes": 735
     },
     {
       "path": "build/evaluate/kyle_davidson/metrics.tsv",
-      "sha256": "c4f932b6930fca03ce5fdefae76f7e63a406a9d6273f67f4205a19c9ea39f1c0",
+      "sha256": "da9c5a22ac84f7bdff360af25b1e53db1f772901b0b8de2c92d84eebda39cc39",
       "bytes": 539
     },
     {
       "path": "build/evaluate/kyle_davidson/manifest.json",
-      "sha256": "e673d901efd71228fd7700ed04ce9f85a59b859e5730cea687035626d11bc7a0",
-      "bytes": 8824
+      "sha256": "e6547a673977afa0efc3b1936731e977fb268c42fb92f7b2a80bfb38e59a13ad",
+      "bytes": 8827
     },
     {
       "path": "build/evaluate/ink_distribution/by_elo_gap.tsv",
-      "sha256": "573a0630b52955a0f259c26cc8d44e76cb11248c6dd1dbf3fc86f263f40ee46c",
+      "sha256": "6a97b9c65900d872591e137cde768d522e9b4c3c3bc6e3bfe44fc67f1d0ec37d",
       "bytes": 735
     },
     {
       "path": "build/evaluate/ink_distribution/metrics.tsv",
-      "sha256": "719fa556c43b818f5f5599324a34f70b5ab1accc1c5dd618758653c3c3b15c49",
+      "sha256": "85a3672742626316f8c583ac4e153e5e03e47843df82fbf0ae68b91b294c1ee8",
       "bytes": 539
     },
     {
       "path": "build/evaluate/ink_distribution/manifest.json",
-      "sha256": "1c490dea0de25fa2bf6125e97b5120784ad36c4b1687027e8efdf9de77aabd55",
-      "bytes": 9604
+      "sha256": "de27929fdbbfb87b42532f6f89e95420e4c464ec36295ac952adde37510ccfb1",
+      "bytes": 9603
     }
   ],
   "outputs": [
@@ -138,7 +138,15 @@
     "levels": {},
     "alone": [],
     "reference_column": "",
-    "colour_pages": []
+    "colour_pages": [],
+    "score_run": null,
+    "catalogue": null,
+    "profiles": [],
+    "collection": "manuscripts",
+    "catalogue_credit": "",
+    "thumbnail_size": 400,
+    "named": [],
+    "min_lines": 0
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -160,7 +168,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
+  "commit": "01298e25c9fb0281e54e9a0ed7ac14beab07268e-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "baselines_by_elo_gap": {
@@ -174,18 +182,18 @@
           "ink_coverage": 0.49376,
           "ink_coverage_low": 0.435577,
           "ink_coverage_high": 0.557996,
-          "text_lines": 0.525784,
-          "text_lines_low": 0.474191,
-          "text_lines_high": 0.592059,
-          "generic": 0.499322,
-          "generic_low": 0.443232,
-          "generic_high": 0.566951,
-          "kyle_davidson": 0.482342,
-          "kyle_davidson_low": 0.42395,
-          "kyle_davidson_high": 0.541685,
-          "ink_distribution": 0.491854,
-          "ink_distribution_low": 0.43183,
-          "ink_distribution_high": 0.555445
+          "text_lines": 0.529526,
+          "text_lines_low": 0.4776,
+          "text_lines_high": 0.595115,
+          "generic": 0.500769,
+          "generic_low": 0.447235,
+          "generic_high": 0.565141,
+          "kyle_davidson": 0.494754,
+          "kyle_davidson_low": 0.439283,
+          "kyle_davidson_high": 0.556033,
+          "ink_distribution": 0.51543,
+          "ink_distribution_low": 0.453143,
+          "ink_distribution_high": 0.581887
         },
         {
           "gap": "100-200",
@@ -196,18 +204,18 @@
           "ink_coverage": 0.514368,
           "ink_coverage_low": 0.445986,
           "ink_coverage_high": 0.573354,
-          "text_lines": 0.535819,
-          "text_lines_low": 0.450325,
-          "text_lines_high": 0.594207,
-          "generic": 0.544223,
-          "generic_low": 0.479486,
-          "generic_high": 0.607265,
-          "kyle_davidson": 0.553711,
-          "kyle_davidson_low": 0.497036,
-          "kyle_davidson_high": 0.618795,
-          "ink_distribution": 0.568581,
-          "ink_distribution_low": 0.501254,
-          "ink_distribution_high": 0.647106
+          "text_lines": 0.538892,
+          "text_lines_low": 0.452313,
+          "text_lines_high": 0.5986,
+          "generic": 0.558243,
+          "generic_low": 0.49917,
+          "generic_high": 0.606215,
+          "kyle_davidson": 0.554803,
+          "kyle_davidson_low": 0.498893,
+          "kyle_davidson_high": 0.625975,
+          "ink_distribution": 0.569273,
+          "ink_distribution_low": 0.509645,
+          "ink_distribution_high": 0.647537
         },
         {
           "gap": "200-300",
@@ -215,21 +223,21 @@
           "reference": 0.915344,
           "reference_low": 0.893005,
           "reference_high": 0.953155,
-          "ink_coverage": 0.525306,
-          "ink_coverage_low": 0.437492,
-          "ink_coverage_high": 0.616067,
+          "ink_coverage": 0.524611,
+          "ink_coverage_low": 0.43704,
+          "ink_coverage_high": 0.616078,
           "text_lines": 0.62901,
           "text_lines_low": 0.57211,
           "text_lines_high": 0.720845,
-          "generic": 0.631,
-          "generic_low": 0.565346,
-          "generic_high": 0.715164,
-          "kyle_davidson": 0.591834,
-          "kyle_davidson_low": 0.509955,
-          "kyle_davidson_high": 0.664402,
-          "ink_distribution": 0.679028,
-          "ink_distribution_low": 0.603933,
-          "ink_distribution_high": 0.756544
+          "generic": 0.613635,
+          "generic_low": 0.537906,
+          "generic_high": 0.695652,
+          "kyle_davidson": 0.591541,
+          "kyle_davidson_low": 0.509769,
+          "kyle_davidson_high": 0.665907,
+          "ink_distribution": 0.675301,
+          "ink_distribution_low": 0.608391,
+          "ink_distribution_high": 0.747923
         },
         {
           "gap": "300-400",
@@ -237,21 +245,21 @@
           "reference": 0.908824,
           "reference_low": 0.837633,
           "reference_high": 0.948723,
-          "ink_coverage": 0.539387,
-          "ink_coverage_low": 0.444538,
-          "ink_coverage_high": 0.640925,
+          "ink_coverage": 0.536708,
+          "ink_coverage_low": 0.443976,
+          "ink_coverage_high": 0.635889,
           "text_lines": 0.596857,
           "text_lines_low": 0.508719,
           "text_lines_high": 0.688501,
-          "generic": 0.666867,
-          "generic_low": 0.601772,
-          "generic_high": 0.764838,
-          "kyle_davidson": 0.663538,
-          "kyle_davidson_low": 0.563635,
-          "kyle_davidson_high": 0.766497,
-          "ink_distribution": 0.782036,
-          "ink_distribution_low": 0.664542,
-          "ink_distribution_high": 0.854117
+          "generic": 0.678713,
+          "generic_low": 0.622947,
+          "generic_high": 0.783127,
+          "kyle_davidson": 0.670529,
+          "kyle_davidson_low": 0.566635,
+          "kyle_davidson_high": 0.769175,
+          "ink_distribution": 0.777641,
+          "ink_distribution_low": 0.660251,
+          "ink_distribution_high": 0.84792
         },
         {
           "gap": ">=400",
@@ -259,21 +267,21 @@
           "reference": 0.953114,
           "reference_low": 0.934285,
           "reference_high": 0.979258,
-          "ink_coverage": 0.620276,
-          "ink_coverage_low": 0.474884,
-          "ink_coverage_high": 0.700002,
+          "ink_coverage": 0.618477,
+          "ink_coverage_low": 0.471228,
+          "ink_coverage_high": 0.698107,
           "text_lines": 0.697884,
           "text_lines_low": 0.581954,
           "text_lines_high": 0.785041,
-          "generic": 0.786911,
-          "generic_low": 0.665339,
-          "generic_high": 0.848233,
-          "kyle_davidson": 0.771449,
-          "kyle_davidson_low": 0.655858,
-          "kyle_davidson_high": 0.83288,
-          "ink_distribution": 0.831688,
-          "ink_distribution_low": 0.727574,
-          "ink_distribution_high": 0.902935
+          "generic": 0.744402,
+          "generic_low": 0.626215,
+          "generic_high": 0.820238,
+          "kyle_davidson": 0.774958,
+          "kyle_davidson_low": 0.659922,
+          "kyle_davidson_high": 0.833912,
+          "ink_distribution": 0.821712,
+          "ink_distribution_low": 0.722214,
+          "ink_distribution_high": 0.906786
         },
         {
           "gap": "overall",
@@ -281,21 +289,21 @@
           "reference": 0.812007,
           "reference_low": 0.782028,
           "reference_high": 0.836214,
-          "ink_coverage": 0.539712,
-          "ink_coverage_low": 0.485709,
-          "ink_coverage_high": 0.578079,
-          "text_lines": 0.591451,
-          "text_lines_low": 0.537684,
-          "text_lines_high": 0.628585,
-          "generic": 0.609157,
-          "generic_low": 0.563068,
-          "generic_high": 0.645085,
-          "kyle_davidson": 0.59264,
-          "kyle_davidson_low": 0.54323,
-          "kyle_davidson_high": 0.626367,
-          "ink_distribution": 0.641574,
-          "ink_distribution_low": 0.593552,
-          "ink_distribution_high": 0.676524
+          "ink_coverage": 0.538879,
+          "ink_coverage_low": 0.484402,
+          "ink_coverage_high": 0.577692,
+          "text_lines": 0.593006,
+          "text_lines_low": 0.539082,
+          "text_lines_high": 0.631661,
+          "generic": 0.600118,
+          "generic_low": 0.555736,
+          "generic_high": 0.635714,
+          "kyle_davidson": 0.596131,
+          "kyle_davidson_low": 0.547668,
+          "kyle_davidson_high": 0.62821,
+          "ink_distribution": 0.644215,
+          "ink_distribution_low": 0.599514,
+          "ink_distribution_high": 0.682333
         },
         {
           "gap": "srocc",
@@ -303,26 +311,26 @@
           "reference": 0.890535,
           "reference_low": NaN,
           "reference_high": NaN,
-          "ink_coverage": 0.086578,
-          "ink_coverage_low": -0.045256,
-          "ink_coverage_high": 0.214162,
-          "text_lines": 0.279078,
-          "text_lines_low": 0.151799,
-          "text_lines_high": 0.404629,
-          "generic": 0.392507,
-          "generic_low": 0.269048,
-          "generic_high": 0.499128,
-          "kyle_davidson": 0.431091,
-          "kyle_davidson_low": 0.309377,
-          "kyle_davidson_high": 0.528363,
-          "ink_distribution": 0.554986,
-          "ink_distribution_low": 0.437785,
-          "ink_distribution_high": 0.633357
+          "ink_coverage": 0.086137,
+          "ink_coverage_low": -0.045988,
+          "ink_coverage_high": 0.213579,
+          "text_lines": 0.279036,
+          "text_lines_low": 0.151587,
+          "text_lines_high": 0.404094,
+          "generic": 0.403498,
+          "generic_low": 0.285448,
+          "generic_high": 0.513177,
+          "kyle_davidson": 0.439447,
+          "kyle_davidson_low": 0.321703,
+          "kyle_davidson_high": 0.535524,
+          "ink_distribution": 0.562796,
+          "ink_distribution_low": 0.442163,
+          "ink_distribution_high": 0.643783
         }
       ]
     },
     "seconds": {
-      "baselines_by_elo_gap": 0.015
+      "baselines_by_elo_gap": 0.013
     }
   }
 }

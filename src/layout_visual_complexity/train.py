@@ -24,6 +24,7 @@ import pandas as pd
 
 from layout_visual_complexity.evaluate import FeatureMethod, HeadMethod, Method
 from layout_visual_complexity.evaluation import calibration, metrics
+from layout_visual_complexity.evaluation.model import WINSORISE
 from layout_visual_complexity.evaluation.vit_head import HeadSettings
 from layout_visual_complexity.logs import logger
 from layout_visual_complexity.ranking.dataset import Dataset, read_dataset
@@ -50,6 +51,8 @@ class TrainSettings:
         tokens: A token set (the folder of `lvc embed`), for the local ViT head.
         head: How the local ViT head is trained.
         regularisation: The pairwise logistic model's C: smaller is stronger.
+        winsorise: The pairwise model clips each feature to its training pages' quantiles at this share and at one
+            minus it (0.01: the 1st and 99th percentiles), in training and when it scores pages; 0 doesn't clip.
         leave_out: Manuscripts left out, by id: their pages, and every judgment that touches them.
         ensemble: Rankers trained before (`lvc train` folders), by the names the ensemble gives them; their training
             pages must be the same.
@@ -61,8 +64,8 @@ class TrainSettings:
         bins: Bins of the predicted probability in the calibration table.
         fit_bound: Pages whose out-of-fold z-score lies beyond this, in absolute value, in any of the calibration's
             evaluations, are left out of the fits of the scales and the Elo scale, with every judgment touching
-            them: a linear model extrapolates on a page whose features lie far outside those it was trained on (a
-            diagram whose lines run every way), and one such page would set a scale alone.
+            them: one page scored far from the others would set a scale alone. The pairwise model's clipped
+            features keep its pages within reach; the bound guards the fits from any method that doesn't.
     """
 
     dataset: Path
@@ -72,6 +75,7 @@ class TrainSettings:
     tokens: Path | None = None
     head: HeadSettings = field(default_factory=HeadSettings)
     regularisation: float = 1.0
+    winsorise: float = WINSORISE
     leave_out: list[str] = field(default_factory=list)
     ensemble: dict[str, Path] = field(default_factory=dict)
     files: dict[str, str] = field(default_factory=dict)
@@ -150,6 +154,7 @@ def train_member(
         tokens=settings.tokens,
         head=settings.head,
         regularisation=settings.regularisation,
+        winsorise=settings.winsorise,
         jobs=1,
     )
     kind = FeatureMethod if settings.features else HeadMethod

@@ -1,37 +1,37 @@
 {
   "command": "report",
-  "started": "2026-11-14T06:22:06+00:00",
-  "ended": "2026-11-14T06:22:07+00:00",
+  "started": "2026-11-15T09:19:46+00:00",
+  "ended": "2026-11-15T09:19:47+00:00",
   "inputs": [
     {
       "path": "build/evaluate/colour/by_elo_gap.tsv",
-      "sha256": "63dbb17d39a04552158c3f2ea0f2dda60643988cfc1ea05453ca61753190e375",
+      "sha256": "34211a96e28c9ae627c9ca24824c5548a040432d61e834af59b124e3f5da63ae",
       "bytes": 735
     },
     {
       "path": "build/evaluate/colour/metrics.tsv",
-      "sha256": "169442c60d5de204f2e1d89e42573bba167c6cf2ecf1dbdf4e25e3e04bf413a4",
+      "sha256": "d0b3c16e77a4359094544ce8dee3405cccbda4356792c8792e54b6b964657fbd",
       "bytes": 541
     },
     {
       "path": "build/evaluate/colour/manifest.json",
-      "sha256": "aab95e3c5582adcf7edc5cea4764996902a4fb8fb6d4a3a874023312607ea88f",
-      "bytes": 9315
+      "sha256": "046f19f4b388bebb6f054a11548c24f5766acbe294b2d706ecedb87625d25c38",
+      "bytes": 9308
     },
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
-      "sha256": "59782a5158994706e32de5e9cb806a3e99fb1a030f80c9a7e505f8ed1691af21",
+      "sha256": "6de02cf79026efd8e70a84e3bda8ac24d4f978ad7578a2bd08bcb469475ce68f",
       "bytes": 735
     },
     {
       "path": "build/evaluate/geometry/metrics.tsv",
-      "sha256": "a344aa858f054a9270e5ffa67ec7d72015a5ec477faa235a6d3f6e70ebd43ee2",
+      "sha256": "f3caf808cc849ed1ae9b5ed813c0acf8d2535816055bcfa599425f1621d8b074",
       "bytes": 539
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "340fc53c747ff4cc5393959ec043fb44288a8ecbf0ab268cbd7354ecdce98208",
-      "bytes": 13397
+      "sha256": "bdb87a1e6516098ef69e149da6efdb3e3c77e287c777bb4508ce8e05853b9044",
+      "bytes": 13409
     },
     {
       "path": "build/evaluate/vit/by_elo_gap.tsv",
@@ -50,48 +50,48 @@
     },
     {
       "path": "build/evaluate/ensemble/by_elo_gap.tsv",
-      "sha256": "50072af82f24a6954aace94ee9e78cceefbb2fa4e99baa38b405069a2a85a471",
+      "sha256": "90e2c499da6283af1138c3f1e5af970e57cfc0eeaf793e920cb519d1faa516d4",
       "bytes": 735
     },
     {
       "path": "build/evaluate/ensemble/metrics.tsv",
-      "sha256": "57a0f86d3db0acc0fa993a6a52f2aac78316517ea69e83133268efacaee7a3df",
+      "sha256": "e191598168277e285c85966f249114db272af00368045c5cc8f0c23a54bb8ff7",
       "bytes": 539
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "0383426efa10545091743e81133245eb2f22c891bcfaa40b86f1ba758f474070",
-      "bytes": 12963
+      "sha256": "12b7b6667bc19196b4962ade939080f291d37aab4c3111facd8a056c7966b67e",
+      "bytes": 12962
     },
     {
       "path": "build/evaluate/colour/by_elo_gap.tsv",
-      "sha256": "63dbb17d39a04552158c3f2ea0f2dda60643988cfc1ea05453ca61753190e375",
+      "sha256": "34211a96e28c9ae627c9ca24824c5548a040432d61e834af59b124e3f5da63ae",
       "bytes": 735
     },
     {
       "path": "build/evaluate/colour/metrics.tsv",
-      "sha256": "169442c60d5de204f2e1d89e42573bba167c6cf2ecf1dbdf4e25e3e04bf413a4",
+      "sha256": "d0b3c16e77a4359094544ce8dee3405cccbda4356792c8792e54b6b964657fbd",
       "bytes": 541
     },
     {
       "path": "build/evaluate/colour/manifest.json",
-      "sha256": "aab95e3c5582adcf7edc5cea4764996902a4fb8fb6d4a3a874023312607ea88f",
-      "bytes": 9315
+      "sha256": "046f19f4b388bebb6f054a11548c24f5766acbe294b2d706ecedb87625d25c38",
+      "bytes": 9308
     },
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
-      "sha256": "59782a5158994706e32de5e9cb806a3e99fb1a030f80c9a7e505f8ed1691af21",
+      "sha256": "6de02cf79026efd8e70a84e3bda8ac24d4f978ad7578a2bd08bcb469475ce68f",
       "bytes": 735
     },
     {
       "path": "build/evaluate/geometry/metrics.tsv",
-      "sha256": "a344aa858f054a9270e5ffa67ec7d72015a5ec477faa235a6d3f6e70ebd43ee2",
+      "sha256": "f3caf808cc849ed1ae9b5ed813c0acf8d2535816055bcfa599425f1621d8b074",
       "bytes": 539
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "340fc53c747ff4cc5393959ec043fb44288a8ecbf0ab268cbd7354ecdce98208",
-      "bytes": 13397
+      "sha256": "bdb87a1e6516098ef69e149da6efdb3e3c77e287c777bb4508ce8e05853b9044",
+      "bytes": 13409
     },
     {
       "path": "build/evaluate/vit/by_elo_gap.tsv",
@@ -110,18 +110,18 @@
     },
     {
       "path": "build/evaluate/ensemble/by_elo_gap.tsv",
-      "sha256": "50072af82f24a6954aace94ee9e78cceefbb2fa4e99baa38b405069a2a85a471",
+      "sha256": "90e2c499da6283af1138c3f1e5af970e57cfc0eeaf793e920cb519d1faa516d4",
       "bytes": 735
     },
     {
       "path": "build/evaluate/ensemble/metrics.tsv",
-      "sha256": "57a0f86d3db0acc0fa993a6a52f2aac78316517ea69e83133268efacaee7a3df",
+      "sha256": "e191598168277e285c85966f249114db272af00368045c5cc8f0c23a54bb8ff7",
       "bytes": 539
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "0383426efa10545091743e81133245eb2f22c891bcfaa40b86f1ba758f474070",
-      "bytes": 12963
+      "sha256": "12b7b6667bc19196b4962ade939080f291d37aab4c3111facd8a056c7966b67e",
+      "bytes": 12962
     }
   ],
   "outputs": [
@@ -184,7 +184,15 @@
     "levels": {},
     "alone": [],
     "reference_column": "",
-    "colour_pages": []
+    "colour_pages": [],
+    "score_run": null,
+    "catalogue": null,
+    "profiles": [],
+    "collection": "manuscripts",
+    "catalogue_credit": "",
+    "thumbnail_size": 400,
+    "named": [],
+    "min_lines": 0
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -206,7 +214,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
+  "commit": "01298e25c9fb0281e54e9a0ed7ac14beab07268e-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "accuracy_by_elo_gap": {
@@ -217,18 +225,18 @@
           "reference": 0.61133,
           "reference_low": 0.553414,
           "reference_high": 0.674677,
-          "colour": 0.499993,
-          "colour_low": 0.433695,
-          "colour_high": 0.544034,
-          "geometry": 0.551481,
-          "geometry_low": 0.494161,
-          "geometry_high": 0.620947,
+          "colour": 0.488642,
+          "colour_low": 0.42328,
+          "colour_high": 0.529619,
+          "geometry": 0.538117,
+          "geometry_low": 0.483926,
+          "geometry_high": 0.608387,
           "vit": 0.537361,
           "vit_low": 0.487572,
           "vit_high": 0.596288,
-          "ensemble": 0.542784,
-          "ensemble_low": 0.485264,
-          "ensemble_high": 0.600663
+          "ensemble": 0.538764,
+          "ensemble_low": 0.476978,
+          "ensemble_high": 0.594879
         },
         {
           "gap": "100-200",
@@ -236,18 +244,18 @@
           "reference": 0.796688,
           "reference_low": 0.759575,
           "reference_high": 0.85075,
-          "colour": 0.464729,
-          "colour_low": 0.405111,
-          "colour_high": 0.527126,
-          "geometry": 0.626432,
-          "geometry_low": 0.569416,
-          "geometry_high": 0.70116,
+          "colour": 0.461843,
+          "colour_low": 0.403248,
+          "colour_high": 0.527878,
+          "geometry": 0.624015,
+          "geometry_low": 0.561815,
+          "geometry_high": 0.685288,
           "vit": 0.632048,
           "vit_low": 0.573733,
           "vit_high": 0.693336,
-          "ensemble": 0.656319,
-          "ensemble_low": 0.600852,
-          "ensemble_high": 0.720319
+          "ensemble": 0.667335,
+          "ensemble_low": 0.609443,
+          "ensemble_high": 0.726246
         },
         {
           "gap": "200-300",
@@ -255,18 +263,18 @@
           "reference": 0.915344,
           "reference_low": 0.893005,
           "reference_high": 0.953155,
-          "colour": 0.47597,
-          "colour_low": 0.398397,
-          "colour_high": 0.547028,
-          "geometry": 0.787292,
-          "geometry_low": 0.725239,
-          "geometry_high": 0.842047,
+          "colour": 0.476891,
+          "colour_low": 0.402083,
+          "colour_high": 0.547347,
+          "geometry": 0.790435,
+          "geometry_low": 0.725558,
+          "geometry_high": 0.845452,
           "vit": 0.808951,
           "vit_low": 0.726968,
           "vit_high": 0.864547,
-          "ensemble": 0.831851,
-          "ensemble_low": 0.77408,
-          "ensemble_high": 0.882095
+          "ensemble": 0.82808,
+          "ensemble_low": 0.762273,
+          "ensemble_high": 0.878747
         },
         {
           "gap": "300-400",
@@ -274,18 +282,18 @@
           "reference": 0.908824,
           "reference_low": 0.837633,
           "reference_high": 0.948723,
-          "colour": 0.508447,
-          "colour_low": 0.424407,
-          "colour_high": 0.606627,
-          "geometry": 0.853169,
-          "geometry_low": 0.751339,
-          "geometry_high": 0.906698,
+          "colour": 0.497585,
+          "colour_low": 0.412538,
+          "colour_high": 0.597738,
+          "geometry": 0.864077,
+          "geometry_low": 0.77748,
+          "geometry_high": 0.916582,
           "vit": 0.878851,
           "vit_low": 0.828114,
           "vit_high": 0.935432,
-          "ensemble": 0.870892,
-          "ensemble_low": 0.780665,
-          "ensemble_high": 0.914101
+          "ensemble": 0.890076,
+          "ensemble_low": 0.812383,
+          "ensemble_high": 0.931974
         },
         {
           "gap": ">=400",
@@ -293,18 +301,18 @@
           "reference": 0.953114,
           "reference_low": 0.934285,
           "reference_high": 0.979258,
-          "colour": 0.598299,
-          "colour_low": 0.49787,
-          "colour_high": 0.681139,
-          "geometry": 0.940802,
-          "geometry_low": 0.91933,
-          "geometry_high": 0.972755,
+          "colour": 0.590765,
+          "colour_low": 0.488661,
+          "colour_high": 0.674822,
+          "geometry": 0.940091,
+          "geometry_low": 0.920037,
+          "geometry_high": 0.970757,
           "vit": 0.945944,
           "vit_low": 0.92157,
           "vit_high": 0.975616,
-          "ensemble": 0.953185,
-          "ensemble_low": 0.936398,
-          "ensemble_high": 0.979654
+          "ensemble": 0.950846,
+          "ensemble_low": 0.933175,
+          "ensemble_high": 0.979063
         },
         {
           "gap": "overall",
@@ -312,18 +320,18 @@
           "reference": 0.812007,
           "reference_low": 0.782028,
           "reference_high": 0.836214,
-          "colour": 0.509726,
-          "colour_low": 0.465864,
-          "colour_high": 0.54987,
-          "geometry": 0.723675,
-          "geometry_low": 0.679826,
-          "geometry_high": 0.752685,
+          "colour": 0.503338,
+          "colour_low": 0.458956,
+          "colour_high": 0.542606,
+          "geometry": 0.720414,
+          "geometry_low": 0.674894,
+          "geometry_high": 0.748563,
           "vit": 0.730137,
           "vit_low": 0.689683,
           "vit_high": 0.76136,
-          "ensemble": 0.742301,
-          "ensemble_low": 0.699953,
-          "ensemble_high": 0.767298
+          "ensemble": 0.743054,
+          "ensemble_low": 0.700565,
+          "ensemble_high": 0.767106
         },
         {
           "gap": "srocc",
@@ -331,23 +339,23 @@
           "reference": 0.890535,
           "reference_low": NaN,
           "reference_high": NaN,
-          "colour": 0.138975,
-          "colour_low": 0.029019,
-          "colour_high": 0.240144,
-          "geometry": 0.751235,
-          "geometry_low": 0.677634,
-          "geometry_high": 0.803791,
+          "colour": 0.146245,
+          "colour_low": 0.035195,
+          "colour_high": 0.247939,
+          "geometry": 0.75957,
+          "geometry_low": 0.69086,
+          "geometry_high": 0.810827,
           "vit": 0.784495,
           "vit_low": 0.725238,
           "vit_high": 0.827712,
-          "ensemble": 0.818944,
-          "ensemble_low": 0.767109,
-          "ensemble_high": 0.856341
+          "ensemble": 0.821409,
+          "ensemble_low": 0.767275,
+          "ensemble_high": 0.85996
         }
       ]
     },
     "seconds": {
-      "accuracy_by_elo_gap": 0.435
+      "accuracy_by_elo_gap": 0.208
     }
   }
 }

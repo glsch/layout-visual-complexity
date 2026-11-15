@@ -1,67 +1,67 @@
 {
   "command": "report",
-  "started": "2026-11-14T06:22:53+00:00",
-  "ended": "2026-11-14T06:22:55+00:00",
+  "started": "2026-11-15T09:20:14+00:00",
+  "ended": "2026-11-15T09:20:16+00:00",
   "inputs": [
     {
       "path": "build/evaluate/line_texture/by_elo_gap.tsv",
-      "sha256": "da177d74b00fcb98b36ca24f0098b4e5e85e0b0d707bc7d462e3e95d6e32a233",
+      "sha256": "f2fbd36d8373e07116254bc386e7c2d7f86e2ba93d71111eee3082ca83ea1df6",
       "bytes": 735
     },
     {
       "path": "build/evaluate/line_texture/metrics.tsv",
-      "sha256": "f884ee680cc3db3ff6f8cd4679c0a76ae71d9080f1afcdf63dd5202b0b133f5b",
+      "sha256": "1fe8fa7660413c2780bbe9c951d28697636805307b45ef5b4488fc5bc14addcb",
       "bytes": 539
     },
     {
       "path": "build/evaluate/line_texture/manifest.json",
-      "sha256": "5da8175e2e1847558d660fb6ebaae601c04fddaaf5ba1730c51770f3821cc0f3",
-      "bytes": 8538
+      "sha256": "681941215935dce87bed971fc1a042411129b2e8666324e82588a39137b77695",
+      "bytes": 8539
     },
     {
       "path": "build/evaluate/colour/by_elo_gap.tsv",
-      "sha256": "63dbb17d39a04552158c3f2ea0f2dda60643988cfc1ea05453ca61753190e375",
+      "sha256": "34211a96e28c9ae627c9ca24824c5548a040432d61e834af59b124e3f5da63ae",
       "bytes": 735
     },
     {
       "path": "build/evaluate/colour/metrics.tsv",
-      "sha256": "169442c60d5de204f2e1d89e42573bba167c6cf2ecf1dbdf4e25e3e04bf413a4",
+      "sha256": "d0b3c16e77a4359094544ce8dee3405cccbda4356792c8792e54b6b964657fbd",
       "bytes": 541
     },
     {
       "path": "build/evaluate/colour/manifest.json",
-      "sha256": "aab95e3c5582adcf7edc5cea4764996902a4fb8fb6d4a3a874023312607ea88f",
-      "bytes": 9315
+      "sha256": "046f19f4b388bebb6f054a11548c24f5766acbe294b2d706ecedb87625d25c38",
+      "bytes": 9308
     },
     {
       "path": "build/evaluate/geometry_colour/by_elo_gap.tsv",
-      "sha256": "ea69a601497577919bcfc2a46a4d1615c2a37d755004b132dc63f28a21bfd7ed",
+      "sha256": "5fddebcfc4e90237b4140d61ab33e0037f247bdeac6218e312cf6992bec02744",
       "bytes": 735
     },
     {
       "path": "build/evaluate/geometry_colour/metrics.tsv",
-      "sha256": "e6c7390f7bac4fcb07508b7ff2ee815c165c1a4690317184f9e280188b9fd3c2",
+      "sha256": "1b802a2d960625bb67bfb8d1587c91cdc0135a4f1c5c53f883ae7962875e16b9",
       "bytes": 539
     },
     {
       "path": "build/evaluate/geometry_colour/manifest.json",
-      "sha256": "b1ff6af9b6ce87736d3fea6ab843323aae69b6df2a3a1830582c858f1b66d792",
-      "bytes": 10802
+      "sha256": "c6be7066d802273d7ef535099dc7a210ed872b0800dea98c7e17688b829c8ae3",
+      "bytes": 10796
     },
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
-      "sha256": "59782a5158994706e32de5e9cb806a3e99fb1a030f80c9a7e505f8ed1691af21",
+      "sha256": "6de02cf79026efd8e70a84e3bda8ac24d4f978ad7578a2bd08bcb469475ce68f",
       "bytes": 735
     },
     {
       "path": "build/evaluate/geometry/metrics.tsv",
-      "sha256": "a344aa858f054a9270e5ffa67ec7d72015a5ec477faa235a6d3f6e70ebd43ee2",
+      "sha256": "f3caf808cc849ed1ae9b5ed813c0acf8d2535816055bcfa599425f1621d8b074",
       "bytes": 539
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "340fc53c747ff4cc5393959ec043fb44288a8ecbf0ab268cbd7354ecdce98208",
-      "bytes": 13397
+      "sha256": "bdb87a1e6516098ef69e149da6efdb3e3c77e287c777bb4508ce8e05853b9044",
+      "bytes": 13409
     },
     {
       "path": "build/ranking/scores.tsv",
@@ -70,43 +70,43 @@
     },
     {
       "path": "build/evaluate/line_texture/hits.tsv",
-      "sha256": "b312b37a599fbc34e64e9bc0f690fda955074220ad01f421a4f2343ace7c1a9f",
+      "sha256": "5b8282d48836ad2d96ae61eb2f80e4e7dd858788cf5b9ca4d634e4683cdf3358",
       "bytes": 403018
     },
     {
       "path": "build/evaluate/line_texture/scores.tsv",
-      "sha256": "12b9c7535d4addc36b6c911212e6209615217dcf17f7961b7189eb42dcbde2dd",
-      "bytes": 19058
+      "sha256": "c9791f09b40c296f75a6d577000a1a74118cb1f4b9fa4fea4b0435bb823f755b",
+      "bytes": 19033
     },
     {
       "path": "build/evaluate/colour/hits.tsv",
-      "sha256": "01ae31a0f9b9c244fe7f049cb911894ba846c3ebcb2d38a453a92a75fdf6dfc1",
+      "sha256": "d0b9a8d9b85d56b3572d8abe0bfe4860c9f54cfddb5f59fd57c8c55e93d6b123",
       "bytes": 403018
     },
     {
       "path": "build/evaluate/colour/scores.tsv",
-      "sha256": "c449cc3fbca063e581e323eae051f830a2a9db74ef6575b93d7b7ec7bc67e0d4",
-      "bytes": 19038
+      "sha256": "3f08a07b953ddee4b1e6d0b91b5c7c26e850760ac36671569f3c2bdbc4715768",
+      "bytes": 19040
     },
     {
       "path": "build/evaluate/geometry_colour/hits.tsv",
-      "sha256": "30ec6949ce10ddfcc95c92a693c0d649f4eaf409507628ec9595020c2c100973",
+      "sha256": "d8e90993ae9d906310271a17abe3c959a58bb859564ca27cb6902d88df8af33d",
       "bytes": 403018
     },
     {
       "path": "build/evaluate/geometry_colour/scores.tsv",
-      "sha256": "926ea3d92ed132cc92e024e65762dc50ecee31ddb8c9f3ad9c7119a5afb148af",
-      "bytes": 19047
+      "sha256": "5620f3781dbf3a9ac30a55ff62640982f81c09acfd1d55807211e961398d7282",
+      "bytes": 19046
     },
     {
       "path": "build/evaluate/geometry/hits.tsv",
-      "sha256": "020f3ea05c940bbcf55dd93e97bf9ff8e0f52088107267f9ef0533f13dd12424",
+      "sha256": "bd2de061848e506f444917edef92de8160802b8983090185fee53c250cadeb8d",
       "bytes": 403018
     },
     {
       "path": "build/evaluate/geometry/scores.tsv",
-      "sha256": "bfaa96d1b551bd569c71decac99eb10d111b996ee07befa254a4a6cb96a48593",
-      "bytes": 19051
+      "sha256": "38c0e8ae5feae7d15be396d03d92b57e70fc40ba9222e393f97130b6d36b1176",
+      "bytes": 19053
     }
   ],
   "outputs": [
@@ -175,7 +175,15 @@
     "levels": {},
     "alone": [],
     "reference_column": "",
-    "colour_pages": []
+    "colour_pages": [],
+    "score_run": null,
+    "catalogue": null,
+    "profiles": [],
+    "collection": "manuscripts",
+    "catalogue_credit": "",
+    "thumbnail_size": 400,
+    "named": [],
+    "min_lines": 0
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -197,7 +205,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
+  "commit": "01298e25c9fb0281e54e9a0ed7ac14beab07268e-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "colour_by_elo_gap": {
@@ -208,15 +216,15 @@
           "reference": 0.61133,
           "reference_low": 0.553414,
           "reference_high": 0.674677,
-          "line_texture": 0.524573,
-          "line_texture_low": 0.472744,
-          "line_texture_high": 0.58769,
-          "colour": 0.499993,
-          "colour_low": 0.433695,
-          "colour_high": 0.544034,
-          "geometry_colour": 0.543496,
-          "geometry_colour_low": 0.487982,
-          "geometry_colour_high": 0.610733
+          "line_texture": 0.527828,
+          "line_texture_low": 0.477102,
+          "line_texture_high": 0.593113,
+          "colour": 0.488642,
+          "colour_low": 0.42328,
+          "colour_high": 0.529619,
+          "geometry_colour": 0.554457,
+          "geometry_colour_low": 0.50241,
+          "geometry_colour_high": 0.618459
         },
         {
           "row": "100-200",
@@ -224,15 +232,15 @@
           "reference": 0.796688,
           "reference_low": 0.759575,
           "reference_high": 0.85075,
-          "line_texture": 0.573363,
-          "line_texture_low": 0.493697,
-          "line_texture_high": 0.616548,
-          "colour": 0.464729,
-          "colour_low": 0.405111,
-          "colour_high": 0.527126,
-          "geometry_colour": 0.621799,
-          "geometry_colour_low": 0.560374,
-          "geometry_colour_high": 0.692336
+          "line_texture": 0.573176,
+          "line_texture_low": 0.49384,
+          "line_texture_high": 0.611093,
+          "colour": 0.461843,
+          "colour_low": 0.403248,
+          "colour_high": 0.527878,
+          "geometry_colour": 0.611908,
+          "geometry_colour_low": 0.552405,
+          "geometry_colour_high": 0.680254
         },
         {
           "row": "200-300",
@@ -240,15 +248,15 @@
           "reference": 0.915344,
           "reference_low": 0.893005,
           "reference_high": 0.953155,
-          "line_texture": 0.731304,
-          "line_texture_low": 0.659123,
-          "line_texture_high": 0.790739,
-          "colour": 0.47597,
-          "colour_low": 0.398397,
-          "colour_high": 0.547028,
-          "geometry_colour": 0.766558,
-          "geometry_colour_low": 0.69572,
-          "geometry_colour_high": 0.827286
+          "line_texture": 0.723334,
+          "line_texture_low": 0.655613,
+          "line_texture_high": 0.786173,
+          "colour": 0.476891,
+          "colour_low": 0.402083,
+          "colour_high": 0.547347,
+          "geometry_colour": 0.760055,
+          "geometry_colour_low": 0.679568,
+          "geometry_colour_high": 0.817775
         },
         {
           "row": "300-400",
@@ -256,15 +264,15 @@
           "reference": 0.908824,
           "reference_low": 0.837633,
           "reference_high": 0.948723,
-          "line_texture": 0.751514,
-          "line_texture_low": 0.63414,
-          "line_texture_high": 0.810169,
-          "colour": 0.508447,
-          "colour_low": 0.424407,
-          "colour_high": 0.606627,
-          "geometry_colour": 0.85028,
-          "geometry_colour_low": 0.75107,
-          "geometry_colour_high": 0.904446
+          "line_texture": 0.737978,
+          "line_texture_low": 0.62107,
+          "line_texture_high": 0.7953,
+          "colour": 0.497585,
+          "colour_low": 0.412538,
+          "colour_high": 0.597738,
+          "geometry_colour": 0.85436,
+          "geometry_colour_low": 0.745653,
+          "geometry_colour_high": 0.910054
         },
         {
           "row": ">=400",
@@ -272,15 +280,15 @@
           "reference": 0.953114,
           "reference_low": 0.934285,
           "reference_high": 0.979258,
-          "line_texture": 0.819069,
-          "line_texture_low": 0.758874,
-          "line_texture_high": 0.908214,
-          "colour": 0.598299,
-          "colour_low": 0.49787,
-          "colour_high": 0.681139,
-          "geometry_colour": 0.90577,
-          "geometry_colour_low": 0.874826,
-          "geometry_colour_high": 0.96239
+          "line_texture": 0.825538,
+          "line_texture_low": 0.761477,
+          "line_texture_high": 0.919652,
+          "colour": 0.590765,
+          "colour_low": 0.488661,
+          "colour_high": 0.674822,
+          "geometry_colour": 0.935362,
+          "geometry_colour_low": 0.911196,
+          "geometry_colour_high": 0.966932
         },
         {
           "row": "overall",
@@ -288,15 +296,15 @@
           "reference": 0.812007,
           "reference_low": 0.782028,
           "reference_high": 0.836214,
-          "line_texture": 0.652714,
-          "line_texture_low": 0.605041,
-          "line_texture_high": 0.686255,
-          "colour": 0.509726,
-          "colour_low": 0.465864,
-          "colour_high": 0.54987,
-          "geometry_colour": 0.707937,
-          "geometry_colour_low": 0.661904,
-          "geometry_colour_high": 0.740849
+          "line_texture": 0.648115,
+          "line_texture_low": 0.599415,
+          "line_texture_high": 0.68535,
+          "colour": 0.503338,
+          "colour_low": 0.458956,
+          "colour_high": 0.542606,
+          "geometry_colour": 0.712221,
+          "geometry_colour_low": 0.666216,
+          "geometry_colour_high": 0.743147
         },
         {
           "row": "srocc",
@@ -304,15 +312,15 @@
           "reference": 0.890535,
           "reference_low": NaN,
           "reference_high": NaN,
-          "line_texture": 0.590015,
-          "line_texture_low": 0.508218,
-          "line_texture_high": 0.656457,
-          "colour": 0.138975,
-          "colour_low": 0.029019,
-          "colour_high": 0.240144,
-          "geometry_colour": 0.744193,
-          "geometry_colour_low": 0.664271,
-          "geometry_colour_high": 0.798877
+          "line_texture": 0.57224,
+          "line_texture_low": 0.480537,
+          "line_texture_high": 0.65067,
+          "colour": 0.146245,
+          "colour_low": 0.035195,
+          "colour_high": 0.247939,
+          "geometry_colour": 0.754205,
+          "geometry_colour_low": 0.677917,
+          "geometry_colour_high": 0.806752
         },
         {
           "row": "accuracy_within",
@@ -320,15 +328,15 @@
           "reference": 0.7864709782660496,
           "reference_low": 0.7247166937879571,
           "reference_high": 0.8576727892499983,
-          "line_texture": 0.5559294669124241,
-          "line_texture_low": 0.48390435027595724,
-          "line_texture_high": 0.6563416105974736,
-          "colour": 0.4780676039326993,
-          "colour_low": 0.40070985462367725,
-          "colour_high": 0.5433758809525405,
-          "geometry_colour": 0.6237732133766489,
-          "geometry_colour_low": 0.5501003203782048,
-          "geometry_colour_high": 0.7093721883948673
+          "line_texture": 0.5538603426205644,
+          "line_texture_low": 0.47584515055262117,
+          "line_texture_high": 0.6718547746230626,
+          "colour": 0.4662153886826912,
+          "colour_low": 0.38713337397940295,
+          "colour_high": 0.5270433765106708,
+          "geometry_colour": 0.6460493714900934,
+          "geometry_colour_low": 0.5611394223018962,
+          "geometry_colour_high": 0.7272599368314271
         },
         {
           "row": "srocc_within",
@@ -336,15 +344,15 @@
           "reference": NaN,
           "reference_low": NaN,
           "reference_high": NaN,
-          "line_texture": 0.340307510268952,
-          "line_texture_low": 0.20412544474608485,
-          "line_texture_high": 0.4511546380092744,
-          "colour": -0.019954820264508802,
-          "colour_low": -0.1224945899030774,
-          "colour_high": 0.09466989623591653,
-          "geometry_colour": 0.5397371903550525,
-          "geometry_colour_low": 0.4280041397961554,
-          "geometry_colour_high": 0.6410612681792043
+          "line_texture": 0.3083417620987848,
+          "line_texture_low": 0.1837677493345547,
+          "line_texture_high": 0.4219779974731397,
+          "colour": -0.008184055643244812,
+          "colour_low": -0.11303721439466632,
+          "colour_high": 0.11040191544685066,
+          "geometry_colour": 0.5667412531792898,
+          "geometry_colour_low": 0.458413143166727,
+          "geometry_colour_high": 0.6568315013761095
         },
         {
           "row": "added_accuracy",
@@ -358,9 +366,9 @@
           "colour": NaN,
           "colour_low": NaN,
           "colour_high": NaN,
-          "geometry_colour": -0.015737630000000006,
-          "geometry_colour_low": -0.03429952995029842,
-          "geometry_colour_high": 0.0028023301701275488
+          "geometry_colour": -0.008193440000000007,
+          "geometry_colour_low": -0.021884208066684487,
+          "geometry_colour_high": 0.005563402720199151
         },
         {
           "row": "added_srocc",
@@ -374,9 +382,9 @@
           "colour": NaN,
           "colour_low": NaN,
           "colour_high": NaN,
-          "geometry_colour": -0.0070419266778898315,
-          "geometry_colour_low": -0.031705167532181014,
-          "geometry_colour_high": 0.020126919246032413
+          "geometry_colour": -0.0053653505294583015,
+          "geometry_colour_low": -0.030256592987642376,
+          "geometry_colour_high": 0.02111242400814432
         },
         {
           "row": "added_accuracy_within",
@@ -390,9 +398,9 @@
           "colour": NaN,
           "colour_low": NaN,
           "colour_high": NaN,
-          "geometry_colour": -0.03518277780094669,
-          "geometry_colour_low": -0.06272570587896731,
-          "geometry_colour_high": 0.007581595631725121
+          "geometry_colour": -0.016033228330808974,
+          "geometry_colour_low": -0.05114517919991364,
+          "geometry_colour_high": 0.016434512876922963
         },
         {
           "row": "added_srocc_within",
@@ -406,14 +414,14 @@
           "colour": NaN,
           "colour_low": NaN,
           "colour_high": NaN,
-          "geometry_colour": -0.008944786943576033,
-          "geometry_colour_low": -0.057677262527422536,
-          "geometry_colour_high": 0.04039505070683397
+          "geometry_colour": -0.016636856149354617,
+          "geometry_colour_low": -0.058267656963653616,
+          "geometry_colour_high": 0.020249960453111695
         }
       ]
     },
     "seconds": {
-      "colour_by_elo_gap": 1.476
+      "colour_by_elo_gap": 1.411
     }
   }
 }

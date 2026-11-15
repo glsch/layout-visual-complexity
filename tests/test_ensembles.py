@@ -1,6 +1,7 @@
 """Ensembles of evaluations, the per-fold hits and z-scores `lvc evaluate` keeps, paired comparisons read back from
 them, the local ViT head evaluated on tokens, learning curves, and `lvc train`."""
 
+import json
 from pathlib import Path
 
 import numpy as np
@@ -41,8 +42,14 @@ def test_each_folds_scores_are_z_scored_by_its_training_pages(tmp_path: Path, da
 
 
 def test_the_hits_of_each_fold_are_kept_and_compare_in_pairs(tmp_path: Path, dataset_folder: Path) -> None:
-    first = evaluate(tmp_path, dataset_folder, "signal", features=True, families="signal")
-    second = evaluate(tmp_path, dataset_folder, "other", features=True, families="other")
+    # Unclipped: the signal grows from one manuscript to the next, so a fold's test pages lie beyond its training
+    # pages' range, where clipped features would tie them all.
+    first = evaluate(tmp_path, dataset_folder, "signal", features=True, families="signal", winsorise=0.0)
+    second = evaluate(tmp_path, dataset_folder, "other", features=True, families="other", winsorise=0.0)
+    model = json.loads((first / "model.json").read_text())
+    assert "low" not in model and "low" in json.loads(
+        (evaluate(tmp_path, dataset_folder, "clipped", features=True, families="signal") / "model.json").read_text()
+    )
     hits = pd.read_csv(first / "hits.tsv", sep="\t")
     folds = pd.read_csv(first / "folds.tsv", sep="\t")
     assert len(hits) == folds["test"].sum() and set(hits["hit"]) <= {0.0, 0.5, 1.0}
