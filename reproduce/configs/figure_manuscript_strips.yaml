@@ -1,0 +1,3 @@
+# Every one of Crux's 23 manuscripts as a strip of its pages coloured by score, one row each, for the appendix.
+name: figure_manuscript_strips
+outputs: [manuscript_strips]

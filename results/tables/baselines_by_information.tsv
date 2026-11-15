@@ -1,14 +1,14 @@
 level	evaluation	label	alone	accuracy	low	high	srocc	srocc_low	srocc_high
-Trivial	ink_coverage	Ink coverage alone	False	0.539712	0.485709	0.578079	0.086578	-0.045256	0.214162
-Trivial	text_lines	Number of text lines	False	0.591451	0.537684	0.628585	0.279078	0.151799	0.404629
-Trivial	trivial	Both together	False	0.583822	0.533399	0.619606	0.218421	0.080307	0.350503
-Image only	generic	Generic image measures	False	0.609157	0.563068	0.645085	0.392507	0.269048	0.499128
-Image only	kyle_davidson	Kyle–Davidson as published	False	0.592640	0.543230	0.626367	0.431091	0.309377	0.528363
-Ink	ink_distribution	Ink distribution	False	0.641574	0.593552	0.676524	0.554986	0.437785	0.633357
-Colour	line_texture	Line texture as published	False	0.652714	0.605041	0.686255	0.590015	0.508218	0.656457
-Colour	colour	Real colour	False	0.509726	0.465864	0.549870	0.138975	0.029019	0.240144
-Layout	geometry	Geometry	False	0.723675	0.679826	0.752685	0.751235	0.677634	0.803791
-Layout	geometry_layout	Geometry with Layout	False	0.714445	0.669470	0.743352	0.735137	0.664044	0.789211
-Learned	mean_token	Linear model on the mean ViT token	False	0.623678	0.580208	0.651572	0.497977	0.383625	0.595057
+Trivial	ink_coverage	Ink coverage alone	False	0.538879	0.484402	0.577692	0.086137	-0.045988	0.213579
+Trivial	text_lines	Number of text lines	False	0.593006	0.539082	0.631661	0.279036	0.151587	0.404094
+Trivial	trivial	Both together	False	0.585198	0.534401	0.621185	0.217278	0.080756	0.349653
+Image only	generic	Generic image measures	False	0.600118	0.555736	0.635714	0.403498	0.285448	0.513177
+Image only	kyle_davidson	Kyle–Davidson as published	False	0.596131	0.547668	0.628210	0.439447	0.321703	0.535524
+Ink	ink_distribution	Ink distribution	False	0.644215	0.599514	0.682333	0.562796	0.442163	0.643783
+Colour	line_texture	Line texture as published	False	0.648115	0.599415	0.685350	0.572240	0.480537	0.650670
+Colour	colour	Real colour	False	0.503338	0.458956	0.542606	0.146245	0.035195	0.247939
+Layout	geometry	Geometry	False	0.720414	0.674894	0.748563	0.759570	0.690860	0.810827
+Layout	geometry_layout	Geometry with Layout	False	0.712552	0.672400	0.742013	0.740911	0.669759	0.796531
+Learned	mean_token	Linear model on the mean ViT token	False	0.612736	0.570398	0.639555	0.433895	0.321851	0.533147
 Learned	vit	Local ViT head	False	0.730137	0.689683	0.761360	0.784495	0.725238	0.827712
-Learned	ensemble	Ensemble (geometry and ViT)	False	0.742301	0.699953	0.767298	0.818944	0.767109	0.856341
+Learned	ensemble	Ensemble (geometry and ViT)	False	0.743054	0.700565	0.767106	0.821409	0.767275	0.859960

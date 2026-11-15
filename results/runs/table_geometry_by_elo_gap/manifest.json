@@ -1,37 +1,37 @@
 {
   "command": "report",
-  "started": "2026-11-14T06:21:37+00:00",
-  "ended": "2026-11-14T06:21:37+00:00",
+  "started": "2026-11-15T09:17:18+00:00",
+  "ended": "2026-11-15T09:17:18+00:00",
   "inputs": [
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
-      "sha256": "59782a5158994706e32de5e9cb806a3e99fb1a030f80c9a7e505f8ed1691af21",
+      "sha256": "6de02cf79026efd8e70a84e3bda8ac24d4f978ad7578a2bd08bcb469475ce68f",
       "bytes": 735
     },
     {
       "path": "build/evaluate/geometry/metrics.tsv",
-      "sha256": "a344aa858f054a9270e5ffa67ec7d72015a5ec477faa235a6d3f6e70ebd43ee2",
+      "sha256": "f3caf808cc849ed1ae9b5ed813c0acf8d2535816055bcfa599425f1621d8b074",
       "bytes": 539
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "340fc53c747ff4cc5393959ec043fb44288a8ecbf0ab268cbd7354ecdce98208",
-      "bytes": 13397
+      "sha256": "bdb87a1e6516098ef69e149da6efdb3e3c77e287c777bb4508ce8e05853b9044",
+      "bytes": 13409
     },
     {
       "path": "build/evaluate/geometry_layout/by_elo_gap.tsv",
-      "sha256": "67c1244b75a71f583f49384e505d7c954765644065a57eaa4c4a8fe9a5463120",
+      "sha256": "456bcfbb88717810965215f4ed8bd36c1f17f1da0869cc479a3f7fe992625a89",
       "bytes": 735
     },
     {
       "path": "build/evaluate/geometry_layout/metrics.tsv",
-      "sha256": "9eb4d3e88a7b115464d5dc0ac93c0d895591981cdd9b31185c9e6f6259b3c485",
+      "sha256": "359701510a41f562bf4f0cdb3c4edc18cb0ff853d47b06819980b30476c6c21c",
       "bytes": 539
     },
     {
       "path": "build/evaluate/geometry_layout/manifest.json",
-      "sha256": "ffdf0ecdf24ee20675ab84fa9d9e232d0f5e1af1fd14c361c5b587f9a41c52dd",
-      "bytes": 10594
+      "sha256": "1dc048bb7abde9add8eb060cafe92ce32a61b69fcf3b374e600a884afd6d06de",
+      "bytes": 10588
     }
   ],
   "outputs": [
@@ -87,7 +87,15 @@
     "levels": {},
     "alone": [],
     "reference_column": "",
-    "colour_pages": []
+    "colour_pages": [],
+    "score_run": null,
+    "catalogue": null,
+    "profiles": [],
+    "collection": "manuscripts",
+    "catalogue_credit": "",
+    "thumbnail_size": 400,
+    "named": [],
+    "min_lines": 0
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -109,7 +117,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
+  "commit": "01298e25c9fb0281e54e9a0ed7ac14beab07268e-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "geometry_by_elo_gap": {
@@ -120,12 +128,12 @@
           "reference": 0.61133,
           "reference_low": 0.553414,
           "reference_high": 0.674677,
-          "geometry": 0.551481,
-          "geometry_low": 0.494161,
-          "geometry_high": 0.620947,
-          "geometry_layout": 0.534263,
-          "geometry_layout_low": 0.475327,
-          "geometry_layout_high": 0.605326
+          "geometry": 0.538117,
+          "geometry_low": 0.483926,
+          "geometry_high": 0.608387,
+          "geometry_layout": 0.529344,
+          "geometry_layout_low": 0.474375,
+          "geometry_layout_high": 0.593091
         },
         {
           "gap": "100-200",
@@ -133,12 +141,12 @@
           "reference": 0.796688,
           "reference_low": 0.759575,
           "reference_high": 0.85075,
-          "geometry": 0.626432,
-          "geometry_low": 0.569416,
-          "geometry_high": 0.70116,
-          "geometry_layout": 0.634915,
-          "geometry_layout_low": 0.578927,
-          "geometry_layout_high": 0.708823
+          "geometry": 0.624015,
+          "geometry_low": 0.561815,
+          "geometry_high": 0.685288,
+          "geometry_layout": 0.620896,
+          "geometry_layout_low": 0.566052,
+          "geometry_layout_high": 0.68865
         },
         {
           "gap": "200-300",
@@ -146,12 +154,12 @@
           "reference": 0.915344,
           "reference_low": 0.893005,
           "reference_high": 0.953155,
-          "geometry": 0.787292,
-          "geometry_low": 0.725239,
-          "geometry_high": 0.842047,
-          "geometry_layout": 0.770649,
-          "geometry_layout_low": 0.711885,
-          "geometry_layout_high": 0.832937
+          "geometry": 0.790435,
+          "geometry_low": 0.725558,
+          "geometry_high": 0.845452,
+          "geometry_layout": 0.778735,
+          "geometry_layout_low": 0.718665,
+          "geometry_layout_high": 0.84086
         },
         {
           "gap": "300-400",
@@ -159,12 +167,12 @@
           "reference": 0.908824,
           "reference_low": 0.837633,
           "reference_high": 0.948723,
-          "geometry": 0.853169,
-          "geometry_low": 0.751339,
-          "geometry_high": 0.906698,
-          "geometry_layout": 0.846609,
-          "geometry_layout_low": 0.743446,
-          "geometry_layout_high": 0.90309
+          "geometry": 0.864077,
+          "geometry_low": 0.77748,
+          "geometry_high": 0.916582,
+          "geometry_layout": 0.855024,
+          "geometry_layout_low": 0.757812,
+          "geometry_layout_high": 0.912194
         },
         {
           "gap": ">=400",
@@ -172,12 +180,12 @@
           "reference": 0.953114,
           "reference_low": 0.934285,
           "reference_high": 0.979258,
-          "geometry": 0.940802,
-          "geometry_low": 0.91933,
-          "geometry_high": 0.972755,
-          "geometry_layout": 0.924267,
-          "geometry_layout_low": 0.897671,
-          "geometry_layout_high": 0.964914
+          "geometry": 0.940091,
+          "geometry_low": 0.920037,
+          "geometry_high": 0.970757,
+          "geometry_layout": 0.935214,
+          "geometry_layout_low": 0.906008,
+          "geometry_layout_high": 0.967594
         },
         {
           "gap": "overall",
@@ -185,12 +193,12 @@
           "reference": 0.812007,
           "reference_low": 0.782028,
           "reference_high": 0.836214,
-          "geometry": 0.723675,
-          "geometry_low": 0.679826,
-          "geometry_high": 0.752685,
-          "geometry_layout": 0.714445,
-          "geometry_layout_low": 0.66947,
-          "geometry_layout_high": 0.743352
+          "geometry": 0.720414,
+          "geometry_low": 0.674894,
+          "geometry_high": 0.748563,
+          "geometry_layout": 0.712552,
+          "geometry_layout_low": 0.6724,
+          "geometry_layout_high": 0.742013
         },
         {
           "gap": "srocc",
@@ -198,17 +206,17 @@
           "reference": 0.890535,
           "reference_low": NaN,
           "reference_high": NaN,
-          "geometry": 0.751235,
-          "geometry_low": 0.677634,
-          "geometry_high": 0.803791,
-          "geometry_layout": 0.735137,
-          "geometry_layout_low": 0.664044,
-          "geometry_layout_high": 0.789211
+          "geometry": 0.75957,
+          "geometry_low": 0.69086,
+          "geometry_high": 0.810827,
+          "geometry_layout": 0.740911,
+          "geometry_layout_low": 0.669759,
+          "geometry_layout_high": 0.796531
         }
       ]
     },
     "seconds": {
-      "geometry_by_elo_gap": 0.027
+      "geometry_by_elo_gap": 0.008
     }
   }
 }

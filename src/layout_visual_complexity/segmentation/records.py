@@ -46,7 +46,9 @@ class Status:
 
 @dataclass
 class PageRecord:
-    """One page as it goes through the stages."""
+    """One page as it goes through the stages: its segmentation and, when it is scored, its features (`features`,
+    and the families that failed on it, `feature_errors`) and the ViT head's verdict (`vit`: its raw score, the
+    grid and the crop box, and on request the patch scores)."""
 
     page: str
     document: str
@@ -62,6 +64,9 @@ class PageRecord:
     yolo_lines: list[Detection] = field(default_factory=list)
     lines: list[Line] = field(default_factory=list)
     line_map: str | None = None
+    features: dict[str, float] = field(default_factory=dict)
+    feature_errors: dict[str, str] = field(default_factory=dict)
+    vit: dict[str, Any] | None = None
     status: dict[str, Status] = field(default_factory=dict)
     seconds: dict[str, float] = field(default_factory=dict)
 
@@ -92,6 +97,9 @@ class PageRecord:
                 for line in data.get("lines", [])
             ],
             line_map=data.get("line_map"),
+            features={name: float(value) for name, value in (data.get("features") or {}).items()},
+            feature_errors=dict(data.get("feature_errors") or {}),
+            vit=data.get("vit"),
             status={name: Status(**status) for name, status in data.get("status", {}).items()},
             seconds=dict(data.get("seconds", {})),
         )

@@ -1,0 +1,4 @@
+# Crux's 23 manuscripts: the catalogue's facts beside the pages scored, the mean and interquartile range of their
+# predicted scores, and the share of pages with colour beside the catalogue's colours.
+name: table_crux_manuscripts
+outputs: [manuscripts_table]

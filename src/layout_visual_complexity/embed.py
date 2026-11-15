@@ -227,6 +227,9 @@ def report_text(summary: dict[str, Any], layout: Path) -> str:
     def number(value: Any, digits: int = 3) -> str:
         return "–" if value is None else f"{value:,.{digits}f}"
 
+    def share(value: Any) -> str:
+        return "–" if value is None else f"{value:.0%}"
+
     lines = [
         "# Token run",
         "",
@@ -240,8 +243,8 @@ def report_text(summary: dict[str, Any], layout: Path) -> str:
         "in the model.",
         f"- Tokens: {number(summary['tokens_per_page'], 0)} a page at the median; {summary['megabytes']:,.1f} MB in "
         f"`{tokens['cache']}`.",
-        f"- Cores busy: {number(summary['machine'].get('cores_busy'), 2)} of {summary['machine'].get('cores')} on "
-        f"average; the GPU {number(summary['machine'].get('gpu_busy'), 2)} busy on average.",
+        f"- Cores busy: {share(summary['machine'].get('cores_busy'))} of {summary['machine'].get('cores')} on "
+        f"average; the GPU busy {share(summary['machine'].get('gpu_busy'))} of the time on average.",
         "",
         "## Failures",
         "",

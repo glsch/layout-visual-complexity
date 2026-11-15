@@ -1,0 +1,13 @@
+# The ViT head for Crux of Telč's case study, out of sample: trained as train_vit_head.yaml trains it, without the
+# four of Crux's manuscripts that gave the dataset pages (five pages in all), and every judgment touching them.
+dataset: build/dataset
+tokens: build/embed/dataset
+head:
+  hidden: 128
+  epochs: 180
+  learning_rate: 0.002
+  weight_decay: 0.001
+  unit_length: true
+  seed: 20260629
+leave_out: [xiiig10, ie36, ia29a, ia38]
+output: build/train/vit_head_without_crux

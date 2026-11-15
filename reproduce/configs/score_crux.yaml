@@ -1,0 +1,43 @@
+# Crux of Telč's 23 manuscripts, scored out of sample: their leaves (a number, perhaps a word such as `bis`, then
+# recto or verso; flyleaves, covers and spines left out), each fetched at a 2,000-pixel long edge through
+# Manuscriptorium's IIIF services, segmented as the dataset's pages are, and scored by the rankers trained without
+# the four of Crux's manuscripts that gave the dataset pages (train_models_without_crux.yaml). The colour family
+# describes the pages' colour (rubrics, coloured initials) for the case study's table; it doesn't enter the scores.
+# Not part of `make all`: it needs the segment and vit extras, the models in models/ and the network, and three to four
+# hours on an Apple M4 Pro.
+sources:
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/1/AIPDIG-NKCR__I_E_32______15QUM41-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/1/AIPDIG-NKCR__I_G_40______19Y0SQ1-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/B/AIPDIG-NKCR__XIII_E_5____0OJC8HB-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/9/AIPDIG-NKCR__XIII_G_10___32HOQ09-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/3/AIPDIG-NKCR__XI_C_1______0JGOUA3-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/6/AIPDIG-NKCR__I_E_42______08I7M86-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/5/AIPDIG-NKCR__VI_F_21_____1WAWFM5-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/3/AIPDIG-NKCR__XIV_D_24____077XK33-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/7/AIPDIG-NKCR__I_G_11A_____1WEHY87-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/8/AIPDIG-NKCR__XIV_E_31____3SBO218-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/B/AIPDIG-NKCR__XIII_G_18___3APOFFB-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/3/AIPDIG-NKCR__I_F_18______29HNWB3-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/7/AIPDIG-NKCR__XI_C_8______1S9NIG7-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/8/AIPDIG-NKCR__I_E_36______17IIPP8-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/6/AIPDIG-NKCR__I_A_29A_____0P5W1R6-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/1/AIPDIG-NKCR__I_B_7_______1P03Y21-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/6/AIPDIG-NKCR__I_C_16______1FRV8O6-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/4/AIPDIG-NKCR__I_C_29______41RJM54-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/8/AIPDIG-NKCR__I_D_18______0PACVN8-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/8/AIPDIG-NKCR__I_A_38______0SCL208-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/E/AIPDIG-NKCR__I_B_33______2WX05AE-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/B/AIPDIG-NKCR__I_A_41______0HG96MB-cs/
+  - https://collectiones.manuscriptorium.com/assorted/AIPDIG/NKCR__/D/AIPDIG-NKCR__XIII_C_17___2T4E2VD-cs/
+output: build/score/crux
+models: build/train/models_without_crux
+# The rankers that come with the package, trained on every page of the dataset, score the same pages beside them
+# (scores_all_dataset_pages.tsv), to measure what leaving Crux's manuscripts out changes.
+other_models:
+  all_dataset_pages: src/layout_visual_complexity/heads
+inputs:
+  label_filter: '\d+[a-z]*[rv]'
+regions:
+  model: models/medieval-yolov11x.pt
+families: [colour]
+maps: true

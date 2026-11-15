@@ -46,7 +46,7 @@ where = ["src"]
 include = ["layout_visual_complexity*"]
 
 [tool.setuptools.package-data]
-layout_visual_complexity = ["heads/*.npz", "codebooks/*.npz"]
+layout_visual_complexity = ["heads/*.npz", "heads/*.json", "codebooks/*.npz"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

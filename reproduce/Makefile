@@ -24,6 +24,11 @@
 #
 # The colour level (line texture as the article publishes it, and real colour) is measured with the others too; its
 # ensemble with the geometry and ViT rankers needs the ViT's evaluation.
+#
+# The rankers that come with the package (package-models) are the geometry ranker and the ViT head trained on every
+# judgment, with their scales of win probabilities and the Elo scale from the evaluations. Crux of Telč's case study
+# scores its 23 manuscripts with the rankers trained without its manuscripts in the dataset (score-crux, not part of
+# `all`), and draws its figures and tables from that run and the catalogue's facts in crux_manuscripts.tsv.
 
 LVC ?= ../.venv/bin/lvc
 
@@ -41,18 +46,20 @@ RANKING := $(TOP)/build/ranking/scores.tsv
 REPORT := $(RUN) judgments report --config $(CONFIGS)/report.yaml --config $(CONFIGS)
 
 .PHONY: all dataset ranking segment-dataset table-dataset-categories table-reliability figure-position-bias-funnel \
-	figure-comparison-graph figure-elo-violins features-dataset evaluate-geometry evaluate-geometry-layout \
+	figure-comparison-graph figure-elo-score-bands features-dataset evaluate-geometry evaluate-geometry-layout \
 	table-geometry-by-elo-gap table-geometry-feature-hierarchy figure-geometry-feature-correlations \
 	figure-geometry-features-on-page figure-geometry-features-on-schematic-page figure-geometry-feature-families \
-	embed-dataset evaluate-vit evaluate-ensembles head-dataset package-head table-methods-by-elo-gap \
+	embed-dataset evaluate-vit evaluate-ensembles head-dataset package-head train-geometry models-dataset \
+	package-models models-without-crux score-crux table-methods-by-elo-gap \
 	figure-accuracy-by-elo-gap table-paired-differences table-ensembles-by-elo-gap figure-learning-curves-and-calibration \
 	figure-local-complexity-maps codebook-dataset package-codebook features-mean-token evaluate-baselines \
 	evaluate-measures table-baselines-by-elo-gap table-baseline-measures table-baseline-differences \
 	figure-baselines-by-information figure-baselines-by-information-each-measure figure-generic-measure-correlations \
 	evaluate-colour evaluate-colour-measures table-colour-by-elo-gap table-colour-differences table-line-texture-families \
-	table-colour-measures table-within-and-across-manuscripts figure-ink-colour-on-page clean
+	table-colour-measures table-within-and-across-manuscripts figure-ink-colour-on-page figure-manuscript-profiles \
+	figure-manuscript-strips figure-crux-overview table-crux-manuscripts table-crux-readings clean
 
-all: table-dataset-categories table-reliability figure-position-bias-funnel figure-comparison-graph figure-elo-violins \
+all: table-dataset-categories table-reliability figure-position-bias-funnel figure-comparison-graph figure-elo-score-bands \
 	table-geometry-by-elo-gap table-geometry-feature-hierarchy figure-geometry-feature-correlations \
 	figure-geometry-features-on-page figure-geometry-features-on-schematic-page figure-geometry-feature-families \
 	table-methods-by-elo-gap figure-accuracy-by-elo-gap table-paired-differences table-ensembles-by-elo-gap \
@@ -60,7 +67,8 @@ all: table-dataset-categories table-reliability figure-position-bias-funnel figu
 	table-baseline-measures table-baseline-differences figure-baselines-by-information \
 	figure-baselines-by-information-each-measure figure-generic-measure-correlations table-colour-by-elo-gap \
 	table-colour-differences table-line-texture-families table-colour-measures table-within-and-across-manuscripts \
-	figure-ink-colour-on-page
+	figure-ink-colour-on-page figure-manuscript-profiles figure-manuscript-strips figure-crux-overview \
+	table-crux-manuscripts table-crux-readings
 
 # The dataset comes from configs/dataset.yaml's source: a folder in the published structure, or the Zenodo
 # record's DOI. When it is a folder, a change to its files makes the dataset again.
@@ -94,10 +102,10 @@ figure-comparison-graph: $(TOP)/results/figures/comparison_graph.svg
 $(TOP)/results/figures/comparison_graph.svg: $(RANKING) configs/report.yaml configs/figure_comparison_graph.yaml
 	$(REPORT)/figure_comparison_graph.yaml
 
-# The score distributions as violins, and as bands (elo_score_bands), with the same thumbnails.
-figure-elo-violins: $(TOP)/results/figures/elo_score_distributions.svg
-$(TOP)/results/figures/elo_score_distributions.svg: $(RANKING) configs/report.yaml configs/figure_elo_violins.yaml
-	$(REPORT)/figure_elo_violins.yaml
+# The score distributions as bands, with thumbnails of ten pages.
+figure-elo-score-bands: $(TOP)/results/figures/elo_score_bands.svg
+$(TOP)/results/figures/elo_score_bands.svg: $(RANKING) configs/report.yaml configs/figure_elo_score_bands.yaml
+	$(REPORT)/figure_elo_score_bands.yaml
 
 # The features of the dataset's pages, the geometry ranker with and without the Layout features, and their tables
 # and figures.
@@ -192,6 +200,45 @@ $(HEAD): $(TOKENS) $(DATASET) configs/train_vit_head.yaml
 
 package-head: $(HEAD)
 	cp $(HEAD) $(TOP)/src/layout_visual_complexity/heads/dinov2_vits14.npz
+
+# The rankers that come with the package, which lvc score and lvc compare use: the geometry ranker and the head, each
+# trained on every judgment, and their ensemble with equal weights. Their scales of win probabilities are fitted on
+# the evaluations' out-of-fold scores, and the ensemble's Elo scale is the regression of the Elo scores on its
+# evaluation's out-of-fold scores. `make -C reproduce package-models` copies them into the package.
+TRAINED_GEOMETRY := $(TOP)/build/train/geometry/model.json
+MODELS := $(TOP)/build/train/models/ensemble.json
+train-geometry: $(TRAINED_GEOMETRY)
+$(TRAINED_GEOMETRY): $(FEATURES) $(DATASET) configs/train_geometry.yaml
+	$(RUN) train --config $(CONFIGS)/train_geometry.yaml
+
+models-dataset: $(MODELS)
+$(MODELS): $(TRAINED_GEOMETRY) $(HEAD) $(GEOMETRY) $(VIT) $(ENSEMBLE) configs/train_models.yaml
+	$(RUN) train --config $(CONFIGS)/train_models.yaml
+
+package-models: $(MODELS)
+	cp $(addprefix $(TOP)/build/train/models/,ensemble.json geometry.json dinov2_vits14.npz) \
+		$(TOP)/src/layout_visual_complexity/heads/
+
+# Crux of Telč's case study, scored out of sample: the rankers trained without the four of its manuscripts that gave
+# the dataset pages. Scoring its 14,024 leaves isn't part of `all` (it needs the segment and vit extras, the models
+# in models/, the network, and about four hours on an Apple M4 Pro), but the case study's figures and tables are,
+# and make it first if it's missing.
+GEOMETRY_WITHOUT_CRUX := $(TOP)/build/train/geometry_without_crux/model.json
+HEAD_WITHOUT_CRUX := $(TOP)/build/train/vit_head_without_crux/head.npz
+MODELS_WITHOUT_CRUX := $(TOP)/build/train/models_without_crux/ensemble.json
+$(GEOMETRY_WITHOUT_CRUX): $(FEATURES) $(DATASET) configs/train_geometry_without_crux.yaml
+	$(RUN) train --config $(CONFIGS)/train_geometry_without_crux.yaml
+$(HEAD_WITHOUT_CRUX): $(TOKENS) $(DATASET) configs/train_vit_head_without_crux.yaml
+	$(RUN) train --config $(CONFIGS)/train_vit_head_without_crux.yaml
+models-without-crux: $(MODELS_WITHOUT_CRUX)
+$(MODELS_WITHOUT_CRUX): $(GEOMETRY_WITHOUT_CRUX) $(HEAD_WITHOUT_CRUX) $(GEOMETRY) $(VIT) $(ENSEMBLE) \
+		configs/train_models_without_crux.yaml
+	$(RUN) train --config $(CONFIGS)/train_models_without_crux.yaml
+
+SCORE_CRUX := $(TOP)/build/score/crux/scores.tsv
+score-crux: $(SCORE_CRUX)
+$(SCORE_CRUX): $(MODELS_WITHOUT_CRUX) configs/score_crux.yaml
+	$(RUN) score --config $(CONFIGS)/score_crux.yaml
 
 METHODS := $(GEOMETRY) $(VIT) $(ENSEMBLE)
 
@@ -352,6 +399,36 @@ figure-ink-colour-on-page: $(TOP)/results/figures/ink_colour_on_page.svg
 $(TOP)/results/figures/ink_colour_on_page.svg: $(FEATURES) configs/report_features.yaml \
 		configs/figure_ink_colour_on_page.yaml
 	$(FEATURE_REPORT)/figure_ink_colour_on_page.yaml
+
+# Crux of Telč's case study: the profiles of I D 18 and XI C 1, every manuscript's strip, the overview, the table of
+# the 23 manuscripts and the article's readings, from the score run (score-crux) and the catalogue's facts.
+CRUX_REPORT := $(RUN) report --config $(CONFIGS)/report_crux.yaml --config $(CONFIGS)
+CATALOGUE := crux_manuscripts.tsv
+
+figure-manuscript-profiles: $(TOP)/results/figures/manuscript_profile_id18.svg
+$(TOP)/results/figures/manuscript_profile_id18.svg: $(SCORE_CRUX) $(CATALOGUE) configs/report_crux.yaml \
+		configs/figure_manuscript_profiles.yaml
+	$(CRUX_REPORT)/figure_manuscript_profiles.yaml
+
+figure-manuscript-strips: $(TOP)/results/figures/manuscript_strips.svg
+$(TOP)/results/figures/manuscript_strips.svg: $(SCORE_CRUX) $(CATALOGUE) configs/report_crux.yaml \
+		configs/figure_manuscript_strips.yaml
+	$(CRUX_REPORT)/figure_manuscript_strips.yaml
+
+figure-crux-overview: $(TOP)/results/figures/crux_overview.svg
+$(TOP)/results/figures/crux_overview.svg: $(SCORE_CRUX) $(CATALOGUE) configs/report_crux.yaml \
+		configs/figure_crux_overview.yaml
+	$(CRUX_REPORT)/figure_crux_overview.yaml
+
+table-crux-manuscripts: $(TOP)/results/tables/crux_manuscripts.tsv
+$(TOP)/results/tables/crux_manuscripts.tsv: $(SCORE_CRUX) $(CATALOGUE) configs/report_crux.yaml \
+		configs/table_crux_manuscripts.yaml
+	$(CRUX_REPORT)/table_crux_manuscripts.yaml
+
+table-crux-readings: $(TOP)/results/tables/crux_readings.tsv
+$(TOP)/results/tables/crux_readings.tsv: $(SCORE_CRUX) $(CATALOGUE) configs/report_crux.yaml \
+		configs/table_crux_readings.yaml
+	$(CRUX_REPORT)/table_crux_readings.yaml
 
 clean:
 	rm -rf $(TOP)/build/dataset $(TOP)/build/ranking $(TOP)/build/features/dataset $(TOP)/build/evaluate

@@ -1,0 +1,166 @@
+{
+  "command": "report",
+  "started": "2026-11-15T09:23:17+00:00",
+  "ended": "2026-11-15T09:23:18+00:00",
+  "inputs": [
+    {
+      "path": "build/score/crux/scores.tsv",
+      "sha256": "0c3d7df7780a7f59288e2f61fe49dda1f58887e55c39d7ff398916959c2cd86d",
+      "bytes": 2599117
+    },
+    {
+      "path": "build/score/crux/pages.parquet",
+      "sha256": "0c81e966bdf8cc7e8c92f67d5d6e86744e9a8c064553d8f130b43bbb776a5b6d",
+      "bytes": 1064297
+    },
+    {
+      "path": "build/score/crux/features.parquet",
+      "sha256": "ef085b5b001e823d4188bc0258e397784c3ddefc9825bdfe7bde9866427d65d8",
+      "bytes": 9334772
+    },
+    {
+      "path": "reproduce/crux_manuscripts.tsv",
+      "sha256": "81d84ee7301cc6151488e9d141f92231b7c96fba4c206519b49f28ab42969945",
+      "bytes": 2277
+    }
+  ],
+  "outputs": [
+    "results/tables/crux_readings.tsv",
+    "results/tables/crux_readings.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "manuscript_readings"
+    ],
+    "name": "table_crux_readings",
+    "dataset": null,
+    "scores": null,
+    "features": null,
+    "layout": null,
+    "evaluations": {},
+    "shown": [],
+    "labels": {},
+    "colours": {},
+    "comparisons": [],
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": "",
+    "colour_pages": [],
+    "score_run": "build/score/crux",
+    "catalogue": "reproduce/crux_manuscripts.tsv",
+    "profiles": [],
+    "collection": "crux",
+    "catalogue_credit": "Catalogue facts from Dragoun, Ebersonová and Doležalová (2021).",
+    "thumbnail_size": 400,
+    "named": [
+      "id18",
+      "xic1"
+    ],
+    "min_lines": 5
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "01298e25c9fb0281e54e9a0ed7ac14beab07268e-dirty",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "manuscript_readings": {
+      "readings": [
+        {
+          "reading": "Spearman's rho, hands and mean",
+          "value": 0.44009322157603087,
+          "low": 0.033743905617008754,
+          "high": 0.7414776137015471,
+          "manuscripts": 23,
+          "note": ""
+        },
+        {
+          "reading": "Spearman's rho, hands and interquartile range",
+          "value": 0.6276414039387588,
+          "low": 0.21858384279376344,
+          "high": 0.871004210552683,
+          "manuscripts": 23,
+          "note": ""
+        },
+        {
+          "reading": "Interquartile range, composite less homogeneous (mean)",
+          "value": 53.109104181623934,
+          "low": 9.91784916570513,
+          "high": 95.76487109748938,
+          "manuscripts": 22,
+          "note": "composite 13 (mean 161.6, median 133.1), homogeneous 9 (mean 108.5, median 102.4); left out: if18"
+        },
+        {
+          "reading": "Place by interquartile range, id18 (1 the most varied)",
+          "value": 8.0,
+          "low": 7.0,
+          "high": 15.0,
+          "manuscripts": 23,
+          "note": "interquartile range 136.8"
+        },
+        {
+          "reading": "Place by interquartile range, xic1 (1 the most varied)",
+          "value": 1.0,
+          "low": 1.0,
+          "high": 2.0,
+          "manuscripts": 23,
+          "note": "interquartile range 289.5"
+        },
+        {
+          "reading": "Spearman's rho, pages with colour and the catalogue's colours",
+          "value": 0.35358429224494714,
+          "low": -0.12748501564483528,
+          "high": 0.7680983455123156,
+          "manuscripts": 23,
+          "note": ""
+        }
+      ]
+    },
+    "seconds": {
+      "manuscript_readings": 0.606
+    }
+  }
+}

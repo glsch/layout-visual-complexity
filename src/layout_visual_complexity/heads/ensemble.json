@@ -1,0 +1,60 @@
+{
+  "model": "ensemble",
+  "members": {
+    "geometry": {
+      "file": "geometry.json",
+      "sha256": "469c73ea0e569f89e6bce65a2fee21f90fa6e7edf11c2d4202166479d6230d4f",
+      "weight": 0.5,
+      "scale_training": 1.160276686310544,
+      "scale": 0.9133057144177762
+    },
+    "vit": {
+      "file": "dinov2_vits14.npz",
+      "sha256": "8ea32e82910e3b7037359f70060610760096dfbe88b67a00e67e00e0c7ea70cc",
+      "weight": 0.5,
+      "scale_training": 1.1061889542438168,
+      "scale": 0.9845500960286763
+    }
+  },
+  "combined": {
+    "mean": 2.392947100812509e-08,
+    "sd": 0.959613431463558
+  },
+  "scale_training": 1.189591482313142,
+  "scale": 1.0713556341471453,
+  "scales_from": "the evaluations' out-of-fold scores",
+  "trained_on": {
+    "dataset": "build/dataset",
+    "pages": 397,
+    "judgments": 5562,
+    "left_out": []
+  },
+  "elo": {
+    "intercept": 1499.5501381084193,
+    "slope": 167.54067282392768,
+    "correlation": 0.8248534216134538,
+    "elo_mean": 1500.0000000075568,
+    "elo_sd": 200.76302865014492,
+    "score_sd": 0.9884171307440365,
+    "pages": 397
+  },
+  "left_out_of_fits": {
+    "bound": 5.0,
+    "pages": [],
+    "judgments": 0
+  },
+  "calibration": {
+    "geometry": {
+      "evaluation": "build/evaluate/geometry",
+      "scores_sha256": "38c0e8ae5feae7d15be396d03d92b57e70fc40ba9222e393f97130b6d36b1176"
+    },
+    "vit": {
+      "evaluation": "build/evaluate/vit",
+      "scores_sha256": "a79f6fd6e37f786fd690c937d0f4f2c6131f5dfa19e0912e5e693581086ddec0"
+    },
+    "ensemble": {
+      "evaluation": "build/evaluate/ensemble",
+      "scores_sha256": "bf4412e8d32d136846009d059d554ae09e9cc377929393a01fe3575d2729a4af"
+    }
+  }
+}

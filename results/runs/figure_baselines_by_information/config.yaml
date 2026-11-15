@@ -84,3 +84,11 @@ levels:
 alone: []
 reference_column: ''
 colour_pages: []
+score_run: null
+catalogue: null
+profiles: []
+collection: manuscripts
+catalogue_credit: ''
+thumbnail_size: 400
+named: []
+min_lines: 0

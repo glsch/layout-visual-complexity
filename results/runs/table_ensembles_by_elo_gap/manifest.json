@@ -1,87 +1,87 @@
 {
   "command": "report",
-  "started": "2026-11-14T06:22:14+00:00",
-  "ended": "2026-11-14T06:22:14+00:00",
+  "started": "2026-11-15T09:20:03+00:00",
+  "ended": "2026-11-15T09:20:03+00:00",
   "inputs": [
     {
       "path": "build/evaluate/ensemble/by_elo_gap.tsv",
-      "sha256": "50072af82f24a6954aace94ee9e78cceefbb2fa4e99baa38b405069a2a85a471",
+      "sha256": "90e2c499da6283af1138c3f1e5af970e57cfc0eeaf793e920cb519d1faa516d4",
       "bytes": 735
     },
     {
       "path": "build/evaluate/ensemble/metrics.tsv",
-      "sha256": "57a0f86d3db0acc0fa993a6a52f2aac78316517ea69e83133268efacaee7a3df",
+      "sha256": "e191598168277e285c85966f249114db272af00368045c5cc8f0c23a54bb8ff7",
       "bytes": 539
     },
     {
       "path": "build/evaluate/ensemble/manifest.json",
-      "sha256": "0383426efa10545091743e81133245eb2f22c891bcfaa40b86f1ba758f474070",
-      "bytes": 12963
+      "sha256": "12b7b6667bc19196b4962ade939080f291d37aab4c3111facd8a056c7966b67e",
+      "bytes": 12962
     },
     {
       "path": "build/evaluate/ensemble_layout/by_elo_gap.tsv",
-      "sha256": "d0b43a39db3881b4d5d6f7641ad6bd84cddbac7f0f4c513e6835143fdca97723",
+      "sha256": "3b6b33bb963019b5b091b720e5800ff2cb02a11a209e27e2237014948bd88070",
       "bytes": 735
     },
     {
       "path": "build/evaluate/ensemble_layout/metrics.tsv",
-      "sha256": "a2eb72cb1f6689035a56f4802d5707267951bc1bb1ceb8356f40f9df621f75af",
+      "sha256": "59893629f33a75dc03bdc2484a69070fd88f92787c064fb4baaa3b13b88ee6eb",
       "bytes": 539
     },
     {
       "path": "build/evaluate/ensemble_layout/manifest.json",
-      "sha256": "e77190605c546e31eeaf71c54a35be2de9ee0eef65e2ca073179da399b9ea9e9",
-      "bytes": 8981
+      "sha256": "f1b57b0e80006d66492ffe7a83efc1f11a041ba24d67be5063a9c54f5c78bc51",
+      "bytes": 8979
     },
     {
       "path": "build/evaluate/ensemble_fitted/by_elo_gap.tsv",
-      "sha256": "6e275126823ec879053234d7232c9da402b4a80521826c989eef9051c9184e6d",
+      "sha256": "7960b17560277c26aef012ca8e5afe512e3cf39a50d0604c8aaa7c7467006a5c",
       "bytes": 735
     },
     {
       "path": "build/evaluate/ensemble_fitted/metrics.tsv",
-      "sha256": "de85e4a198e993aca9cf615b1184ca80a6dcffcd6afa8892fa8f6c07710c2958",
+      "sha256": "b4735f24689d2c11ef6f80fc78ce07ea2f913d700d6ed52c23dd5add01161575",
       "bytes": 539
     },
     {
       "path": "build/evaluate/ensemble_fitted/manifest.json",
-      "sha256": "3ccb2a6f3054b597e4f9196b219530b18fa194594f518a2ce998239b244a72a7",
-      "bytes": 8963
+      "sha256": "45904c91326caf9086abe164eaccb53535a17bb91e660743657cfe639cc07877",
+      "bytes": 8971
     },
     {
       "path": "build/evaluate/ensemble_layout_fitted/by_elo_gap.tsv",
-      "sha256": "7e5dd7fbc08060acc57e585e1c73f89012498c285934228a6c627c05eecad729",
+      "sha256": "eec0d1225ae044a905d2d95ccf7b6b0f4d2fb0f8822fa8b928f0433ea13c00dd",
       "bytes": 735
     },
     {
       "path": "build/evaluate/ensemble_layout_fitted/metrics.tsv",
-      "sha256": "3b768469edd04aecfd49ddbb145746ba9e5747dbcc819d53c13f36d5940de173",
+      "sha256": "73950b360152f5976e13408826060ac9a7a65efb4e5c940ae867dcd51443188c",
       "bytes": 539
     },
     {
       "path": "build/evaluate/ensemble_layout_fitted/manifest.json",
-      "sha256": "217c5a4aeeb81fbe480e154742fa95abbfc4e9114fc7919cea71c19f549b21eb",
-      "bytes": 9076
+      "sha256": "5b68847bc529ea1339e018f65c64bc1407f6dec848a2e54f11f564b6ea40f59c",
+      "bytes": 9075
     },
     {
       "path": "build/evaluate/ensemble_colour/by_elo_gap.tsv",
-      "sha256": "a411ee589ff19b869e51dcbd4091953c9fa19b67796ab0a2b8915ac6e7a84e75",
+      "sha256": "acf8206e734e9aa51e81c6133ec2f94e77c001584f62a7ff89d8142db0687a12",
       "bytes": 735
     },
     {
       "path": "build/evaluate/ensemble_colour/metrics.tsv",
-      "sha256": "1d61ceb5fa7ba3e81a87aa8f16486158ca0aadf99868d74e3304dc6a5a999b46",
+      "sha256": "efc897bb7e80542e49afcb4a3d45f3c555b49fdbab50fcfc2c1024fa68a712e4",
       "bytes": 539
     },
     {
       "path": "build/evaluate/ensemble_colour/manifest.json",
-      "sha256": "377417f49c2769c9951edcc5e81ec05eb3122911678f37de2d9c48d4809859a4",
-      "bytes": 9402
+      "sha256": "d33ed1d2c89bfa4ffba1f12a39a300a0de9b5039a4e95def43df43063c01d25c",
+      "bytes": 9404
     },
     {
       "path": "build/evaluate/geometry/manifest.json",
-      "sha256": "340fc53c747ff4cc5393959ec043fb44288a8ecbf0ab268cbd7354ecdce98208",
-      "bytes": 13397
+      "sha256": "bdb87a1e6516098ef69e149da6efdb3e3c77e287c777bb4508ce8e05853b9044",
+      "bytes": 13409
     },
     {
       "path": "build/evaluate/vit/manifest.json",
@@ -90,13 +90,13 @@
     },
     {
       "path": "build/evaluate/geometry_layout/manifest.json",
-      "sha256": "ffdf0ecdf24ee20675ab84fa9d9e232d0f5e1af1fd14c361c5b587f9a41c52dd",
-      "bytes": 10594
+      "sha256": "1dc048bb7abde9add8eb060cafe92ce32a61b69fcf3b374e600a884afd6d06de",
+      "bytes": 10588
     },
     {
       "path": "build/evaluate/colour/manifest.json",
-      "sha256": "aab95e3c5582adcf7edc5cea4764996902a4fb8fb6d4a3a874023312607ea88f",
-      "bytes": 9315
+      "sha256": "046f19f4b388bebb6f054a11548c24f5766acbe294b2d706ecedb87625d25c38",
+      "bytes": 9308
     }
   ],
   "outputs": [
@@ -162,7 +162,15 @@
     "levels": {},
     "alone": [],
     "reference_column": "",
-    "colour_pages": []
+    "colour_pages": [],
+    "score_run": null,
+    "catalogue": null,
+    "profiles": [],
+    "collection": "manuscripts",
+    "catalogue_credit": "",
+    "thumbnail_size": 400,
+    "named": [],
+    "min_lines": 0
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -184,7 +192,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
+  "commit": "01298e25c9fb0281e54e9a0ed7ac14beab07268e-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "ensembles_by_elo_gap": {
@@ -195,21 +203,21 @@
           "reference": 0.61133,
           "reference_low": 0.553414,
           "reference_high": 0.674677,
-          "ensemble": 0.542784,
-          "ensemble_low": 0.485264,
-          "ensemble_high": 0.600663,
-          "ensemble_layout": 0.541388,
-          "ensemble_layout_low": 0.481826,
-          "ensemble_layout_high": 0.59819,
-          "ensemble_fitted": 0.548411,
-          "ensemble_fitted_low": 0.490842,
-          "ensemble_fitted_high": 0.605615,
-          "ensemble_layout_fitted": 0.541868,
-          "ensemble_layout_fitted_low": 0.483802,
-          "ensemble_layout_fitted_high": 0.608344,
-          "ensemble_colour": 0.533895,
-          "ensemble_colour_low": 0.471605,
-          "ensemble_colour_high": 0.585081
+          "ensemble": 0.538764,
+          "ensemble_low": 0.476978,
+          "ensemble_high": 0.594879,
+          "ensemble_layout": 0.540357,
+          "ensemble_layout_low": 0.481971,
+          "ensemble_layout_high": 0.602122,
+          "ensemble_fitted": 0.53897,
+          "ensemble_fitted_low": 0.478285,
+          "ensemble_fitted_high": 0.596467,
+          "ensemble_layout_fitted": 0.530708,
+          "ensemble_layout_fitted_low": 0.472772,
+          "ensemble_layout_fitted_high": 0.59556,
+          "ensemble_colour": 0.519855,
+          "ensemble_colour_low": 0.458821,
+          "ensemble_colour_high": 0.572936
         },
         {
           "gap": "100-200",
@@ -217,21 +225,21 @@
           "reference": 0.796688,
           "reference_low": 0.759575,
           "reference_high": 0.85075,
-          "ensemble": 0.656319,
-          "ensemble_low": 0.600852,
-          "ensemble_high": 0.720319,
-          "ensemble_layout": 0.654567,
-          "ensemble_layout_low": 0.596783,
-          "ensemble_layout_high": 0.719047,
-          "ensemble_fitted": 0.654395,
-          "ensemble_fitted_low": 0.598575,
-          "ensemble_fitted_high": 0.719349,
-          "ensemble_layout_fitted": 0.646196,
-          "ensemble_layout_fitted_low": 0.587724,
-          "ensemble_layout_fitted_high": 0.714172,
-          "ensemble_colour": 0.599079,
-          "ensemble_colour_low": 0.529703,
-          "ensemble_colour_high": 0.647489
+          "ensemble": 0.667335,
+          "ensemble_low": 0.609443,
+          "ensemble_high": 0.726246,
+          "ensemble_layout": 0.654962,
+          "ensemble_layout_low": 0.598723,
+          "ensemble_layout_high": 0.708433,
+          "ensemble_fitted": 0.658464,
+          "ensemble_fitted_low": 0.600579,
+          "ensemble_fitted_high": 0.717781,
+          "ensemble_layout_fitted": 0.644754,
+          "ensemble_layout_fitted_low": 0.588754,
+          "ensemble_layout_fitted_high": 0.700073,
+          "ensemble_colour": 0.603802,
+          "ensemble_colour_low": 0.537563,
+          "ensemble_colour_high": 0.655192
         },
         {
           "gap": "200-300",
@@ -239,21 +247,21 @@
           "reference": 0.915344,
           "reference_low": 0.893005,
           "reference_high": 0.953155,
-          "ensemble": 0.831851,
-          "ensemble_low": 0.77408,
-          "ensemble_high": 0.882095,
-          "ensemble_layout": 0.818393,
-          "ensemble_layout_low": 0.748096,
-          "ensemble_layout_high": 0.872104,
-          "ensemble_fitted": 0.828518,
-          "ensemble_fitted_low": 0.770722,
-          "ensemble_fitted_high": 0.878824,
-          "ensemble_layout_fitted": 0.809388,
-          "ensemble_layout_fitted_low": 0.742569,
-          "ensemble_layout_fitted_high": 0.866708,
-          "ensemble_colour": 0.764832,
-          "ensemble_colour_low": 0.69109,
-          "ensemble_colour_high": 0.821876
+          "ensemble": 0.82808,
+          "ensemble_low": 0.762273,
+          "ensemble_high": 0.878747,
+          "ensemble_layout": 0.819855,
+          "ensemble_layout_low": 0.748187,
+          "ensemble_layout_high": 0.869729,
+          "ensemble_fitted": 0.826306,
+          "ensemble_fitted_low": 0.761392,
+          "ensemble_fitted_high": 0.874999,
+          "ensemble_layout_fitted": 0.812486,
+          "ensemble_layout_fitted_low": 0.746248,
+          "ensemble_layout_fitted_high": 0.867386,
+          "ensemble_colour": 0.767136,
+          "ensemble_colour_low": 0.692068,
+          "ensemble_colour_high": 0.824743
         },
         {
           "gap": "300-400",
@@ -261,21 +269,21 @@
           "reference": 0.908824,
           "reference_low": 0.837633,
           "reference_high": 0.948723,
-          "ensemble": 0.870892,
-          "ensemble_low": 0.780665,
-          "ensemble_high": 0.914101,
-          "ensemble_layout": 0.856328,
-          "ensemble_layout_low": 0.756813,
-          "ensemble_layout_high": 0.91739,
-          "ensemble_fitted": 0.870178,
-          "ensemble_fitted_low": 0.780005,
-          "ensemble_fitted_high": 0.914101,
-          "ensemble_layout_fitted": 0.854499,
-          "ensemble_layout_fitted_low": 0.753159,
-          "ensemble_layout_fitted_high": 0.914115,
-          "ensemble_colour": 0.779322,
-          "ensemble_colour_low": 0.676186,
-          "ensemble_colour_high": 0.85927
+          "ensemble": 0.890076,
+          "ensemble_low": 0.812383,
+          "ensemble_high": 0.931974,
+          "ensemble_layout": 0.866401,
+          "ensemble_layout_low": 0.770524,
+          "ensemble_layout_high": 0.921277,
+          "ensemble_fitted": 0.889621,
+          "ensemble_fitted_low": 0.812383,
+          "ensemble_fitted_high": 0.931107,
+          "ensemble_layout_fitted": 0.861401,
+          "ensemble_layout_fitted_low": 0.766079,
+          "ensemble_layout_fitted_high": 0.91926,
+          "ensemble_colour": 0.806863,
+          "ensemble_colour_low": 0.715139,
+          "ensemble_colour_high": 0.8688
         },
         {
           "gap": ">=400",
@@ -283,21 +291,21 @@
           "reference": 0.953114,
           "reference_low": 0.934285,
           "reference_high": 0.979258,
-          "ensemble": 0.953185,
-          "ensemble_low": 0.936398,
-          "ensemble_high": 0.979654,
-          "ensemble_layout": 0.954354,
-          "ensemble_layout_low": 0.937596,
-          "ensemble_layout_high": 0.980593,
-          "ensemble_fitted": 0.953185,
-          "ensemble_fitted_low": 0.936398,
-          "ensemble_fitted_high": 0.979654,
-          "ensemble_layout_fitted": 0.953039,
-          "ensemble_layout_fitted_low": 0.934667,
-          "ensemble_layout_fitted_high": 0.979032,
-          "ensemble_colour": 0.933449,
-          "ensemble_colour_low": 0.909483,
-          "ensemble_colour_high": 0.970167
+          "ensemble": 0.950846,
+          "ensemble_low": 0.933175,
+          "ensemble_high": 0.979063,
+          "ensemble_layout": 0.953185,
+          "ensemble_layout_low": 0.936398,
+          "ensemble_layout_high": 0.979654,
+          "ensemble_fitted": 0.949003,
+          "ensemble_fitted_low": 0.929766,
+          "ensemble_fitted_high": 0.977553,
+          "ensemble_layout_fitted": 0.950173,
+          "ensemble_layout_fitted_low": 0.93135,
+          "ensemble_layout_fitted_high": 0.977553,
+          "ensemble_colour": 0.92897,
+          "ensemble_colour_low": 0.904299,
+          "ensemble_colour_high": 0.968493
         },
         {
           "gap": "overall",
@@ -305,21 +313,21 @@
           "reference": 0.812007,
           "reference_low": 0.782028,
           "reference_high": 0.836214,
-          "ensemble": 0.742301,
-          "ensemble_low": 0.699953,
-          "ensemble_high": 0.767298,
-          "ensemble_layout": 0.734456,
-          "ensemble_layout_low": 0.691114,
-          "ensemble_layout_high": 0.760747,
-          "ensemble_fitted": 0.741994,
-          "ensemble_fitted_low": 0.699523,
-          "ensemble_fitted_high": 0.766663,
-          "ensemble_layout_fitted": 0.730609,
-          "ensemble_layout_fitted_low": 0.686641,
-          "ensemble_layout_fitted_high": 0.758067,
-          "ensemble_colour": 0.695689,
-          "ensemble_colour_low": 0.648048,
-          "ensemble_colour_high": 0.723287
+          "ensemble": 0.743054,
+          "ensemble_low": 0.700565,
+          "ensemble_high": 0.767106,
+          "ensemble_layout": 0.735785,
+          "ensemble_layout_low": 0.69212,
+          "ensemble_layout_high": 0.760605,
+          "ensemble_fitted": 0.74002,
+          "ensemble_fitted_low": 0.697803,
+          "ensemble_fitted_high": 0.765026,
+          "ensemble_layout_fitted": 0.728037,
+          "ensemble_layout_fitted_low": 0.685401,
+          "ensemble_layout_fitted_high": 0.754489,
+          "ensemble_colour": 0.695758,
+          "ensemble_colour_low": 0.648129,
+          "ensemble_colour_high": 0.724969
         },
         {
           "gap": "srocc",
@@ -327,21 +335,21 @@
           "reference": 0.890535,
           "reference_low": NaN,
           "reference_high": NaN,
-          "ensemble": 0.818944,
-          "ensemble_low": 0.767109,
-          "ensemble_high": 0.856341,
-          "ensemble_layout": 0.813904,
-          "ensemble_layout_low": 0.760693,
-          "ensemble_layout_high": 0.855013,
-          "ensemble_fitted": 0.816192,
-          "ensemble_fitted_low": 0.762794,
-          "ensemble_fitted_high": 0.85466,
-          "ensemble_layout_fitted": 0.804845,
-          "ensemble_layout_fitted_low": 0.751057,
-          "ensemble_layout_fitted_high": 0.848063,
-          "ensemble_colour": 0.733098,
-          "ensemble_colour_low": 0.658484,
-          "ensemble_colour_high": 0.790143
+          "ensemble": 0.821409,
+          "ensemble_low": 0.767275,
+          "ensemble_high": 0.85996,
+          "ensemble_layout": 0.816164,
+          "ensemble_layout_low": 0.764023,
+          "ensemble_layout_high": 0.855958,
+          "ensemble_fitted": 0.817232,
+          "ensemble_fitted_low": 0.762813,
+          "ensemble_fitted_high": 0.856876,
+          "ensemble_layout_fitted": 0.805971,
+          "ensemble_layout_fitted_low": 0.750585,
+          "ensemble_layout_fitted_high": 0.847819,
+          "ensemble_colour": 0.735198,
+          "ensemble_colour_low": 0.657825,
+          "ensemble_colour_high": 0.795629
         }
       ]
     },

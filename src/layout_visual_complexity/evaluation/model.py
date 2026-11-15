@@ -1,8 +1,10 @@
 """The pairwise logistic model: a page score that is linear in the page's features, fitted on judgments.
 
-Features are standardised on the training pages (missing values filled with the training median). An
-intercept-free, L2-regularised logistic regression is fitted on the differences between the two pages' features,
-each judgment entered in both orders so the model stays symmetric. A page's score is the linear predictor.
+Features are winsorised at the training pages' 1st and 99th percentiles, so a page far outside the training pages
+scores no further than their extremes would, and standardised on the training pages (missing values filled with the
+training median). An intercept-free, L2-regularised logistic regression is fitted on the differences between the two
+pages' features, each judgment entered in both orders so the model stays symmetric. A page's score is the linear
+predictor.
 """
 
 import json
@@ -16,20 +18,28 @@ from sklearn.linear_model import LogisticRegression
 
 from layout_visual_complexity.ranking.reliability import other_image
 
+# The share of the training pages beyond each bound a feature is clipped to: the 1st and 99th percentiles.
+WINSORISE = 0.01
+
 
 @dataclass
 class PairwiseModel:
-    """A fitted model: how to standardise each feature, and its weight."""
+    """A fitted model: how to standardise each feature, and its weight. `low` and `high` are the bounds each feature
+    is clipped to before it is standardised; a model without them doesn't clip."""
 
     columns: list[str]
     centre: np.ndarray
     spread: np.ndarray
     fill: np.ndarray
     weights: np.ndarray
+    low: np.ndarray | None = None
+    high: np.ndarray | None = None
 
     def standardise(self, features: pd.DataFrame) -> np.ndarray:
         values = features.reindex(columns=self.columns).to_numpy(dtype=float)
         values = np.where(np.isfinite(values), values, self.fill)
+        if self.low is not None and self.high is not None:
+            values = np.clip(values, self.low, self.high)
         return (values - self.centre) / self.spread
 
     def scores(self, features: pd.DataFrame) -> pd.Series:
@@ -44,10 +54,13 @@ def difference_matrix(standardised: pd.DataFrame, judgments: pd.DataFrame) -> np
     return chosen - other
 
 
-def fit_pairwise_model(features: pd.DataFrame, judgments: pd.DataFrame, regularisation: float = 1.0) -> PairwiseModel:
+def fit_pairwise_model(
+    features: pd.DataFrame, judgments: pd.DataFrame, regularisation: float = 1.0, winsorise: float = WINSORISE
+) -> PairwiseModel:
     """Fit on `judgments` between the pages of `features` (pages × features, numeric).
 
-    `regularisation` is scikit-learn's C: smaller is stronger.
+    `regularisation` is scikit-learn's C: smaller is stronger. Each feature is clipped to the training pages'
+    `winsorise` and 1 − `winsorise` quantiles, in training and when the model scores pages; 0 doesn't clip.
     """
     if judgments.empty:
         raise ValueError("no training judgments")
@@ -57,7 +70,12 @@ def fit_pairwise_model(features: pd.DataFrame, judgments: pd.DataFrame, regulari
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", RuntimeWarning)
         fill = np.nanmedian(values, axis=0) if len(values) else np.zeros(len(columns))
+        bounds = np.nanquantile(values, [winsorise, 1 - winsorise], axis=0) if winsorise > 0 and len(values) else None
     fill = np.where(np.isfinite(fill), fill, 0.0)
+    low = high = None
+    if bounds is not None:
+        low, high = (np.where(np.isfinite(bound), bound, fill) for bound in bounds)
+        values = np.clip(values, low, high)
     values = np.where(np.isnan(values), fill, values)
     centre = values.mean(axis=0)
     spread = values.std(axis=0)
@@ -68,7 +86,7 @@ def fit_pairwise_model(features: pd.DataFrame, judgments: pd.DataFrame, regulari
     outcome = np.concatenate([np.ones(len(differences)), np.zeros(len(differences))])
     regression = LogisticRegression(fit_intercept=False, C=regularisation, max_iter=1000)
     regression.fit(design, outcome)
-    return PairwiseModel(columns, centre, spread, fill, regression.coef_[0].astype(float))
+    return PairwiseModel(columns, centre, spread, fill, regression.coef_[0].astype(float), low, high)
 
 
 class FeatureMismatch(ValueError):
@@ -111,10 +129,14 @@ class TrainedModel:
         return (raw - self.score_mean) / (self.score_sd if self.score_sd > 0 else 1.0)
 
     def to_dict(self) -> dict:
+        clipped = {}
+        if self.model.low is not None and self.model.high is not None:
+            clipped = {"low": self.model.low.tolist(), "high": self.model.high.tolist()}
         return {
             "model": "pairwise logistic",
             "columns": self.model.columns,
             "families": self.families,
+            **clipped,
             "centre": self.model.centre.tolist(),
             "spread": self.model.spread.tolist(),
             "fill": self.model.fill.tolist(),
@@ -131,6 +153,7 @@ class TrainedModel:
         model = PairwiseModel(
             list(data["columns"]),
             *(np.asarray(data[key], dtype=float) for key in ("centre", "spread", "fill", "weights")),
+            *(np.asarray(data[key], dtype=float) if key in data else None for key in ("low", "high")),
         )
         return cls(
             model,

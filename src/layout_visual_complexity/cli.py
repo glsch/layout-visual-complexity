@@ -47,6 +47,35 @@ def features_command() -> tuple[type, Callable[..., object]]:
     return FeaturesSettings, run_features
 
 
+def score_command() -> tuple[type, Callable[..., object]]:
+    """The score command's settings and what runs it, imported when needed."""
+    from layout_visual_complexity.score import ScoreSettings, run_score
+
+    return ScoreSettings, run_score
+
+
+def compare_command() -> tuple[type, Callable[..., object]]:
+    """The compare command's settings and what runs it, imported when needed."""
+    from layout_visual_complexity.compare import CompareSettings, run_compare
+
+    return CompareSettings, run_compare
+
+
+def models_command() -> tuple[type, Callable[..., object]]:
+    """The models command's settings (a scoring run's) and what runs it, imported when needed."""
+    from layout_visual_complexity.model_inventory import run_models
+    from layout_visual_complexity.score import ScoreSettings
+
+    return ScoreSettings, run_models
+
+
+def cache_command() -> tuple[type, Callable[..., object]]:
+    """The cache command's settings and what runs it, imported when needed."""
+    from layout_visual_complexity.caches import CacheSettings, run_cache
+
+    return CacheSettings, run_cache
+
+
 def codebook_command() -> tuple[type, Callable[..., object]]:
     """The codebook command's settings and what runs it, imported when needed."""
     from layout_visual_complexity.codebook import CodebookSettings, run_codebook
@@ -103,8 +132,8 @@ def settings_parser(settings: type, flags: tuple[str, ...] = ()) -> ArgumentPars
 
 
 def parser() -> ArgumentParser:
-    """The command line: `lvc judgments import|rank|report`, `lvc segment`, `lvc codebook`, `lvc features`,
-    `lvc embed`, `lvc evaluate`, `lvc train` and `lvc report`."""
+    """The command line: `lvc score`, `lvc compare`, `lvc models`, `lvc cache`, `lvc judgments import|rank|report`,
+    `lvc segment`, `lvc codebook`, `lvc features`, `lvc embed`, `lvc evaluate`, `lvc train` and `lvc report`."""
     top = ArgumentParser(prog="lvc", description=layout_visual_complexity.__doc__)
     top.add_argument("--version", action="version", version=layout_visual_complexity.__version__)
     top.add_argument("--quiet", action="store_true", help="Show only warnings and errors.")
@@ -124,6 +153,28 @@ def parser() -> ArgumentParser:
         help="Sources to segment; they replace the configuration's.",
     )
     commands.add_subcommand("segment", segment, help=first_paragraph(settings.__doc__))
+    settings, _ = score_command()
+    score = settings_parser(settings, flags=("alto", "maps", "profiles", "local_only"))
+    score.add_argument(
+        "given_sources",
+        nargs="*",
+        default=[],
+        metavar="SOURCES",
+        help="Sources to score; they replace the configuration's.",
+    )
+    commands.add_subcommand("score", score, help=first_paragraph(settings.__doc__))
+    settings, _ = compare_command()
+    compare = settings_parser(settings, flags=("alto", "maps", "profiles", "local_only"))
+    compare.add_argument("pages", nargs="*", default=[], metavar="PAGE", help="The two pages: first, then second.")
+    commands.add_subcommand("compare", compare, help=first_paragraph(settings.__doc__))
+    settings, _ = models_command()
+    commands.add_subcommand(
+        "models",
+        settings_parser(settings, flags=("alto", "maps", "profiles", "local_only")),
+        help="The models a scoring run uses: where each is, and whether it is there and the one expected.",
+    )
+    settings, _ = cache_command()
+    commands.add_subcommand("cache", settings_parser(settings), help=first_paragraph(settings.__doc__))
     settings, _ = codebook_command()
     commands.add_subcommand("codebook", settings_parser(settings), help=first_paragraph(settings.__doc__))
     settings, _ = features_command()
@@ -157,12 +208,29 @@ def build(settings: type, values: Namespace | dict) -> object:
 def main(argv: list[str] | None = None) -> int:
     arguments = parser().parse_args(argv)
     logs.setup(logging.WARNING if arguments.quiet else logging.INFO)
-    if arguments.command == "segment":
-        settings, run = segment_command()
-        values = arguments.segment.as_dict()
+    if arguments.command in ("segment", "score"):
+        settings, run = segment_command() if arguments.command == "segment" else score_command()
+        given = arguments[arguments.command]
+        values = given.as_dict()
         if values.pop("given_sources", None):
-            values["sources"] = list(arguments.segment.given_sources)
+            values["sources"] = list(given.given_sources)
         chosen = build(settings, values)
+    elif arguments.command == "compare":
+        settings, run = compare_command()
+        values = arguments.compare.as_dict()
+        pages = values.pop("pages", None) or []
+        if pages:
+            if len(pages) != 2:
+                print("lvc: error: compare takes two pages", file=sys.stderr)
+                return 2
+            values["first"], values["second"] = pages
+        chosen = build(settings, values)
+    elif arguments.command == "models":
+        settings, run = models_command()
+        chosen = build(settings, arguments.models)
+    elif arguments.command == "cache":
+        settings, run = cache_command()
+        chosen = build(settings, arguments.cache)
     elif arguments.command == "codebook":
         settings, run = codebook_command()
         chosen = build(settings, arguments.codebook)

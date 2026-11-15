@@ -1,0 +1,6 @@
+# The profiles of I D 18 and XI C 1 (the article's Figures 4 and 5), each as one figure: in the package's design (the
+# strip, the scores with their rolling median, the three most and least complex pages) and in the article's (the
+# strip above the six pages, labelled complex and plain).
+name: figure_manuscript_profiles
+outputs: [manuscript_profiles, manuscript_profile_strips]
+profiles: [id18, xic1]

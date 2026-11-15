@@ -11,6 +11,7 @@ from collections.abc import Iterable
 from typing import Literal
 
 import matplotlib
+import numpy as np
 from matplotlib.axes import Axes
 from matplotlib.colors import Colormap, LinearSegmentedColormap, to_hex, to_rgb
 from matplotlib.figure import Figure
@@ -46,6 +47,7 @@ HUE_CLASS_COLOURS = {
 NEGATIVE, MIDDLE, POSITIVE = "#0072B2", "#F7F7F7", "#D55E00"
 HIGHLIGHT = "#D55E00"
 TEXT, SECONDARY, GRID = "#1F2328", "#57606A", "#E6E9ED"
+GRID_DARK = "#AEB4BB"  # whiskers drawn behind marks
 PAPER, PAPER_EDGE, WRITING = "#F4EBD9", "#C9B99A", "#5C4E40"
 SANS, MONOSPACE = "DejaVu Sans", "DejaVu Sans Mono"
 LINE = 0.75  # points
@@ -127,6 +129,13 @@ def correlation_colormap() -> Colormap:
 def score_colormap() -> Colormap:
     """Elo and predicted scores."""
     return matplotlib.colormaps["viridis"]
+
+
+def count_colormap() -> Colormap:
+    """Counts, such as a manuscript's hands: plasma without its palest yellow, apart from the scores' viridis."""
+    from matplotlib.colors import ListedColormap
+
+    return ListedColormap(matplotlib.colormaps["plasma"](np.linspace(0.0, 0.85, 256)), name="counts")
 
 
 def map_colormap() -> Colormap:

@@ -23,7 +23,7 @@ import pandas as pd
 
 from layout_visual_complexity.evaluation import metrics
 from layout_visual_complexity.evaluation.folds import Fold, FoldSettings, manuscript_folds
-from layout_visual_complexity.evaluation.model import TrainedModel, fit_pairwise_model
+from layout_visual_complexity.evaluation.model import WINSORISE, TrainedModel, fit_pairwise_model
 from layout_visual_complexity.evaluation.protocol import (
     Evaluation,
     FoldScores,
@@ -107,6 +107,8 @@ class EvaluateSettings:
         folds: The folds by manuscript.
         gap_edges: The edges of the bins of the final Elo gap.
         regularisation: The logistic regressions' C (the pairwise model's, the fitted weights'): smaller is stronger.
+        winsorise: The pairwise model clips each feature to its training pages' quantiles at this share and at one
+            minus it (0.01: the 1st and 99th percentiles), in training and when it scores pages; 0 doesn't clip.
         bootstrap: Resamples of the manuscripts for the 95% intervals.
         seed: The seed of the bootstrap and of the learning curves' shares.
         reliability_bins: Bins of the predicted probability in the calibration table.
@@ -132,6 +134,7 @@ class EvaluateSettings:
     folds: FoldSettings = field(default_factory=FoldSettings)
     gap_edges: list[float] = field(default_factory=lambda: list(DEFAULT_GAP_EDGES))
     regularisation: float = 1.0
+    winsorise: float = WINSORISE
     bootstrap: int = 1000
     seed: int = 1
     reliability_bins: int = 10
@@ -155,9 +158,11 @@ def read_ceiling(path: Path) -> tuple[float, float]:
     return reliability, ceiling(reliability)
 
 
-def train(features: pd.DataFrame, judgments: pd.DataFrame, regularisation: float) -> tuple:
+def train(
+    features: pd.DataFrame, judgments: pd.DataFrame, regularisation: float, winsorise: float = WINSORISE
+) -> tuple:
     """The model on every judgment, its scores' mean and spread over the pages, and the scale of win probabilities."""
-    model = fit_pairwise_model(features, judgments, regularisation)
+    model = fit_pairwise_model(features, judgments, regularisation, winsorise)
     raw = model.scores(features)
     mean, sd = float(raw.mean()), float(raw.std(ddof=0))
     z = (raw - mean) / (sd if sd > 0 else 1.0)
@@ -250,7 +255,8 @@ class FeatureMethod(Method):
     def evaluate(
         self, features: pd.DataFrame, folds: list[Fold], elo: pd.Series, protocol: ProtocolSettings
     ) -> Evaluation:
-        fold_scores = pairwise_fold_scores(features, self.judgments, folds, self.settings.regularisation)
+        fold_scores = pairwise_fold_scores(features, self.judgments, folds, self.settings.regularisation,
+                                           self.settings.winsorise)  # fmt: skip
         return evaluate_fold_scores(fold_scores, self.judgments, elo, folds, protocol)
 
     def describe(self) -> str:
@@ -258,10 +264,12 @@ class FeatureMethod(Method):
         return f"Features: `{shown_path(self.settings.features)}`, {self.features.shape[1]} columns of {families}."  # type: ignore[arg-type]
 
     def fold_scores(self, folds: list[Fold], curve: Curve | None) -> FoldScores:
-        return pairwise_fold_scores(self.features, self.judgments, folds, self.settings.regularisation)
+        return pairwise_fold_scores(self.features, self.judgments, folds, self.settings.regularisation,
+                                    self.settings.winsorise)  # fmt: skip
 
     def train(self, output: Path) -> tuple[Path, pd.Series, dict[str, Any]]:
-        model, mean, sd, scale = train(self.features, self.judgments, self.settings.regularisation)
+        model, mean, sd, scale = train(self.features, self.judgments, self.settings.regularisation,
+                                       self.settings.winsorise)  # fmt: skip
         trained = TrainedModel(model, self.table.families, mean, sd, scale, self.settings.regularisation,
                                trained_on(self.settings, self.pages, self.judgments))  # fmt: skip
         z = (model.scores(self.features) - mean) / (sd if sd > 0 else 1.0)
@@ -493,7 +501,7 @@ def run_evaluate(settings: EvaluateSettings) -> dict[str, object]:
     manuscripts = dataset.images.set_index("image")["manuscript"]
     edges = tuple(float(edge) for edge in settings.gap_edges)
     protocol = ProtocolSettings(
-        edges, settings.regularisation, settings.bootstrap, settings.reliability_bins, settings.seed
+        edges, settings.regularisation, settings.bootstrap, settings.reliability_bins, settings.seed, settings.winsorise
     )
     fold = settings.folds
     folds = manuscript_folds(pages, manuscripts, judgments, fold.k, fold.repeats, fold.seed)

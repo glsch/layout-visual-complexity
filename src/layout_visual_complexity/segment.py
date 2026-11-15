@@ -48,8 +48,11 @@ from layout_visual_complexity.segmentation.store import STAGES, page_row, write_
 
 Device = Literal["auto", "cpu", "mps"]
 
+# Seconds between commits of the run's state: a run that is killed keeps what was done until then.
+COMMIT_EVERY = 30.0
+
 # How the CPU's workers are shared among the steps placed on it, when the settings don't say.
-CPU_SHARES = {"folio_box": 1.0, "folio": 0.5, "regions": 1.0, "line_maps": 1.5, "lines": 6.0}
+CPU_SHARES = {"folio_box": 1.0, "folio": 0.5, "regions": 1.0, "line_maps": 1.5, "lines": 6.0, "features": 0.5}
 
 
 @dataclass(frozen=True)
@@ -97,6 +100,33 @@ class SegmentSettings:
     memory_gb: float | None = None
     fetch_threads: int = 8
     ahead: int | None = None
+
+
+class Extension:
+    """What a command built on segmentation adds to its stream, besides its own steps: what it does with each page
+    once every step is done with it, before the page is saved and its image released, and with the run's records at
+    the end. The plain segmentation adds nothing."""
+
+    command = "segment"
+    title = "Segmentation run"
+
+    def page_done(self, record: PageRecord, source: dict[str, Any]) -> None:
+        """A page every step is done with (failed or not)."""
+
+    def finish(
+        self, output: Path, records: list[tuple[PageRecord, str, dict[str, Any]]], summary: dict[str, Any]
+    ) -> list[Path]:
+        """Write what the command adds, from every page's record, status and source in the run's order; add to the
+        summary. Returns the files written."""
+        return []
+
+    def report(self, summary: dict[str, Any]) -> list[str]:
+        """Lines the command adds to the run's report."""
+        return []
+
+    def inputs(self) -> list[Path]:
+        """Files the command reads besides the steps' models, for the run's record."""
+        return []
 
 
 def free_memory_mb() -> float:
@@ -239,9 +269,14 @@ class Progress:
 
 
 def run_segment(
-    settings: SegmentSettings, steps: dict[str, Step] | None = None, transport: httpx2.BaseTransport | None = None
+    settings: SegmentSettings,
+    steps: dict[str, Step] | None = None,
+    transport: httpx2.BaseTransport | None = None,
+    extension: Extension | None = None,
 ) -> dict[str, Any]:
-    """Segment the sources' pages into `output`. Running it again resumes. Returns the run's summary."""
+    """Segment the sources' pages into `output`. Running it again resumes. Returns the run's summary.
+
+    `extension` adds a command's own handling of pages and outputs (`lvc score`); its steps come in `steps`."""
     if not settings.sources:
         raise ValueError("no sources: give manifests, images, folders, lists or a page table")
     began = time.monotonic()
@@ -251,17 +286,23 @@ def run_segment(
     handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
     logger.addHandler(handler)
     try:
-        return _run(settings, steps, transport, began)
+        return _run(settings, steps, transport, began, extension or Extension())
     finally:
         logger.removeHandler(handler)
         handler.close()
 
 
 def _run(
-    settings: SegmentSettings, steps: dict[str, Step] | None, transport: httpx2.BaseTransport | None, began: float
+    settings: SegmentSettings,
+    steps: dict[str, Step] | None,
+    transport: httpx2.BaseTransport | None,
+    began: float,
+    extension: Extension,
 ) -> dict[str, Any]:
     output, cache = Path(settings.output), Path(settings.cache).expanduser()
-    run = Run("segment", settings)
+    run = Run(extension.command, settings)
+    for path in extension.inputs():
+        run.read(path)
     for source in settings.sources:
         if "://" not in source and Path(source).is_file():
             run.read(Path(source))
@@ -269,6 +310,8 @@ def _run(
     for step in steps.values():
         step.cache = cache  # type: ignore[attr-defined]
         step.work = output / ".maps"  # type: ignore[attr-defined]
+    for leftover in (output / ".maps").glob("*.npz"):
+        leftover.unlink(missing_ok=True)  # heatmaps of a run that was killed
     checksums = {}
     for step in steps.values():
         for model in step.models():
@@ -281,6 +324,7 @@ def _run(
     budget = settings.memory_gb * 1024 if settings.memory_gb else free_memory_mb()
     placements = place(steps, settings.device, jobs, budget)
     key = settings_key(steps, checksums, settings.images.long_edge)
+    stages = (*STAGES, *(name for name in steps if name not in STAGES))
 
     with HttpClient(settings.http, transport) as client:
         manifests = Cache(cache / "manifests", ".json")
@@ -306,15 +350,21 @@ def _run(
         alto_info = alto_steps(steps, checksums) if settings.alto else []
         todo_documents = {page.document for page in todo}
 
+        committed = [time.monotonic()]
+
         def on_page(record: PageRecord) -> None:
             assign_lines(record.lines, record.regions)
             if record.line_map:
                 Path(record.line_map).unlink(missing_ok=True)
                 record.line_map = None
+            extension.page_done(record, sources[record.page])
             image = images.pop(record.page, None)
             if image is not None:
                 fetcher.release(image)
             state.save(record, keys[record.page], key, sources[record.page])
+            if time.monotonic() - committed[0] >= COMMIT_EVERY:
+                state.commit()  # what's done survives a run that is killed, not only one stopped
+                committed[0] = time.monotonic()
             progress.add(bool(record.failed))
             slots.release()
             if settings.alto and not record.failed:
@@ -370,13 +420,16 @@ def _run(
             if not (output / "layout" / f"{document}.parquet").is_file():
                 write_document(output, state, key, document)
         order = {page.page: number for number, page in enumerate(pages)}
-        rows = [page_row(record, status, source, key) for record, status, source in state.rows(key)]
-        rows.sort(key=lambda row: (order.get(row["page"], len(order)), row["document"], row["page"]))
-        written = [write_pages(output / "pages.parquet", rows)]
+        found = sorted(state.rows(key), key=lambda item: (order.get(item[0].page, len(order)), item[0].document,
+                                                          item[0].page))  # fmt: skip
+        found = [item for item in found if item[0].page in order]
+        rows = [page_row(record, status, source, key, stages) for record, status, source in found]
+        written = [write_pages(output / "pages.parquet", rows, stages)]
         state.close()
         requests = list(client.records)
 
-    summary = summarize(rows, scheduler.stage_usage(), monitor.summary(), requests, output, settings, todo, began)
+    summary = summarize(rows, scheduler.stage_usage(), monitor.summary(), requests, output, settings, todo, began,
+                        stages)  # fmt: skip
     summary["stopped"] = not finished
     summary["settings_key"] = key
     summary["steps"] = {
@@ -387,8 +440,10 @@ def _run(
         }
         for placement in placements
     }
+    written += extension.finish(output, found, summary)
     report = output / "report.md"
-    report.write_text(report_text(summary), encoding="utf-8")
+    added = "".join(f"{line}\n" for line in extension.report(summary))
+    report.write_text(report_text(summary, extension.title) + added, encoding="utf-8")
     written += [report, *sorted((output / "layout").glob("*.parquet"))]
     run.wrote(written)
     run.summary = summary
@@ -437,6 +492,7 @@ def summarize(
     settings: SegmentSettings,
     todo: list[PageSource],
     began: float,
+    stages: tuple[str, ...] = STAGES,
 ) -> dict[str, Any]:
     """What a run reports: pages done and failed, each stage's pace, how busy the machine was, the store's size,
     and the pages where YOLO's folio box and Otsu's region disagree."""
@@ -444,8 +500,8 @@ def summarize(
     this_run = {page.page for page in todo}
     ran = [row for row in rows if row["page"] in this_run]
     done = [row for row in rows if row["status"] == "done"]
-    stages = {}
-    for stage in STAGES:
+    by_stage = {}
+    for stage in stages:
         if stage != "fetch" and stage not in usage:
             continue  # a step the run didn't have
         seconds = [row[f"{stage}_seconds"] for row in ran if row[f"{stage}_seconds"] is not None]
@@ -463,7 +519,7 @@ def summarize(
                 "peak_memory_per_worker": used.peak_memory,
                 "load_seconds": used.load,
             }
-        stages[stage] = entry
+        by_stage[stage] = entry
     layout_bytes = sum(path.stat().st_size for path in (output / "layout").glob("*.parquet"))
     pages_bytes = (output / "pages.parquet").stat().st_size if (output / "pages.parquet").is_file() else 0
     disagreement = settings.folio.disagreement
@@ -486,7 +542,7 @@ def summarize(
         "failed": [(row["page"], row["status"]) for row in rows if row["status"] != "done"],
         "seconds": wall,
         "pages_per_second": len(ran) / wall if wall else None,
-        "stages": stages,
+        "stages": by_stage,
         "machine": machine,
         "requests": {
             "count": len(requests),
@@ -511,6 +567,10 @@ def summarize(
     }
 
 
+def _share(value: Any) -> str:
+    return "–" if value is None else f"{value:.0%}"
+
+
 def _number(value: Any, digits: int = 2) -> str:
     if value is None:
         return "–"
@@ -519,12 +579,12 @@ def _number(value: Any, digits: int = 2) -> str:
     return f"{value:,.{digits}f}"
 
 
-def report_text(summary: dict[str, Any]) -> str:
+def report_text(summary: dict[str, Any], title: str = "Segmentation run") -> str:
     """The run's report, in Markdown."""
     machine = summary["machine"]
     gib = 2**30
     lines = [
-        "# Segmentation run",
+        f"# {title}",
         "",
         f"- Pages: {summary['pages']:,} in the store, {summary['done']:,} done; this run {summary['pages_this_run']:,}"
         f" pages, {summary['done_this_run']:,} done, in {summary['seconds']:.0f} s"
@@ -532,9 +592,10 @@ def report_text(summary: dict[str, Any]) -> str:
         + (" Stopped before the end." if summary["stopped"] else ""),
         f"- Regions {summary['regions']:,}, YOLO's lines {summary['yolo_lines']:,},"
         f" Kraken's lines {summary['lines']:,}.",
-        f"- Cores busy: {_number(machine.get('cores_busy'))} of {machine.get('cores')} on average, "
-        f"{_number(machine.get('cores_busy_peak'))} at the busiest interval.",
-        f"- GPU busy: {_number(machine.get('gpu_busy'))} on average, {_number(machine.get('gpu_busy_peak'))} at most.",
+        f"- Cores busy: {_share(machine.get('cores_busy'))} of {machine.get('cores')} on average, "
+        f"{_share(machine.get('cores_busy_peak'))} at the busiest interval.",
+        f"- GPU busy: {_share(machine.get('gpu_busy'))} of the time on average, {_share(machine.get('gpu_busy_peak'))}"
+        " at most.",
         f"- Memory in use: {_number((machine.get('memory_peak') or 0) / gib, 1)} GB at most "
         f"({_number((machine.get('memory_before') or 0) / gib, 1)} GB before the run, "
         f"{_number((machine.get('memory_total') or 0) / gib, 0)} GB in all).",

@@ -1,0 +1,16 @@
+# The rankers that come with the package (make -C reproduce package-models copies them there): the geometry ranker
+# and the ViT head, each trained on every judgment, with equal weights. Their scales of win probabilities are fitted
+# on the evaluations' out-of-fold scores, so that lvc compare's probabilities hold on new pages; the Elo scale of
+# the ensemble's scores is the regression of the Elo scores on the ensemble evaluation's out-of-fold scores.
+dataset: build/dataset
+ensemble:
+  geometry: build/train/geometry
+  vit: build/train/vit_head
+files:
+  geometry: geometry.json
+  vit: dinov2_vits14.npz
+calibration:
+  geometry: build/evaluate/geometry
+  vit: build/evaluate/vit
+  ensemble: build/evaluate/ensemble
+output: build/train/models

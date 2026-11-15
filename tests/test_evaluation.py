@@ -15,6 +15,7 @@ from layout_visual_complexity.evaluation import (
     metrics,
     paired_comparison,
 )
+from layout_visual_complexity.evaluation.model import TrainedModel
 
 
 def synthetic(pages: int = 60, judgments: int = 3000, seed: int = 0):
@@ -86,6 +87,26 @@ def test_the_pairwise_model_is_symmetric_and_fills_missing_values() -> None:
     assert np.isfinite(model.scores(features)).all()
     swapped = judgments.assign(left=judgments["right"], right=judgments["left"])
     assert np.allclose(fit_pairwise_model(features, swapped).weights, model.weights)
+
+
+def test_the_pairwise_model_clips_each_feature_to_its_training_pages_percentiles(tmp_path) -> None:
+    _, features, _, _, _, _, judgments = synthetic(judgments=500)
+    model = fit_pairwise_model(features, judgments)
+    assert model.low == pytest.approx(features.quantile(0.01).to_numpy())
+    assert model.high == pytest.approx(features.quantile(0.99).to_numpy())
+    far = features.iloc[:2].copy()
+    far.iloc[0, 0], far.iloc[1, 0] = 1e6, -1e6
+    at_bounds = far.copy()
+    at_bounds.iloc[0, 0], at_bounds.iloc[1, 0] = model.high[0], model.low[0]
+    assert model.scores(far).to_numpy() == pytest.approx(model.scores(at_bounds).to_numpy())
+    unclipped = fit_pairwise_model(features, judgments, winsorise=0.0)
+    assert unclipped.low is None and abs(unclipped.scores(far).iloc[0]) > 1e4
+
+    trained = TrainedModel(model, [], 0.0, 1.0, 1.0, 1.0, {})
+    loaded = TrainedModel.load(trained.save(tmp_path / "model.json"))
+    assert loaded.model.scores(far).to_numpy() == pytest.approx(model.scores(far).to_numpy())
+    without_bounds = {key: value for key, value in trained.to_dict().items() if key not in ("low", "high")}
+    assert TrainedModel.from_dict(without_bounds).model.low is None
 
 
 def test_accuracy_counts_ties_half() -> None:
