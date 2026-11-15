@@ -1,7 +1,9 @@
 # Shared by Crux of Telč's case study's tables and figures: the score run of its 23 manuscripts (score_crux.yaml), its
 # catalogue facts (reproduce/crux_manuscripts.tsv), where the outputs go, the resamples and the credits. Each table or
-# figure adds its own configuration.
+# figure adds its own configuration. Leaves on which Kraken finds fewer than five text lines, blank or nearly blank,
+# are left out (they stay in the run's scores.tsv); the captions say how many.
 score_run: build/score/crux
+min_lines: 5
 catalogue: reproduce/crux_manuscripts.tsv
 collection: crux
 output: results

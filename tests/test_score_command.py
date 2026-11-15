@@ -186,8 +186,11 @@ def test_pages_with_too_few_lines_are_left_out_and_counted_in_the_captions(
     pages.loc[pages["page"].isin(["msa_2r", "msb_1r"]), "lines"] = 2  # the fake Kraken finds six on every page
     pages.to_parquet(store)
     kept = load_collection(tmp_path / "run", None, 50, 1, min_lines=5)
-    assert kept.blank == 2 and len(kept.scores) == 5 and not kept.scores["page"].isin(["msa_2r", "msb_1r"]).any()
+    assert len(kept.scores) == 5 and not kept.scores["page"].isin(["msa_2r", "msb_1r"]).any()
+    assert sum(kept.blank.values()) == 2 and set(kept.blank.values()) == {1}
     assert "The 2 leaves on which Kraken finds fewer than 5 text lines" in scale_sentence(kept)
+    document = kept.scores.loc[kept.scores["page"].str.startswith("msa"), "document"].iloc[0]
+    assert "Its 1 leaf on which Kraken finds fewer than 5" in scale_sentence(kept, document)
     assert "left out" not in scale_sentence(load_collection(tmp_path / "run", None, 50, 1, min_lines=2))
 
 

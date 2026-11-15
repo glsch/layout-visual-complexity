@@ -1,0 +1,7 @@
+reading	value	low	high	manuscripts	note
+Spearman's rho, hands and mean	0.440093	0.033744	0.741478	23	
+Spearman's rho, hands and interquartile range	0.627641	0.218584	0.871004	23	
+Interquartile range, composite less homogeneous (mean)	53.109104	9.917849	95.764871	22	composite 13 (mean 161.6, median 133.1), homogeneous 9 (mean 108.5, median 102.4); left out: if18
+Place by interquartile range, id18 (1 the most varied)	8.000000	7.000000	15.000000	23	interquartile range 136.8
+Place by interquartile range, xic1 (1 the most varied)	1.000000	1.000000	2.000000	23	interquartile range 289.5
+Spearman's rho, pages with colour and the catalogue's colours	0.353584	-0.127485	0.768098	23	

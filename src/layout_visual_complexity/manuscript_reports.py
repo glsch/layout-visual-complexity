@@ -51,7 +51,7 @@ class Collection:
     norm: Normalize
     order: list[str] = field(default_factory=list)
     min_lines: int = 0
-    blank: int = 0
+    blank: dict[str, int] = field(default_factory=dict)
 
     def label(self, manuscript: str) -> str:
         """A manuscript's shelfmark, else its id."""
@@ -90,11 +90,11 @@ def load_collection(folder: Path, catalogue: Path | None, resamples: int, seed: 
         scores = read_scores(folder)
     scores = scores.dropna(subset=[ms.SCORE]).sort_values(["document", "order"], kind="stable")
     pages = read_pages(folder / "pages.parquet").set_index("page")
-    blank = 0
+    blank: dict[str, int] = {}
     if min_lines:
-        lines = pages["lines"].reindex(scores["page"]).fillna(0).to_numpy()
-        blank = int((lines < min_lines).sum())
-        scores = scores[lines >= min_lines]
+        few = pages["lines"].reindex(scores["page"]).fillna(0).to_numpy() < min_lines
+        blank = {str(document): int(count) for document, count in scores.loc[few, "document"].value_counts().items()}
+        scores = scores[~few]
     services = pages["image_service"].reindex(scores["page"])
     colour = pd.Series(np.nan, index=scores["page"])
     if (folder / FEATURES).is_file():
@@ -114,8 +114,9 @@ def load_collection(folder: Path, catalogue: Path | None, resamples: int, seed: 
                       Normalize(float(low), float(high)), order, min_lines, blank)  # fmt: skip
 
 
-def scale_sentence(collection: Collection) -> str:
-    """How a predicted score is made, and which pages count, for the captions."""
+def scale_sentence(collection: Collection, manuscript: str | None = None) -> str:
+    """How a predicted score is made, and which pages count (the manuscript's, or the collection's), for the
+    captions."""
     elo = collection.elo
     text = (
         "A page's predicted score is its expected Elo score: the regression of the dataset's Elo scores on the "
@@ -126,15 +127,17 @@ def scale_sentence(collection: Collection) -> str:
     if collection.left_out:
         names = ", ".join(collection.label(name) for name in collection.left_out)
         text += f" The rankers were trained without the dataset's pages from {names}, so every score is out of sample."
-    return text + pages_sentence(collection)
+    return text + pages_sentence(collection, manuscript)
 
 
-def pages_sentence(collection: Collection) -> str:
-    """Which pages count, for the captions."""
-    if not collection.min_lines or not collection.blank:
+def pages_sentence(collection: Collection, manuscript: str | None = None) -> str:
+    """Which pages count, for the captions: the leaves left out, the manuscript's or the collection's."""
+    count = sum(collection.blank.values()) if manuscript is None else collection.blank.get(manuscript, 0)
+    if not collection.min_lines or not count:
         return ""
-    leaves = "leaf" if collection.blank == 1 else "leaves"
-    return (f" The {collection.blank:,} {leaves} on which Kraken finds fewer than {collection.min_lines} text lines "
+    leaves = "leaf" if count == 1 else "leaves"
+    whose = "The" if manuscript is None else "Its"
+    return (f" {whose} {count:,} {leaves} on which Kraken finds fewer than {collection.min_lines} text lines "
             "(blank or nearly blank) are left out.")  # fmt: skip
 
 
@@ -182,7 +185,7 @@ def profile_caption(collection: Collection, manuscript: str, design: str, image_
             "the strip."
         )
     return (f"{escape(label)}{number_note}, its {len(pages):,} leaf pages in the manuscript's order: {drawn} "
-            f"{scale_sentence(collection)} The colour scale runs from {number(collection.norm.vmin, 0)} to "
+            f"{scale_sentence(collection, manuscript)} The colour scale runs from {number(collection.norm.vmin, 0)} to "
             f"{number(collection.norm.vmax, 0)}, the 2nd and 98th percentiles of all the collection's pages."
             + credits(image_credit, catalogue_credit))  # fmt: skip
 

@@ -1,0 +1,35 @@
+\begin{table}[htbp]
+  \centering
+  \footnotesize
+  \caption{The case study's manuscripts in the catalogue's order: shelfmark, catalogue number, date (the earliest and latest year the catalogue names, else its centuries as written), folios, hands, texts (counted finely) and languages (ISO 639-3) as catalogued; the leaf pages scored; the mean of their predicted scores and their interquartile range, each with its 95\% interval from 1,000 resamples of the manuscript's pages; the share of its pages with colour (a rubric line, at least half of whose ink is chromatic, or a coloured initial, by the colour measures, which no ranker uses); and the number of colours besides plain ink the catalogue gives. A page's predicted score is its expected Elo score: the regression of the dataset's Elo scores on the ensemble's out-of-fold scores, 1,500 + 168 $\times$ $z$, $z$ being the page's score under the ensemble of the geometry and the ViT rankers (equal weights). The rankers were trained without the dataset's pages from XIII G 10, I E 36, I A 29a, I A 38, so every score is out of sample. The 362 leaves on which Kraken finds fewer than 5 text lines (blank or nearly blank) are left out. Catalogue facts from Dragoun, Ebersonová and Doležalová (2021).}
+  \label{tab:crux_manuscripts}
+  \begin{tabular}{lccccccccccc}
+    \toprule
+    Shelfmark & No. & Date & Folios & Hands & Texts & Languages & Pages & Mean & IQR & Colour & Colours \\
+    \midrule
+    I A 29a & K5 & 1412 & 439 & 10 & 42 & lat & 836 & 1,352 [1,347, 1,358] & 87 [81, 98] & 0.94 & 2 \\
+    I A 38 & K6 & 1466--1472 & 464 & 6 & 75 & lat, ces & 905 & 1,393 [1,386, 1,399] & 133 [120, 147] & 0.78 & 1 \\
+    I A 41 & K7 & 1468--1477 & 521 & 2 & 240 & lat, ces, gre & 1,042 & 1,486 [1,480, 1,492] & 122 [113, 131] & 0.51 & 4 \\
+    I B 7 & K8 & 1478 & 396 & 9 & 17 & lat & 786 & 1,474 [1,470, 1,479] & 76 [70, 84] & 0.74 & 1 \\
+    I B 33 & K9 & 1377 & 257 & 4 & 83 & lat, ces, deu & 512 & 1,389 [1,380, 1,397] & 114 [102, 127] & 0.22 & 1 \\
+    I C 16 & K10 & 1465--1477 & 350 & 3 & 34 & lat & 685 & 1,476 [1,471, 1,482] & 87 [81, 97] & 0.85 & 2 \\
+    I C 29 & K11 & 1401 & 200 & 2 & 15 & lat & 388 & 1,423 [1,418, 1,428] & 60 [54, 66] & 0.93 & 1 \\
+    I D 18 & K12 & XV in. + XV2 & 310 & 5 & 102 & lat, ces & 538 & 1,282 [1,270, 1,294] & 137 [105, 164] & 0.76 & 2 \\
+    I E 32 & K14 & 1463 & 276 & 2 & 3 & lat & 552 & 1,356 [1,352, 1,361] & 74 [65, 81] & 0.53 & 1 \\
+    I E 36 & K15 & XV2 + XV1 + XIV (med.?) & 392 & 18 & 279 & lat, ces & 726 & 1,591 [1,582, 1,600] & 129 [117, 142] & 0.66 & 1 \\
+    I E 42 & K18 & XIV/XV & 140 & 4 & 53 & lat, ces & 267 & 1,633 [1,620, 1,646] & 141 [129, 162] & 0.00 & 0 \\
+    I F 18 & K20 & 1463--1492 & 320 & 6 & 165 & lat, ces & 639 & 1,541 [1,534, 1,547] & 107 [96, 117] & 0.31 & 1 \\
+    I G 11a & K27 & 1461--1491 & 210 & 29 & 72 & lat, ces & 400 & 1,624 [1,609, 1,639] & 249 [230, 274] & 0.33 & 1 \\
+    I G 40 & K30 & 1383 & 164 & 5 & 10 & lat, ces & 312 & 1,305 [1,289, 1,320] & 206 [165, 234] & 0.26 & 3 \\
+    VI F 21 & K33 & XV in. & 276 & 5 & 4 & lat, ces & 552 & 1,404 [1,398, 1,411] & 110 [98, 118] & 0.95 & 2 \\
+    XI C 1 & K34 & 1436--1502 & 444 & 16 & 101 & lat, ces & 818 & 1,475 [1,463, 1,487] & 289 [257, 314] & 0.51 & 1 \\
+    XI C 8 & K35 & 1463--1477 & 312 & 8 & 171 & lat, ces & 624 & 1,565 [1,558, 1,572] & 104 [94, 114] & 0.66 & 1 \\
+    XIII C 17 & K36 & 1387--1494 & 204 & 23 & 202 & lat & 455 & 1,552 [1,537, 1,568] & 248 [225, 275] & 0.72 & 1 \\
+    XIII E 5 & K37 & 1427--1428 & 300 & 3 & 51 & lat & 594 & 1,354 [1,349, 1,360] & 81 [74, 88] & 0.41 & 1 \\
+    XIII G 10 & K38 & 1428--1429 & 150 & 4 & 27 & lat & 272 & 1,371 [1,361, 1,381] & 102 [80, 123] & 0.59 & 1 \\
+    XIII G 18 & K39 & 1456--1481 & 279 & 6 & 160 & lat, ces & 557 & 1,562 [1,554, 1,569] & 128 [119, 140] & 0.55 & 1 \\
+    XIV D 24 & K40 & 1468 & 278 & 21 & 97 & lat, ces, deu & 518 & 1,485 [1,473, 1,498] & 216 [197, 236] & 0.30 & 1 \\
+    XIV E 31 & K41 & 1460--1474 & 403 & 20 & 185 & lat, ces & 798 & 1,582 [1,572, 1,591] & 181 [160, 198] & 0.37 & 1 \\
+    \bottomrule
+  \end{tabular}
+\end{table}

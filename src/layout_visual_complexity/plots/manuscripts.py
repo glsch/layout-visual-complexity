@@ -175,7 +175,8 @@ def marker_sizes(values: pd.Series, smallest: float = 18.0, largest: float = 260
 
 
 def place_labels(figure: Figure, axis, xs: np.ndarray, ys: np.ndarray, texts: list[str], sizes: np.ndarray) -> None:
-    """Each point's label beside it, where it overlaps no other label or point, if there is such a place."""
+    """Each point's label beside it, where it overlaps no other label, point, legend or text already drawn, if there
+    is such a place."""
     from matplotlib.backends.backend_agg import FigureCanvasAgg
 
     canvas = FigureCanvasAgg(figure)
@@ -185,7 +186,10 @@ def place_labels(figure: Figure, axis, xs: np.ndarray, ys: np.ndarray, texts: li
     centres = axis.transData.transform(np.column_stack([xs, ys]))
     radii = np.sqrt(sizes / np.pi) * figure.dpi / 72 + 1.5
     frame = axis.get_window_extent(renderer)
-    placed: list[tuple[float, float, float, float]] = []
+    drawn = [*axis.texts, *([axis.get_legend()] if axis.get_legend() is not None else [])]
+    placed: list[tuple[float, float, float, float]] = [
+        tuple(item.get_window_extent(renderer).extents) for item in drawn
+    ]
     candidates = []
     for angle in np.radians([45, -45, 135, -135, 90, -90, 0, 180, 22.5, -22.5, 157.5, -157.5, 67.5, -67.5, 112.5,
                              -112.5]):  # fmt: skip
@@ -287,7 +291,7 @@ def plot_overview(table: pd.DataFrame, design: str = "ours") -> Figure:
     if design == "ours":
         figure.legend(handles=handles, loc="outside lower center", ncols=len(handles), handletextpad=0.3)
     else:
-        axis.legend(handles=handles, loc="center left", handletextpad=0.3, labelspacing=1.0)
+        axis.legend(handles=handles, loc="best", handletextpad=0.3, labelspacing=1.0)
         for x, y, ha, va, text, strong in (
             (0.015, 0.985, "left", "top", "plain but varied", False),
             (0.985, 0.985, "right", "top", "complex and varied", True),
