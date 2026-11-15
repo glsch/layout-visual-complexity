@@ -48,7 +48,8 @@ class Status:
 class PageRecord:
     """One page as it goes through the stages: its segmentation and, when it is scored, its features (`features`,
     and the families that failed on it, `feature_errors`) and the ViT head's verdict (`vit`: its raw score, the
-    grid and the crop box, and on request the patch scores)."""
+    grid and the crop box, and on request the patch scores); when its text is recognised, the texts read on its
+    ground-truth lines and on its own lines (`recognition`)."""
 
     page: str
     document: str
@@ -67,6 +68,7 @@ class PageRecord:
     features: dict[str, float] = field(default_factory=dict)
     feature_errors: dict[str, str] = field(default_factory=dict)
     vit: dict[str, Any] | None = None
+    recognition: dict[str, Any] | None = None
     status: dict[str, Status] = field(default_factory=dict)
     seconds: dict[str, float] = field(default_factory=dict)
 
@@ -100,6 +102,7 @@ class PageRecord:
             features={name: float(value) for name, value in (data.get("features") or {}).items()},
             feature_errors=dict(data.get("feature_errors") or {}),
             vit=data.get("vit"),
+            recognition=data.get("recognition"),
             status={name: Status(**status) for name, status in data.get("status", {}).items()},
             seconds=dict(data.get("seconds", {})),
         )
