@@ -98,8 +98,8 @@ class RecognitionStep(Step):
 
     needs = frozenset({"image", "lines"})
     produces = frozenset({"recognition"})
-    # One worker's peak footprint was 1.9 GB on a page alone, 3.1 GB in the stream.
-    memory_mb = {"cpu": 2000}
+    # One worker's peak footprint was 1.9 GB on a page alone, 3.1 GB in the stream on 18 pages, 5.7 GB on 288.
+    memory_mb = {"cpu": 6000}
     speed_settings = frozenset({"batch_size", "workers", "threads"})
     settings: RecognitionSettings
 
