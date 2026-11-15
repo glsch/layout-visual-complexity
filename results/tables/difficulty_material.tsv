@@ -1,0 +1,51 @@
+document	source	shelfmark	century	language	split	held_out	comparison	pages
+parisbnfnal730	CATMuS Medieval Segmentation	Paris, BnF, NAL 730	14	Latin	test	yes	yes	8
+parisbnfesp36	CATMuS Medieval Segmentation	Paris, BnF, esp. 36	14	Castilian	test	yes	yes	6
+parisbnfesp65	CATMuS Medieval Segmentation	Paris, BnF, esp. 65	14	Castilian	test	yes	yes	11
+parisbnffr574	CATMuS Medieval Segmentation	Paris, BnF, fr. 574	14	French	test	yes	yes	2
+parisbnfita481	CATMuS Medieval Segmentation	Paris, BnF, ita. 481	14	Italian	test	yes	yes	5
+parisbnfita783	CATMuS Medieval Segmentation	Paris, BnF, ita. 783	14	Italian	test	yes	yes	5
+parisbnflat14137	CATMuS Medieval Segmentation	Paris, BnF, lat. 14137	14	Latin	test	yes	yes	5
+madridbnemss3995	CATMuS Medieval Segmentation	Madrid, BNE, MSS. 3995	15	Castilian	test	yes	yes	2
+parisbnffr2701	CATMuS Medieval Segmentation	Paris, BnF, fr. 2701	15	French	test	yes	yes	1
+parisbnffr413	CATMuS Medieval Segmentation	Paris, BnF, fr. 413	15	French	test	yes	yes	10
+parisbnffr604	CATMuS Medieval Segmentation	Paris, BnF, fr. 604	15	French	test	yes	yes	5
+parisbnflat14650	CATMuS Medieval Segmentation	Paris, BnF, lat. 14650	15	Latin	test	yes	yes	4
+parisbnfsmithlesouef16	CATMuS Medieval Segmentation	Paris, BnF, Smith-Lesouëf 16	16	Latin	test	yes	yes	6
+parisbnfesp368	CATMuS Medieval Segmentation	Paris, BnF, esp. 368	16	Castilian	test	yes	yes	7
+parisbnffr1881	CATMuS Medieval Segmentation	Paris, BnF, fr. 1881	16	French	test	yes	yes	7
+bodmer168otinel	CREMMA Medieval	Cologny, Bodmer, 168	13	French	train	no	no	23
+bnfarsenal3516imagedumonde	CREMMA Medieval	Paris, BnF, Arsenal 3516	13	French	train	no	no	10
+bnffr13496saintjerome	CREMMA Medieval	Paris, BnF, fr. 13496	13	French	test	yes	no	2
+bnffr17229saintlambert	CREMMA Medieval	Paris, BnF, fr. 17229	13	French	train	no	no	2
+bnffr24428bestiaire	CREMMA Medieval	Paris, BnF, fr. 24428	13	French	train	no	no	20
+bnffr412wauchier	CREMMA Medieval	Paris, BnF, fr. 412	13	French	train	no	no	66
+bnffr844manuscritduroi	CREMMA Medieval	Paris, BnF, fr. 844	13	French	train	no	no	18
+bnffr1728	CREMMA Medieval	Paris, BnF, fr. 1728	14	French	train	no	yes	10
+bnffr22549septsages	CREMMA Medieval	Paris, BnF, fr. 22549	14	French	train	no	yes	18
+bnffr411saintlambert	CREMMA Medieval	Paris, BnF, fr. 411	14	French	train	no	yes	2
+pennsylvania660pelerinagemademoisellesapience	CREMMA Medieval	University of Pennsylvania, codex 660	14	French	train	no	yes	11
+vaticanereglat1616otinel	CREMMA Medieval	Vaticane, Reg. Lat., 1616	14	French	train	no	yes	52
+kbr9232examensmoraux	CREMMA Medieval	KBR, ms 9232	15	French	train	no	yes	16
+pennsylvaniacodex909eneide	CREMMA Medieval	University of Pennsylvania, codex 909	15	French	train	no	yes	32
+egerton821	CREMMA Medii Aevi	Egerton 821	12	Latin	dev	no	no	4
+h318	CREMMA Medii Aevi	Montpellier H318	12	Latin	test	yes	no	10
+ccccmss236	CREMMA Medii Aevi	CCCC MSS 236	13	Latin	train	no	no	5
+clm13027	CREMMA Medii Aevi	CLM 13027	13	Latin	train	no	no	5
+latin16195	CREMMA Medii Aevi	Latin 16195	13	Latin	train	no	no	4
+wettf0015	CREMMA Medii Aevi	MsWettF 15	13	Latin	train	no	no	5
+arras861	CREMMA Medii Aevi	Arras 861	14	Latin	train	no	yes	5
+bis193	CREMMA Medii Aevi	BIS 193	14	Latin	test	yes	yes	6
+latin6395	CREMMA Medii Aevi	Latin 6395	14	Latin	train	no	yes	6
+laurentianuspluteus3331	CREMMA Medii Aevi	Laur. Plut. 33.31	14	Latin	train	no	yes	5
+mazarine915	CREMMA Medii Aevi	Mazarine Ms. 915	14	Latin	train	no	yes	4
+phi10a135	CREMMA Medii Aevi	Phil., Col. of Phys. 10a 135	14	Latin	train	no	yes	5
+ubl758	CREMMA Medii Aevi	UBL, Ms 758	14	Latin	train	no	yes	15
+bgo511	CREMMA Medii Aevi	Berlin, Germ. Oct. 511	15	Latin	train	no	yes	6
+sbbpkhdschr25	CREMMA Medii Aevi	Berlin, Hdschr. 25	15	Latin	train	no	yes	17
+latin8236	CREMMA Medii Aevi	Latin 8236	15	Latin	train	no	yes	10
+laurentianuspluteus3934	CREMMA Medii Aevi	Laur. Plut. 39.34	15	Latin	test	yes	yes	5
+laurentianuspluteus5308	CREMMA Medii Aevi	Laur. Plut. 53.08	15	Latin	train	no	yes	4
+laurentianuspluteus5309	CREMMA Medii Aevi	Laur. Plut. 53.09	15	Latin	train	no	yes	5
+pallat373	CREMMA Medii Aevi	Vat. Pal. Lat. 373	15	Latin	train	no	yes	5
+ccccmss165	CREMMA Medii Aevi	CCCC MSS 165	16	Latin	train	no	yes	5

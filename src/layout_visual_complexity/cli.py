@@ -54,6 +54,13 @@ def score_command() -> tuple[type, Callable[..., object]]:
     return ScoreSettings, run_score
 
 
+def difficulty_command() -> tuple[type, Callable[..., object]]:
+    """The difficulty command's settings and what runs it, imported when needed."""
+    from layout_visual_complexity.difficulty import DifficultySettings, run_difficulty
+
+    return DifficultySettings, run_difficulty
+
+
 def compare_command() -> tuple[type, Callable[..., object]]:
     """The compare command's settings and what runs it, imported when needed."""
     from layout_visual_complexity.compare import CompareSettings, run_compare
@@ -132,8 +139,9 @@ def settings_parser(settings: type, flags: tuple[str, ...] = ()) -> ArgumentPars
 
 
 def parser() -> ArgumentParser:
-    """The command line: `lvc score`, `lvc compare`, `lvc models`, `lvc cache`, `lvc judgments import|rank|report`,
-    `lvc segment`, `lvc codebook`, `lvc features`, `lvc embed`, `lvc evaluate`, `lvc train` and `lvc report`."""
+    """The command line: `lvc score`, `lvc compare`, `lvc difficulty`, `lvc models`, `lvc cache`,
+    `lvc judgments import|rank|report`, `lvc segment`, `lvc codebook`, `lvc features`, `lvc embed`, `lvc evaluate`,
+    `lvc train` and `lvc report`."""
     top = ArgumentParser(prog="lvc", description=layout_visual_complexity.__doc__)
     top.add_argument("--version", action="version", version=layout_visual_complexity.__version__)
     top.add_argument("--quiet", action="store_true", help="Show only warnings and errors.")
@@ -163,6 +171,16 @@ def parser() -> ArgumentParser:
         help="Sources to score; they replace the configuration's.",
     )
     commands.add_subcommand("score", score, help=first_paragraph(settings.__doc__))
+    settings, _ = difficulty_command()
+    difficulty = settings_parser(settings, flags=("alto", "maps", "profiles", "local_only"))
+    difficulty.add_argument(
+        "given_sources",
+        nargs="*",
+        default=[],
+        metavar="SOURCES",
+        help="ALTO files, folders, lists or a metadata.jsonl; they replace the configuration's.",
+    )
+    commands.add_subcommand("difficulty", difficulty, help=first_paragraph(settings.__doc__))
     settings, _ = compare_command()
     compare = settings_parser(settings, flags=("alto", "maps", "profiles", "local_only"))
     compare.add_argument("pages", nargs="*", default=[], metavar="PAGE", help="The two pages: first, then second.")
@@ -208,8 +226,9 @@ def build(settings: type, values: Namespace | dict) -> object:
 def main(argv: list[str] | None = None) -> int:
     arguments = parser().parse_args(argv)
     logs.setup(logging.WARNING if arguments.quiet else logging.INFO)
-    if arguments.command in ("segment", "score"):
-        settings, run = segment_command() if arguments.command == "segment" else score_command()
+    if arguments.command in ("segment", "score", "difficulty"):
+        settings, run = {"segment": segment_command, "score": score_command,
+                         "difficulty": difficulty_command}[arguments.command]()  # fmt: skip
         given = arguments[arguments.command]
         values = given.as_dict()
         if values.pop("given_sources", None):

@@ -14,7 +14,9 @@ class PageSource:
 
     `page` is its id, `document` its document's. The image is a IIIF image service (with its Image API version), an
     image URL fetched as it is, or a local file. `width` and `height` are the full image's, when the source gives
-    them; coordinates are given in those pixels.
+    them; coordinates are given in those pixels. A page that is part of a local image (half of a double-page spread)
+    has its `region` there (x0, y0, x1, y1, in the image's pixels); its own width, height and coordinates are then
+    the part's.
     """
 
     page: str
@@ -29,6 +31,7 @@ class PageSource:
     path: str | None = None
     width: int | None = None
     height: int | None = None
+    region: tuple[int, int, int, int] | None = None
 
     @property
     def image(self) -> str:

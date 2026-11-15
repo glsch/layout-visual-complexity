@@ -1,0 +1,3 @@
+# Spearman's rho of each measure with complexity, overall and within manuscripts.
+name: table_difficulty_correlations
+outputs: [difficulty_correlations]

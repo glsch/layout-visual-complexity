@@ -29,6 +29,11 @@
 # judgment, with their scales of win probabilities and the Elo scale from the evaluations. Crux of Telč's case study
 # scores its 23 manuscripts with the rankers trained without its manuscripts in the dataset (score-crux, not part of
 # `all`), and draws its figures and tables from that run and the catalogue's facts in crux_manuscripts.tsv.
+#
+# The difficulty experiment measures how hard CREMMA's pages, and the held-out pages of CATMuS's test split, are for
+# the regions model, Kraken's lines and Kraken's recognition with CATMuS's model, beside their predicted complexity.
+# Its sources come at fixed commits and a fixed revision, checked (sources); its runs and outputs aren't part of
+# `all` (difficulty).
 
 LVC ?= ../.venv/bin/lvc
 
@@ -57,7 +62,10 @@ REPORT := $(RUN) judgments report --config $(CONFIGS)/report.yaml --config $(CON
 	figure-baselines-by-information figure-baselines-by-information-each-measure figure-generic-measure-correlations \
 	evaluate-colour evaluate-colour-measures table-colour-by-elo-gap table-colour-differences table-line-texture-families \
 	table-colour-measures table-within-and-across-manuscripts figure-ink-colour-on-page figure-manuscript-profiles \
-	figure-manuscript-strips figure-crux-overview table-crux-manuscripts table-crux-readings clean
+	figure-manuscript-strips figure-crux-overview table-crux-manuscripts table-crux-readings sources difficulty \
+	difficulty-cremma difficulty-catmus-test figure-difficulty-against-complexity table-difficulty-regression \
+	table-difficulty-regression-across-and-within table-difficulty-held-out table-difficulty-correlations \
+	table-difficulty-main-text-and-margins table-difficulty-material difficulty-pages clean
 
 all: table-dataset-categories table-reliability figure-position-bias-funnel figure-comparison-graph figure-elo-score-bands \
 	table-geometry-by-elo-gap table-geometry-feature-hierarchy figure-geometry-feature-correlations \
@@ -429,6 +437,96 @@ table-crux-readings: $(TOP)/results/tables/crux_readings.tsv
 $(TOP)/results/tables/crux_readings.tsv: $(SCORE_CRUX) $(CATALOGUE) configs/report_crux.yaml \
 		configs/table_crux_readings.yaml
 	$(CRUX_REPORT)/table_crux_readings.yaml
+
+# The difficulty experiment's sources, in build/sources/: CREMMA Medieval and CREMMA Medii Aevi (Latin) at their
+# commits, each fetched shallowly at that commit, and the files of CATMuS Medieval Segmentation's test split the
+# experiment uses (its metadata and the images of 15 manuscripts), at a fixed revision, each checked against its
+# SHA-256 from the Hub's listing (catmus_segmentation_files.tsv). A repository already there is checked, not fetched.
+SOURCES := $(TOP)/build/sources
+CREMMA_MEDIEVAL := bc4a105f6e8316a9b30d9ce5d98dda2ba947d7d4
+CREMMA_LATIN := 292525969ad98380b398e6606a9c2a36d51913ae
+CATMUS_REVISION := e8fb686763d061627fd78f9b516a4db37ac25d5a
+CATMUS := https://huggingface.co/datasets/CATMuS/medieval-segmentation/resolve/$(CATMUS_REVISION)
+CATMUS_FILES := catmus_segmentation_files.tsv
+
+# $(call at_commit,repository URL,folder,commit)
+at_commit = if [ ! -e $(2)/.git ]; then git init -q $(2) && git -C $(2) fetch -q --depth 1 $(1) $(3) \
+	&& git -C $(2) -c advice.detachedHead=false checkout -q FETCH_HEAD; fi; \
+	test "$$(git -C $(2) rev-parse HEAD)" = $(3) || { echo "$(2) is not at $(3)"; exit 1; }
+
+sources: $(SOURCES)/cremma.checked $(SOURCES)/catmus.checked
+
+$(SOURCES)/cremma.checked:
+	mkdir -p $(SOURCES)/cremma
+	$(call at_commit,https://github.com/HTR-United/cremma-medieval.git,$(SOURCES)/cremma/cremma-medieval,$(CREMMA_MEDIEVAL))
+	$(call at_commit,https://github.com/HTR-United/CREMMA-Medieval-LAT.git,$(SOURCES)/cremma/cremma-medieval-lat,$(CREMMA_LATIN))
+	touch $@
+
+$(SOURCES)/catmus.checked: $(CATMUS_FILES)
+	tail -n +2 $(CATMUS_FILES) | while IFS="$$(printf '\t')" read -r path size sha; do \
+		target=$(SOURCES)/catmus/$$path; \
+		if ! echo "$$sha  $$target" | shasum -a 256 -c --status 2>/dev/null; then \
+			mkdir -p "$$(dirname "$$target")"; \
+			curl -sSfL --retry 3 -o "$$target.part" "$(CATMUS)/$$path" && mv "$$target.part" "$$target" || exit 1; \
+			echo "$$sha  $$target" | shasum -a 256 -c --status || { echo "$$path: its SHA-256 differs"; exit 1; }; \
+		fi; \
+	done
+	touch $@
+
+# The difficulty experiment: CREMMA's 400 pages and the held-out pages of CATMuS's test split measured against their
+# ground truth (lvc difficulty), and its figure and tables. None of it is part of `all`: the runs need the segment and
+# vit extras, the models in models/ and the sources; on an Apple M4 Pro CREMMA's run takes about 45 minutes, the
+# test split's a few. `make -C reproduce difficulty` makes them all.
+DIFFICULTY_CREMMA := $(TOP)/build/difficulty/cremma/difficulty.tsv
+DIFFICULTY_CATMUS := $(TOP)/build/difficulty/catmus_test/difficulty.tsv
+MANUSCRIPT_TABLE := difficulty_manuscripts.tsv
+difficulty-cremma: $(DIFFICULTY_CREMMA)
+$(DIFFICULTY_CREMMA): $(SOURCES)/cremma.checked configs/difficulty_cremma.yaml $(MANUSCRIPT_TABLE)
+	$(RUN) difficulty --config $(CONFIGS)/difficulty_cremma.yaml
+difficulty-catmus-test: $(DIFFICULTY_CATMUS)
+$(DIFFICULTY_CATMUS): $(SOURCES)/catmus.checked configs/difficulty_catmus_test.yaml $(MANUSCRIPT_TABLE)
+	$(RUN) difficulty --config $(CONFIGS)/difficulty_catmus_test.yaml
+
+DIFFICULTY_REPORT := $(RUN) report --config $(CONFIGS)/report_difficulty.yaml --config $(CONFIGS)
+DIFFICULTY_RUNS := $(DIFFICULTY_CREMMA) $(DIFFICULTY_CATMUS) $(MANUSCRIPT_TABLE) configs/report_difficulty.yaml
+DIFFICULTY_OUTPUTS := figure-difficulty-against-complexity table-difficulty-regression \
+	table-difficulty-regression-across-and-within table-difficulty-held-out table-difficulty-correlations \
+	table-difficulty-main-text-and-margins table-difficulty-material difficulty-pages
+difficulty: $(DIFFICULTY_OUTPUTS)
+
+figure-difficulty-against-complexity: $(TOP)/results/figures/difficulty_against_complexity.svg
+$(TOP)/results/figures/difficulty_against_complexity.svg: $(DIFFICULTY_RUNS) configs/figure_difficulty_against_complexity.yaml
+	$(DIFFICULTY_REPORT)/figure_difficulty_against_complexity.yaml
+
+table-difficulty-regression: $(TOP)/results/tables/difficulty_regression.tsv
+$(TOP)/results/tables/difficulty_regression.tsv: $(DIFFICULTY_RUNS) configs/table_difficulty_regression.yaml
+	$(DIFFICULTY_REPORT)/table_difficulty_regression.yaml
+
+table-difficulty-regression-across-and-within: $(TOP)/results/tables/difficulty_regression_across_and_within.tsv
+$(TOP)/results/tables/difficulty_regression_across_and_within.tsv: $(DIFFICULTY_RUNS) \
+		configs/table_difficulty_regression_across_and_within.yaml
+	$(DIFFICULTY_REPORT)/table_difficulty_regression_across_and_within.yaml
+
+table-difficulty-held-out: $(TOP)/results/tables/difficulty_held_out.tsv
+$(TOP)/results/tables/difficulty_held_out.tsv: $(DIFFICULTY_RUNS) configs/table_difficulty_held_out.yaml
+	$(DIFFICULTY_REPORT)/table_difficulty_held_out.yaml
+
+table-difficulty-correlations: $(TOP)/results/tables/difficulty_correlations.tsv
+$(TOP)/results/tables/difficulty_correlations.tsv: $(DIFFICULTY_RUNS) configs/table_difficulty_correlations.yaml
+	$(DIFFICULTY_REPORT)/table_difficulty_correlations.yaml
+
+table-difficulty-main-text-and-margins: $(TOP)/results/tables/difficulty_main_text_and_margins.tsv
+$(TOP)/results/tables/difficulty_main_text_and_margins.tsv: $(DIFFICULTY_RUNS) \
+		configs/table_difficulty_main_text_and_margins.yaml
+	$(DIFFICULTY_REPORT)/table_difficulty_main_text_and_margins.yaml
+
+table-difficulty-material: $(TOP)/results/tables/difficulty_material.tsv
+$(TOP)/results/tables/difficulty_material.tsv: $(DIFFICULTY_RUNS) configs/table_difficulty_material.yaml
+	$(DIFFICULTY_REPORT)/table_difficulty_material.yaml
+
+difficulty-pages: $(TOP)/results/difficulty/cremma.tsv
+$(TOP)/results/difficulty/cremma.tsv: $(DIFFICULTY_RUNS) configs/difficulty_pages.yaml
+	$(DIFFICULTY_REPORT)/difficulty_pages.yaml
 
 clean:
 	rm -rf $(TOP)/build/dataset $(TOP)/build/ranking $(TOP)/build/features/dataset $(TOP)/build/evaluate

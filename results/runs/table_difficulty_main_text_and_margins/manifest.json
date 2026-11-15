@@ -1,0 +1,145 @@
+{
+  "command": "report",
+  "started": "2026-11-15T16:26:49+00:00",
+  "ended": "2026-11-15T16:26:50+00:00",
+  "inputs": [
+    {
+      "path": "reproduce/difficulty_manuscripts.tsv",
+      "sha256": "ad19c7c9a509aa645b0db59feab7fbebe79a478ad76a1f7f28b6cc9e600fd062",
+      "bytes": 5742
+    },
+    {
+      "path": "build/difficulty/cremma/difficulty.tsv",
+      "sha256": "b77ad9fdece3231e6ae7d9ec77e18c0810aa9643972af5d18c57062411ce82f8",
+      "bytes": 247568
+    },
+    {
+      "path": "build/difficulty/catmus_test/difficulty.tsv",
+      "sha256": "fd3b150e0536ec11055a74da0dd6d66213226aa9965263ca24278db78784d496",
+      "bytes": 36368
+    }
+  ],
+  "outputs": [
+    "results/tables/difficulty_main_text_and_margins.tsv",
+    "results/tables/difficulty_main_text_and_margins.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "difficulty_main_text_and_margins"
+    ],
+    "name": "table_difficulty_main_text_and_margins",
+    "dataset": null,
+    "scores": null,
+    "features": null,
+    "layout": null,
+    "evaluations": {},
+    "shown": [],
+    "labels": {},
+    "colours": {},
+    "comparisons": [],
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": "",
+    "colour_pages": [],
+    "score_run": null,
+    "catalogue": null,
+    "profiles": [],
+    "collection": "manuscripts",
+    "catalogue_credit": "",
+    "thumbnail_size": 400,
+    "named": [],
+    "min_lines": 0,
+    "difficulty_runs": {
+      "cremma": "build/difficulty/cremma",
+      "catmus_test": "build/difficulty/catmus_test"
+    },
+    "difficulty_main": "cremma",
+    "manuscript_table": "reproduce/difficulty_manuscripts.tsv",
+    "neighbours": 0.25
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "ab37b5deb5b6955d4e0ac65c2af34abf0a389769-dirty",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "difficulty_main_text_and_margins": {
+      "main_line_f1": [
+        0.9198757544738978,
+        0.863163146748358,
+        0.963850706557147
+      ],
+      "main_cer_lines": [
+        0.024447341849088786,
+        0.01777967414917486,
+        0.03502584197108089
+      ],
+      "main_cer_end_to_end": [
+        0.17019224170890232,
+        0.07765329288897292,
+        0.3027872825480286
+      ],
+      "margin_line_f1": [
+        0.6690223792697291,
+        0.4955466424897018,
+        0.8390045306347121
+      ],
+      "margin_cer_lines": [
+        0.1291979454760964,
+        0.05925250928812444,
+        0.1939547987953711
+      ],
+      "margin_cer_end_to_end": [
+        0.5403002765705255,
+        0.2146098672331242,
+        1.0913388983017938
+      ]
+    },
+    "seconds": {
+      "difficulty_main_text_and_margins": 1.069
+    }
+  }
+}

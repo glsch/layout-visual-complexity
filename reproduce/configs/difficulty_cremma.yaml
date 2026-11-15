@@ -1,0 +1,36 @@
+# The difficulty experiment on CREMMA's 400 pages: CREMMA Medieval and CREMMA Medii Aevi (Latin), read from their
+# ALTO files normalised as CATMuS trains on them (ChocoMufin's), each beside its image. Each page is cropped to its
+# folio, segmented and scored as `lvc score` does, its text recognised by Kraken with CATMuS Medieval's model on the
+# ground truth's lines and on Kraken's own, and measured against the ground truth. The 18 double-page spreads, every
+# image wider than tall, looked at one by one, are split into their pages first. Not part of `make all`: it needs the
+# segment and vit extras, the models in models/, and the sources (make -C reproduce sources).
+sources:
+  - build/sources/cremma/cremma-medieval/data
+  - build/sources/cremma/cremma-medieval-lat/data
+output: build/difficulty/cremma
+alto_files: "*.chocomufin.xml"
+manuscript_table: reproduce/difficulty_manuscripts.tsv
+regions:
+  model: models/medieval-yolov11x.pt
+recognition:
+  model: models/catmus-medieval-1.6.0.mlmodel
+spreads:
+  pages:
+    - bnffr13496saintjerome_245v-246r
+    - bnffr17229saintlambert_163v-164r
+    - bnffr411saintlambert_125v-126r
+    - h318_10r
+    - h318_10v-11r
+    - h318_11rv-12r
+    - h318_12v-13r
+    - h318_13v
+    - latin16195_23v-24r
+    - latin16195_24v-25r
+    - latin6395_286v-287r
+    - latin6395_287v-288r
+    - latin6395_288v-289r
+    - latin8236_f142
+    - latin8236_f145
+    - latin8236_f55
+    - latin8236_f73
+    - latin8236_f89

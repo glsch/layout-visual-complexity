@@ -52,7 +52,15 @@ Device = Literal["auto", "cpu", "mps"]
 COMMIT_EVERY = 30.0
 
 # How the CPU's workers are shared among the steps placed on it, when the settings don't say.
-CPU_SHARES = {"folio_box": 1.0, "folio": 0.5, "regions": 1.0, "line_maps": 1.5, "lines": 6.0, "features": 0.5}
+CPU_SHARES = {
+    "folio_box": 1.0,
+    "folio": 0.5,
+    "regions": 1.0,
+    "line_maps": 1.5,
+    "lines": 6.0,
+    "features": 0.5,
+    "recognition": 4.0,
+}
 
 
 @dataclass(frozen=True)
@@ -126,6 +134,15 @@ class Extension:
 
     def inputs(self) -> list[Path]:
         """Files the command reads besides the steps' models, for the run's record."""
+        return []
+
+    def documents(self, resolver: Resolver, sources: list[str]) -> list[Document]:
+        """The documents and pages to run: the sources' as the resolver reads them."""
+        return resolver.resolve(sources)
+
+    def page_identity(self, page: PageSource) -> list[Any]:
+        """What else decides a page's results, beside its image and the run's settings: a rerun redoes a page whose
+        identity changed."""
         return []
 
 
@@ -202,13 +219,14 @@ def limited(documents: list[Document], limit: int | None) -> list[Document]:
 
 
 def describe_source(page: PageSource) -> dict[str, Any]:
-    return {
+    found = {
         "label": page.label,
         "source": shown_path(page.source) if "://" not in page.source else page.source,
         "canvas": page.canvas,
         "image_service": page.image_service,
         "image": page.image if "://" in page.image else shown_path(page.image),
     }
+    return found if page.region is None else found | {"region": list(page.region)}
 
 
 def settings_key(steps: dict[str, Step], checksums: dict[str, str], long_edge: int) -> str:
@@ -226,9 +244,13 @@ def settings_key(steps: dict[str, Step], checksums: dict[str, str], long_edge: i
     return hashlib.sha256(json.dumps(payload, sort_keys=True, default=str).encode()).hexdigest()
 
 
-def page_key(settings: str, page: PageSource) -> str:
-    """The run's key with the page's own image."""
-    identity = [settings, page.image, page.width, page.height]
+def page_key(settings: str, page: PageSource, extra: list[Any] | None = None) -> str:
+    """The run's key with the page's own image, its part of the image if it is one, and what else decides its
+    results (`extra`)."""
+    identity: list[Any] = [settings, page.image, page.width, page.height]
+    if page.region is not None:
+        identity.append(list(page.region))
+    identity += extra or []
     return hashlib.sha256(json.dumps(identity, default=str).encode()).hexdigest()
 
 
@@ -329,12 +351,12 @@ def _run(
     with HttpClient(settings.http, transport) as client:
         manifests = Cache(cache / "manifests", ".json")
         resolver = Resolver(settings.inputs, lambda url: cached_json(client, manifests, url))
-        documents = limited(resolver.resolve(settings.sources), settings.limit)
+        documents = limited(extension.documents(resolver, settings.sources), settings.limit)
         pages = interleaved(documents)
         logger.info("%d pages in %d documents", len(pages), len(documents))
         state = State(output / ".state.sqlite")
         done = state.done()
-        keys = {page.page: page_key(key, page) for page in pages}
+        keys = {page.page: page_key(key, page, extension.page_identity(page)) for page in pages}
         sources = {page.page: describe_source(page) for page in pages}
         todo = [page for page in pages if done.get(page.page) != keys[page.page]]
         logger.info("%d pages to do, %d done before", len(todo), len(pages) - len(todo))
@@ -392,7 +414,7 @@ def _run(
                 elif page.image_url:
                     image = fetcher.from_url(page.image_url)
                 else:
-                    image = fetcher.from_file(Path(page.path or ""))
+                    image = fetcher.from_file(Path(page.path or ""), page.region)
             except Exception as error:  # a page whose image fails fails alone
                 scheduler.image_ready(page.page, str(error) or type(error).__name__)
                 return

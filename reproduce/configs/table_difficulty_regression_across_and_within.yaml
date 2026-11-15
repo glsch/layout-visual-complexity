@@ -1,0 +1,3 @@
+# Least squares on CREMMA's pages, across manuscripts and within them.
+name: table_difficulty_regression_across_and_within
+outputs: [difficulty_regression_across_and_within]

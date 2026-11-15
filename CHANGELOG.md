@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- `lvc difficulty`: how hard pages with ground truth (ALTO files, or a CATMuS-style `metadata.jsonl`) are for the
+  automatic tools, beside their predicted complexity. Each page goes through `lvc score`'s stream, double-page spreads
+  split into their pages first, and through Kraken's text recognition; one row per page gives zone F1 of the regions
+  model, line F1 and the baseline distance of Kraken's lines, the character error rate on the ground-truth lines and
+  end to end, the same in main text and in margins, and the controls. `lvc report` makes its analysis: rank
+  correlations, a mixed model and least squares across and within manuscripts, a held-out comparison, the figure and
+  the tables. The package now needs `statsmodels`.
+- `make -C reproduce sources` fetches the difficulty experiment's ground truth at fixed commits and a fixed revision,
+  each file checked; `make -C reproduce difficulty` measures CREMMA's pages and the held-out pages of CATMuS's test
+  split and draws the experiment's figure and tables (not part of `all`).
+- A local image's page can be a part of it (half of a double-page spread), cropped into the image cache.
+
 - `lvc score`: pages scored as a stream from their sources (manifests, folders, lists, page selections): fetched,
   cropped to the folio, segmented, measured and scored by the geometry ranker, the ViT head and their ensemble, the
   stages running at once; it keeps the scores with each page's expected Elo score (`scores.tsv`), the layout store and

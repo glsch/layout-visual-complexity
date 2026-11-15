@@ -1,0 +1,3 @@
+# The mixed model on CREMMA's pages: each measure on complexity and the controls, a random intercept per manuscript.
+name: table_difficulty_regression
+outputs: [difficulty_regression]

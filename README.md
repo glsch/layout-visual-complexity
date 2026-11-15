@@ -97,6 +97,45 @@ rankers), where each is, and whether it is there and the one expected; the regio
 (PyPI refuses files over 100 MB), and is put in `models/` until it is published. `cache` lists the user cache's parts
 (page images, manifests, tokens, thumbnails, …) with their sizes, and clears them by kind.
 
+### Measuring how hard pages are for the automatic tools
+
+```
+lvc difficulty SOURCES… --output build/difficulty/name --recognition.model CATMUS.mlmodel [--alto_files '*.xml'] [--manuscripts FOLDER…] [--spreads.pages auto|ID…] [--manuscript_table manuscripts.tsv] [--jobs N]
+```
+
+`difficulty` takes pages that have ground truth, people's own zones, lines and transcriptions, and measures how far
+the automatic tools fall from it, beside each page's predicted complexity. It is what someone auditing their own
+transcribed pages needs: which pages, and which kinds of page, the regions model, Kraken's line finding and a
+recognition model get wrong. It needs both extras and a Kraken recognition model (`--recognition.model`; the study
+used CATMuS Medieval's).
+
+- **Sources**: ALTO files (each beside its image), folders holding them at any depth (`--alto_files` chooses which,
+  `*.chocomufin.xml` say), lists of these; or a CATMuS-style `metadata.jsonl` with its images beside it, from the
+  manuscripts (its folders) named by `--manuscripts`. A page's document is its folder. Classes lose their SegmOnto
+  subtype (`MainZone#2` is `MainZone`).
+- **Double-page spreads** (`--spreads.pages`, by id, or `auto` for every image wider than tall) are split into their
+  pages before the folio crop, at the gutter found by image processing (the middle where none stands out); each half
+  is a page (`<id>_left`, `<id>_right`), with the ground truth whose centroid it holds, and a half without
+  ground-truth lines is left out. Lines lying across a split are listed.
+- **The stream** is `score`'s, with a recognition stage in CPU workers that reads each transcribed page's lines, the
+  ground truth's and Kraken's own, from the full-resolution image, one line at a time.
+- **Each page's row** (`difficulty.tsv`): its predicted complexity (the rankers' z-scores, the expected Elo score,
+  and how many of the geometry ranker's features lie beyond the bounds it clips them to); zone F1 of the regions
+  model's zones (matched one to one within each class by the IoU of boxes, from 0.5); line F1 of Kraken's lines
+  against the ground truth's text lines (default, heading, interlinear; matched by polygon IoU, a match with a drop
+  capital's or music's line counting neither way) and the distance between matched baselines in line heights; the
+  character error rate on the ground-truth lines and end to end (with and without spaces; texts in NFC, whitespace
+  runs as one space); the same for the lines in main text zones and in margins apart; how many unmatched lines and
+  zones lie outside every ground-truth zone (where the ground truth may leave text out); the ground truth's lines and
+  median line height, and the columns of `--manuscript_table` (a TSV by `folder`).
+
+The run's folder also keeps every zone and line with its match and recognised text (`zones.parquet`,
+`lines.parquet`), the zones by class (`zone_classes.tsv`), each spread's split (`spreads.tsv`), and what `score`
+keeps; never an image or a token. A rerun resumes, and the rows don't depend on the number of workers. `lvc report`
+makes the analysis: rank correlations with complexity, overall and within manuscripts; the regressions on complexity
+and the controls, as a mixed model with a random intercept per manuscript and by least squares across and within
+manuscripts; a held-out comparison; main text against margins; the figure and tables.
+
 ### Segmenting pages
 
 ```
@@ -366,11 +405,22 @@ learning curves (on the folds of the first two repeats), takes about 25 minutes 
 | `figure-manuscript-strips` | For the appendix: the strips of all 23 manuscripts |
 | `figure-crux-overview` | Figure 6: the overview of the 23 manuscripts, in the package's design and in the article's |
 | `table-crux-manuscripts`, `table-crux-readings` | The 23 manuscripts' table, the catalogue's facts beside the scores; the article's readings of the overview, checked |
+| `sources` | `build/sources/`: CREMMA Medieval and CREMMA Medii Aevi at their commits, and the files of CATMuS Medieval Segmentation's test split the difficulty experiment uses at a fixed revision, each checked against its SHA-256 (`reproduce/catmus_segmentation_files.tsv`) |
+| `difficulty-cremma`, `difficulty-catmus-test` | `build/difficulty/`: CREMMA's 400 pages and the held-out pages of CATMuS's test split (its handwritten manuscripts of the 14th to 16th century) measured against their ground truth (not part of `all`: they need both extras, the models in `models/` and the sources) |
+| `figure-difficulty-against-complexity` | The CER on the ground-truth lines and end to end, line F1 and zone F1 against predicted complexity, a dot per page |
+| `table-difficulty-regression`, `table-difficulty-regression-across-and-within` | Each measure regressed on complexity and the controls: a mixed model with a random intercept per manuscript; least squares across and within manuscripts |
+| `table-difficulty-held-out`, `table-difficulty-correlations`, `table-difficulty-main-text-and-margins` | The held-out comparison of the segmentation measures; each measure's rank correlation with complexity; main text against margins |
+| `table-difficulty-material`, `difficulty-pages` | The experiment's manuscripts (`reproduce/difficulty_manuscripts.tsv`); each run's per-page rows in `results/difficulty/` |
 
 The dataset leaves out the sessions of a public exhibition, whose annotators were mostly not experts, and the
 calibration judgments; so its numbers differ from the article's, which kept them. Crux of Telč's catalogue facts
 (`reproduce/crux_manuscripts.tsv`) come from M. Dragoun, A. Ebersonová and L. Doležalová, *Středověké knihovny
 augustiniánských kanonií v Třeboni a Borovanech* (Praha: Scriptorium, 2021).
+
+The difficulty experiment's ground truth is CREMMA Medieval and CREMMA Medii Aevi (HTR-United, CC BY 4.0), and
+CATMuS Medieval Segmentation (CC BY 4.0); `make -C reproduce sources` fetches them. None of their files are in this
+repository; `reproduce/difficulty_manuscripts.tsv` gives the manuscripts' languages, centuries and CATMuS's splits.
+`difficulty` (none of it part of `all`) makes its runs, figure and tables.
 
 ## Tests
 

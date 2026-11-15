@@ -20,6 +20,9 @@
 - A collection of manuscripts scored by `lvc score` (`manuscript_reports.py`): `manuscript_profiles`,
   `manuscript_profile_strips`, `manuscript_strips`, `manuscript_overview`, `manuscript_overview_quadrants`,
   `manuscripts_table`, `manuscript_readings`.
+- The difficulty experiment, from `lvc difficulty` runs (`difficulty_reports.py`): `difficulty_against_complexity`,
+  `difficulty_regression`, `difficulty_regression_across_and_within`, `difficulty_held_out`,
+  `difficulty_correlations`, `difficulty_main_text_and_margins`, `difficulty_material`, `difficulty_pages`.
 """
 
 import json
@@ -32,7 +35,13 @@ from typing import Literal, get_args
 import numpy as np
 import pandas as pd
 
-from layout_visual_complexity import baseline_reports, colour_reports, manuscript_reports, method_reports
+from layout_visual_complexity import (
+    baseline_reports,
+    colour_reports,
+    difficulty_reports,
+    manuscript_reports,
+    method_reports,
+)
 from layout_visual_complexity.download import HttpSettings
 from layout_visual_complexity.evaluate import read_elo
 from layout_visual_complexity.evaluation import metrics
@@ -81,6 +90,14 @@ Output = Literal[
     "manuscript_overview_quadrants",
     "manuscripts_table",
     "manuscript_readings",
+    "difficulty_against_complexity",
+    "difficulty_regression",
+    "difficulty_regression_across_and_within",
+    "difficulty_held_out",
+    "difficulty_correlations",
+    "difficulty_main_text_and_margins",
+    "difficulty_material",
+    "difficulty_pages",
 ]
 ALL_OUTPUTS: list[Output] = list(get_args(Output))
 
@@ -168,6 +185,13 @@ class ReportSettings:
         named: The manuscripts whose places by interquartile range the readings give, by id.
         min_lines: A collection's pages with fewer of Kraken's text lines than this are left out of its outputs
             (blank or nearly blank leaves).
+        difficulty_runs: `lvc difficulty` runs, by name, for the difficulty experiment's outputs.
+        difficulty_main: The run whose pages the main analysis takes, every one of them; the held-out comparison
+            takes the pages of every run whose manuscripts the table of manuscripts marks as compared.
+        manuscript_table: The table of the difficulty experiment's manuscripts (TSV, by `folder`: source, shelfmark,
+            language, century, CATMuS's split, whether compared), joined to the runs' rows anew.
+        neighbours: The held-out pages of the main run are set beside its seen pages within this many standard
+            deviations of predicted complexity.
     """
 
     output: Path
@@ -206,6 +230,10 @@ class ReportSettings:
     thumbnail_size: int = 400
     named: list[str] = field(default_factory=list)
     min_lines: int = 0
+    difficulty_runs: dict[str, Path] = field(default_factory=dict)
+    difficulty_main: str = "cremma"
+    manuscript_table: Path | None = None
+    neighbours: float = 0.25
 
 
 def needed(settings: ReportSettings, name: str, output: str) -> object:
@@ -221,6 +249,7 @@ def run_report(settings: ReportSettings) -> dict[str, object]:
     folder = Path(settings.output)
     timings = {}
     collection = None
+    material = None
     for output in dict.fromkeys(settings.outputs):
         began = time.perf_counter()
         logger.info("report: %s", output)
@@ -245,6 +274,18 @@ def run_report(settings: ReportSettings) -> dict[str, object]:
                     given.score_run, given.catalogue, given.bootstrap, given.seed, run, min_lines=given.min_lines
                 )
             written = manuscript_reports.make(output, given, collection, folder)
+        elif output in difficulty_reports.OUTPUTS:
+            given_difficulty = difficulty_reports.DifficultySettings(
+                runs=dict(needed(settings, "difficulty_runs", output)),  # type: ignore[call-overload]
+                main=settings.difficulty_main,
+                manuscripts=settings.manuscript_table,
+                resamples=settings.bootstrap,
+                seed=settings.seed,
+                neighbours=settings.neighbours,
+            )
+            if material is None:
+                material = difficulty_reports.load(given_difficulty, run)
+            written = difficulty_reports.make(output, given_difficulty, material, folder)
         else:
             raise ValueError(f"unknown output {output!r}")
         timings[output] = round(time.perf_counter() - began, 3)

@@ -1,0 +1,311 @@
+{
+  "command": "report",
+  "started": "2026-11-15T16:26:45+00:00",
+  "ended": "2026-11-15T16:26:45+00:00",
+  "inputs": [
+    {
+      "path": "reproduce/difficulty_manuscripts.tsv",
+      "sha256": "ad19c7c9a509aa645b0db59feab7fbebe79a478ad76a1f7f28b6cc9e600fd062",
+      "bytes": 5742
+    },
+    {
+      "path": "build/difficulty/cremma/difficulty.tsv",
+      "sha256": "b77ad9fdece3231e6ae7d9ec77e18c0810aa9643972af5d18c57062411ce82f8",
+      "bytes": 247568
+    },
+    {
+      "path": "build/difficulty/catmus_test/difficulty.tsv",
+      "sha256": "fd3b150e0536ec11055a74da0dd6d66213226aa9965263ca24278db78784d496",
+      "bytes": 36368
+    }
+  ],
+  "outputs": [
+    "results/tables/difficulty_regression.tsv",
+    "results/tables/difficulty_regression.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "difficulty_regression"
+    ],
+    "name": "table_difficulty_regression",
+    "dataset": null,
+    "scores": null,
+    "features": null,
+    "layout": null,
+    "evaluations": {},
+    "shown": [],
+    "labels": {},
+    "colours": {},
+    "comparisons": [],
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": "",
+    "colour_pages": [],
+    "score_run": null,
+    "catalogue": null,
+    "profiles": [],
+    "collection": "manuscripts",
+    "catalogue_credit": "",
+    "thumbnail_size": 400,
+    "named": [],
+    "min_lines": 0,
+    "difficulty_runs": {
+      "cremma": "build/difficulty/cremma",
+      "catmus_test": "build/difficulty/catmus_test"
+    },
+    "difficulty_main": "cremma",
+    "manuscript_table": "reproduce/difficulty_manuscripts.tsv",
+    "neighbours": 0.25
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "ab37b5deb5b6955d4e0ac65c2af34abf0a389769-dirty",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "difficulty_regression": {
+      "Mixed model: zone_f1": {
+        "complexity": [
+          -0.03144454658834016,
+          -0.05378288836767901,
+          -0.009106204809001303
+        ],
+        "log_lines": [
+          -0.05576569956823094,
+          -0.10165052397640684,
+          -0.00988087516005505
+        ],
+        "century": [
+          0.009827358190418564,
+          -0.03744112282268107,
+          0.0570958392035182
+        ],
+        "latin": [
+          -0.17198548056683202,
+          -0.2620442916488133,
+          -0.08192666948485071
+        ],
+        "log_resolution": [
+          0.03628224339912742,
+          -0.06530797403295308,
+          0.1378724608312079
+        ],
+        "r2": 0.1610223404549219
+      },
+      "Mixed model: line_f1": {
+        "complexity": [
+          -0.06755518461553378,
+          -0.08211899987841238,
+          -0.05299136935265518
+        ],
+        "log_lines": [
+          0.11613905369302108,
+          0.07943261295913698,
+          0.15284549442690518
+        ],
+        "century": [
+          0.03593314051527042,
+          -0.0007802012844483411,
+          0.07264648231498919
+        ],
+        "latin": [
+          0.09740267275089486,
+          0.0272361431468051,
+          0.16756920235498463
+        ],
+        "log_resolution": [
+          -0.01924720017369257,
+          -0.09825847864188622,
+          0.05976407829450109
+        ],
+        "r2": 0.37979665085047143
+      },
+      "Mixed model: baseline_distance": {
+        "complexity": [
+          0.005166159617491785,
+          0.0020907453093864984,
+          0.008241573925597072
+        ],
+        "log_lines": [
+          0.008867318366715785,
+          0.001482031270453447,
+          0.016252605462978124
+        ],
+        "century": [
+          -0.004839384463688592,
+          -0.018858146874263768,
+          0.009179377946886582
+        ],
+        "latin": [
+          -0.04955283131203676,
+          -0.0765080400872226,
+          -0.022597622536850926
+        ],
+        "log_resolution": [
+          0.02936934777429681,
+          0.0011701160283468306,
+          0.05756857952024679
+        ],
+        "r2": 0.3802220333232031
+      },
+      "Mixed model: cer_lines": {
+        "complexity": [
+          0.000961787917444769,
+          -0.005909387070759449,
+          0.007832962905648987
+        ],
+        "log_lines": [
+          0.0015662910107588097,
+          -0.009919009934565882,
+          0.013051591956083502
+        ],
+        "century": [
+          -0.0020593868682478172,
+          -0.010850888201912524,
+          0.00673211446541689
+        ],
+        "latin": [
+          0.01355696851027787,
+          -0.002689341666409802,
+          0.029803278686965542
+        ],
+        "log_resolution": [
+          -0.013035372560473235,
+          -0.0330074539066322,
+          0.006936708785685726
+        ],
+        "r2": 0.01611567260045713
+      },
+      "Mixed model: cer_end_to_end": {
+        "complexity": [
+          0.10915939873667832,
+          0.0789947794601191,
+          0.13932401801323754
+        ],
+        "log_lines": [
+          -0.1315164308389951,
+          -0.20020483742403256,
+          -0.06282802425395767
+        ],
+        "century": [
+          -0.05333697609641248,
+          -0.1245471441020114,
+          0.01787319190918643
+        ],
+        "latin": [
+          -0.14319515296115143,
+          -0.2792089044067817,
+          -0.007181401515521185
+        ],
+        "log_resolution": [
+          0.04977298843496119,
+          -0.10398015429337848,
+          0.20352613116330087
+        ],
+        "r2": 0.25425530532347995
+      },
+      "Mixed model: log_cer_lines": {
+        "complexity": [
+          0.06059409974808602,
+          -0.0330340028981994,
+          0.15422220239437145
+        ],
+        "log_lines": [
+          0.08013060521883329,
+          -0.10940689550885267,
+          0.26966810594651924
+        ],
+        "century": [
+          -0.21829902463907205,
+          -0.4074064915855672,
+          -0.029191557692576947
+        ],
+        "latin": [
+          0.909122580164194,
+          0.5490882829015542,
+          1.2691568774268338
+        ],
+        "log_resolution": [
+          -0.3225221621096065,
+          -0.731787593546849,
+          0.08674326932763604
+        ],
+        "r2": 0.25919699023273723
+      },
+      "Mixed model: log_cer_end_to_end": {
+        "complexity": [
+          0.6510958278550218,
+          0.5308957517517255,
+          0.7712959039583182
+        ],
+        "log_lines": [
+          -0.1438789582733079,
+          -0.3984132981192334,
+          0.11065538157261759
+        ],
+        "century": [
+          -0.24129414001683702,
+          -0.5187373655874128,
+          0.03614908555373869
+        ],
+        "latin": [
+          0.07617212457885028,
+          -0.45343281083379694,
+          0.6057770599914974
+        ],
+        "log_resolution": [
+          0.08427306581849303,
+          -0.5122451601861535,
+          0.6807912918231396
+        ],
+        "r2": 0.3406275660160549
+      }
+    },
+    "seconds": {
+      "difficulty_regression": 0.753
+    }
+  }
+}

@@ -1,0 +1,3 @@
+# Each run's per-page rows, in results/difficulty/.
+name: difficulty_pages
+outputs: [difficulty_pages]

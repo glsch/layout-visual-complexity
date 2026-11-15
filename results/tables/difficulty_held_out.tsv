@@ -1,0 +1,64 @@
+model	term	measure	estimate	low	high	pages	manuscripts	r2	notes
+Mixed model	complexity	zone_f1	-0.053929	-0.082590	-0.025267	327	37	0.138701	
+Mixed model	complexity	line_f1	-0.065035	-0.076345	-0.053725	327	37	0.500365	The MLE may be on the boundary of the parameter space.
+Mixed model	complexity	baseline_distance	0.004059	0.000780	0.007338	327	37	0.201410	The MLE may be on the boundary of the parameter space.
+Mixed model	log_lines	zone_f1	-0.013765	-0.075396	0.047866	327	37	0.138701	
+Mixed model	log_lines	line_f1	0.111528	0.082141	0.140914	327	37	0.500365	The MLE may be on the boundary of the parameter space.
+Mixed model	log_lines	baseline_distance	0.008169	-0.000985	0.017324	327	37	0.201410	The MLE may be on the boundary of the parameter space.
+Mixed model	century	zone_f1	0.057424	-0.017014	0.131861	327	37	0.138701	
+Mixed model	century	line_f1	0.074659	0.040892	0.108426	327	37	0.500365	The MLE may be on the boundary of the parameter space.
+Mixed model	century	baseline_distance	-0.001094	-0.021003	0.018815	327	37	0.201410	The MLE may be on the boundary of the parameter space.
+Mixed model	latin	zone_f1	-0.010827	-0.116093	0.094439	327	37	0.138701	
+Mixed model	latin	line_f1	0.057579	0.010120	0.105039	327	37	0.500365	The MLE may be on the boundary of the parameter space.
+Mixed model	latin	baseline_distance	-0.026634	-0.055426	0.002158	327	37	0.201410	The MLE may be on the boundary of the parameter space.
+Mixed model	log_resolution	zone_f1	0.057694	-0.067870	0.183258	327	37	0.138701	
+Mixed model	log_resolution	line_f1	0.008586	-0.047048	0.064219	327	37	0.500365	The MLE may be on the boundary of the parameter space.
+Mixed model	log_resolution	baseline_distance	0.010280	-0.019953	0.040514	327	37	0.201410	The MLE may be on the boundary of the parameter space.
+Mixed model	held_out	zone_f1	-0.119227	-0.219700	-0.018754	327	37	0.138701	
+Mixed model	held_out	line_f1	0.024309	-0.020917	0.069536	327	37	0.500365	The MLE may be on the boundary of the parameter space.
+Mixed model	held_out	baseline_distance	-0.023983	-0.051602	0.003637	327	37	0.201410	The MLE may be on the boundary of the parameter space.
+Mixed model	complexity:held_out	zone_f1	0.044497	-0.013988	0.102982	327	37	0.138701	
+Mixed model	complexity:held_out	line_f1	0.030257	0.007390	0.053125	327	37	0.500365	The MLE may be on the boundary of the parameter space.
+Mixed model	complexity:held_out	baseline_distance	-0.005078	-0.011801	0.001644	327	37	0.201410	The MLE may be on the boundary of the parameter space.
+Across manuscripts	complexity	zone_f1	-0.078782	-0.108934	-0.033217	327	37	0.276029	
+Across manuscripts	complexity	line_f1	-0.050224	-0.076784	-0.024779	327	37	0.412182	
+Across manuscripts	complexity	baseline_distance	0.008027	-0.007158	0.017145	327	37	0.428906	
+Across manuscripts	log_lines	zone_f1	0.037609	-0.048409	0.106109	327	37	0.276029	
+Across manuscripts	log_lines	line_f1	0.056639	0.017393	0.102256	327	37	0.412182	
+Across manuscripts	log_lines	baseline_distance	0.007985	-0.011263	0.033006	327	37	0.428906	
+Across manuscripts	century	zone_f1	0.097564	-0.000720	0.174266	327	37	0.276029	
+Across manuscripts	century	line_f1	0.046113	0.021850	0.075710	327	37	0.412182	
+Across manuscripts	century	baseline_distance	-0.003252	-0.023615	0.025646	327	37	0.428906	
+Across manuscripts	latin	zone_f1	0.021823	-0.104830	0.111568	327	37	0.276029	
+Across manuscripts	latin	line_f1	0.056927	0.019603	0.104265	327	37	0.412182	
+Across manuscripts	latin	baseline_distance	-0.049002	-0.071355	-0.002238	327	37	0.428906	
+Across manuscripts	log_resolution	zone_f1	0.119885	-0.015868	0.226804	327	37	0.276029	
+Across manuscripts	log_resolution	line_f1	0.014866	-0.046035	0.069493	327	37	0.412182	
+Across manuscripts	log_resolution	baseline_distance	-0.013818	-0.050025	0.037582	327	37	0.428906	
+Across manuscripts	held_out	zone_f1	-0.146945	-0.251686	-0.048968	327	37	0.276029	
+Across manuscripts	held_out	line_f1	0.044255	0.006074	0.069477	327	37	0.412182	
+Across manuscripts	held_out	baseline_distance	-0.036630	-0.057179	-0.000439	327	37	0.428906	
+Across manuscripts	complexity:held_out	zone_f1	0.077422	-0.007098	0.150061	327	37	0.276029	
+Across manuscripts	complexity:held_out	line_f1	0.020439	-0.008160	0.053780	327	37	0.412182	
+Across manuscripts	complexity:held_out	baseline_distance	0.000864	-0.018188	0.017373	327	37	0.428906	
+Within manuscripts	complexity	zone_f1	-0.049306	-0.101832	-0.009473	327	37	0.035397	
+Within manuscripts	complexity	line_f1	-0.064898	-0.086283	-0.033013	327	37	0.469287	
+Within manuscripts	complexity	baseline_distance	0.004017	0.001030	0.008564	327	37	0.028298	
+Within manuscripts	log_lines	zone_f1	-0.072222	-0.221822	0.003780	327	37	0.035397	
+Within manuscripts	log_lines	line_f1	0.161837	-0.000543	0.255076	327	37	0.469287	
+Within manuscripts	log_lines	baseline_distance	0.008188	0.001708	0.027381	327	37	0.028298	
+Within manuscripts	century	zone_f1				327	37	0.035397	
+Within manuscripts	century	line_f1				327	37	0.469287	
+Within manuscripts	century	baseline_distance				327	37	0.028298	
+Within manuscripts	latin	zone_f1				327	37	0.035397	
+Within manuscripts	latin	line_f1				327	37	0.469287	
+Within manuscripts	latin	baseline_distance				327	37	0.028298	
+Within manuscripts	log_resolution	zone_f1	-0.131439	-0.874915	0.501208	327	37	0.035397	
+Within manuscripts	log_resolution	line_f1	-0.001018	-0.256729	0.269735	327	37	0.469287	
+Within manuscripts	log_resolution	baseline_distance	0.032647	-0.036879	0.124201	327	37	0.028298	
+Within manuscripts	held_out	zone_f1				327	37	0.035397	
+Within manuscripts	held_out	line_f1				327	37	0.469287	
+Within manuscripts	held_out	baseline_distance				327	37	0.028298	
+Within manuscripts	complexity:held_out	zone_f1	0.019616	-0.069939	0.108485	327	37	0.035397	
+Within manuscripts	complexity:held_out	line_f1	0.031901	-0.003537	0.059388	327	37	0.469287	
+Within manuscripts	complexity:held_out	baseline_distance	-0.005894	-0.010722	-0.002576	327	37	0.028298	

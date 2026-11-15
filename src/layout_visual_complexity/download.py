@@ -408,6 +408,23 @@ def _smaller(data: bytes | Path, long_edge: int, quality: int) -> tuple[bytes, t
     return buffer.getvalue(), size, own
 
 
+def _part(file: Path, region: tuple[int, int, int, int], long_edge: int, quality: int) -> bytes:
+    """A part of an image as JPEG, made to fit the long edge as `_smaller` makes whole images, or at its own size."""
+    from PIL import Image
+
+    with Image.open(file) as image:
+        image.load()
+        part = image.convert("RGB").crop(tuple(int(value) for value in region))
+    own = part.size
+    if max(own) > long_edge:
+        scale = long_edge / max(own)
+        size = (max(1, round(own[0] * scale)), max(1, round(own[1] * scale)))
+        part = part.resize(size, Image.Resampling.LANCZOS, reducing_gap=3.0)
+    buffer = io.BytesIO()
+    part.save(buffer, "JPEG", quality=quality)
+    return buffer.getvalue()
+
+
 def _image_size(path: Path) -> tuple[int, int]:
     from PIL import Image
 
@@ -473,17 +490,25 @@ class ImageFetcher:
         self.info.put(key, json.dumps([width, height]).encode())
         return PageImage(path, *_image_size(path), width, height, url, True)
 
-    def from_file(self, file: Path) -> PageImage:
+    def from_file(self, file: Path, region: tuple[int, int, int, int] | None = None) -> PageImage:
+        """A local image, or a part of it (`region`: x0, y0, x1, y1), made smaller here when larger than the long
+        edge; a part is cropped into the cache, its full size the part's."""
         file = Path(file)
         if not file.is_file():
             raise DownloadError(f"{file}: no such image")
-        own = _image_size(file)
-        if max(own) <= self.settings.long_edge:
-            return PageImage(file, *own, *own, str(file), False)
+        if region is None:
+            own = _image_size(file)
+            if max(own) <= self.settings.long_edge:
+                return PageImage(file, *own, *own, str(file), False)
         stat = file.stat()
-        key = f"{file.resolve()}#{stat.st_size}#{stat.st_mtime_ns}#long_edge={self.settings.long_edge}"
+        part = "" if region is None else "#region=" + ",".join(str(int(value)) for value in region)
+        key = f"{file.resolve()}#{stat.st_size}#{stat.st_mtime_ns}{part}#long_edge={self.settings.long_edge}"
         path = self.images.get(key)
-        if path is None:
+        if region is not None:
+            own = (int(region[2] - region[0]), int(region[3] - region[1]))
+            if path is None:
+                path = self.images.put(key, _part(file, region, self.settings.long_edge, self.settings.quality))
+        elif path is None:
             data, _, _ = _smaller(file, self.settings.long_edge, self.settings.quality)
             path = self.images.put(key, data)
         return PageImage(path, *_image_size(path), *own, str(file), True)

@@ -1,0 +1,61 @@
+\begin{table}[htbp]
+  \centering
+  \caption{The difficulty experiment's manuscripts: CREMMA Medieval's and CREMMA Medii Aevi's, read from their ALTO files, and the handwritten manuscripts of the 14th to 16th century in CATMuS Medieval Segmentation's test split, read from its metadata. Shelfmarks as the sources give them; the century as CREMMA's tables and CATMuS's metadata give it; pages after double-page spreads are split, each half a page, halves without ground truth left out. Held out: in CATMuS's test split, so neither the regions model nor the recognition model trained on it. Compared: in the held-out comparison of the segmentation measures.}
+  \label{tab:difficulty_material}
+  \begin{tabular}{lcccccc}
+    \toprule
+    Shelfmark & Source & Century & Language & Pages & Held out & Compared \\
+    \midrule
+    Paris, BnF, NAL 730 & CATMuS Medieval Segmentation & 14 & Latin & 8 & yes & yes \\
+    Paris, BnF, esp. 36 & CATMuS Medieval Segmentation & 14 & Castilian & 6 & yes & yes \\
+    Paris, BnF, esp. 65 & CATMuS Medieval Segmentation & 14 & Castilian & 11 & yes & yes \\
+    Paris, BnF, fr. 574 & CATMuS Medieval Segmentation & 14 & French & 2 & yes & yes \\
+    Paris, BnF, ita. 481 & CATMuS Medieval Segmentation & 14 & Italian & 5 & yes & yes \\
+    Paris, BnF, ita. 783 & CATMuS Medieval Segmentation & 14 & Italian & 5 & yes & yes \\
+    Paris, BnF, lat. 14137 & CATMuS Medieval Segmentation & 14 & Latin & 5 & yes & yes \\
+    Madrid, BNE, MSS. 3995 & CATMuS Medieval Segmentation & 15 & Castilian & 2 & yes & yes \\
+    Paris, BnF, fr. 2701 & CATMuS Medieval Segmentation & 15 & French & 1 & yes & yes \\
+    Paris, BnF, fr. 413 & CATMuS Medieval Segmentation & 15 & French & 10 & yes & yes \\
+    Paris, BnF, fr. 604 & CATMuS Medieval Segmentation & 15 & French & 5 & yes & yes \\
+    Paris, BnF, lat. 14650 & CATMuS Medieval Segmentation & 15 & Latin & 4 & yes & yes \\
+    Paris, BnF, Smith-Lesouëf 16 & CATMuS Medieval Segmentation & 16 & Latin & 6 & yes & yes \\
+    Paris, BnF, esp. 368 & CATMuS Medieval Segmentation & 16 & Castilian & 7 & yes & yes \\
+    Paris, BnF, fr. 1881 & CATMuS Medieval Segmentation & 16 & French & 7 & yes & yes \\
+    Cologny, Bodmer, 168 & CREMMA Medieval & 13 & French & 23 & no & no \\
+    Paris, BnF, Arsenal 3516 & CREMMA Medieval & 13 & French & 10 & no & no \\
+    Paris, BnF, fr. 13496 & CREMMA Medieval & 13 & French & 2 & yes & no \\
+    Paris, BnF, fr. 17229 & CREMMA Medieval & 13 & French & 2 & no & no \\
+    Paris, BnF, fr. 24428 & CREMMA Medieval & 13 & French & 20 & no & no \\
+    Paris, BnF, fr. 412 & CREMMA Medieval & 13 & French & 66 & no & no \\
+    Paris, BnF, fr. 844 & CREMMA Medieval & 13 & French & 18 & no & no \\
+    Paris, BnF, fr. 1728 & CREMMA Medieval & 14 & French & 10 & no & yes \\
+    Paris, BnF, fr. 22549 & CREMMA Medieval & 14 & French & 18 & no & yes \\
+    Paris, BnF, fr. 411 & CREMMA Medieval & 14 & French & 2 & no & yes \\
+    University of Pennsylvania, codex 660 & CREMMA Medieval & 14 & French & 11 & no & yes \\
+    Vaticane, Reg. Lat., 1616 & CREMMA Medieval & 14 & French & 52 & no & yes \\
+    KBR, ms 9232 & CREMMA Medieval & 15 & French & 16 & no & yes \\
+    University of Pennsylvania, codex 909 & CREMMA Medieval & 15 & French & 32 & no & yes \\
+    Egerton 821 & CREMMA Medii Aevi & 12 & Latin & 4 & no & no \\
+    Montpellier H318 & CREMMA Medii Aevi & 12 & Latin & 10 & yes & no \\
+    CCCC MSS 236 & CREMMA Medii Aevi & 13 & Latin & 5 & no & no \\
+    CLM 13027 & CREMMA Medii Aevi & 13 & Latin & 5 & no & no \\
+    Latin 16195 & CREMMA Medii Aevi & 13 & Latin & 4 & no & no \\
+    MsWettF 15 & CREMMA Medii Aevi & 13 & Latin & 5 & no & no \\
+    Arras 861 & CREMMA Medii Aevi & 14 & Latin & 5 & no & yes \\
+    BIS 193 & CREMMA Medii Aevi & 14 & Latin & 6 & yes & yes \\
+    Latin 6395 & CREMMA Medii Aevi & 14 & Latin & 6 & no & yes \\
+    Laur. Plut. 33.31 & CREMMA Medii Aevi & 14 & Latin & 5 & no & yes \\
+    Mazarine Ms. 915 & CREMMA Medii Aevi & 14 & Latin & 4 & no & yes \\
+    Phil., Col. of Phys. 10a 135 & CREMMA Medii Aevi & 14 & Latin & 5 & no & yes \\
+    UBL, Ms 758 & CREMMA Medii Aevi & 14 & Latin & 15 & no & yes \\
+    Berlin, Germ. Oct. 511 & CREMMA Medii Aevi & 15 & Latin & 6 & no & yes \\
+    Berlin, Hdschr. 25 & CREMMA Medii Aevi & 15 & Latin & 17 & no & yes \\
+    Latin 8236 & CREMMA Medii Aevi & 15 & Latin & 10 & no & yes \\
+    Laur. Plut. 39.34 & CREMMA Medii Aevi & 15 & Latin & 5 & yes & yes \\
+    Laur. Plut. 53.08 & CREMMA Medii Aevi & 15 & Latin & 4 & no & yes \\
+    Laur. Plut. 53.09 & CREMMA Medii Aevi & 15 & Latin & 5 & no & yes \\
+    Vat. Pal. Lat. 373 & CREMMA Medii Aevi & 15 & Latin & 5 & no & yes \\
+    CCCC MSS 165 & CREMMA Medii Aevi & 16 & Latin & 5 & no & yes \\
+    \bottomrule
+  \end{tabular}
+\end{table}

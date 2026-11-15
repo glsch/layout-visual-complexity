@@ -1,0 +1,63 @@
+# The difficulty experiment's held-out pages: CATMuS Medieval Segmentation's test split, its handwritten manuscripts of
+# the 14th to the 16th century that aren't CREMMA's (BIS 193 and Laur. Plut. 39.34 are read from CREMMA, once): 59
+# images of 15 manuscripts, with zones and lines but no transcriptions, so no text is recognised. The 31 double-page
+# spreads, every image wider than tall, looked at one by one, are split into their pages first; a half without any
+# ground-truth line is left out. Not part of `make all`: it needs the segment and vit extras, the models in models/,
+# and the sources (make -C reproduce sources).
+sources:
+  - build/sources/catmus/data/test/metadata.jsonl
+manuscripts:
+  - paris-bnf-ita-783
+  - paris-bnf-ita-481
+  - paris-bnf-fr-574
+  - paris-bnf-esp-65
+  - paris-bnf-esp-36
+  - paris-bnf-lat-14137
+  - paris-bnf-nal-730
+  - madrid-bne-mss-3995
+  - paris-bnf-fr-604
+  - paris-bnf-fr-413
+  - paris-bnf-fr-2701
+  - paris-bnf-lat-14650
+  - paris-bnf-fr-1881
+  - paris-bnf-esp-368
+  - paris-bnf-smith-lesouef-16
+output: build/difficulty/catmus_test
+manuscript_table: reproduce/difficulty_manuscripts.tsv
+regions:
+  model: models/medieval-yolov11x.pt
+recognition:
+  model: models/catmus-medieval-1.6.0.mlmodel
+spreads:
+  pages:
+    - madridbnemss3995_page-001-of-001
+    - parisbnffr413_page-001-of-005
+    - parisbnffr413_page-002-of-005
+    - parisbnffr413_page-003-of-005
+    - parisbnffr413_page-004-of-005
+    - parisbnffr413_page-005-of-005
+    - parisbnffr2701_page-002-of-002
+    - parisbnffr1881_page-001-of-004
+    - parisbnffr1881_page-002-of-004
+    - parisbnffr1881_page-003-of-004
+    - parisbnffr1881_page-004-of-004
+    - parisbnfesp368_page-001-of-005
+    - parisbnfesp368_page-002-of-005
+    - parisbnfesp368_page-003-of-005
+    - parisbnfesp368_page-004-of-005
+    - parisbnfesp368_page-005-of-005
+    - parisbnfesp65_page-001-of-006
+    - parisbnfesp65_page-002-of-006
+    - parisbnfesp65_page-003-of-006
+    - parisbnfesp65_page-004-of-006
+    - parisbnfesp65_page-005-of-006
+    - parisbnfesp65_page-006-of-006
+    - parisbnfnal730_page-001-of-004
+    - parisbnfnal730_page-002-of-004
+    - parisbnfnal730_page-003-of-004
+    - parisbnfnal730_page-004-of-004
+    - parisbnflat14650_page-001-of-002
+    - parisbnflat14650_page-002-of-002
+    - parisbnfsmithlesouef16_page-001-of-003
+    - parisbnfsmithlesouef16_page-002-of-003
+    - parisbnfsmithlesouef16_page-003-of-003

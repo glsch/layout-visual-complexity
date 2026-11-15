@@ -121,3 +121,27 @@ class FakeLines(FakeStep):
                 page.lines.append(Line([(0.15 * width, y), (0.85 * width, y)], boundary))
             page.status[self.name] = Status()
         return pages
+
+
+class FakeRecognition(FakeStep):
+    """Text recognition that reads every ground-truth line as its id and every found line as `line <n>`, on the pages
+    given; the others are left as they are."""
+
+    needs = frozenset({"image", "lines"})
+    produces = frozenset({"recognition"})
+
+    def __init__(self, settings: FakeSettings | None = None, pages: dict | None = None) -> None:
+        super().__init__(settings)
+        self.pages = pages or {}
+
+    def process(self, pages: list[PageRecord]) -> list[PageRecord]:
+        for page in self.simulate(pages):
+            given = self.pages.get(page.page)
+            page.recognition = None
+            if given is not None:
+                page.recognition = {
+                    "ground_truth": {line[0]: line[0] for line in given.lines},
+                    "lines": [f"line {number}" for number in range(1, len(page.lines) + 1)],
+                }
+            page.status[self.name] = Status()
+        return pages
