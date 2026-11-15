@@ -1,0 +1,43 @@
+\begin{table}[htbp]
+  \centering
+  \caption{The segmentation measures on pages CATMuS's models never saw against pages they trained on, all handwritten and of the 14th to 16th century: 94 pages from 17 manuscripts of CATMuS's test split (CREMMA's two among them) against 233 of CREMMA's pages from 20 manuscripts, each measure regressed on complexity, held out and their interaction, with the controls: in a mixed model with a random intercept for the manuscript (Wald intervals), and by least squares across and within manuscripts (intervals from 1,000 resamples of the manuscripts; within, held out and the manuscripts' own controls drop out). Complexity is the expected Elo score of the shipped ensemble, standardised over the pages analysed, so its coefficient is per standard deviation; these are predictions, for nobody judged these pages. The controls: the log of the ground truth's text lines, the century, Latin against the other languages, and the log of the median height of the ground-truth line polygons in pixels (the resolution). Zone F1 is the F1 score of the regions model's zones against the ground truth's, matched one to one within each class by the IoU of boxes (from 0.5); line F1 that of Kraken's lines against the ground truth's text lines (default, heading and interlinear), matched by the IoU of polygons, a found line matching a drop capital's or music's counting neither way; the baseline distance, the mean distance between matched baselines in line heights; the CER, the character error rate of Kraken with CATMuS Medieval's model, on the ground-truth lines and end to end (on Kraken's lines, missed lines' characters and invented lines' added), texts in NFC with whitespace runs as one space.}
+  \label{tab:difficulty_held_out}
+  \begin{tabular}{lccc}
+    \toprule
+     & Zone F1 & Line F1 & Baseline distance \\
+    \midrule
+    \textit{Mixed model} &  &  &  \\
+    Complexity (per SD) & $-$0.054 [$-$0.083, $-$0.025] & $-$0.065 [$-$0.076, $-$0.054] & +0.004 [+0.001, +0.007] \\
+    Lines (log) & $-$0.014 [$-$0.075, +0.048] & +0.112 [+0.082, +0.141] & +0.008 [$-$0.001, +0.017] \\
+    Century & +0.057 [$-$0.017, +0.132] & +0.075 [+0.041, +0.108] & $-$0.001 [$-$0.021, +0.019] \\
+    Latin & $-$0.011 [$-$0.116, +0.094] & +0.058 [+0.010, +0.105] & $-$0.027 [$-$0.055, +0.002] \\
+    Resolution (log) & +0.058 [$-$0.068, +0.183] & +0.009 [$-$0.047, +0.064] & +0.010 [$-$0.020, +0.041] \\
+    Held out & $-$0.119 [$-$0.220, $-$0.019] & +0.024 [$-$0.021, +0.070] & $-$0.024 [$-$0.052, +0.004] \\
+    Complexity $\times$ held out & +0.044 [$-$0.014, +0.103] & +0.030 [+0.007, +0.053] & $-$0.005 [$-$0.012, +0.002] \\
+    Pages; manuscripts & 327; 37 & 327; 37 & 327; 37 \\
+    R$^2$ & 0.139 & 0.500 & 0.201 \\
+    \midrule
+    \textit{Across manuscripts} &  &  &  \\
+    Complexity (per SD) & $-$0.079 [$-$0.109, $-$0.033] & $-$0.050 [$-$0.077, $-$0.025] & +0.008 [$-$0.007, +0.017] \\
+    Lines (log) & +0.038 [$-$0.048, +0.106] & +0.057 [+0.017, +0.102] & +0.008 [$-$0.011, +0.033] \\
+    Century & +0.098 [$-$0.001, +0.174] & +0.046 [+0.022, +0.076] & $-$0.003 [$-$0.024, +0.026] \\
+    Latin & +0.022 [$-$0.105, +0.112] & +0.057 [+0.020, +0.104] & $-$0.049 [$-$0.071, $-$0.002] \\
+    Resolution (log) & +0.120 [$-$0.016, +0.227] & +0.015 [$-$0.046, +0.069] & $-$0.014 [$-$0.050, +0.038] \\
+    Held out & $-$0.147 [$-$0.252, $-$0.049] & +0.044 [+0.006, +0.069] & $-$0.037 [$-$0.057, $-$0.000] \\
+    Complexity $\times$ held out & +0.077 [$-$0.007, +0.150] & +0.020 [$-$0.008, +0.054] & +0.001 [$-$0.018, +0.017] \\
+    Pages; manuscripts & 327; 37 & 327; 37 & 327; 37 \\
+    R$^2$ & 0.276 & 0.412 & 0.429 \\
+    \midrule
+    \textit{Within manuscripts} &  &  &  \\
+    Complexity (per SD) & $-$0.049 [$-$0.102, $-$0.009] & $-$0.065 [$-$0.086, $-$0.033] & +0.004 [+0.001, +0.009] \\
+    Lines (log) & $-$0.072 [$-$0.222, +0.004] & +0.162 [$-$0.001, +0.255] & +0.008 [+0.002, +0.027] \\
+    Century & -- & -- & -- \\
+    Latin & -- & -- & -- \\
+    Resolution (log) & $-$0.131 [$-$0.875, +0.501] & $-$0.001 [$-$0.257, +0.270] & +0.033 [$-$0.037, +0.124] \\
+    Held out & -- & -- & -- \\
+    Complexity $\times$ held out & +0.020 [$-$0.070, +0.108] & +0.032 [$-$0.004, +0.059] & $-$0.006 [$-$0.011, $-$0.003] \\
+    Pages; manuscripts & 327; 37 & 327; 37 & 327; 37 \\
+    R$^2$ & 0.035 & 0.469 & 0.028 \\
+    \bottomrule
+  \end{tabular}
+\end{table}

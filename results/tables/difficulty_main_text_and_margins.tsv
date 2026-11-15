@@ -1,0 +1,13 @@
+part	measure	pooled	low	high	pages
+main	line_f1	0.919876	0.863163	0.963851	418
+main	cer_lines	0.024447	0.017780	0.035026	418
+main	cer_end_to_end	0.170192	0.077653	0.302787	418
+main	rho_line_f1	-0.495442	-0.681471	-0.266534	418
+main	rho_cer_lines	0.062767	-0.151738	0.268152	417
+main	rho_cer_end_to_end	0.519177	0.306115	0.706420	417
+margin	line_f1	0.669022	0.495547	0.839005	78
+margin	cer_lines	0.129198	0.059253	0.193955	78
+margin	cer_end_to_end	0.540300	0.214610	1.091339	78
+margin	rho_line_f1	-0.115039	-0.373049	0.235161	78
+margin	rho_cer_lines	-0.133022	-0.533893	0.206659	76
+margin	rho_cer_end_to_end	0.027924	-0.410020	0.376983	76
