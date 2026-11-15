@@ -1,0 +1,51 @@
+source	folder	catmus_folder	shelfmark	language	century	split	comparison	note
+CREMMA Medieval	bnf_arsenal_3516-imageDuMonde	paris-bnf-arsenal-3516	Paris, BnF, Arsenal 3516	French	13	train	no	
+CREMMA Medieval	bnf_fr_13496-saintJerome	paris-bnf-fr-13496	Paris, BnF, fr. 13496	French	13	test	no	
+CREMMA Medieval	bnf_fr_17229-saintLambert	paris-bnf-fr-17229	Paris, BnF, fr. 17229	French	13	train	no	
+CREMMA Medieval	bnf_fr_1728	paris-bnf-fr-1728	Paris, BnF, fr. 1728	French	14	train	yes	
+CREMMA Medieval	bnf_fr_22549-septSages	paris-bnf-fr-22549	Paris, BnF, fr. 22549	French	14	train	yes	
+CREMMA Medieval	bnf_fr_24428-bestiaire	paris-bnf-fr-24428	Paris, BnF, fr. 24428	French	13	train	no	
+CREMMA Medieval	bnf_fr_411-saintLambert	paris-bnf-fr-411	Paris, BnF, fr. 411	French	14	train	yes	
+CREMMA Medieval	bnf_fr_412-wauchier	paris-bnf-fr-412	Paris, BnF, fr. 412	French	13	train	no	
+CREMMA Medieval	bnf_fr_844-manuscritDuRoi	paris-bnf-fr-844	Paris, BnF, fr. 844	French	13	train	no	
+CREMMA Medieval	bodmer_168-otinel	cologne-bodmer-168	Cologny, Bodmer, 168	French	13	train	no	
+CREMMA Medieval	kbr_9232-examensMoraux	bruxelles-kbr-ms-9232	KBR, ms 9232	French	15	train	yes	
+CREMMA Medieval	pennsylvania_660-pelerinageMademoiselleSapience	philadelphia-university-of-pennsylvania-ms-codex-660	University of Pennsylvania, codex 660	French	14	train	yes	
+CREMMA Medieval	pennsylvania_codex_909-eneide	philadelphia-university-of-pennsylvania-codex-909	University of Pennsylvania, codex 909	French	15	train	yes	
+CREMMA Medieval	vaticane_reg_lat_1616-otinel	vatican-biblioteca-apostolica-vaticana-reg-lat-1616	Vaticane, Reg. Lat., 1616	French	14	train	yes	
+CREMMA Medii Aevi	Arras-861	arras-mediatheque-de-l-abbaye-saint-vaast-315-cgm-861	Arras 861	Latin	14	train	yes	
+CREMMA Medii Aevi	BGO-511	berlin-staatsbibliothek-germ-oct-511	Berlin, Germ. Oct. 511	Latin	15	train	yes	
+CREMMA Medii Aevi	BIS-193	paris-bibliotheque-inter-universitaire-de-la-sorbonne-193	BIS 193	Latin	14	test	yes	
+CREMMA Medii Aevi	CCCC-MSS-165	cambridge-corpus-christi-college-ms-165	CCCC MSS 165	Latin	16	train	yes	
+CREMMA Medii Aevi	CCCC-MSS-236	cambridge-corpus-christi-college-ms-236	CCCC MSS 236	Latin	13	train	no	
+CREMMA Medii Aevi	CLM13027	munich-bayerische-staatsbibliothek-clm-13027	CLM 13027	Latin	13	train	no	
+CREMMA Medii Aevi	Egerton821	london-british-library-egerton-821	Egerton 821	Latin	12	dev	no	
+CREMMA Medii Aevi	H318	montpellier-bibliotheque-universitaire-historique-de-medecine-h318	Montpellier H318	Latin	12	test	no	
+CREMMA Medii Aevi	Latin16195	paris-bnf-lat-16195	Latin 16195	Latin	13	train	no	
+CREMMA Medii Aevi	Latin6395	paris-bnf-lat-6395	Latin 6395	Latin	14	train	yes	
+CREMMA Medii Aevi	Latin8236	paris-bnf-lat-8236	Latin 8236	Latin	15	train	yes	
+CREMMA Medii Aevi	LaurentianusPluteus33.31	florence-biblioteca-medicea-laurenziana-laur-plut-33-31	Laur. Plut. 33.31	Latin	14	train	yes	
+CREMMA Medii Aevi	LaurentianusPluteus39.34	florence-biblioteca-medicea-laurenziana-laur-plut-39-34	Laur. Plut. 39.34	Latin	15	test	yes	
+CREMMA Medii Aevi	LaurentianusPluteus53.08	florence-biblioteca-medicea-laurenziana-laur-plut-53-08	Laur. Plut. 53.08	Latin	15	train	yes	
+CREMMA Medii Aevi	LaurentianusPluteus53.09	florence-biblioteca-medicea-laurenziana-laur-plut-53-09	Laur. Plut. 53.09	Latin	15	train	yes	
+CREMMA Medii Aevi	Mazarine915	paris-mazarine-ms-915	Mazarine Ms. 915	Latin	14	train	yes	
+CREMMA Medii Aevi	PalLat373	vatican-biblioteca-apostolica-vaticana-pal-lat-373	Vat. Pal. Lat. 373	Latin	15	train	yes	
+CREMMA Medii Aevi	Phi_10a135	philadelphia-college-of-physicians-10a-135	Phil., Col. of Phys. 10a 135	Latin	14	train	yes	
+CREMMA Medii Aevi	SBB_PK_Hdschr25	berlin-staatsbibliothek-hdschr-25	Berlin, Hdschr. 25	Latin	15	train	yes	
+CREMMA Medii Aevi	UBL758	leipzig-universitats-bibliothek-leipzig-ms-758	UBL, Ms 758	Latin	14	train	yes	
+CREMMA Medii Aevi	WettF0015	aarau-aargauer-kantonsbibliothek-mswettf-15	MsWettF 15	Latin	13	train	no	
+CATMuS Medieval Segmentation	paris-bnf-ita-783	paris-bnf-ita-783	Paris, BnF, ita. 783	Italian	14	test	yes	
+CATMuS Medieval Segmentation	paris-bnf-ita-481	paris-bnf-ita-481	Paris, BnF, ita. 481	Italian	14	test	yes	
+CATMuS Medieval Segmentation	paris-bnf-fr-574	paris-bnf-fr-574	Paris, BnF, fr. 574	French	14	test	yes	
+CATMuS Medieval Segmentation	paris-bnf-esp-65	paris-bnf-esp-65	Paris, BnF, esp. 65	Castilian	14	test	yes	
+CATMuS Medieval Segmentation	paris-bnf-esp-36	paris-bnf-esp-36	Paris, BnF, esp. 36	Castilian	14	test	yes	
+CATMuS Medieval Segmentation	paris-bnf-lat-14137	paris-bnf-lat-14137	Paris, BnF, lat. 14137	Latin	14	test	yes	
+CATMuS Medieval Segmentation	paris-bnf-nal-730	paris-bnf-nal-730	Paris, BnF, NAL 730	Latin	14	test	yes	
+CATMuS Medieval Segmentation	madrid-bne-mss-3995	madrid-bne-mss-3995	Madrid, BNE, MSS. 3995	Castilian	15	test	yes	Language from CATMuS Medieval (revision e119659), its test split's file for the shelfmark (L-Cas).
+CATMuS Medieval Segmentation	paris-bnf-fr-604	paris-bnf-fr-604	Paris, BnF, fr. 604	French	15	test	yes	
+CATMuS Medieval Segmentation	paris-bnf-fr-413	paris-bnf-fr-413	Paris, BnF, fr. 413	French	15	test	yes	
+CATMuS Medieval Segmentation	paris-bnf-fr-2701	paris-bnf-fr-2701	Paris, BnF, fr. 2701	French	15	test	yes	
+CATMuS Medieval Segmentation	paris-bnf-lat-14650	paris-bnf-lat-14650	Paris, BnF, lat. 14650	Latin	15	test	yes	
+CATMuS Medieval Segmentation	paris-bnf-fr-1881	paris-bnf-fr-1881	Paris, BnF, fr. 1881	French	16	test	yes	
+CATMuS Medieval Segmentation	paris-bnf-esp-368	paris-bnf-esp-368	Paris, BnF, esp. 368	Castilian	16	test	yes	
+CATMuS Medieval Segmentation	paris-bnf-smith-lesouef-16	paris-bnf-smith-lesouef-16	Paris, BnF, Smith-Lesouëf 16	Latin	16	test	yes	Language from CATMuS Medieval (revision e119659), its test split's file for the shelfmark (L-Lat).

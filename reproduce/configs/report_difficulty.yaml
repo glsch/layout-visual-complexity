@@ -1,0 +1,13 @@
+# Shared by the difficulty experiment's tables and figures: its two runs (difficulty_cremma.yaml, the main analysis on
+# CREMMA's pages; difficulty_catmus_test.yaml, the held-out pages of CATMuS's test split), the table of manuscripts
+# (reproduce/difficulty_manuscripts.tsv), where the outputs go, and the resamples. Each table or figure adds its own
+# configuration.
+difficulty_runs:
+  cremma: build/difficulty/cremma
+  catmus_test: build/difficulty/catmus_test
+difficulty_main: cremma
+manuscript_table: reproduce/difficulty_manuscripts.tsv
+output: results
+bootstrap: 1000
+seed: 20260629
+neighbours: 0.25

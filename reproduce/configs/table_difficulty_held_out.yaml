@@ -1,0 +1,4 @@
+# The held-out comparison of the segmentation measures, 14th to 16th century, and CREMMA's held-out pages beside
+# its seen pages of similar complexity.
+name: table_difficulty_held_out
+outputs: [difficulty_held_out]

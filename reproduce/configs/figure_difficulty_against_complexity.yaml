@@ -1,0 +1,4 @@
+# The four measures of automatic difficulty against predicted complexity, a dot per page, in a 2 × 2 grid; with
+# the CER on a log axis too when it is skewed.
+name: figure_difficulty_against_complexity
+outputs: [difficulty_against_complexity]
