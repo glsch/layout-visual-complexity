@@ -65,7 +65,8 @@ REPORT := $(RUN) judgments report --config $(CONFIGS)/report.yaml --config $(CON
 	figure-manuscript-strips figure-crux-overview table-crux-manuscripts table-crux-readings sources difficulty \
 	difficulty-cremma difficulty-catmus-test figure-difficulty-against-complexity table-difficulty-regression \
 	table-difficulty-regression-across-and-within table-difficulty-held-out table-difficulty-correlations \
-	table-difficulty-main-text-and-margins table-difficulty-material difficulty-pages clean
+	table-difficulty-main-text-and-margins table-difficulty-ground-truth-coverage table-difficulty-by-ranker \
+	table-difficulty-by-quarter table-difficulty-material difficulty-pages clean
 
 all: table-dataset-categories table-reliability figure-position-bias-funnel figure-comparison-graph figure-elo-score-bands \
 	table-geometry-by-elo-gap table-geometry-feature-hierarchy figure-geometry-feature-correlations \
@@ -491,7 +492,8 @@ DIFFICULTY_REPORT := $(RUN) report --config $(CONFIGS)/report_difficulty.yaml --
 DIFFICULTY_RUNS := $(DIFFICULTY_CREMMA) $(DIFFICULTY_CATMUS) $(MANUSCRIPT_TABLE) configs/report_difficulty.yaml
 DIFFICULTY_OUTPUTS := figure-difficulty-against-complexity table-difficulty-regression \
 	table-difficulty-regression-across-and-within table-difficulty-held-out table-difficulty-correlations \
-	table-difficulty-main-text-and-margins table-difficulty-material difficulty-pages
+	table-difficulty-main-text-and-margins table-difficulty-ground-truth-coverage table-difficulty-by-ranker \
+	table-difficulty-by-quarter table-difficulty-material difficulty-pages
 difficulty: $(DIFFICULTY_OUTPUTS)
 
 figure-difficulty-against-complexity: $(TOP)/results/figures/difficulty_against_complexity.svg
@@ -519,6 +521,19 @@ table-difficulty-main-text-and-margins: $(TOP)/results/tables/difficulty_main_te
 $(TOP)/results/tables/difficulty_main_text_and_margins.tsv: $(DIFFICULTY_RUNS) \
 		configs/table_difficulty_main_text_and_margins.yaml
 	$(DIFFICULTY_REPORT)/table_difficulty_main_text_and_margins.yaml
+
+table-difficulty-ground-truth-coverage: $(TOP)/results/tables/difficulty_ground_truth_coverage.tsv
+$(TOP)/results/tables/difficulty_ground_truth_coverage.tsv: $(DIFFICULTY_RUNS) \
+		configs/table_difficulty_ground_truth_coverage.yaml
+	$(DIFFICULTY_REPORT)/table_difficulty_ground_truth_coverage.yaml
+
+table-difficulty-by-ranker: $(TOP)/results/tables/difficulty_by_ranker.tsv
+$(TOP)/results/tables/difficulty_by_ranker.tsv: $(DIFFICULTY_RUNS) configs/table_difficulty_by_ranker.yaml
+	$(DIFFICULTY_REPORT)/table_difficulty_by_ranker.yaml
+
+table-difficulty-by-quarter: $(TOP)/results/tables/difficulty_by_quarter.tsv
+$(TOP)/results/tables/difficulty_by_quarter.tsv: $(DIFFICULTY_RUNS) configs/table_difficulty_by_quarter.yaml
+	$(DIFFICULTY_REPORT)/table_difficulty_by_quarter.yaml
 
 table-difficulty-material: $(TOP)/results/tables/difficulty_material.tsv
 $(TOP)/results/tables/difficulty_material.tsv: $(DIFFICULTY_RUNS) configs/table_difficulty_material.yaml

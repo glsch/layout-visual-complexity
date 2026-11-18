@@ -1,0 +1,4 @@
+# Each ranker alone: rho overall and within manuscripts, and the mixed model, for the geometry ranker, the ViT head
+# and their ensemble.
+name: table_difficulty_by_ranker
+outputs: [difficulty_by_ranker]

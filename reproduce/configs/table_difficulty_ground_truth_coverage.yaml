@@ -1,0 +1,4 @@
+# Ground truth that leaves text out: the mixed model with every page and without the pages where many of Kraken's
+# lines lie outside every ground-truth zone, with each run's pages flagged and line and zone precision.
+name: table_difficulty_ground_truth_coverage
+outputs: [difficulty_ground_truth_coverage]
