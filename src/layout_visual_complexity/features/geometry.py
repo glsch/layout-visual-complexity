@@ -166,6 +166,9 @@ class Geometry(Family):
     def words(self, column: str) -> str:
         return column_words(column)
 
+    def label(self, column: str) -> str:
+        return column_label(column)
+
     def measure(self, page: Page) -> list[dict[str, float]]:
         settings: GeometrySettings = self.settings  # type: ignore[assignment]
         rows = []
@@ -226,7 +229,7 @@ STATISTIC_WORDS = {
     "max_dev": "range",
     "min": "minimum",
     "max": "maximum",
-    "var_coef": "coefficient of variation",
+    "var_coef": "coefficient of variation (standard deviation over mean)",
 }
 DISTANCE_WORDS = {
     "min_gap": "the shortest distance",
@@ -262,8 +265,9 @@ def column_words(column: str) -> str:
         }[flavour]
     if feature == "LineSimilarity":
         measure, _, statistic = flavour.partition("_")
-        name = "IoU" if measure == "iou" else "Dice"
-        return f"the {STATISTIC_WORDS[statistic]} {name} similarity of two line polygons centred on each other"
+        name = "IoU" if measure == "iou" else "Dice similarity"
+        of = " " if statistic in ("mean", "median") else " of the "
+        return f"the {STATISTIC_WORDS[statistic]}{of}{name} of two line polygons centred on each other"
     if feature in ("GraphicZoneArea", "DropCapitalArea"):
         zones = "graphic zones" if feature == "GraphicZoneArea" else "drop capitals"
         name = flavour.split("_", 1)[1] if feature == "GraphicZoneArea" else flavour.removeprefix("drop_capital_")
@@ -272,7 +276,7 @@ def column_words(column: str) -> str:
         if name == "num_isolated_instances":
             return f"the number of separate {zones}"
         statistic = name.removeprefix("area_ratio_")
-        return f"the {STATISTIC_WORDS[statistic]} area of the {zones}, each relative to the folio's"
+        return f"the {STATISTIC_WORDS[statistic]} of the {zones}' areas, each relative to the folio's"
     if feature == "LineLength":
         return f"the {STATISTIC_WORDS[flavour]} of the baselines' lengths relative to their zone's width"
     if feature == "InterlinearDistance":
@@ -290,6 +294,92 @@ def column_words(column: str) -> str:
         statistic = flavour.removeprefix("pairwise_angle_diff_")
         return f"the {STATISTIC_WORDS[statistic]} of the absolute differences between two baselines' angles"
     raise ValueError(f"not a geometric column: {column}")
+
+
+# Columns as labelled in figures: the feature, then what sets the flavour apart. The six definitions of the
+# interlinear distance share their labels, as do flavours that differ only in what a caption says.
+
+FEATURE_LABELS = {
+    "WrittenSpaceRatio": "Written space",
+    "WrittenSpaceRectangularity": "Rectangularity",
+    "LineSimilarity": "Line similarity",
+    "GraphicZoneArea": "Graphic zones",
+    "DropCapitalArea": "Drop capitals",
+    "LineLength": "Line length",
+    "InterlinearDistance": "Interlinear distance",
+    "ZigzagScore": "Zigzag",
+    "LineParallelism": "Line parallelism",
+}
+# A statistic as a label names it: "variation" is the standard deviation, except for the line length, where it is the
+# coefficient of variation and the standard deviation is "SD".
+STATISTIC_LABELS = {
+    "mean": "mean",
+    "median": "median",
+    "std": "variation",
+    "max_dev": "range",
+    "min": "minimum",
+    "max": "maximum",
+    "var_coef": "variation",
+}
+SHIFT_LABELS = {
+    "max_possible": "possible shifts",
+    "coord_shift": "reversals",
+    "zigzag": "shifts",
+    "zigzag_prop": "share of shifts",
+    "coord_shift_prop": "share of reversals",
+}
+
+
+def column_label(column: str) -> str:
+    """A geometric column's readable label: its feature, then its flavour (`Line length, variation`)."""
+    _, feature, flavour = column.split("__")
+    if feature in ("WrittenSpaceRatio", "WrittenSpaceRectangularity"):
+        flavour_label = {
+            "folio_ratio": "share of the folio",
+            "convexity": "convexity",
+            "outside_ratio": "outside share",
+            "perimeter_efficiency": "perimeter efficiency",
+        }[flavour]
+    elif feature == "LineSimilarity":
+        measure, _, statistic = flavour.partition("_")
+        name = "IoU" if measure == "iou" else "Dice"
+        flavour_label = (
+            f"{statistic} {name}" if statistic in ("mean", "median") else f"{name} {STATISTIC_LABELS[statistic]}"
+        )
+    elif feature in ("GraphicZoneArea", "DropCapitalArea"):
+        name = flavour.split("_", 1)[1] if feature == "GraphicZoneArea" else flavour.removeprefix("drop_capital_")
+        statistic = name.removeprefix("area_ratio_")
+        flavour_label = {
+            "total_area_ratio": "share of the folio",
+            "num_isolated_instances": "separate",
+            "mean": "mean area",
+            "min": "smallest area",
+            "max": "largest area",
+        }.get(name) or f"area {STATISTIC_LABELS[statistic]}"
+    elif feature == "LineLength":
+        flavour_label = "SD" if flavour == "std" else STATISTIC_LABELS[flavour]
+    elif feature == "InterlinearDistance":
+        distance = next(name for name in DISTANCE_WORDS if flavour.startswith(f"{name}_"))
+        flavour_label = STATISTIC_LABELS[flavour.removeprefix(f"{distance}_")]
+    elif feature == "ZigzagScore":
+        name, _, side = flavour.rpartition("_")
+        if name in SHIFT_LABELS:
+            flavour_label = f"{side} {SHIFT_LABELS[name]}"
+        else:
+            flavour_label = f"{side} ends" + ("" if name == "std" else f", {STATISTIC_LABELS[name]}")
+    elif feature == "LineParallelism":
+        if flavour.startswith("angle_"):
+            statistic, measured = flavour.removeprefix("angle_"), "angle"
+        else:
+            statistic, measured = flavour.removeprefix("pairwise_angle_diff_"), "angle difference"
+        flavour_label = (
+            f"{statistic} {measured}"
+            if statistic in ("mean", "median")
+            else f"{measured} {STATISTIC_LABELS[statistic]}"
+        )
+    else:
+        raise ValueError(f"not a geometric column: {column}")
+    return f"{FEATURE_LABELS[feature]}, {flavour_label}"
 
 
 # Shapes and statistics.

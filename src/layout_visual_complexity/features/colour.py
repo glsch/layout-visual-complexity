@@ -1,4 +1,4 @@
-"""Real colour: how much of the ink is coloured, in which hues, how saturated, and where on the page it sits, on the ink
+"""Ink colour: how much of the ink is coloured, in which hues, how saturated, and where on the page it sits, on the ink
 layer (`folio_image.py`) with the parchment made neutral (`ink_colour.py`).
 
 - Chromatic share: the share of the ink whose chroma reaches `chroma` and whose hue lies outside `excluded_hues`
@@ -106,30 +106,30 @@ class Colour(Family):
         settings: ColourSettings = self.settings  # type: ignore[assignment]
         bins = 360 / settings.bins
         return [
-            Group("Colour", "Chromatic share", "Colour__ChromaticShare", ("share",),
+            Group("Ink colour", "Chromatic share", "Colour__ChromaticShare", ("share",),
                   "Share of the ink whose chroma, the parchment's colour made neutral, reaches the threshold, its hue "
                   "outside the excluded range.",
                   chroma_words(settings.chroma, settings.excluded_hues), "this study"),
-            Group("Colour", "Hue classes", "Colour__HueClasses", (*HUE_CLASSES, "count"),
+            Group("Ink colour", "Hue classes", "Colour__HueClasses", (*HUE_CLASSES, "count"),
                   "Shares of the ink in the chromatic hue classes, and the number of classes present.",
                   f"{hue_words(settings.excluded_hues)}; present from "
                   f"{settings.class_area:g} square line height{'s' if settings.class_area != 1 else ''}",
                   "this study"),
-            Group("Colour", "Hue entropy", "Colour__HueEntropy", ("bits",),
+            Group("Ink colour", "Hue entropy", "Colour__HueEntropy", ("bits",),
                   "Entropy of the chromatic ink's hue angles; 0 without chromatic ink.",
                   f"{settings.bins} bins of {bins:g}°", "this study"),
-            Group("Colour", "Saturation", "Colour__Saturation", ("median", "spread"),
+            Group("Ink colour", "Saturation", "Colour__Saturation", ("median", "spread"),
                   "Median chroma of the chromatic ink, and its interquartile range.",
                   "CIELAB chroma, the parchment made neutral", "this study"),
-            Group("Colour", "Colour by zone", "Colour__Zones", (*ZONE_KINDS, "headings", "rest"),
+            Group("Ink colour", "Colour by zone", "Colour__Zones", (*ZONE_KINDS, "headings", "rest"),
                   "Chromatic share of the ink within each kind of zone: main text, margins, numbering and running "
                   "titles, decoration, heading lines, and the rest of the folio.",
                   "the regions model's zones and heading lines", "this study"),
-            Group("Colour", "Colour across lines", "Colour__Lines", ("rubric_share", "spread"),
+            Group("Ink colour", "Colour across lines", "Colour__Lines", ("rubric_share", "spread"),
                   "Share of the text lines whose ink is mostly chromatic (rubric lines), and the standard deviation of "
                   "the lines' chromatic shares.",
                   f"a rubric line at least {settings.rubric:.0%} chromatic", "this study"),
-            Group("Colour", "Coloured initials", "Colour__ColouredInitials", ("count",),
+            Group("Ink colour", "Coloured initials", "Colour__ColouredInitials", ("count",),
                   "Number of drop capitals and graphic zones whose ink is mostly chromatic.",
                   f"at least {settings.coloured:.0%} of the zone's ink chromatic", "this study"),
         ]  # fmt: skip

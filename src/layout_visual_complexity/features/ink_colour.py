@@ -74,9 +74,12 @@ def chromatic(chroma: np.ndarray, hue: np.ndarray, least: float, excluded: tuple
     return found & ~hue_class(hue, excluded) if excluded else found
 
 
-def chroma_words(chroma: float, excluded: tuple[float, ...]) -> str:
-    """What makes ink chromatic, in words."""
-    return f"chroma at least {chroma:g}" + (f", hue outside {excluded[0]:g}°–{excluded[1]:g}°" if excluded else "")
+def chroma_words(chroma: float, excluded: tuple[float, ...], joined: str = ", ") -> str:
+    """What makes ink chromatic, in words, its two conditions `joined` (as a table's cell lists them; " and " in a
+    sentence)."""
+    return f"chroma at least {chroma:g}" + (
+        f"{joined}hue outside {excluded[0]:g}°–{excluded[1]:g}°" if excluded else ""
+    )
 
 
 def hue_words(excluded: tuple[float, ...]) -> str:
