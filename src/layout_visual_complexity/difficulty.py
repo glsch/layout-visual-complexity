@@ -13,13 +13,17 @@ pages that are transcribed. Each page then gets one row:
 - the character error rate of the recognition model on the ground truth's lines, and end to end, on Kraken's lines
   matched as for line F1, with the missed lines' characters and the invented lines' added;
 - the same for the lines in main text zones and in margins apart;
+- checks of the ground truth: how many of its text lines read as a neighbouring line's text (a shifted text), how
+  many read as empty through their own polygon while the found line matched to them reads text, and whether either
+  count flags the page's texts as misplaced; how many unmatched found lines and zones lie outside every ground-truth
+  zone, where the ground truth may leave text out;
 - the controls: the ground truth's lines, the median height of its line polygons (the resolution), and the columns
   of a table of manuscripts, when one is given.
 
 The run keeps the rows (`difficulty.tsv`), the zones by class (`zone_classes.tsv`), every zone and line with its
 match (`zones.parquet`, `lines.parquet`), each spread's split (`spreads.tsv`), and what `lvc score` keeps; never an
-image or a token. The measures are computed from the run's records at the end of every run, so they don't depend on
-the workers or the order pages arrive in; a rerun resumes.
+image or a token. Its report lists the pages the checks flag. The measures are computed from the run's records at
+the end of every run, so they don't depend on the workers or the order pages arrive in; a rerun resumes.
 """
 
 import math
@@ -80,6 +84,34 @@ PARTS = {"main": "MainZone", "margin": "MarginTextZone"}
 
 
 @dataclass(frozen=True)
+class GroundTruthChecks:
+    """Checks of the ground truth, whose flagged pages the run's report lists.
+
+    A ground-truth text line with a reference and a found line matched to it, texts normalised as for the CER, has a
+    shifted text when the found line reads, against the line's own text, a CER over `shifted_own`, and against the
+    text of the text line just before or after it (in the ground truth's order), a CER under `shifted_neighbour`; it
+    reads empty when its own polygon reads as empty and the found line reads text. A page with at least `lines`
+    lines of either kind has its texts flagged as misplaced, and `lvc report` leaves it out of the CERs.
+
+    A page's ground truth may leave text out when at least `outside_lines` unmatched found lines lie outside every
+    ground-truth zone, making at least `outside_share` of the lines found.
+
+    Args:
+        shifted_own: A shifted text's CER against the line's own text is over this.
+        shifted_neighbour: A shifted text's CER against a neighbouring line's text is under this.
+        lines: A page's texts are misplaced with at least this many shifted texts, or this many lines read empty.
+        outside_lines: Unmatched found lines outside every zone, at least, for a page that may leave text out.
+        outside_share: Their share of the lines found, at least.
+    """
+
+    shifted_own: float = 0.5
+    shifted_neighbour: float = 0.25
+    lines: int = 3
+    outside_lines: int = 5
+    outside_share: float = 0.1
+
+
+@dataclass(frozen=True)
 class DifficultySettings(ScoreSettings):
     """Measure how hard pages with ground truth are for the automatic tools, beside their predicted complexity.
 
@@ -95,6 +127,7 @@ class DifficultySettings(ScoreSettings):
         manuscript_table: A table of the manuscripts (TSV, by `folder`), whose columns join each page's row.
         zone_classes: The classes zone F1 is measured on: the regions model's zones.
         threshold: The IoU from which a found zone or line matches a ground-truth one.
+        checks: The checks of the ground truth: texts that don't fit their lines, and text the ground truth leaves out.
     """
 
     output: Path = Path("build/difficulty")
@@ -105,6 +138,7 @@ class DifficultySettings(ScoreSettings):
     manuscript_table: Path | None = None
     zone_classes: list[str] = field(default_factory=lambda: list(MODEL_ZONES))
     threshold: float = matching.THRESHOLD
+    checks: GroundTruthChecks = field(default_factory=GroundTruthChecks)
 
 
 # The measures of one page.
@@ -158,17 +192,50 @@ def errors(pairs: list[tuple[str, str]], spaces: bool = True) -> tuple[int, int]
     return total, characters
 
 
+def misfits(
+    counted: list[truth.Line],
+    matched: dict[int, tuple[int, float]],
+    recognised: dict[str, str],
+    texts: list[str],
+    checks: GroundTruthChecks,
+) -> tuple[int, int]:
+    """How many of a page's text lines (in the ground truth's order) have a shifted text, and how many read empty,
+    as `GroundTruthChecks` defines them; `matched` maps a text line to the found line matched to it."""
+    references = [normalise(line.text) for line in counted]
+
+    def cer(reference: str, reading: str) -> float:
+        return rate(edit_distance(reference, reading), len(reference))
+
+    shifted = empty = 0
+    for j, line in enumerate(counted):
+        hit = matched.get(j)
+        if not references[j] or hit is None:
+            continue
+        reading = normalise(texts[hit[0]])
+        if reading and not normalise(recognised.get(line.id)):
+            empty += 1
+        neighbours = [references[k] for k in (j - 1, j + 1) if 0 <= k < len(counted) and references[k]]
+        if cer(references[j], reading) > checks.shifted_own and any(
+            cer(neighbour, reading) < checks.shifted_neighbour for neighbour in neighbours
+        ):
+            shifted += 1
+    return shifted, empty
+
+
 def measure_page(
     page: truth.Page,
     found: Found,
     recognised: dict[str, str] | None = None,
     zone_classes: list[str] | None = None,
     threshold: float = matching.THRESHOLD,
+    checks: GroundTruthChecks | None = None,
 ) -> Measured:
-    """A page's zone F1, line F1, baseline distance and character error rates against its ground truth.
+    """A page's zone F1, line F1, baseline distance and character error rates against its ground truth, and the
+    checks of its texts.
 
     `recognised` holds the texts read on its ground-truth lines, by id; `found.texts` those read on the found lines.
-    Without them the character error rates are missing."""
+    Without them the character error rates and the checks of the texts are missing."""
+    checks = checks or GroundTruthChecks()
     classes = list(zone_classes or MODEL_ZONES)
     row: dict[str, Any] = {}
     zone_rows, zone_class_rows, line_rows = [], [], []
@@ -291,6 +358,17 @@ def measure_page(
     # A found line matched to a text line without a reference counts neither way end to end: it is neither among
     # the references nor invented.
     row |= cer_of(with_text, unmatched, "")
+
+    # Ground-truth texts that don't fit their lines: read on the found lines matched to them, or read empty.
+    if rates:
+        shifted, empty = misfits(counted, counted_match, recognised or {}, texts or [], checks)
+        row |= {
+            "lines_shifted": shifted,
+            "lines_read_empty": empty,
+            "texts_misplaced": shifted >= checks.lines or empty >= checks.lines,
+        }
+    else:
+        row |= {"lines_shifted": math.nan, "lines_read_empty": math.nan, "texts_misplaced": False}
 
     # Main text and margins apart.
     for part, cls in PARTS.items():
@@ -490,7 +568,7 @@ class Difficulty(Scoring):
             if status == "done":
                 recognised = (record.recognition or {}).get("ground_truth") if record.recognition else None
                 measured = measure_page(
-                    page, found_layout(record), recognised, settings.zone_classes, settings.threshold
+                    page, found_layout(record), recognised, settings.zone_classes, settings.threshold, settings.checks
                 )
                 row |= measured.row
                 classes += measured.zone_classes
@@ -537,9 +615,19 @@ class Difficulty(Scoring):
             len(record.recognition["ground_truth"]) + len(record.recognition["lines"])  # type: ignore[index]
             for record in recognised
         )
+        checks: GroundTruthChecks = self.settings.checks  # type: ignore[attr-defined]
+        misplaced = table[texts_misplaced(table)]
+        outside = table[leaves_text_out(table, checks.outside_lines, checks.outside_share)]
+        if len(outside):
+            outside = outside.assign(share=outside["lines_outside"] / outside["lines_found"])
+            outside = outside.sort_values("share", ascending=False, kind="stable")
         return {
             "pages": len(table),
             "pages_measured": int(table["line_f1"].notna().sum()) if "line_f1" in table else 0,
+            "texts_misplaced": {
+                row.page: [int(row.lines_shifted), int(row.lines_read_empty)] for row in misplaced.itertuples()
+            },
+            "text_left_out": {row.page: [int(row.lines_found), int(row.lines_outside)] for row in outside.itertuples()},
             "spreads": len(self.splits),
             "gutters_found": sum(split.gutter.found for split in self.splits),
             "middle": [split.page for split in self.splits if not split.gutter.found],
@@ -585,6 +673,40 @@ class Difficulty(Scoring):
                 f"- Recognised: {found['lines_recognised']:,} lines, {found['lines_per_second']:.1f} lines/s"
                 " in one worker."
             )
+        checks: GroundTruthChecks = self.settings.checks  # type: ignore[attr-defined]
+        misplaced = found.get("texts_misplaced", {})
+        lines += [
+            "",
+            "## Ground-truth texts that don't fit their lines",
+            "",
+            f"Pages with at least {checks.lines} text lines whose found line reads another text line's text (a CER "
+            f"over {checks.shifted_own:.0%} against their own text, under {checks.shifted_neighbour:.0%} against the "
+            "text line's just before or after), or that read as empty through their own polygon while the found "
+            "line reads text. `lvc report` leaves them out of the character error rates.",
+            "",
+        ]
+        if misplaced:
+            lines += ["| Page | Shifted texts | Read empty |", "|---|---:|---:|"]
+            lines += [f"| {page} | {shifted} | {empty} |" for page, (shifted, empty) in misplaced.items()]
+        else:
+            lines.append("None.")
+        outside = found.get("text_left_out", {})
+        lines += [
+            "",
+            "## Ground truth that may leave text out",
+            "",
+            f"Pages where at least {checks.outside_lines} found lines, matched to none, lie outside every "
+            f"ground-truth zone, making at least {checks.outside_share:.0%} of the lines found: the neighbouring "
+            "leaf, decoration, or text the ground truth doesn't hold.",
+            "",
+        ]
+        if outside:
+            lines += ["| Page | Lines found | Outside every zone | Share |", "|---|---:|---:|---:|"]
+            lines += [
+                f"| {page} | {total} | {count} | {count / total:.0%} |" for page, (total, count) in outside.items()
+            ]
+        else:
+            lines.append("None.")
         return lines
 
 
@@ -685,3 +807,24 @@ def run_difficulty(
 def read_rows(folder: Path) -> pd.DataFrame:
     """A difficulty run's rows."""
     return pd.read_csv(Path(folder) / ROWS, sep="\t", dtype={"page": str, "document": str, "label": str})
+
+
+def texts_misplaced(rows: pd.DataFrame) -> pd.Series:
+    """The pages whose ground-truth texts the run's checks flagged as not fitting their lines."""
+    if "texts_misplaced" not in rows:
+        return pd.Series(False, index=rows.index)
+    return rows["texts_misplaced"].map(lambda value: str(value) == "True")
+
+
+def leaves_text_out(
+    rows: pd.DataFrame,
+    lines: int = GroundTruthChecks.outside_lines,
+    share: float = GroundTruthChecks.outside_share,
+) -> pd.Series:
+    """The pages whose ground truth may leave text out: at least `lines` found lines, matched to none, outside every
+    ground-truth zone, making at least `share` of the lines found."""
+    if "lines_outside" not in rows:
+        return pd.Series(False, index=rows.index)
+    found = rows["lines_found"].astype(float)
+    outside = rows["lines_outside"].astype(float)
+    return (outside >= lines) & (outside / found.where(found > 0) >= share)
