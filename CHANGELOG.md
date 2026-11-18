@@ -9,6 +9,19 @@
   end to end, the same in main text and in margins, and the controls. `lvc report` makes its analysis: rank
   correlations, a mixed model and least squares across and within manuscripts, a held-out comparison, the figure and
   the tables. The package now needs `statsmodels`.
+- `lvc difficulty` checks the ground truth's texts against their lines: how many text lines Kraken's matched line
+  reads as the text of the line before or after (`lines_shifted`), how many read as empty through their own polygon
+  while Kraken's line reads text (`lines_read_empty`), and whether a page has at least 3 of either
+  (`texts_misplaced`); the thresholds are settings (`--checks.*`). Its report lists those pages, and the pages whose
+  ground truth may leave text out (many of Kraken's lines outside every ground-truth zone).
+- `lvc report`'s difficulty outputs leave the pages whose ground-truth texts don't fit their lines out of every
+  character error rate, and count them in the captions; on CREMMA, five pages, which moves the CER on the ground-truth
+  lines' slope from +0.001 to +0.0028 per SD of complexity. New tables: `difficulty_ground_truth_coverage` (the mixed
+  model without the pages whose ground truth may leave text out, `--outside_lines`, `--outside_share`),
+  `difficulty_by_ranker` (each ranker alone) and `difficulty_by_quarter` (the measures by quarter of complexity);
+  `difficulty_held_out_pages` gains its LaTeX table. The figure's trend lines are robust LOWESS fits instead of
+  running medians, its x-axis reads "Predicted score (Elo scale)" as the other figures' do, and its legend names
+  every kind of dot and line.
 - `make -C reproduce sources` fetches the difficulty experiment's ground truth at fixed commits and a fixed revision,
   each file checked; `make -C reproduce difficulty` measures CREMMA's pages and the held-out pages of CATMuS's test
   split and draws the experiment's figure and tables (not part of `all`).
