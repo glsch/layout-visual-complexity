@@ -9,6 +9,7 @@ layout: null
 evaluations: {}
 shown: []
 labels: {}
+in_text: {}
 colours: {}
 comparisons: []
 families:
@@ -35,6 +36,7 @@ http:
   timeout: 60.0
 levels: {}
 alone: []
+defined_in: ''
 reference_column: ''
 colour_pages: []
 score_run: null
@@ -42,6 +44,8 @@ catalogue: null
 profiles: []
 collection: manuscripts
 catalogue_credit: ''
+title_credit: ''
+repository: ''
 thumbnail_size: 400
 named: []
 min_lines: 0

@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-14T06:22:17+00:00",
-  "ended": "2026-11-14T06:22:19+00:00",
+  "started": "2026-11-18T12:46:54+00:00",
+  "ended": "2026-11-18T12:46:56+00:00",
   "inputs": [
     {
       "path": "build/embed/dataset/tokens.json",
@@ -37,6 +37,7 @@
     "evaluations": {},
     "shown": [],
     "labels": {},
+    "in_text": {},
     "colours": {},
     "comparisons": [],
     "families": [
@@ -50,9 +51,9 @@
     "tokens": "build/embed/dataset",
     "head": "build/train/vit_head/head.npz",
     "map_pages": [
-      "vif12b_96r",
-      "vc7_35r",
-      "vh1_48r"
+      "iiih6_11v",
+      "xive29_66v",
+      "ve4b_50v"
     ],
     "map_long_edge": 900,
     "map_range": [
@@ -70,8 +71,25 @@
     },
     "levels": {},
     "alone": [],
+    "defined_in": "",
     "reference_column": "",
-    "colour_pages": []
+    "colour_pages": [],
+    "score_run": null,
+    "catalogue": null,
+    "profiles": [],
+    "collection": "manuscripts",
+    "catalogue_credit": "",
+    "title_credit": "",
+    "repository": "",
+    "thumbnail_size": 400,
+    "named": [],
+    "min_lines": 0,
+    "difficulty_runs": {},
+    "difficulty_main": "cremma",
+    "manuscript_table": null,
+    "neighbours": 0.25,
+    "outside_lines": 5,
+    "outside_share": 0.1
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -93,14 +111,14 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
+  "commit": "4421c8db3cbdfb8b36af1be4223667f9aa97a5f1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "local_complexity_maps": {
       "pages": {
-        "vif12b_96r": -1.0344897703892688,
-        "vc7_35r": -0.07617494265215023,
-        "vh1_48r": 1.234830481615288
+        "iiih6_11v": -0.9720463242575806,
+        "xive29_66v": -0.10108183755343016,
+        "ve4b_50v": 0.9687594058845749
       },
       "scale": [
         1.6628398716449737,
@@ -108,7 +126,7 @@
       ]
     },
     "seconds": {
-      "local_complexity_maps": 1.721
+      "local_complexity_maps": 1.295
     }
   }
 }

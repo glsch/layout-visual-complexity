@@ -6,7 +6,7 @@ evaluations:
   vit: build/evaluate/vit
   ensemble: build/evaluate/ensemble
 labels:
-  geometry: Geometry
+  geometry: Layout (geometry)
   vit: ViT
   ensemble: Ensemble
 comparisons:

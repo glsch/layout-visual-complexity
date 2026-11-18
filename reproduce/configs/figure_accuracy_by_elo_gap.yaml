@@ -1,14 +1,16 @@
-# Each method's accuracy by Elo gap with its interval, beside the Reference, as a figure and a table: real colour, the
-# geometry ranker, the ViT ranker and their ensemble.
+# Each method's accuracy by Elo gap with its interval, beside the Reference, as a figure and a table: line texture,
+# ink colour, the geometric features (Layout (geometry)), the ViT ranker and their ensemble.
 name: figure_accuracy_by_elo_gap
 outputs: [accuracy_by_elo_gap]
 evaluations:
+  line_texture: build/evaluate/line_texture
   colour: build/evaluate/colour
   geometry: build/evaluate/geometry
   vit: build/evaluate/vit
   ensemble: build/evaluate/ensemble
 labels:
-  colour: Colour
-  geometry: Geometry
+  line_texture: Line texture
+  colour: Ink colour
+  geometry: Layout (geometry)
   vit: ViT
   ensemble: Ensemble

@@ -1,5 +1,6 @@
-# What each level of information buys: each method's accuracy with its interval and its SROCC, grouped by the
-# information it needs, from trivial to learned, beside chance and the Reference.
+# Accuracy by the information a method needs: each method's accuracy with its interval and its SROCC, grouped by the
+# information it needs, from trivial to learned, beside chance and the Reference. An ensemble's definition names the ViT
+# head as `in_text` gives it.
 name: figure_baselines_by_information
 outputs: [baselines_by_information]
 evaluations:
@@ -21,15 +22,17 @@ labels:
   text_lines: Number of text lines
   trivial: Both together
   generic: Generic image measures
-  kyle_davidson: Kyle–Davidson as published
+  kyle_davidson: Kyle–Davidson
   ink_distribution: Ink distribution
-  line_texture: Line texture as published
-  colour: Real colour
-  geometry: Geometry
-  geometry_layout: Geometry with Layout
+  line_texture: Line texture
+  colour: Ink colour
+  geometry: Layout (geometry)
+  geometry_layout: Layout (geometry with Kyle–Davidson)
   mean_token: Linear model on the mean ViT token
   vit: Local ViT head
-  ensemble: Ensemble (geometry and ViT)
+  ensemble: "Ensemble: Layout (geometry) and ViT"
+in_text:
+  vit: the local ViT head
 levels:
   ink_coverage: Trivial
   text_lines: Trivial
@@ -50,6 +53,5 @@ colours:
   trivial: trivial
   generic: generic_image
   ink_distribution: ink
-  line_texture: colour
   geometry_layout: geometry
   mean_token: vit

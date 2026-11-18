@@ -14,13 +14,14 @@ evaluations:
   ensemble: build/evaluate/ensemble
 shown: []
 labels:
-  geometry_line_texture: Geometry with line texture
-  geometry_colour: Geometry with real colour
-  geometry: Geometry
-  ensemble_colour: Ensemble with colour
+  geometry_line_texture: Layout (geometry) with line texture
+  geometry_colour: Layout (geometry) with ink colour
+  geometry: Layout (geometry)
+  ensemble_colour: Ensemble with ink colour
   ensemble: Ensemble
   vit: ViT
-  colour: Real colour
+  colour: Ink colour
+in_text: {}
 colours: {}
 comparisons:
 - - geometry_line_texture
@@ -53,6 +54,7 @@ http:
   timeout: 60.0
 levels: {}
 alone: []
+defined_in: ''
 reference_column: ''
 colour_pages: []
 score_run: null
@@ -60,6 +62,14 @@ catalogue: null
 profiles: []
 collection: manuscripts
 catalogue_credit: ''
+title_credit: ''
+repository: ''
 thumbnail_size: 400
 named: []
 min_lines: 0
+difficulty_runs: {}
+difficulty_main: cremma
+manuscript_table: null
+neighbours: 0.25
+outside_lines: 5
+outside_share: 0.1

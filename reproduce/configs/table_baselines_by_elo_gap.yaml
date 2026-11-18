@@ -1,5 +1,5 @@
 # Table 3's successor: the baselines by Elo gap, beside the consistency reference, with intervals in the Overall and
-# SROCC rows: ink coverage and the number of text lines alone, the generic image measures, Kyle–Davidson as published
+# SROCC rows: ink coverage and the number of text lines alone, the generic image measures, Kyle–Davidson
 # and ink distribution, each with the pairwise logistic model.
 name: table_baselines_by_elo_gap
 outputs: [baselines_by_elo_gap]

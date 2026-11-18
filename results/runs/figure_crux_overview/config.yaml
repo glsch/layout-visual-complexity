@@ -1,7 +1,6 @@
 output: results
 outputs:
 - manuscript_overview
-- manuscript_overview_quadrants
 name: figure_crux_overview
 dataset: null
 scores: null
@@ -10,6 +9,7 @@ layout: null
 evaluations: {}
 shown: []
 labels: {}
+in_text: {}
 colours: {}
 comparisons: []
 families:
@@ -36,6 +36,7 @@ http:
   timeout: 60.0
 levels: {}
 alone: []
+defined_in: ''
 reference_column: ''
 colour_pages: []
 score_run: build/score/crux
@@ -43,6 +44,14 @@ catalogue: reproduce/crux_manuscripts.tsv
 profiles: []
 collection: crux
 catalogue_credit: Catalogue facts from Dragoun, Ebersonová and Doležalová (2021).
+title_credit: the title from the library's record in Manuscriptorium
+repository: Prague, National Library of the Czech Republic
 thumbnail_size: 400
 named: []
 min_lines: 5
+difficulty_runs: {}
+difficulty_main: cremma
+manuscript_table: null
+neighbours: 0.25
+outside_lines: 5
+outside_share: 0.1

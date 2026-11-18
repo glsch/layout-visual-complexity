@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-18T11:08:27+00:00",
-  "ended": "2026-11-18T11:08:27+00:00",
+  "started": "2026-11-18T12:47:49+00:00",
+  "ended": "2026-11-18T12:47:49+00:00",
   "inputs": [
     {
       "path": "reproduce/difficulty_manuscripts.tsv",
@@ -41,6 +41,7 @@
     "evaluations": {},
     "shown": [],
     "labels": {},
+    "in_text": {},
     "colours": {},
     "comparisons": [],
     "families": [
@@ -70,6 +71,7 @@
     },
     "levels": {},
     "alone": [],
+    "defined_in": "",
     "reference_column": "",
     "colour_pages": [],
     "score_run": null,
@@ -77,6 +79,8 @@
     "profiles": [],
     "collection": "manuscripts",
     "catalogue_credit": "",
+    "title_credit": "",
+    "repository": "",
     "thumbnail_size": 400,
     "named": [],
     "min_lines": 0,
@@ -110,7 +114,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "cb56bc35b770cb1af215ff8112d873f60bb14224-dirty",
+  "commit": "4421c8db3cbdfb8b36af1be4223667f9aa97a5f1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "difficulty_material": {
@@ -118,7 +122,7 @@
       "pages": 502
     },
     "seconds": {
-      "difficulty_material": 0.028
+      "difficulty_material": 0.031
     }
   }
 }

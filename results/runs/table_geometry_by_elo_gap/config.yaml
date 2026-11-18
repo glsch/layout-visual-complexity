@@ -11,8 +11,9 @@ evaluations:
   geometry_layout: build/evaluate/geometry_layout
 shown: []
 labels:
-  geometry: Geometry
-  geometry_layout: Geometry + Layout
+  geometry: Layout (geometry)
+  geometry_layout: Layout (geometry with Kyle–Davidson)
+in_text: {}
 colours: {}
 comparisons: []
 families:
@@ -39,6 +40,7 @@ http:
   timeout: 60.0
 levels: {}
 alone: []
+defined_in: ''
 reference_column: ''
 colour_pages: []
 score_run: null
@@ -46,6 +48,14 @@ catalogue: null
 profiles: []
 collection: manuscripts
 catalogue_credit: ''
+title_credit: ''
+repository: ''
 thumbnail_size: 400
 named: []
 min_lines: 0
+difficulty_runs: {}
+difficulty_main: cremma
+manuscript_table: null
+neighbours: 0.25
+outside_lines: 5
+outside_share: 0.1

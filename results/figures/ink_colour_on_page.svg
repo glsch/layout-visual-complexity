@@ -160,7 +160,7 @@ L 136.187043 153.012007
      </g>
     </g>
     <g id="text_7">
-     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1f2328" x="83.456767" y="240.84043" transform="rotate(-0 83.456767 240.84043)">Share of the ink (%)</text>
+     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1f2328" x="83.456767" y="240.84043" transform="rotate(-0 83.456767 240.84043)">Ink (%)</text>
     </g>
    </g>
    <g id="matplotlib.axis_4">
@@ -343,7 +343,7 @@ L 277.919327 153.012007
      </g>
     </g>
     <g id="text_17">
-     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1f2328" x="225.18905" y="240.84043" transform="rotate(-0 225.18905 240.84043)">Share of the ink (%)</text>
+     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1f2328" x="225.18905" y="240.84043" transform="rotate(-0 225.18905 240.84043)">Ink (%)</text>
     </g>
    </g>
    <g id="matplotlib.axis_8">
@@ -527,7 +527,7 @@ L 419.65161 153.012007
      </g>
     </g>
     <g id="text_27">
-     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1f2328" x="366.921334" y="240.84043" transform="rotate(-0 366.921334 240.84043)">Share of the ink (%)</text>
+     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1f2328" x="366.921334" y="240.84043" transform="rotate(-0 366.921334 240.84043)">Ink (%)</text>
     </g>
    </g>
    <g id="matplotlib.axis_12">

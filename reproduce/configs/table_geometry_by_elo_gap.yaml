@@ -6,5 +6,5 @@ evaluations:
   geometry: build/evaluate/geometry
   geometry_layout: build/evaluate/geometry_layout
 labels:
-  geometry: Geometry
-  geometry_layout: Geometry + Layout
+  geometry: Layout (geometry)
+  geometry_layout: Layout (geometry with Kyle–Davidson)

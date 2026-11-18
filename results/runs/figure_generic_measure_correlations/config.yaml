@@ -10,6 +10,7 @@ evaluations:
   generic: build/evaluate/generic
 shown: []
 labels: {}
+in_text: {}
 colours: {}
 comparisons: []
 families:
@@ -35,6 +36,7 @@ http:
   timeout: 60.0
 levels: {}
 alone: []
+defined_in: ''
 reference_column: Trivial__InkCoverage__share
 colour_pages: []
 score_run: null
@@ -42,6 +44,14 @@ catalogue: null
 profiles: []
 collection: manuscripts
 catalogue_credit: ''
+title_credit: ''
+repository: ''
 thumbnail_size: 400
 named: []
 min_lines: 0
+difficulty_runs: {}
+difficulty_main: cremma
+manuscript_table: null
+neighbours: 0.25
+outside_lines: 5
+outside_share: 0.1

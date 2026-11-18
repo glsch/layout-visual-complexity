@@ -1,5 +1,5 @@
 # The overview of Crux's 23 manuscripts (the article's Figure 6): each one's mean predicted score against the
-# interquartile range of its pages', coloured by hands, sized by folios; in the package's design (with intervals,
-# nothing written inside but the labels) and in the article's (the quadrants named inside).
+# interquartile range of its pages', coloured by hands, sized by folios, with intervals, the axes' ends named, nothing
+# written inside but the labels.
 name: figure_crux_overview
-outputs: [manuscript_overview, manuscript_overview_quadrants]
+outputs: [manuscript_overview]

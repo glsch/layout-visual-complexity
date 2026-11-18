@@ -22,7 +22,7 @@
 # on the dataset's pages (codebook-dataset), which `make -C reproduce package-codebook` copies into the package. The
 # linear model on the mean token needs the ViT's tokens.
 #
-# The colour level (line texture as the article publishes it, and real colour) is measured with the others too; its
+# The colour level (line texture as the article publishes it, and ink colour) is measured with the others too; its
 # ensemble with the geometry and ViT rankers needs the ViT's evaluation.
 #
 # The rankers that come with the package (package-models) are the geometry ranker and the ViT head trained on every
@@ -53,7 +53,7 @@ REPORT := $(RUN) judgments report --config $(CONFIGS)/report.yaml --config $(CON
 .PHONY: all dataset ranking segment-dataset table-dataset-categories table-reliability figure-position-bias-funnel \
 	figure-comparison-graph figure-elo-score-bands features-dataset evaluate-geometry evaluate-geometry-layout \
 	table-geometry-by-elo-gap table-geometry-feature-hierarchy figure-geometry-feature-correlations \
-	figure-geometry-features-on-page figure-geometry-features-on-schematic-page figure-geometry-feature-families \
+	figure-geometry-features-on-page figure-geometry-feature-families \
 	embed-dataset evaluate-vit evaluate-ensembles head-dataset package-head train-geometry models-dataset \
 	package-models models-without-crux score-crux table-methods-by-elo-gap \
 	figure-accuracy-by-elo-gap table-paired-differences table-ensembles-by-elo-gap figure-learning-curves-and-calibration \
@@ -70,7 +70,7 @@ REPORT := $(RUN) judgments report --config $(CONFIGS)/report.yaml --config $(CON
 
 all: table-dataset-categories table-reliability figure-position-bias-funnel figure-comparison-graph figure-elo-score-bands \
 	table-geometry-by-elo-gap table-geometry-feature-hierarchy figure-geometry-feature-correlations \
-	figure-geometry-features-on-page figure-geometry-features-on-schematic-page figure-geometry-feature-families \
+	figure-geometry-features-on-page figure-geometry-feature-families \
 	table-methods-by-elo-gap figure-accuracy-by-elo-gap table-paired-differences table-ensembles-by-elo-gap \
 	figure-learning-curves-and-calibration figure-local-complexity-maps table-baselines-by-elo-gap \
 	table-baseline-measures table-baseline-differences figure-baselines-by-information \
@@ -116,7 +116,7 @@ figure-elo-score-bands: $(TOP)/results/figures/elo_score_bands.svg
 $(TOP)/results/figures/elo_score_bands.svg: $(RANKING) configs/report.yaml configs/figure_elo_score_bands.yaml
 	$(REPORT)/figure_elo_score_bands.yaml
 
-# The features of the dataset's pages, the geometry ranker with and without the Layout features, and their tables
+# The features of the dataset's pages, the geometry ranker with and without Layout (Kyle–Davidson), and their tables
 # and figures.
 CODEBOOK := $(TOP)/build/codebook/dataset/codebook.npz
 codebook-dataset: $(CODEBOOK)
@@ -166,11 +166,6 @@ figure-geometry-features-on-page: $(TOP)/results/figures/geometry_features_on_pa
 $(TOP)/results/figures/geometry_features_on_page.svg: $(FEATURES) configs/report_features.yaml \
 		configs/figure_geometry_features_on_page.yaml
 	$(FEATURE_REPORT)/figure_geometry_features_on_page.yaml
-
-figure-geometry-features-on-schematic-page: $(TOP)/results/figures/geometry_features_on_schematic_page.svg
-$(TOP)/results/figures/geometry_features_on_schematic_page.svg: configs/report_features.yaml \
-		configs/figure_geometry_features_on_schematic_page.yaml
-	$(FEATURE_REPORT)/figure_geometry_features_on_schematic_page.yaml
 
 figure-geometry-feature-families: $(TOP)/results/figures/geometry_feature_families.svg
 $(TOP)/results/figures/geometry_feature_families.svg: configs/report_features.yaml \
@@ -299,7 +294,8 @@ $(MEASURE_MODELS): $(TOP)/build/evaluate/measures/%/model.json: $(FEATURES) $(RA
 evaluate-baselines: $(GROUP_MODELS) $(MEAN_TOKEN)
 evaluate-measures: $(MEASURE_MODELS)
 
-# The colour level: line texture and real colour alone, each with geometry in one model, and the ensemble with colour.
+# The colour level: line texture and ink colour alone, each with geometry in one model, and the ensemble with ink
+# colour.
 COLOUR_GROUPS := line_texture colour geometry_line_texture geometry_colour
 COLOUR_MODELS := $(foreach group,$(COLOUR_GROUPS),$(TOP)/build/evaluate/$(group)/model.json)
 COLOUR := $(TOP)/build/evaluate/colour/model.json
@@ -355,7 +351,7 @@ $(TOP)/results/tables/methods_by_elo_gap.tsv: $(GENERIC) $(COLOUR) $(METHODS) co
 	$(FEATURE_REPORT)/table_methods_by_elo_gap.yaml
 
 figure-accuracy-by-elo-gap: $(TOP)/results/figures/accuracy_by_elo_gap.svg
-$(TOP)/results/figures/accuracy_by_elo_gap.svg: $(COLOUR) $(METHODS) configs/report_features.yaml \
+$(TOP)/results/figures/accuracy_by_elo_gap.svg: $(LINE_TEXTURE) $(COLOUR) $(METHODS) configs/report_features.yaml \
 		configs/figure_accuracy_by_elo_gap.yaml
 	$(FEATURE_REPORT)/figure_accuracy_by_elo_gap.yaml
 

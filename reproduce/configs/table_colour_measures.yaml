@@ -1,4 +1,4 @@
-# The real colour measures defined: each one's name, what it measures, its parameters and its source, with the
+# The ink colour measures defined: each one's name, what it measures, its parameters and its source, with the
 # settings the feature table recorded.
 name: table_colour_measures
 outputs: [colour_measures]

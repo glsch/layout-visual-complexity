@@ -1,25 +1,25 @@
 level	evaluation	label	alone	accuracy	low	high	srocc	srocc_low	srocc_high
-Trivial	trivial	Trivial measures, combined	False	0.585198	0.534401	0.621185	0.217278	0.080756	0.349653
+Trivial	trivial	Both together	False	0.585198	0.534401	0.621185	0.217278	0.080756	0.349653
 Trivial	ink_coverage	Ink coverage	True	0.538879	0.484402	0.577692	0.086137	-0.045988	0.213579
 Trivial	text_lines	Number of text lines	True	0.593006	0.539082	0.631661	0.279036	0.151587	0.404094
-Image only	generic	Generic image measures, combined	False	0.600118	0.555736	0.635714	0.403498	0.285448	0.513177
+Image only	generic	Generic image measures	False	0.600118	0.555736	0.635714	0.403498	0.285448	0.513177
 Image only	edge_orientation_entropy	Edge-orientation entropy	True	0.565325	0.515256	0.608402	0.104250	-0.022473	0.232310
 Image only	mssc	MSSC per scale	True	0.570781	0.518696	0.599776	0.242679	0.129448	0.345970
 Image only	compressibility	Lossless compressibility	True	0.567396	0.520474	0.608293	0.211254	0.067093	0.354351
 Image only	feature_congestion	Feature congestion	True	0.574231	0.528914	0.611181	0.285402	0.133991	0.411525
 Image only	colourfulness	Colourfulness	True	0.553459	0.508965	0.602956	-0.013992	-0.157372	0.130726
 Image only	codebook_variety	Patch-codebook variety	True	0.466433	0.437345	0.503264	-0.115602	-0.223986	-0.010881
-Kyle–Davidson	kyle_davidson	Kyle–Davidson as published, combined	False	0.596131	0.547668	0.628210	0.439447	0.321703	0.535524
+Kyle–Davidson	kyle_davidson	Kyle–Davidson	False	0.596131	0.547668	0.628210	0.439447	0.321703	0.535524
 Kyle–Davidson	clutter	Clutter (normalised cut)	True	0.504228	0.456794	0.535189	-0.044420	-0.153101	0.073998
 Kyle–Davidson	symmetry	Patch symmetry	True	0.608696	0.557833	0.640521	0.433999	0.307704	0.540120
 Kyle–Davidson	entropy	HSV entropy	True	0.534635	0.486587	0.572939	0.181578	0.046852	0.310166
-Ink	ink_distribution	Ink distribution, combined	False	0.644215	0.599514	0.682333	0.562796	0.442163	0.643783
+Ink	ink_distribution	Ink distribution	False	0.644215	0.599514	0.682333	0.562796	0.442163	0.643783
 Ink	lacunarity	Lacunarity	True	0.655505	0.617245	0.695179	0.561619	0.445797	0.642620
 Ink	fragmentation	Fragmentation	True	0.526598	0.478381	0.572086	0.134959	0.001830	0.262505
 Ink	chromatic_share	Chromatic share	True	0.462333	0.419875	0.502598	0.139245	0.005549	0.260531
 Ink	hue_classes	Hue classes	True	0.473306	0.435272	0.512840	-0.023148	-0.160867	0.125399
-Colour	line_texture	Line texture as published	False	0.648115	0.599415	0.685350	0.572240	0.480537	0.650670
-Colour	colour	Real colour, combined	False	0.503338	0.458956	0.542606	0.146245	0.035195	0.247939
+Colour	line_texture	Line texture	False	0.648115	0.599415	0.685350	0.572240	0.480537	0.650670
+Colour	colour	Ink colour	False	0.503338	0.458956	0.542606	0.146245	0.035195	0.247939
 Colour	colour_chromatic_share	Chromatic share	True	0.462333	0.419875	0.502598	0.139341	0.005645	0.260479
 Colour	colour_hue_classes	Hue classes	True	0.472113	0.435115	0.511943	-0.020590	-0.158509	0.128368
 Colour	colour_hue_entropy	Hue entropy	True	0.483330	0.439985	0.523749	0.110201	-0.017428	0.237218
@@ -27,8 +27,8 @@ Colour	colour_saturation	Saturation	True	0.523018	0.478591	0.562807	0.081508	-0.
 Colour	colour_zones	Colour by zone	True	0.507794	0.464558	0.549549	0.113024	-0.008899	0.221148
 Colour	colour_lines	Colour across lines	True	0.498028	0.454521	0.538511	0.084804	-0.042815	0.200026
 Colour	colour_coloured_initials	Coloured initials	True	0.528111	0.493811	0.557975	0.290226	0.151815	0.404328
-Layout	geometry	Geometry	False	0.720414	0.674894	0.748563	0.759570	0.690860	0.810827
-Layout	geometry_layout	Geometry with Layout	False	0.712552	0.672400	0.742013	0.740911	0.669759	0.796531
+Layout	geometry	Layout (geometry)	False	0.720414	0.674894	0.748563	0.759570	0.690860	0.810827
+Layout	geometry_layout	Layout (geometry with Kyle–Davidson)	False	0.712552	0.672400	0.742013	0.740911	0.669759	0.796531
 Learned	mean_token	Linear model on the mean ViT token	False	0.612736	0.570398	0.639555	0.433895	0.321851	0.533147
 Learned	vit	Local ViT head	False	0.730137	0.689683	0.761360	0.784495	0.725238	0.827712
-Learned	ensemble	Ensemble (geometry and ViT)	False	0.743054	0.700565	0.767106	0.821409	0.767275	0.859960
+Learned	ensemble	Ensemble: Layout (geometry) and ViT	False	0.743054	0.700565	0.767106	0.821409	0.767275	0.859960

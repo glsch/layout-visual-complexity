@@ -26,22 +26,23 @@ labels:
   text_lines: Number of text lines
   trivial: Both together
   generic: Generic image measures
-  kyle_davidson: Kyle–Davidson as published
+  kyle_davidson: Kyle–Davidson
   ink_distribution: Ink distribution
-  line_texture: Line texture as published
-  colour: Real colour
-  geometry: Geometry
-  geometry_layout: Geometry with Layout
+  line_texture: Line texture
+  colour: Ink colour
+  geometry: Layout (geometry)
+  geometry_layout: Layout (geometry with Kyle–Davidson)
   mean_token: Linear model on the mean ViT token
   vit: Local ViT head
-  ensemble: Ensemble (geometry and ViT)
+  ensemble: 'Ensemble: Layout (geometry) and ViT'
+in_text:
+  vit: the local ViT head
 colours:
   ink_coverage: trivial
   text_lines: trivial
   trivial: trivial
   generic: generic_image
   ink_distribution: ink
-  line_texture: colour
   geometry_layout: geometry
   mean_token: vit
 comparisons: []
@@ -82,6 +83,7 @@ levels:
   vit: Learned
   ensemble: Learned
 alone: []
+defined_in: ''
 reference_column: ''
 colour_pages: []
 score_run: null
@@ -89,6 +91,14 @@ catalogue: null
 profiles: []
 collection: manuscripts
 catalogue_credit: ''
+title_credit: ''
+repository: ''
 thumbnail_size: 400
 named: []
 min_lines: 0
+difficulty_runs: {}
+difficulty_main: cremma
+manuscript_table: null
+neighbours: 0.25
+outside_lines: 5
+outside_share: 0.1
