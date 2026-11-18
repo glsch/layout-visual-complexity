@@ -49,6 +49,66 @@ def short_date(text: str) -> str:
     return str(years[0]) if years[0] == years[-1] else f"{years[0]}–{years[-1]}"
 
 
+CENTURY = re.compile(r"^(?P<century>[IVX]+)\.?\s*(?P<part>in\.|med\.|ex\.|[12](?![0-9]))?\s*(?P<rest>.*)$")
+CENTURY_PARTS = {
+    None: "{n} century",
+    "in.": "early {n} century",
+    "med.": "mid-{n} century",
+    "ex.": "late {n} century",
+    "1": "first half of the {n} century",
+    "2": "second half of the {n} century",
+}
+ROMAN = {"I": 1, "V": 5, "X": 10}
+
+
+def roman(text: str) -> int:
+    values = [ROMAN[character] for character in text]
+    return sum(
+        -value if value < following else value for value, following in zip(values, [*values[1:], 0], strict=True)
+    )
+
+
+def ordinal(number: int) -> str:
+    return f"{number}{'th' if 10 <= number % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(number % 10, 'th')}"
+
+
+def listed(items: Sequence[str]) -> str:
+    """`a, b and c`."""
+    return items[0] if len(items) == 1 else ", ".join(items[:-1]) + f" and {items[-1]}"
+
+
+def date_part_in_words(part: str) -> str:
+    """One part of a catalogue's date in words: `XV2 (parts dated 1461, 1491)` → `second half of the 15th century
+    (parts dated 1461 and 1491)`; years and spans of years stay as they are."""
+    part = " ".join(part.split()).strip(" ,")
+    bracket = re.search(r"\((.*)\)\s*$", part)
+    note = ""
+    if bracket:
+        part, note = part[: bracket.start()].strip(), bracket.group(1)
+        items = [item.strip() for item in re.split(r",\s*|\s+and\s+", note) if item.strip()]
+        lead = re.match(r"^((?:a |one )?parts? dated )(.*)$", items[0]) if items else None
+        if lead and len(items) > 1:
+            note = lead.group(1) + listed([lead.group(2), *items[1:]])
+        elif note == "med.?":
+            note = "perhaps mid-century"
+    if "/" in part and all(CENTURY.match(piece) for piece in part.split("/")):
+        first, second = (ordinal(roman(piece.strip(". "))) for piece in part.split("/"))
+        words = f"turn of the {first} and {second} centuries"
+    elif found := CENTURY.match(part):
+        words = CENTURY_PARTS[found.group("part")].format(n=ordinal(roman(found.group("century"))))
+        words = f"{words} {found.group('rest')}".strip()
+    else:
+        words = part
+    return f"{words} ({note})" if note else words
+
+
+def date_in_words(text: str) -> str:
+    """A catalogue's date in words, its parts in its order: `XV in. + XV2` → `early 15th century and second half of
+    the 15th century`."""
+    parts = [date_part_in_words(part) for part in str(text).split("+") if part.strip(" ,")]
+    return listed(parts) if parts else ""
+
+
 def languages(text: str) -> str:
     """ISO 639-3 codes as a list in words: `lat|ces` → `lat, ces`."""
     return ", ".join(code for code in str(text).split("|") if code)

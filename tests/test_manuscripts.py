@@ -79,6 +79,70 @@ def test_dates_are_shortened_to_the_years_the_catalogue_names_else_its_centuries
     assert ms.short_date(text) == short
 
 
+@pytest.mark.parametrize(
+    ("text", "words"),
+    [
+        ("XV in. + XV2", "early 15th century and second half of the 15th century"),
+        (
+            "1502 + XV med. (a part dated 1436) + XV ex. (parts dated 1477, 1478, 1479, 1484) + XV in.",
+            "1502, mid-15th century (a part dated 1436), late 15th century (parts dated 1477, 1478, 1479 and 1484) "
+            "and early 15th century",
+        ),
+        ("XIV/XV", "turn of the 14th and 15th centuries"),
+        ("XIV. ex.", "late 14th century"),
+        ("XV1 + XIII", "first half of the 15th century and 13th century"),
+        ("XV2 (parts dated 1468, 1470),", "second half of the 15th century (parts dated 1468 and 1470)"),
+        ("1427–1428", "1427–1428"),
+    ],
+)
+def test_dates_are_written_out_in_words_in_the_catalogues_order(text: str, words: str) -> None:
+    assert ms.date_in_words(text) == words
+
+
+def test_a_profile_opens_with_the_manuscript_as_catalogued_its_title_where_it_has_one() -> None:
+    from layout_visual_complexity.manuscript_reports import described
+
+    catalogue = pd.DataFrame(
+        {"shelfmark": ["I D 18", "XI C 1"], "date": ["XV in. + XV2", "1502"], "folios": [310, 444],
+         "material": ["paper", ""], "title": ["[Novum testamentum]", ""]},
+        index=["id18", "xic1"],
+    )  # fmt: skip
+
+    class Catalogued:
+        def __init__(self) -> None:
+            self.catalogue = catalogue
+
+        def label(self, manuscript: str) -> str:
+            return str(catalogue.at[manuscript, "shelfmark"])
+
+    collection = Catalogued()
+    assert described(collection, "id18", "Prague, National Library of the Czech Republic") == (  # type: ignore[arg-type]
+        "Prague, National Library of the Czech Republic, I D 18, paper, 310 leaves, early 15th century and second half "
+        "of the 15th century: [Novum testamentum]"
+    )
+    assert described(collection, "xic1") == "XI C 1, 444 leaves, 1502"  # type: ignore[arg-type]
+
+
+def test_the_overview_names_the_ends_of_its_axes_outside_the_plot() -> None:
+    from layout_visual_complexity.plots.manuscripts import plot_overview
+
+    table = pd.DataFrame(
+        {"mean": [1400.0, 1500, 1600], "iqr": [80.0, 120, 160], "hands": [2.0, 5, 9], "folios": [150.0, 300, 450],
+         "label": ["A (2)", "B (5)", "C (9)"]},
+    )  # fmt: skip
+    for column in ("mean", "iqr"):
+        table[f"{column}_low"], table[f"{column}_high"] = table[column] - 20, table[column] + 20
+    figure = plot_overview(table)
+    axis = figure.axes[0]
+    ends = {text.get_text(): text for text in axis.texts if "→" in text.get_text() or "←" in text.get_text()}
+    assert set(ends) == {"← plainer", "more complex →", "← more uniform", "more varied →"}
+    renderer = figure.canvas.get_renderer()
+    frame = axis.get_window_extent(renderer)
+    for text in ends.values():
+        box = text.get_window_extent(renderer)
+        assert box.y1 <= frame.y0 or box.x1 <= frame.x0  # below or left of the plotting area
+
+
 def test_a_page_has_colour_with_a_rubric_line_or_a_coloured_initial() -> None:
     features = pd.DataFrame(
         {"Colour__Lines__rubric_share": [0.0, 0.2, 0.0, np.nan], "Colour__ColouredInitials__count": [0, 0, 2, np.nan]},

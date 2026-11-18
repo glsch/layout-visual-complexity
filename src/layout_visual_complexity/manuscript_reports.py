@@ -3,12 +3,11 @@
 
 - `manuscript_profiles`: each manuscript's profile (`figures/manuscript_profile_<id>`): its pages as a strip coloured
   by score, the scores with their rolling median over nine pages, and its three most and three least complex pages;
-- `manuscript_profile_strips`: the same pages as the article first drew them (`figures/manuscript_profile_strip_<id>`):
-  the strip above the six pages, labelled complex and plain, with their scores;
+  the caption opens with the manuscript as catalogued (shelfmark, material, leaves, date, title);
 - `manuscript_strips`: every manuscript's strip, one row each (`figures/manuscript_strips`);
 - `manuscript_overview`: each manuscript's mean score against the interquartile range of its pages' scores, with
-  intervals from resampling its pages, coloured by hands, sized by folios (`figures/<collection>_overview`); and
-  `manuscript_overview_quadrants`, the article's design, the quadrants named inside;
+  intervals from resampling its pages, coloured by hands, sized by folios, the axes' ends named
+  (`figures/<collection>_overview`);
 - `manuscripts_table`: the collection's table, the catalogue's facts beside the scores and the share of pages with
   colour (`tables/<collection>_manuscripts`);
 - `manuscript_readings`: the article's readings as numbers, with intervals (`tables/<collection>_readings`).
@@ -114,20 +113,19 @@ def load_collection(folder: Path, catalogue: Path | None, resamples: int, seed: 
                       Normalize(float(low), float(high)), order, min_lines, blank)  # fmt: skip
 
 
-def scale_sentence(collection: Collection, manuscript: str | None = None) -> str:
-    """How a predicted score is made, and which pages count (the manuscript's, or the collection's), for the
-    captions."""
+def scale_sentence(collection: Collection) -> str:
+    """How a predicted score is made, for the captions."""
     elo = collection.elo
     text = (
         "A page's predicted score is its expected Elo score: the regression of the dataset's Elo scores on the "
         "ensemble's out-of-fold scores, "
         f"{number(elo.get('intercept', math.nan), 0)} + {number(elo.get('slope', math.nan), 0)} $\\times$ $z$, $z$ "
-        "being the page's score under the ensemble of the geometry and the ViT rankers (equal weights)."
+        "being the page's score under the ensemble of the Layout (geometry) and ViT rankers (equal weights)."
     )
     if collection.left_out:
-        names = ", ".join(collection.label(name) for name in collection.left_out)
+        names = ms.listed([escape(collection.label(name)) for name in collection.left_out])
         text += f" The rankers were trained without the dataset's pages from {names}, so every score is out of sample."
-    return text + pages_sentence(collection, manuscript)
+    return text
 
 
 def pages_sentence(collection: Collection, manuscript: str | None = None) -> str:
@@ -166,28 +164,49 @@ def shown_pages(collection: Collection, manuscript: str, size: int, client: Any,
     return found
 
 
-def profile_caption(collection: Collection, manuscript: str, design: str, image_credit: str,
-                    catalogue_credit: str) -> str:  # fmt: skip
+def described(collection: Collection, manuscript: str, repository: str = "") -> str:
+    """A manuscript as its profile's caption opens: its full shelfmark, then its material, leaves and date as
+    catalogued (the date in words), then its title where the catalogue facts give one."""
+    facts = collection.catalogue.loc[manuscript] if manuscript in collection.catalogue.index else pd.Series()
+    name = collection.label(manuscript)
+    parts = [f"{repository}, {name}" if repository else name]
+    material = str(facts.get("material", "") or "").strip()
+    if material:
+        parts.append(material)
+    if pd.notna(facts.get("folios", math.nan)):
+        parts.append(f"{int(facts['folios']):,} leaves")
+    date = ms.date_in_words(facts.get("date", ""))
+    if date:
+        parts.append(date)
+    title = str(facts.get("title", "") or "").strip()
+    return escape(", ".join(parts)) + (f": {escape(title)}" if title else "")
+
+
+def profile_caption(collection: Collection, manuscript: str, settings: "CollectionSettings") -> str:
+    """A profile's caption: the manuscript as catalogued, what the figure shows, how the scores are made, and the
+    sources, the catalogue's entry among them."""
     pages = collection.pages(manuscript)
-    label = collection.label(manuscript)
-    facts = collection.catalogue.loc[manuscript] if manuscript in collection.catalogue.index else None
-    number_note = f" ({escape(facts['catalogue_number'])})" if facts is not None and "catalogue_number" in facts else ""
-    if design == "ours":
-        drawn = (
-            "(top) each page as a band coloured by its predicted score; (middle) the scores (dots) with their rolling "
-            "median over nine pages (line); (bottom) the three most complex pages (1--3, vermillion) and the three "
-            "least complex (4--6, blue), each with its folio and score, marked on the strip and among the scores."
+    facts = collection.catalogue.loc[manuscript] if manuscript in collection.catalogue.index else pd.Series()
+    drawn = (
+        "(top) each page as a band coloured by its predicted score; (middle) the scores (dots) with their rolling "
+        "median over nine pages (line); (bottom) the three most complex pages (1--3, vermillion) and the three least "
+        "complex (4--6, blue), each with its folio and score, marked on the strip and among the scores."
+    )
+    sources = settings.catalogue_credit.rstrip(".")
+    entry = str(facts.get("catalogue_number", "") or "").strip()
+    if sources and entry:
+        sources += f", no. {entry}"
+    if str(facts.get("title", "") or "").strip() and settings.title_credit:
+        sources = (
+            f"{sources}; {settings.title_credit}"
+            if sources
+            else settings.title_credit[:1].upper() + settings.title_credit[1:]
         )
-    else:
-        drawn = (
-            "the strip of its pages, each coloured by its predicted score, above its three most complex pages "
-            "(vermillion) and its three least complex (blue), each with its folio and score, their places boxed on "
-            "the strip."
-        )
-    return (f"{escape(label)}{number_note}, its {len(pages):,} leaf pages in the manuscript's order: {drawn} "
-            f"{scale_sentence(collection, manuscript)} The colour scale runs from {number(collection.norm.vmin, 0)} to "
-            f"{number(collection.norm.vmax, 0)}, the 2nd and 98th percentiles of all the collection's pages."
-            + credits(image_credit, catalogue_credit))  # fmt: skip
+    return (f"{described(collection, manuscript, settings.repository)}. Its {len(pages):,} leaf pages in the "
+            f"manuscript's order: {drawn}{pages_sentence(collection, manuscript)} {scale_sentence(collection)} The "
+            f"colour scale runs from {number(collection.norm.vmin, 0)} to {number(collection.norm.vmax, 0)}, the 2nd "
+            "and 98th percentiles of all the collection's pages."
+            + credits(settings.image_credit, f"{sources}." if sources else ""))  # fmt: skip
 
 
 @dataclass(frozen=True)
@@ -200,6 +219,8 @@ class CollectionSettings:
     collection: str = "manuscripts"
     image_credit: str = ""
     catalogue_credit: str = ""
+    title_credit: str = ""
+    repository: str = ""
     thumbnail_size: int = 400
     named: list[str] = field(default_factory=list)
     min_lines: int = 0
@@ -209,8 +230,8 @@ class CollectionSettings:
     http: HttpSettings = field(default_factory=HttpSettings)
 
 
-def profiles(settings: CollectionSettings, collection: Collection, folder: Path, design: str) -> Written:
-    """Each chosen manuscript's profile, in our design or the article's."""
+def profiles(settings: CollectionSettings, collection: Collection, folder: Path) -> Written:
+    """Each chosen manuscript's profile."""
     chosen = settings.profiles or collection.order
     unknown = [name for name in chosen if name not in collection.order]
     if unknown:
@@ -222,13 +243,9 @@ def profiles(settings: CollectionSettings, collection: Collection, folder: Path,
             pages = collection.pages(manuscript)
             values = pages[ms.SCORE].to_numpy(dtype=float)
             shown = shown_pages(collection, manuscript, settings.thumbnail_size, client, cache)
-            if design == "ours":
-                figure = plots.plot_profile(values, list(pages["label"].astype(str)), shown, collection.norm)
-                stem = folder / "figures" / f"manuscript_profile_{manuscript}"
-            else:
-                figure = plots.plot_profile_strip(values, shown, collection.norm)
-                stem = folder / "figures" / f"manuscript_profile_strip_{manuscript}"
-            caption = profile_caption(collection, manuscript, design, settings.image_credit, settings.catalogue_credit)
+            figure = plots.plot_profile(values, list(pages["label"].astype(str)), shown, collection.norm)
+            stem = folder / "figures" / f"manuscript_profile_{manuscript}"
+            caption = profile_caption(collection, manuscript, settings)
             paths += save_figure(figure, stem, caption, f"fig:{stem.name}")
             summary[manuscript] = [{"page": page.page, "score": page.score, "complex": page.complex} for page in shown]
     return Written(paths, summary)
@@ -242,7 +259,7 @@ def strips(settings: CollectionSettings, collection: Collection, folder: Path) -
     caption = (
         f"The {len(rows)} manuscripts' leaf pages, one row each {ordered}, each page a band coloured by its predicted "
         "score, in the manuscript's order from the left; the rows' lengths are the manuscripts' numbers of leaf pages. "
-        f"{scale_sentence(collection)}" + credits("", settings.catalogue_credit)
+        f"{scale_sentence(collection)}{pages_sentence(collection)}" + credits("", settings.catalogue_credit)
     )
     paths = save_figure(figure, folder / "figures" / "manuscript_strips", caption, "fig:manuscript_strips")
     return Written(paths, {"manuscripts": len(rows)})
@@ -261,10 +278,10 @@ def overview_table(collection: Collection) -> pd.DataFrame:
     return table
 
 
-def overview(settings: CollectionSettings, collection: Collection, folder: Path, design: str) -> Written:
+def overview(settings: CollectionSettings, collection: Collection, folder: Path) -> Written:
     table = overview_table(collection)
-    figure = plots.plot_overview(table, design)
-    stem = folder / "figures" / (f"{settings.collection}_overview" + ("" if design == "ours" else "_quadrants"))
+    figure = plots.plot_overview(table)
+    stem = folder / "figures" / f"{settings.collection}_overview"
     drawn = (
         "Each manuscript's mean predicted score (horizontal) against the interquartile range of its pages' predicted "
         "scores (vertical): how complex its pages are on average, and how much they vary. Points are coloured by the "
@@ -272,15 +289,14 @@ def overview(settings: CollectionSettings, collection: Collection, folder: Path,
         "shelfmark and, in brackets, the number of texts it holds (counted finely). The dashed lines are the "
         "medians of the manuscripts' means and ranges."
     )
-    if design == "ours":
-        drawn += (
-            " The whiskers are 95\\% intervals from 1,000 resamples of each manuscript's pages. Plain and uniform "
-            "manuscripts lie towards the lower left, complex and varied ones towards the upper right; plain but "
-            "varied ones towards the upper left, complex but uniform ones towards the lower right."
-        ).replace("1,000", f"{settings.bootstrap:,}")
-    else:
-        drawn += " The quadrants the medians mark are named in their corners."
-    caption = f"{drawn} {scale_sentence(collection)}" + credits("", settings.catalogue_credit)
+    drawn += (
+        f" The whiskers are 95\\% intervals from {settings.bootstrap:,} resamples of each manuscript's pages. Plain "
+        "and uniform manuscripts lie towards the lower left, complex and varied ones towards the upper right; plain "
+        "but varied ones towards the upper left, complex but uniform ones towards the lower right."
+    )
+    caption = f"{drawn} {scale_sentence(collection)}{pages_sentence(collection)}" + credits(
+        "", settings.catalogue_credit
+    )
     paths = save_figure(figure, stem, caption, f"fig:{stem.name}")
     return Written(paths, {"manuscripts": len(table)})
 
@@ -327,7 +343,8 @@ def manuscripts_table(settings: CollectionSettings, collection: Collection, fold
         f"interquartile range, each with its 95\\% interval from {settings.bootstrap:,} resamples of the manuscript's "
         "pages; the share of its pages with colour (a rubric line, at least half of whose ink is chromatic, or a "
         "coloured initial, by the colour measures, which no ranker uses); and the number of colours besides plain ink "
-        f"the catalogue gives. {scale_sentence(collection)}" + credits("", settings.catalogue_credit)
+        f"the catalogue gives. {scale_sentence(collection)}{pages_sentence(collection)}"
+        + credits("", settings.catalogue_credit)
     )
     latex = LatexTable(
         ["Shelfmark", "No.", "Date", "Folios", "Hands", "Texts", "Languages", "Pages", "Mean", "IQR", "Colour",
@@ -369,10 +386,8 @@ def readings(settings: CollectionSettings, collection: Collection, folder: Path)
 
 OUTPUTS = (
     "manuscript_profiles",
-    "manuscript_profile_strips",
     "manuscript_strips",
     "manuscript_overview",
-    "manuscript_overview_quadrants",
     "manuscripts_table",
     "manuscript_readings",
 )
@@ -381,15 +396,11 @@ OUTPUTS = (
 def make(output: str, settings: CollectionSettings, collection: Collection, folder: Path) -> Written:
     """One of the collection's outputs."""
     if output == "manuscript_profiles":
-        return profiles(settings, collection, folder, "ours")
-    if output == "manuscript_profile_strips":
-        return profiles(settings, collection, folder, "article")
+        return profiles(settings, collection, folder)
     if output == "manuscript_strips":
         return strips(settings, collection, folder)
     if output == "manuscript_overview":
-        return overview(settings, collection, folder, "ours")
-    if output == "manuscript_overview_quadrants":
-        return overview(settings, collection, folder, "article")
+        return overview(settings, collection, folder)
     if output == "manuscripts_table":
         return manuscripts_table(settings, collection, folder)
     if output == "manuscript_readings":
@@ -407,8 +418,8 @@ def score_run_figures(output: Path, scores: pd.DataFrame, settings: Any, describ
         http=settings.http,
     )
     collection = load_collection(Path(output), None, given.bootstrap, given.seed, scores=scores, described=described)
-    paths = profiles(given, collection, Path(output), "ours").paths
+    paths = profiles(given, collection, Path(output)).paths
     if len(collection.order) > 1:
-        paths += overview(given, collection, Path(output), "ours").paths
+        paths += overview(given, collection, Path(output)).paths
     logger.info("score: %d figures in %s", sum(path.suffix == ".svg" for path in paths), shown_path(Path(output)))
     return paths

@@ -1,5 +1,5 @@
-"""Manuscripts drawn through their pages' scores: a profile along the pages (in two designs), the strips of a whole
-collection, and the overview of a collection's means against their spreads (in two designs).
+"""Manuscripts drawn through their pages' scores: a profile along the pages, the strips of a whole collection, and the
+overview of a collection's means against their spreads.
 
 Scores are coloured on the score scale (viridis) between two values shared by every figure of a collection, so the
 figures can be read together. The most complex pages are marked in vermillion, the least complex in blue.
@@ -14,7 +14,6 @@ from matplotlib.colors import Normalize
 from matplotlib.figure import Figure
 from matplotlib.gridspec import GridSpec
 from matplotlib.lines import Line2D
-from matplotlib.patches import Rectangle
 
 from layout_visual_complexity.plots import style
 
@@ -65,7 +64,7 @@ def draw_strip(axis, values: np.ndarray, norm: Normalize, length: int | None = N
         axis.spines[side].set_visible(False)
 
 
-def draw_thumbnail(axis, shown: ShownPage, number: int | None, design: str) -> None:
+def draw_thumbnail(axis, shown: ShownPage, number: int) -> None:
     colour = COMPLEX if shown.complex else PLAIN
     if shown.image is not None:
         axis.imshow(shown.image)
@@ -75,10 +74,7 @@ def draw_thumbnail(axis, shown: ShownPage, number: int | None, design: str) -> N
         side.set_visible(True)
         side.set_edgecolor(colour)
         side.set_linewidth(1.0)
-    if design == "ours":
-        axis.set_xlabel(f"{number}  {folio(shown.label)}\n{thousands(shown.score)}", color=colour, fontsize=7)
-    else:
-        axis.set_xlabel(f"{folio(shown.label)}\n{thousands(shown.score)}", color=colour, fontsize=7)
+    axis.set_xlabel(f"{number}  {folio(shown.label)}\n{thousands(shown.score)}", color=colour, fontsize=7)
 
 
 def plot_profile(
@@ -115,29 +111,7 @@ def plot_profile(
                        va="bottom", fontsize=6.5, color=colour, annotation_clip=False)  # fmt: skip
         curve.scatter([x], [page.score], s=28, facecolors="none", edgecolors=colour, linewidths=1.0, zorder=4)
     for index, page in enumerate(shown[:6]):
-        draw_thumbnail(figure.add_subplot(grid[2, index]), page, index + 1, "ours")
-    return figure
-
-
-def plot_profile_strip(values: np.ndarray, shown: list[ShownPage], norm: Normalize) -> Figure:
-    """A manuscript's profile as the article first drew it: the strip above the three most complex and the three
-    least complex pages, labelled so, each with its folio and score, their places boxed on the strip."""
-    figure = style.new_figure("full", 6.8)
-    grid = GridSpec(2, 6, figure=figure, height_ratios=[0.8, 4.0])
-    strip = figure.add_subplot(grid[0, :])
-    draw_strip(strip, values, norm)
-    strip.set_xticks([])
-    for page in shown:
-        colour = COMPLEX if page.complex else PLAIN
-        strip.add_patch(Rectangle((page.place + 0.5 - 1.5, 0.02), 3.0 + 0.0, 0.96, fill=False, edgecolor=colour,
-                                  linewidth=1.2, zorder=4))  # fmt: skip
-    axes = [figure.add_subplot(grid[1, index]) for index in range(min(6, len(shown)))]
-    for axis, page in zip(axes, shown[:6], strict=False):
-        draw_thumbnail(axis, page, None, "article")
-    if len(axes) >= 2:
-        axes[1].set_title("complex", color=COMPLEX, fontsize=8)
-    if len(axes) >= 5:
-        axes[4].set_title("plain", color=PLAIN, fontsize=8)
+        draw_thumbnail(figure.add_subplot(grid[2, index]), page, index + 1)
     return figure
 
 
@@ -257,11 +231,14 @@ def _own(box: tuple[float, float, float, float], centre: np.ndarray, radius: flo
     return max(0.0, min(x1, cx + radius) - max(x0, cx - radius)) * max(0.0, min(y1, cy + radius) - max(y0, cy - radius))
 
 
-def plot_overview(table: pd.DataFrame, design: str = "ours") -> Figure:
+AXIS_ENDS = {"x": ("plainer", "more complex"), "y": ("more uniform", "more varied")}
+
+
+def plot_overview(table: pd.DataFrame) -> Figure:
     """Each manuscript's mean score against the interquartile range of its pages' scores, coloured by the number of
-    hands, sized by folios, labelled; the medians dashed. `table` has `mean`, `iqr`, their intervals (`mean_low`, …),
-    `hands`, `folios` and `label`. In our design the intervals are whiskers and nothing else is written inside; in
-    the article's, the quadrants are named in the corners and the sizes' key is inside."""
+    hands, sized by folios, labelled; the medians dashed, the intervals as whiskers, nothing else written inside.
+    Each axis names its two ends beside its label (`AXIS_ENDS`). `table` has `mean`, `iqr`, their intervals
+    (`mean_low`, …), `hands`, `folios` and `label`."""
     figure = style.new_figure("full", 11.5)
     axis = figure.add_subplot()
     sizes = marker_sizes(table["folios"])
@@ -271,15 +248,15 @@ def plot_overview(table: pd.DataFrame, design: str = "ours") -> Figure:
     colours = style.count_colormap() if known else _single(style.METHODS["ensemble"])
     axis.axvline(table["mean"].median(), color=style.SECONDARY, linewidth=0.6, linestyle="--", zorder=1)
     axis.axhline(table["iqr"].median(), color=style.SECONDARY, linewidth=0.6, linestyle="--", zorder=1)
-    if design == "ours":
-        axis.errorbar(table["mean"], table["iqr"],
-                      xerr=[table["mean"] - table["mean_low"], table["mean_high"] - table["mean"]],
-                      yerr=[table["iqr"] - table["iqr_low"], table["iqr_high"] - table["iqr"]],
-                      fmt="none", ecolor=style.GRID_DARK, elinewidth=0.6, capsize=0, zorder=2)  # fmt: skip
+    axis.errorbar(table["mean"], table["iqr"],
+                  xerr=[table["mean"] - table["mean_low"], table["mean_high"] - table["mean"]],
+                  yerr=[table["iqr"] - table["iqr_low"], table["iqr_high"] - table["iqr"]],
+                  fmt="none", ecolor=style.GRID_DARK, elinewidth=0.6, capsize=0, zorder=2)  # fmt: skip
     points = axis.scatter(table["mean"], table["iqr"], s=sizes, c=hands.fillna(0), cmap=colours, norm=norm,
                           edgecolors=style.TEXT, linewidths=0.5, alpha=0.9, zorder=3)  # fmt: skip
     axis.set_xlabel(f"mean {SCORE_LABEL}")
-    axis.set_ylabel(f"interquartile range of the {SCORE_LABEL.replace('predicted score', 'predicted scores')}")
+    axis.set_ylabel(f"interquartile range of the\n{SCORE_LABEL.replace('predicted score', 'predicted scores')}")
+    name_axis_ends(axis)
     style.light_grid(axis)
     if known:
         bar = figure.colorbar(points, ax=axis, label="hands", fraction=0.04, pad=0.02)
@@ -288,23 +265,25 @@ def plot_overview(table: pd.DataFrame, design: str = "ours") -> Figure:
     handles = [Line2D([], [], linestyle="none", marker="o", markersize=float(np.sqrt(size)), markerfacecolor="none",
                       markeredgecolor=style.TEXT, markeredgewidth=0.5, label=f"{folios:,} folios")
                for folios, size in keys]  # fmt: skip
-    if design == "ours":
-        figure.legend(handles=handles, loc="outside lower center", ncols=len(handles), handletextpad=0.3)
-    else:
-        axis.legend(handles=handles, loc="best", handletextpad=0.3, labelspacing=1.0)
-        for x, y, ha, va, text, strong in (
-            (0.015, 0.985, "left", "top", "plain but varied", False),
-            (0.985, 0.985, "right", "top", "complex and varied", True),
-            (0.015, 0.015, "left", "bottom", "plain and uniform", False),
-            (0.985, 0.015, "right", "bottom", "complex but uniform", False),
-        ):
-            colour, weight = (style.TEXT, "bold") if strong else (style.SECONDARY, "normal")
-            axis.text(x, y, text, transform=axis.transAxes, ha=ha, va=va, fontsize=7, style="italic", color=colour,
-                      fontweight=weight)  # fmt: skip
+    figure.legend(handles=handles, loc="outside lower center", ncols=len(handles), handletextpad=0.3)
     _pad(axis, table)
     place_labels(figure, axis, table["mean"].to_numpy(float), table["iqr"].to_numpy(float), list(table["label"]),
                  sizes.to_numpy(float))  # fmt: skip
     return figure
+
+
+def name_axis_ends(axis) -> None:
+    """Each axis's two ends named in muted text outside the plotting area, in line with the axis's label: along the
+    horizontal axis at its left and right ends, along the vertical one at its bottom and top."""
+    low, high = AXIS_ENDS["x"]
+    for x, text, ha in ((0.0, f"← {low}", "left"), (1.0, f"{high} →", "right")):
+        axis.annotate(text, (x, 0), xycoords=("axes fraction", "axes fraction"), xytext=(0, -26),
+                      textcoords="offset points", ha=ha, va="top", fontsize=7.5, color=style.SECONDARY)  # fmt: skip
+    low, high = AXIS_ENDS["y"]
+    for y, text, va in ((0.0, f"← {low}", "bottom"), (1.0, f"{high} →", "top")):
+        axis.annotate(text, (0, y), xycoords=("axes fraction", "axes fraction"), xytext=(-46, 0),
+                      textcoords="offset points", ha="right", va=va, rotation=90, fontsize=7.5,
+                      color=style.SECONDARY)  # fmt: skip
 
 
 def _pad(axis, table: pd.DataFrame) -> None:
