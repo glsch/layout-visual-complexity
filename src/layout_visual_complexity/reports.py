@@ -22,7 +22,8 @@
   `manuscripts_table`, `manuscript_readings`.
 - The difficulty experiment, from `lvc difficulty` runs (`difficulty_reports.py`): `difficulty_against_complexity`,
   `difficulty_regression`, `difficulty_regression_across_and_within`, `difficulty_held_out`,
-  `difficulty_correlations`, `difficulty_main_text_and_margins`, `difficulty_material`, `difficulty_pages`.
+  `difficulty_correlations`, `difficulty_main_text_and_margins`, `difficulty_ground_truth_coverage`,
+  `difficulty_by_ranker`, `difficulty_by_quarter`, `difficulty_material`, `difficulty_pages`.
 """
 
 import json
@@ -96,6 +97,9 @@ Output = Literal[
     "difficulty_held_out",
     "difficulty_correlations",
     "difficulty_main_text_and_margins",
+    "difficulty_ground_truth_coverage",
+    "difficulty_by_ranker",
+    "difficulty_by_quarter",
     "difficulty_material",
     "difficulty_pages",
 ]
@@ -192,6 +196,9 @@ class ReportSettings:
             language, century, CATMuS's split, whether compared), joined to the runs' rows anew.
         neighbours: The held-out pages of the main run are set beside its seen pages within this many standard
             deviations of predicted complexity.
+        outside_lines: A page's ground truth may leave text out when at least this many found lines, matched to none,
+            lie outside every ground-truth zone,
+        outside_share: making at least this share of the lines found; the robustness check leaves those pages out.
     """
 
     output: Path
@@ -234,6 +241,8 @@ class ReportSettings:
     difficulty_main: str = "cremma"
     manuscript_table: Path | None = None
     neighbours: float = 0.25
+    outside_lines: int = 5
+    outside_share: float = 0.1
 
 
 def needed(settings: ReportSettings, name: str, output: str) -> object:
@@ -282,6 +291,8 @@ def run_report(settings: ReportSettings) -> dict[str, object]:
                 resamples=settings.bootstrap,
                 seed=settings.seed,
                 neighbours=settings.neighbours,
+                outside_lines=settings.outside_lines,
+                outside_share=settings.outside_share,
             )
             if material is None:
                 material = difficulty_reports.load(given_difficulty, run)

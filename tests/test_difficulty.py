@@ -220,6 +220,104 @@ def test_zones_and_lines_match_one_to_one_and_drop_capital_lines_count_neither_w
     assert np.isnan(without["cer_lines"]) and without["line_f1"] == measured["line_f1"]
 
 
+TEXTS = ["alpha one", "beta two", "gamma three", "delta four", "epsilon five", "zeta six", "eta seven"]
+
+
+def stacked(order: list[int], texts: list[str] | None = None) -> tuple[truth.Page, Found]:
+    """A page of text lines one under the other, the n-th 100 pixels below the (n-1)-th, listed in the ground truth in
+    `order`; each found exactly by a found line, in the same order, whose texts are left to the test."""
+    texts = texts or TEXTS
+    lines = [truth.Line(f"t{n}", "DefaultLine", box(100, 100 * n, 500, 100 * n + 40), [(100, 100 * n + 35),
+                        (500, 100 * n + 35)], texts[n], "z1", "MainZone") for n in order]  # fmt: skip
+    page = truth.Page("ms_p1", "ms", Path("p1.jpg"), 800, 1000, [truth.Zone("z1", "MainZone", box(50, 50, 550, 900))],
+                      lines, label="p1")  # fmt: skip
+    found = Found([], [(line.polygon, line.baseline) for line in lines])
+    return page, found
+
+
+def checked(page: truth.Page, found: Found, readings: list[str], recognised: dict[str, str] | None = None) -> dict:
+    found.texts = readings
+    own = recognised if recognised is not None else {line.id: line.text or "" for line in page.lines}
+    return measure_page(page, found, own).row
+
+
+def test_a_page_with_three_shifted_texts_is_flagged_and_one_with_two_isnt() -> None:
+    page, found = stacked(list(range(7)))
+    # Lines 1 to 3 read the next line's text: their ground truth sits one line off.
+    three = checked(page, found, [TEXTS[0], TEXTS[2], TEXTS[3], TEXTS[4], TEXTS[4], TEXTS[5], TEXTS[6]])
+    assert three["lines_shifted"] == 3 and three["lines_read_empty"] == 0 and three["texts_misplaced"]
+    two = checked(page, found, [TEXTS[0], TEXTS[2], TEXTS[3], TEXTS[3], TEXTS[4], TEXTS[5], TEXTS[6]])
+    assert two["lines_shifted"] == 2 and not two["texts_misplaced"]
+    # A reading close to its own text isn't shifted, even when a neighbour's is like it.
+    near = checked(page, found, [TEXTS[0], "beta twx", TEXTS[2], TEXTS[3], TEXTS[4], TEXTS[5], TEXTS[6]])
+    assert near["lines_shifted"] == 0
+
+
+def test_neighbours_are_taken_in_the_ground_truths_order() -> None:
+    # The ground truth lists the lines 0, 2, 1, 3, …: line 0's neighbours are 2 alone, though line 1 lies under it.
+    page, found = stacked([0, 2, 1, 3, 4, 5, 6])
+    readings = [line.text for line in page.lines]
+    readings[0] = TEXTS[1]  # the line under it on the page, two away in the ground truth
+    assert checked(page, found, list(readings))["lines_shifted"] == 0
+    readings[0] = TEXTS[2]  # the next in the ground truth
+    assert checked(page, found, list(readings))["lines_shifted"] == 1
+
+
+def test_an_empty_reference_and_an_unmatched_line_are_skipped() -> None:
+    texts = list(TEXTS)
+    texts[1] = "  "
+    page, found = stacked(list(range(7)), texts)
+    readings = [TEXTS[0], TEXTS[2], TEXTS[3], TEXTS[4], TEXTS[4], TEXTS[5], TEXTS[6]]
+    # Line 1 has no reference, so it counts neither way; lines 2 and 3 are shifted.
+    assert checked(page, found, list(readings))["lines_shifted"] == 2
+    # Without a found line on line 3, only line 2 is.
+    unmatched = Found([], found.lines[:3] + found.lines[4:])
+    assert checked(page, unmatched, readings[:3] + readings[4:])["lines_shifted"] == 1
+
+
+def test_lines_read_empty_through_their_own_polygon_while_the_found_line_reads_text() -> None:
+    page, found = stacked(list(range(7)))
+    own = {line.id: line.text or "" for line in page.lines}
+    for empty in ("t0", "t1", "t2"):
+        own[empty] = " "
+    flagged = checked(page, found, list(TEXTS), own)
+    assert flagged["lines_read_empty"] == 3 and flagged["lines_shifted"] == 0 and flagged["texts_misplaced"]
+    # Where the found line reads nothing either, the line doesn't count.
+    readings = list(TEXTS)
+    readings[2] = ""
+    two = checked(page, found, readings, own)
+    assert two["lines_read_empty"] == 2 and not two["texts_misplaced"]
+    # An unmatched line doesn't count.
+    unmatched = Found([], found.lines[1:])
+    assert checked(page, unmatched, list(TEXTS[1:]), own)["lines_read_empty"] == 2
+    # Without recognition the counts are missing and the page isn't flagged.
+    plain = measure_page(page, Found([], found.lines)).row
+    assert np.isnan(plain["lines_shifted"]) and np.isnan(plain["lines_read_empty"]) and not plain["texts_misplaced"]
+
+
+def test_the_thresholds_are_settings() -> None:
+    from layout_visual_complexity.difficulty import GroundTruthChecks
+
+    page, found = stacked(list(range(7)))
+    found.texts = [TEXTS[0], TEXTS[2], TEXTS[3], TEXTS[3], TEXTS[4], TEXTS[5], TEXTS[6]]
+    own = {line.id: line.text or "" for line in page.lines}
+    assert measure_page(page, found, own, checks=GroundTruthChecks(lines=2)).row["texts_misplaced"]
+    # A CER against the neighbour's text under 0 can't be.
+    assert measure_page(page, found, own, checks=GroundTruthChecks(shifted_neighbour=0.0)).row["lines_shifted"] == 0
+
+
+def test_pages_whose_ground_truth_may_leave_text_out() -> None:
+    from layout_visual_complexity.difficulty import leaves_text_out, texts_misplaced
+
+    rows = pd.DataFrame({"lines_found": [100, 110, 40, 30, 0, np.nan], "lines_outside": [10, 11, 5, 4, 0, np.nan],
+                         "texts_misplaced": [True, False, "True", "False", np.nan, False]})  # fmt: skip
+    assert leaves_text_out(rows).tolist() == [True, True, True, False, False, False]
+    assert leaves_text_out(rows, lines=6).tolist() == [True, True, False, False, False, False]
+    assert leaves_text_out(rows, share=0.105).tolist() == [False, False, True, False, False, False]
+    assert texts_misplaced(rows).tolist() == [True, False, True, False, False, False]
+    assert not texts_misplaced(rows.drop(columns="texts_misplaced")).any()
+
+
 def test_matching_iou_and_baselines() -> None:
     assert box_iou(np.array([[0, 0, 10, 10]]), np.array([[5, 0, 15, 10], [20, 20, 30, 30]])).tolist() == [[1 / 3, 0]]
     iou = polygon_iou([box(0, 0, 10, 10), box(0, 0, 10, 4)], [box(0, 0, 10, 4), box(0, 0, 10, 10)])

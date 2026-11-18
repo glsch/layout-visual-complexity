@@ -1,28 +1,28 @@
 \begin{table}[htbp]
   \centering
-  \caption{Automatic difficulty against predicted complexity on CREMMA's pages, by least squares across manuscripts (every page pooled) and within them (each manuscript's means removed from the measure and the covariates, so the century and Latin drop out), coefficients with their 95\% intervals from 1,000 resamples of the manuscripts. Complexity is the expected Elo score of the shipped ensemble, standardised over the pages analysed, so its coefficient is per standard deviation; these are predictions, for nobody judged these pages. The controls: the log of the ground truth's text lines, the century, Latin against the other languages, and the log of the median height of the ground-truth line polygons in pixels (the resolution). Zone F1 is the F1 score of the regions model's zones against the ground truth's, matched one to one within each class by the IoU of boxes (from 0.5); line F1 that of Kraken's lines against the ground truth's text lines (default, heading and interlinear), matched by the IoU of polygons, a found line matching a drop capital's or music's counting neither way; the baseline distance, the mean distance between matched baselines in line heights; the CER, the character error rate of Kraken with CATMuS Medieval's model, on the ground-truth lines and end to end (on Kraken's lines, missed lines' characters and invented lines' added), texts in NFC with whitespace runs as one space. CATMuS's models trained on 31 of CREMMA's 35 manuscripts; 23 of its 418 pages, from 4 manuscripts, are in CATMuS's test split.}
+  \caption{Automatic difficulty against predicted complexity on CREMMA's pages, by least squares across manuscripts (every page pooled) and within them (each manuscript's means removed from the measure and the covariates, so the century and Latin drop out), coefficients with their 95\% intervals from 1,000 resamples of the manuscripts. Complexity is the expected Elo score of the shipped ensemble, standardised over the pages analysed, so its coefficient is per standard deviation; these are predictions, for nobody judged these pages. The controls: the log of the ground truth's text lines, the century, Latin against the other languages, and the log of the median height of the ground-truth line polygons in pixels (the resolution). Zone F1 is the F1 score of the regions model's zones against the ground truth's, matched one to one within each class by the IoU of boxes (from 0.5); line F1 that of Kraken's lines against the ground truth's text lines (default, heading and interlinear), matched by the IoU of polygons, a found line matching a drop capital's or music's counting neither way; the baseline distance, the mean distance between matched baselines in line heights; the CER, the character error rate of Kraken with CATMuS Medieval's model, on the ground-truth lines and end to end (on Kraken's lines, missed lines' characters and invented lines' added), texts in NFC with whitespace runs as one space. CATMuS's models trained on 31 of CREMMA's 35 manuscripts; 23 of its 418 pages, from 4 manuscripts, are in CATMuS's test split. The CERs leave out 5 pages whose ground-truth texts don't fit their lines: at least 3 text lines read, on Kraken's line matched to them, as the text of the line just before or after (a CER over 50\% against their own text, under 25\% against the neighbour's), or read as empty through their own polygon while Kraken's line reads text.}
   \label{tab:difficulty_regression_across_and_within}
   \begin{tabular}{lccccccc}
     \toprule
      & Zone F1 & Line F1 & Baseline distance & CER, ground-truth lines & CER, end to end & log CER, ground-truth lines & log CER, end to end \\
     \midrule
     \textit{Across manuscripts} &  &  &  &  &  &  &  \\
-    Complexity (per SD) & $-$0.019 [$-$0.059, +0.020] & $-$0.069 [$-$0.108, $-$0.030] & +0.001 [$-$0.006, +0.011] & +0.001 [$-$0.006, +0.006] & +0.138 [+0.042, +0.231] & +0.085 [$-$0.087, +0.245] & +0.672 [+0.322, +1.031] \\
-    Lines (log) & $-$0.007 [$-$0.112, +0.079] & +0.061 [+0.003, +0.113] & +0.004 [$-$0.012, +0.025] & $-$0.003 [$-$0.013, +0.010] & $-$0.056 [$-$0.181, +0.064] & $-$0.034 [$-$0.331, +0.328] & $-$0.170 [$-$0.632, +0.345] \\
-    Century & +0.009 [$-$0.051, +0.066] & +0.021 [$-$0.009, +0.060] & $-$0.006 [$-$0.018, +0.008] & $-$0.001 [$-$0.011, +0.007] & $-$0.026 [$-$0.120, +0.043] & $-$0.252 [$-$0.563, +0.102] & $-$0.124 [$-$0.583, +0.241] \\
-    Latin & $-$0.106 [$-$0.277, +0.024] & +0.077 [+0.020, +0.142] & $-$0.059 [$-$0.086, $-$0.024] & +0.009 [$-$0.012, +0.031] & $-$0.074 [$-$0.272, +0.026] & +0.853 [+0.376, +1.433] & +0.147 [$-$0.473, +0.761] \\
-    Resolution (log) & +0.090 [$-$0.079, +0.239] & $-$0.020 [$-$0.126, +0.055] & $-$0.001 [$-$0.031, +0.030] & $-$0.018 [$-$0.044, +0.005] & +0.089 [$-$0.111, +0.329] & $-$0.520 [$-$1.083, +0.070] & +0.039 [$-$0.753, +1.011] \\
-    Pages; manuscripts & 418; 35 & 418; 35 & 418; 35 & 417; 35 & 417; 35 & 417; 35 & 417; 35 \\
-    R$^2$ & 0.095 & 0.360 & 0.477 & 0.021 & 0.269 & 0.296 & 0.312 \\
+    Complexity (per SD) & $-$0.019 [$-$0.059, +0.020] & $-$0.069 [$-$0.108, $-$0.030] & +0.001 [$-$0.006, +0.011] & +0.003 [$-$0.000, +0.006] & +0.143 [+0.045, +0.232] & +0.093 [$-$0.068, +0.249] & +0.690 [+0.340, +1.043] \\
+    Lines (log) & $-$0.007 [$-$0.112, +0.079] & +0.061 [+0.003, +0.113] & +0.004 [$-$0.012, +0.025] & +0.002 [$-$0.003, +0.008] & $-$0.054 [$-$0.181, +0.068] & $-$0.011 [$-$0.287, +0.309] & $-$0.163 [$-$0.617, +0.358] \\
+    Century & +0.009 [$-$0.051, +0.066] & +0.021 [$-$0.009, +0.060] & $-$0.006 [$-$0.018, +0.008] & $-$0.002 [$-$0.007, +0.003] & $-$0.026 [$-$0.120, +0.042] & $-$0.257 [$-$0.535, +0.067] & $-$0.128 [$-$0.588, +0.239] \\
+    Latin & $-$0.106 [$-$0.277, +0.024] & +0.077 [+0.020, +0.142] & $-$0.059 [$-$0.086, $-$0.024] & +0.021 [+0.013, +0.031] & $-$0.065 [$-$0.271, +0.037] & +0.934 [+0.492, +1.444] & +0.192 [$-$0.430, +0.772] \\
+    Resolution (log) & +0.090 [$-$0.079, +0.239] & $-$0.020 [$-$0.126, +0.055] & $-$0.001 [$-$0.031, +0.030] & $-$0.008 [$-$0.019, +0.004] & +0.096 [$-$0.107, +0.336] & $-$0.460 [$-$0.955, +0.066] & +0.069 [$-$0.725, +1.025] \\
+    Pages; manuscripts & 418; 35 & 418; 35 & 418; 35 & 412; 35 & 412; 35 & 412; 35 & 412; 35 \\
+    R$^2$ & 0.095 & 0.360 & 0.477 & 0.344 & 0.283 & 0.381 & 0.331 \\
     \midrule
     \textit{Within manuscripts} &  &  &  &  &  &  &  \\
-    Complexity (per SD) & $-$0.035 [$-$0.075, +0.000] & $-$0.063 [$-$0.088, $-$0.034] & +0.005 [+0.002, +0.008] & $-$0.001 [$-$0.009, +0.005] & +0.097 [+0.034, +0.164] & +0.033 [$-$0.104, +0.145] & +0.662 [+0.323, +1.136] \\
-    Lines (log) & $-$0.058 [$-$0.096, $-$0.009] & +0.163 [$-$0.119, +0.254] & +0.010 [+0.002, +0.036] & $-$0.001 [$-$0.013, +0.020] & $-$0.203 [$-$0.473, +0.264] & $-$0.081 [$-$0.621, +0.201] & $-$0.194 [$-$1.094, +1.395] \\
+    Complexity (per SD) & $-$0.035 [$-$0.075, +0.000] & $-$0.063 [$-$0.088, $-$0.034] & +0.005 [+0.002, +0.008] & +0.002 [+0.000, +0.005] & +0.100 [+0.040, +0.167] & +0.043 [$-$0.080, +0.151] & +0.675 [+0.335, +1.140] \\
+    Lines (log) & $-$0.058 [$-$0.096, $-$0.009] & +0.163 [$-$0.119, +0.254] & +0.010 [+0.002, +0.036] & +0.001 [$-$0.012, +0.007] & $-$0.200 [$-$0.464, +0.253] & $-$0.056 [$-$0.665, +0.187] & $-$0.182 [$-$1.065, +1.371] \\
     Century & -- & -- & -- & -- & -- & -- & -- \\
     Latin & -- & -- & -- & -- & -- & -- & -- \\
-    Resolution (log) & +0.076 [$-$0.511, +0.724] & $-$0.304 [$-$0.738, +0.203] & +0.086 [$-$0.027, +0.207] & $-$0.249 [$-$0.552, $-$0.001] & +0.726 [$-$0.308, +1.730] & $-$2.909 [$-$6.684, +0.235] & +1.953 [$-$1.523, +4.801] \\
-    Pages; manuscripts & 418; 35 & 418; 35 & 418; 35 & 417; 35 & 417; 35 & 417; 35 & 417; 35 \\
-    R$^2$ & 0.022 & 0.317 & 0.063 & 0.018 & 0.183 & 0.025 & 0.232 \\
+    Resolution (log) & +0.076 [$-$0.511, +0.724] & $-$0.304 [$-$0.738, +0.203] & +0.086 [$-$0.027, +0.207] & $-$0.022 [$-$0.089, +0.048] & +0.982 [$-$0.022, +1.905] & $-$0.994 [$-$3.877, +1.575] & +3.078 [+0.000, +5.694] \\
+    Pages; manuscripts & 418; 35 & 418; 35 & 418; 35 & 412; 35 & 412; 35 & 412; 35 & 412; 35 \\
+    R$^2$ & 0.022 & 0.317 & 0.063 & 0.014 & 0.216 & 0.007 & 0.265 \\
     \bottomrule
   \end{tabular}
 \end{table}

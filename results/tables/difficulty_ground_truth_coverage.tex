@@ -1,0 +1,18 @@
+\begin{table}[htbp]
+  \centering
+  \caption{Ground truth that leaves text out: the mixed model's coefficient of complexity for each measure, with its 95\% Wald interval and the controls as in the regression table, on CREMMA's pages, with every page and without the pages where at least 5 of Kraken's lines, matched to none, lie outside every ground-truth zone, making at least 10\% of the lines found: the neighbouring leaf in the photograph, decoration taken for lines, or text the ground truth doesn't hold. Complexity is standardised over all 418 pages in both. Every page stays in the main analysis. CREMMA: 53 of 418 pages flagged; 1,817 of the 4,130 lines Kraken invented lie outside every zone, and 136 of the 410 zones the regions model invented; line precision 0.865, 0.896 without the flagged pages; zone precision 0.831, 0.835 without. CATMuS Medieval Segmentation's test split: 5 of 83 pages flagged; 121 of the 219 lines Kraken invented lie outside every zone, and 24 of the 115 zones the regions model invented; line precision 0.953, 0.972 without the flagged pages; zone precision 0.666, 0.658 without. Zone F1 is the F1 score of the regions model's zones against the ground truth's, matched one to one within each class by the IoU of boxes (from 0.5); line F1 that of Kraken's lines against the ground truth's text lines (default, heading and interlinear), matched by the IoU of polygons, a found line matching a drop capital's or music's counting neither way; the baseline distance, the mean distance between matched baselines in line heights; the CER, the character error rate of Kraken with CATMuS Medieval's model, on the ground-truth lines and end to end (on Kraken's lines, missed lines' characters and invented lines' added), texts in NFC with whitespace runs as one space. The CERs leave out 5 pages whose ground-truth texts don't fit their lines: at least 3 text lines read, on Kraken's line matched to them, as the text of the line just before or after (a CER over 50\% against their own text, under 25\% against the neighbour's), or read as empty through their own polygon while Kraken's line reads text.}
+  \label{tab:difficulty_ground_truth_coverage}
+  \begin{tabular}{lcc}
+    \toprule
+     & Every page & Without the flagged pages \\
+    \midrule
+    Zone F1 & $-$0.031 [$-$0.054, $-$0.009] & $-$0.031 [$-$0.057, $-$0.005] \\
+    Line F1 & $-$0.068 [$-$0.082, $-$0.053] & $-$0.041 [$-$0.054, $-$0.028] \\
+    Baseline distance & +0.005 [+0.002, +0.008] & +0.003 [$-$0.000, +0.007] \\
+    CER, ground-truth lines & +0.003 [+0.001, +0.005] & +0.003 [+0.001, +0.005] \\
+    CER, end to end & +0.113 [+0.084, +0.142] & +0.081 [+0.054, +0.109] \\
+    log CER, ground-truth lines & +0.071 [$-$0.008, +0.151] & +0.077 [$-$0.014, +0.169] \\
+    log CER, end to end & +0.669 [+0.552, +0.786] & +0.604 [+0.473, +0.734] \\
+    \bottomrule
+  \end{tabular}
+\end{table}

@@ -51,3 +51,5 @@ difficulty_runs:
 difficulty_main: cremma
 manuscript_table: reproduce/difficulty_manuscripts.tsv
 neighbours: 0.25
+outside_lines: 5
+outside_share: 0.1

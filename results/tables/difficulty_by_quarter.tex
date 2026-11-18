@@ -1,0 +1,22 @@
+\begin{table}[htbp]
+  \centering
+  \caption{CREMMA's 418 pages in 4 quarters of equal size by predicted complexity, from the least to the most complex: each quarter's pages and its range of expected Elo scores, and the median over its pages of each measure. Line recall is a page's matched lines over its matched and missed ones, line precision its matched lines over its matched and invented ones. Predicted complexity is the expected Elo score of the shipped ensemble: a prediction, for nobody judged these pages. Zone F1 is the F1 score of the regions model's zones against the ground truth's, matched one to one within each class by the IoU of boxes (from 0.5); line F1 that of Kraken's lines against the ground truth's text lines (default, heading and interlinear), matched by the IoU of polygons, a found line matching a drop capital's or music's counting neither way; the baseline distance, the mean distance between matched baselines in line heights; the CER, the character error rate of Kraken with CATMuS Medieval's model, on the ground-truth lines and end to end (on Kraken's lines, missed lines' characters and invented lines' added), texts in NFC with whitespace runs as one space. The CERs leave out 5 pages whose ground-truth texts don't fit their lines: at least 3 text lines read, on Kraken's line matched to them, as the text of the line just before or after (a CER over 50\% against their own text, under 25\% against the neighbour's), or read as empty through their own polygon while Kraken's line reads text. The CERs' medians are over 102, 102, 104, 104 pages.}
+  \label{tab:difficulty_by_quarter}
+  \begin{tabular}{lcccc}
+    \toprule
+     & First (least complex) & Second & Third & Fourth (most complex) \\
+    \midrule
+    Pages & 105 & 104 & 104 & 105 \\
+    Expected Elo score & 982--1,243 & 1,243--1,306 & 1,309--1,389 & 1,391--1,716 \\
+    \midrule
+    Line F1 & 0.98 & 0.95 & 0.93 & 0.81 \\
+    Line recall & 1.00 & 0.99 & 0.98 & 0.89 \\
+    Line precision & 0.98 & 0.93 & 0.92 & 0.80 \\
+    CER, end to end & 4.0\% & 6.2\% & 9.2\% & 25.1\% \\
+    CER, ground-truth lines & 1.6\% & 1.6\% & 1.6\% & 1.8\% \\
+    Zone F1 & 1.00 & 0.92 & 0.91 & 0.89 \\
+    Baseline distance & 0.101 & 0.122 & 0.131 & 0.114 \\
+    Ground-truth text lines & 35 & 80 & 81.5 & 71 \\
+    \bottomrule
+  \end{tabular}
+\end{table}

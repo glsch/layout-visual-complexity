@@ -1,0 +1,184 @@
+{
+  "command": "report",
+  "started": "2026-11-18T11:08:25+00:00",
+  "ended": "2026-11-18T11:08:25+00:00",
+  "inputs": [
+    {
+      "path": "reproduce/difficulty_manuscripts.tsv",
+      "sha256": "ad19c7c9a509aa645b0db59feab7fbebe79a478ad76a1f7f28b6cc9e600fd062",
+      "bytes": 5742
+    },
+    {
+      "path": "build/difficulty/cremma/difficulty.tsv",
+      "sha256": "66488f9a5e89cfb0a7b5d27f1a905be0ee6150295d41b0397bf8724276a77579",
+      "bytes": 257630
+    },
+    {
+      "path": "build/difficulty/catmus_test/difficulty.tsv",
+      "sha256": "ef69313e178e4ed34a36d68b76a337facb26bc7b4ef892eefe9bde7960793a5c",
+      "bytes": 37087
+    },
+    {
+      "path": "build/difficulty/cremma/config.yaml",
+      "sha256": "6d7667fb387ba1178df9b60e4e0ffe743a7ce73fb3989f4886d64e3119b68914",
+      "bytes": 2245
+    }
+  ],
+  "outputs": [
+    "results/tables/difficulty_by_quarter.tsv",
+    "results/tables/difficulty_by_quarter.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "difficulty_by_quarter"
+    ],
+    "name": "table_difficulty_by_quarter",
+    "dataset": null,
+    "scores": null,
+    "features": null,
+    "layout": null,
+    "evaluations": {},
+    "shown": [],
+    "labels": {},
+    "colours": {},
+    "comparisons": [],
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": "",
+    "colour_pages": [],
+    "score_run": null,
+    "catalogue": null,
+    "profiles": [],
+    "collection": "manuscripts",
+    "catalogue_credit": "",
+    "thumbnail_size": 400,
+    "named": [],
+    "min_lines": 0,
+    "difficulty_runs": {
+      "cremma": "build/difficulty/cremma",
+      "catmus_test": "build/difficulty/catmus_test"
+    },
+    "difficulty_main": "cremma",
+    "manuscript_table": "reproduce/difficulty_manuscripts.tsv",
+    "neighbours": 0.25,
+    "outside_lines": 5,
+    "outside_share": 0.1
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "cb56bc35b770cb1af215ff8112d873f60bb14224-dirty",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "difficulty_by_quarter": {
+      "quarters": [
+        {
+          "quarter": 1,
+          "pages": 105,
+          "elo_low": 982.046483,
+          "elo_high": 1242.515554,
+          "line_f1": 0.984127,
+          "line_recall": 1.0,
+          "line_precision": 0.9846153846153847,
+          "cer_end_to_end": 0.0399935,
+          "cer_lines": 0.016045999999999998,
+          "zone_f1": 1.0,
+          "baseline_distance": 0.101232,
+          "lines": 35.0,
+          "cer_pages": 102
+        },
+        {
+          "quarter": 2,
+          "pages": 104,
+          "elo_low": 1242.620506,
+          "elo_high": 1305.629503,
+          "line_f1": 0.9511905,
+          "line_recall": 0.9893045069778084,
+          "line_precision": 0.9292929292929293,
+          "cer_end_to_end": 0.062245499999999995,
+          "cer_lines": 0.015843,
+          "zone_f1": 0.916084,
+          "baseline_distance": 0.122054,
+          "lines": 80.0,
+          "cer_pages": 102
+        },
+        {
+          "quarter": 3,
+          "pages": 104,
+          "elo_low": 1309.293506,
+          "elo_high": 1389.461756,
+          "line_f1": 0.9343414999999999,
+          "line_recall": 0.9813436029097133,
+          "line_precision": 0.9164131018435655,
+          "cer_end_to_end": 0.092044,
+          "cer_lines": 0.0164605,
+          "zone_f1": 0.909091,
+          "baseline_distance": 0.1311655,
+          "lines": 81.5,
+          "cer_pages": 104
+        },
+        {
+          "quarter": 4,
+          "pages": 105,
+          "elo_low": 1391.28892,
+          "elo_high": 1715.997201,
+          "line_f1": 0.809524,
+          "line_recall": 0.8928571428571429,
+          "line_precision": 0.8022598870056498,
+          "cer_end_to_end": 0.2514205,
+          "cer_lines": 0.017954,
+          "zone_f1": 0.892857,
+          "baseline_distance": 0.113912,
+          "lines": 71.0,
+          "cer_pages": 104
+        }
+      ]
+    },
+    "seconds": {
+      "difficulty_by_quarter": 0.027
+    }
+  }
+}

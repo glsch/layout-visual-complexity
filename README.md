@@ -100,7 +100,7 @@ rankers), where each is, and whether it is there and the one expected; the regio
 ### Measuring how hard pages are for the automatic tools
 
 ```
-lvc difficulty SOURCES… --output build/difficulty/name --recognition.model CATMUS.mlmodel [--alto_files '*.xml'] [--manuscripts FOLDER…] [--spreads.pages auto|ID…] [--manuscript_table manuscripts.tsv] [--jobs N]
+lvc difficulty SOURCES… --output build/difficulty/name --recognition.model CATMUS.mlmodel [--alto_files '*.xml'] [--manuscripts FOLDER…] [--spreads.pages auto|ID…] [--manuscript_table manuscripts.tsv] [--checks.lines 3] [--jobs N]
 ```
 
 `difficulty` takes pages that have ground truth, people's own zones, lines and transcriptions, and measures how far
@@ -126,15 +126,29 @@ used CATMuS Medieval's).
   capital's or music's line counting neither way) and the distance between matched baselines in line heights; the
   character error rate on the ground-truth lines and end to end (with and without spaces; texts in NFC, whitespace
   runs as one space); the same for the lines in main text zones and in margins apart; how many unmatched lines and
-  zones lie outside every ground-truth zone (where the ground truth may leave text out); the ground truth's lines and
-  median line height, and the columns of `--manuscript_table` (a TSV by `folder`).
+  zones lie outside every ground-truth zone (`lines_outside`, `zones_outside`: where the ground truth may leave text
+  out); the checks of its texts (below); the ground truth's lines and median line height, and the columns of
+  `--manuscript_table` (a TSV by `folder`).
+- **Ground-truth texts that don't fit their lines.** On a ground-truth text line with a reference and a line of
+  Kraken's matched to it, a *shifted text* is one that Kraken's line reads as the text of the text line just before
+  or after it, in the ground truth's order: a CER over 50% against its own text (`--checks.shifted_own`) and under 25%
+  against the neighbour's (`--checks.shifted_neighbour`). A line *reads empty* when recognition reads nothing through
+  its own polygon while Kraken's line there reads text. `lines_shifted` and `lines_read_empty` count them, and a page
+  with at least 3 of either (`--checks.lines`) is flagged in `texts_misplaced`; `lvc report` leaves such pages out of
+  every character error rate. They are errors of the ground truth, not of the tools: a transcription one line off
+  its polygons, or texts swapped between lines. Pages without transcriptions have no counts and are never flagged.
 
-The run's folder also keeps every zone and line with its match and recognised text (`zones.parquet`,
-`lines.parquet`), the zones by class (`zone_classes.tsv`), each spread's split (`spreads.tsv`), and what `score`
-keeps; never an image or a token. A rerun resumes, and the rows don't depend on the number of workers. `lvc report`
-makes the analysis: rank correlations with complexity, overall and within manuscripts; the regressions on complexity
-and the controls, as a mixed model with a random intercept per manuscript and by least squares across and within
-manuscripts; a held-out comparison; main text against margins; the figure and tables.
+The run's report (`report.md`) lists the pages whose texts don't fit their lines, with their counts, and the pages
+whose ground truth may leave text out: at least 5 of Kraken's lines, matched to none, outside every ground-truth zone
+(`--checks.outside_lines`), making at least 10% of the lines found (`--checks.outside_share`), where they are the
+neighbouring leaf in the photograph, decoration, or text the ground truth doesn't hold. The run's folder also keeps
+every zone and line with its match and recognised text (`zones.parquet`, `lines.parquet`), the zones by class
+(`zone_classes.tsv`), each spread's split (`spreads.tsv`), and what `score` keeps; never an image or a token. A rerun
+resumes, and the rows don't depend on the number of workers. `lvc report` makes the analysis: rank correlations with
+complexity, overall and within manuscripts; the regressions on complexity and the controls, as a mixed model with a
+random intercept per manuscript and by least squares across and within manuscripts; a held-out comparison; main text
+against margins; the same without the pages whose ground truth may leave text out (`--outside_lines`,
+`--outside_share`); each ranker alone; the measures by quarter of complexity; the figure and tables.
 
 ### Segmenting pages
 
@@ -407,9 +421,11 @@ learning curves (on the folds of the first two repeats), takes about 25 minutes 
 | `table-crux-manuscripts`, `table-crux-readings` | The 23 manuscripts' table, the catalogue's facts beside the scores; the article's readings of the overview, checked |
 | `sources` | `build/sources/`: CREMMA Medieval and CREMMA Medii Aevi at their commits, and the files of CATMuS Medieval Segmentation's test split the difficulty experiment uses at a fixed revision, each checked against its SHA-256 (`reproduce/catmus_segmentation_files.tsv`) |
 | `difficulty-cremma`, `difficulty-catmus-test` | `build/difficulty/`: CREMMA's 400 pages and the held-out pages of CATMuS's test split (its handwritten manuscripts of the 14th to 16th century) measured against their ground truth (not part of `all`: they need both extras, the models in `models/` and the sources) |
-| `figure-difficulty-against-complexity` | The CER on the ground-truth lines and end to end, line F1 and zone F1 against predicted complexity, a dot per page |
+| `figure-difficulty-against-complexity` | The CER on the ground-truth lines and end to end, line F1 and zone F1 against predicted complexity, a dot per page, with a robust LOWESS trend for the seen and the held-out pages |
 | `table-difficulty-regression`, `table-difficulty-regression-across-and-within` | Each measure regressed on complexity and the controls: a mixed model with a random intercept per manuscript; least squares across and within manuscripts |
-| `table-difficulty-held-out`, `table-difficulty-correlations`, `table-difficulty-main-text-and-margins` | The held-out comparison of the segmentation measures; each measure's rank correlation with complexity; main text against margins |
+| `table-difficulty-held-out`, `table-difficulty-correlations`, `table-difficulty-main-text-and-margins` | The held-out comparison of the segmentation measures, and CREMMA's held-out pages beside its seen pages of similar complexity; each measure's rank correlation with complexity; main text against margins |
+| `table-difficulty-ground-truth-coverage` | The mixed model with every page and without the pages whose ground truth may leave text out, with each run's pages flagged and line and zone precision with and without them |
+| `table-difficulty-by-ranker`, `table-difficulty-by-quarter` | Each ranker alone (the geometry ranker, the ViT head, their ensemble): rank correlations and the mixed model; the medians of each measure in four quarters of predicted complexity |
 | `table-difficulty-material`, `difficulty-pages` | The experiment's manuscripts (`reproduce/difficulty_manuscripts.tsv`); each run's per-page rows in `results/difficulty/` |
 
 The dataset leaves out the sessions of a public exhibition, whose annotators were mostly not experts, and the

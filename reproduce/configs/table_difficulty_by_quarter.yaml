@@ -1,0 +1,3 @@
+# The medians of each measure in four quarters of predicted complexity, on CREMMA's pages.
+name: table_difficulty_by_quarter
+outputs: [difficulty_by_quarter]

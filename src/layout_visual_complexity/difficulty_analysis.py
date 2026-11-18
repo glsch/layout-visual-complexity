@@ -15,6 +15,9 @@ Complexity is the expected Elo score standardised over the pages analysed, so it
 deviation. The controls: the log of the ground truth's lines, the century as a number, Latin or not, and the log of
 the median line height in pixels (the resolution); and, in the held-out comparison, held out and its interaction with
 complexity.
+
+A page whose ground-truth texts don't fit their lines (`lvc difficulty`'s `texts_misplaced`) is left out of every
+character error rate, and keeps its segmentation measures.
 """
 
 import math
@@ -23,6 +26,7 @@ from dataclasses import dataclass, field
 import numpy as np
 import pandas as pd
 
+from layout_visual_complexity.difficulty import texts_misplaced
 from layout_visual_complexity.evaluation import metrics
 from layout_visual_complexity.evaluation.protocol import centred_srocc
 
@@ -39,14 +43,29 @@ TERMS = ["complexity", "log_lines", "century", "latin", "log_resolution"]
 HELD_OUT_TERMS = [*TERMS, "held_out", "complexity:held_out"]
 # Added to the CER before its log, so a page read without error stays finite.
 LOG_OFFSET = 0.001
+# The columns a page's character errors are in, with and without spaces, overall, in main text and in margins.
+CHARACTER_COLUMNS = ("cer_", "errors_", "characters")
+
+
+def standardised(values: pd.Series) -> pd.Series:
+    """Values less their mean, over their standard deviation."""
+    values = values.astype(float)
+    return (values - values.mean()) / values.std(ddof=1)
+
+
+def character_columns(data: pd.DataFrame) -> list[str]:
+    return [column for column in data.columns if column.startswith(CHARACTER_COLUMNS)]
 
 
 def prepared(rows: pd.DataFrame) -> pd.DataFrame:
     """Each page's measures with the regressions' covariates: complexity (the expected Elo score standardised over these
-    pages), log lines, century, Latin, log resolution, held out, and the manuscript."""
+    pages), log lines, century, Latin, log resolution, held out, and the manuscript. The character errors of the pages
+    whose ground-truth texts don't fit their lines are left out (missing)."""
     data = rows.copy()
-    elo = data["expected_elo"].astype(float)
-    data["complexity"] = (elo - elo.mean()) / elo.std(ddof=1)
+    columns = character_columns(data)
+    data[columns] = data[columns].astype(float)
+    data.loc[texts_misplaced(data), columns] = np.nan
+    data["complexity"] = standardised(data["expected_elo"])
     data["log_lines"] = np.log(data["lines"].astype(float).where(data["lines"] > 0))
     data["century"] = data["century"].astype(float)
     data["latin"] = (data["language"].astype(str) == "Latin").astype(float)
@@ -233,6 +252,45 @@ def similar_pages(data: pd.DataFrame, measures: list[str], within: float = 0.25)
                 "pages_above": int(sum(value > 0 for value in differences)),
             }
         )
+    return pd.DataFrame(rows)
+
+
+def with_ranker(data: pd.DataFrame, column: str) -> pd.DataFrame:
+    """The pages with their complexity taken from one ranker's score, standardised over these pages."""
+    found = data.assign(complexity=standardised(data[column]))
+    found["complexity:held_out"] = found["complexity"] * found["held_out"]
+    return found
+
+
+# The measures by quarter of complexity, each a median over the quarter's pages.
+QUARTER_MEASURES = [
+    "line_f1",
+    "line_recall",
+    "line_precision",
+    "cer_end_to_end",
+    "cer_lines",
+    "zone_f1",
+    "baseline_distance",
+    "lines",
+]
+
+
+def by_quarter(data: pd.DataFrame, quarters: int = 4) -> pd.DataFrame:
+    """The pages in `quarters` groups of equal size by their expected Elo score, the least complex first: each group's
+    pages, the range of its scores, the median of each measure over its pages (line recall, matched over matched and
+    missed lines, and precision, matched over matched and invented, page by page), and how many pages have a CER."""
+    pages = data.assign(
+        line_recall=data["lines_matched"] / (data["lines_matched"] + data["lines_missed"]),
+        line_precision=data["lines_matched"] / (data["lines_matched"] + data["lines_invented"]),
+    )
+    group = pd.qcut(pages["expected_elo"].astype(float), quarters, labels=False)
+    rows = []
+    for number, part in pages.groupby(group, sort=True):
+        elo = part["expected_elo"].astype(float)
+        row = {"quarter": int(number) + 1, "pages": len(part), "elo_low": elo.min(), "elo_high": elo.max()}
+        row |= {measure: float(part[measure].astype(float).median()) for measure in QUARTER_MEASURES}
+        row["cer_pages"] = int(part["cer_end_to_end"].notna().sum())
+        rows.append(row)
     return pd.DataFrame(rows)
 
 

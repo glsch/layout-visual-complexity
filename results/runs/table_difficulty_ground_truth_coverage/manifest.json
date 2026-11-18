@@ -1,0 +1,292 @@
+{
+  "command": "report",
+  "started": "2026-11-18T11:08:17+00:00",
+  "ended": "2026-11-18T11:08:17+00:00",
+  "inputs": [
+    {
+      "path": "reproduce/difficulty_manuscripts.tsv",
+      "sha256": "ad19c7c9a509aa645b0db59feab7fbebe79a478ad76a1f7f28b6cc9e600fd062",
+      "bytes": 5742
+    },
+    {
+      "path": "build/difficulty/cremma/difficulty.tsv",
+      "sha256": "66488f9a5e89cfb0a7b5d27f1a905be0ee6150295d41b0397bf8724276a77579",
+      "bytes": 257630
+    },
+    {
+      "path": "build/difficulty/catmus_test/difficulty.tsv",
+      "sha256": "ef69313e178e4ed34a36d68b76a337facb26bc7b4ef892eefe9bde7960793a5c",
+      "bytes": 37087
+    },
+    {
+      "path": "build/difficulty/cremma/config.yaml",
+      "sha256": "6d7667fb387ba1178df9b60e4e0ffe743a7ce73fb3989f4886d64e3119b68914",
+      "bytes": 2245
+    }
+  ],
+  "outputs": [
+    "results/tables/difficulty_ground_truth_coverage.tsv",
+    "results/tables/difficulty_ground_truth_coverage.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "difficulty_ground_truth_coverage"
+    ],
+    "name": "table_difficulty_ground_truth_coverage",
+    "dataset": null,
+    "scores": null,
+    "features": null,
+    "layout": null,
+    "evaluations": {},
+    "shown": [],
+    "labels": {},
+    "colours": {},
+    "comparisons": [],
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    },
+    "levels": {},
+    "alone": [],
+    "reference_column": "",
+    "colour_pages": [],
+    "score_run": null,
+    "catalogue": null,
+    "profiles": [],
+    "collection": "manuscripts",
+    "catalogue_credit": "",
+    "thumbnail_size": 400,
+    "named": [],
+    "min_lines": 0,
+    "difficulty_runs": {
+      "cremma": "build/difficulty/cremma",
+      "catmus_test": "build/difficulty/catmus_test"
+    },
+    "difficulty_main": "cremma",
+    "manuscript_table": "reproduce/difficulty_manuscripts.tsv",
+    "neighbours": 0.25,
+    "outside_lines": 5,
+    "outside_share": 0.1
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "cb56bc35b770cb1af215ff8112d873f60bb14224-dirty",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "difficulty_ground_truth_coverage": {
+      "cremma": {
+        "pages": 418,
+        "pages_flagged": 53,
+        "lines_outside": 1817,
+        "lines_invented": 4130,
+        "zones_outside": 136,
+        "zones_invented": 410,
+        "line_precision": 0.8654547823820693,
+        "line_precision_without": 0.8955098447254682,
+        "zone_precision": 0.8314144736842105,
+        "zone_precision_without": 0.8347417840375587,
+        "flagged": [
+          "bnffr1728_btv1b84473026_f5",
+          "bnffr1728_btv1b84473026_f8",
+          "bnffr22549septsages_266_a70f5_default",
+          "bnffr22549septsages_267_67f25_default",
+          "bnffr22549septsages_268_eb0f1_default",
+          "bnffr22549septsages_343_74602_default",
+          "bnffr22549septsages_f.157r",
+          "bnffr22549septsages_f.163r",
+          "bnffr22549septsages_f.163v",
+          "bnffr22549septsages_f.169r",
+          "bnffr22549septsages_f.174r",
+          "bnffr22549septsages_f.174v",
+          "bnffr22549septsages_f.178r",
+          "bnffr22549septsages_f.178v",
+          "bnffr24428bestiaire_132_da7e5_default",
+          "bnffr24428bestiaire_135_38a7a_default",
+          "bnffr24428bestiaire_140_4780d_default",
+          "bnffr24428bestiaire_142_21242_default",
+          "bnffr24428bestiaire_144_f0078_default",
+          "bnffr412wauchier_215_3240a_default",
+          "bnffr412wauchier_217_d9c7f_default",
+          "bnffr412wauchier_225_10f6f_default",
+          "bnffr412wauchier_231_e1f4f_default",
+          "bnffr412wauchier_233_0a17b_default",
+          "bnffr412wauchier_234_16ca8_default",
+          "bnffr412wauchier_239_7e1cb_default",
+          "bnffr412wauchier_243_d5817_default",
+          "bnffr412wauchier_245_26b27_default",
+          "bnffr412wauchier_247_8a40e_default",
+          "bnffr412wauchier_255_eb70f_default",
+          "bnffr412wauchier_257_d5347_default",
+          "bnffr412wauchier_263_fd271_default",
+          "bnffr412wauchier_273_7bbf3_default",
+          "bnffr412wauchier_277_c7087_default",
+          "bodmer168otinel_425_9077b_default",
+          "bodmer168otinel_427_d9a41_default",
+          "bodmer168otinel_429_e5dd4_default",
+          "bodmer168otinel_431_00e7d_default",
+          "bodmer168otinel_435_5f2b8_default",
+          "bodmer168otinel_437_00668_default",
+          "bodmer168otinel_439_94a1c_default",
+          "kbr9232examensmoraux_be-kbr00_b-18374984_0000-00-00_00_0471",
+          "pennsylvaniacodex909eneide_69v",
+          "vaticanereglat1616otinel_reg-lat-1616_115r",
+          "vaticanereglat1616otinel_reg-lat-1616_116v",
+          "vaticanereglat1616otinel_reg-lat-1616_124v",
+          "bgo511_sbb_pk_mgo511_026r",
+          "bgo511_sbb_pk_mgo511_027r",
+          "clm13027_41r",
+          "clm13027_41v",
+          "h318_13v_left",
+          "laurentianuspluteus3331_42r",
+          "pallat373_bibliotecaapostolicavaticana_ms.cod.pal.lat.373-3r"
+        ]
+      },
+      "catmus_test": {
+        "pages": 83,
+        "pages_flagged": 5,
+        "lines_outside": 121,
+        "lines_invented": 219,
+        "zones_outside": 24,
+        "zones_invented": 115,
+        "line_precision": 0.9526691160579209,
+        "line_precision_without": 0.9722351843210453,
+        "zone_precision": 0.6656976744186046,
+        "zone_precision_without": 0.6583850931677019,
+        "flagged": [
+          "parisbnffr604_page-002-of-005",
+          "parisbnffr574_page-001-of-003",
+          "parisbnfesp36_page-001-of-006",
+          "parisbnflat14137_page-002-of-005",
+          "parisbnflat14137_page-004-of-005"
+        ]
+      },
+      "zone_f1": {
+        "every": [
+          -0.03144454658834016,
+          -0.05378288836767901,
+          -0.009106204809001303
+        ],
+        "without": [
+          -0.030693506761046097,
+          -0.05657113630917171,
+          -0.004815877212920483
+        ]
+      },
+      "line_f1": {
+        "every": [
+          -0.06755518461553378,
+          -0.08211899987841238,
+          -0.05299136935265518
+        ],
+        "without": [
+          -0.04112418645089495,
+          -0.05432915027281726,
+          -0.027919222628972645
+        ]
+      },
+      "baseline_distance": {
+        "every": [
+          0.005166159617491785,
+          0.0020907453093864984,
+          0.008241573925597072
+        ],
+        "without": [
+          0.003291143825660695,
+          -0.00018583972203683064,
+          0.006768127373358221
+        ]
+      },
+      "cer_lines": {
+        "every": [
+          0.0027756698887814154,
+          0.0009320747176124644,
+          0.004619265059950367
+        ],
+        "without": [
+          0.0031141992784882565,
+          0.0009453185315901284,
+          0.005283080025386385
+        ]
+      },
+      "cer_end_to_end": {
+        "every": [
+          0.11303389026657479,
+          0.08375973219974325,
+          0.14230804833340632
+        ],
+        "without": [
+          0.08132067797579282,
+          0.054087679865494134,
+          0.1085536760860915
+        ]
+      },
+      "log_cer_lines": {
+        "every": [
+          0.0712222996983119,
+          -0.008160708199913894,
+          0.15060530759653767
+        ],
+        "without": [
+          0.0770978012270417,
+          -0.014455884406233285,
+          0.16865148686031667
+        ]
+      },
+      "log_cer_end_to_end": {
+        "every": [
+          0.6691593741888429,
+          0.5520065206464428,
+          0.7863122277312429
+        ],
+        "without": [
+          0.603613852757643,
+          0.4732825236794007,
+          0.7339451818358853
+        ]
+      }
+    },
+    "seconds": {
+      "difficulty_ground_truth_coverage": 0.625
+    }
+  }
+}
