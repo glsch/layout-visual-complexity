@@ -165,8 +165,9 @@ def test_the_report_writes_the_figures_and_tables(tmp_path: Path) -> None:
                  "tables/difficulty_by_quarter", "tables/difficulty_held_out_pages",
                  "tables/difficulty_material"):  # fmt: skip
         assert f"{stem}.tex" in found
-    assert {"figures/difficulty_against_complexity_log_cer.svg", "difficulty/main.tsv", "difficulty/test.tsv",
+    assert {"figures/difficulty_against_complexity.svg", "difficulty/main.tsv", "difficulty/test.tsv",
             "tables/difficulty_held_out_pages.tsv"} <= found  # fmt: skip
+    assert not any("log_cer" in name for name in found)
     regression = pd.read_csv(tmp_path / "results" / "tables" / "difficulty_regression.tsv", sep="\t")
     assert set(regression["measure"]) >= {"zone_f1", "line_f1", "baseline_distance", "cer_lines", "cer_end_to_end"}
     material = pd.read_csv(tmp_path / "results" / "tables" / "difficulty_material.tsv", sep="\t")
@@ -178,7 +179,9 @@ def test_the_report_writes_the_figures_and_tables(tmp_path: Path) -> None:
     assert test.loc[no_text_lines, "page"] not in set(loaded.comparison["page"])
     assert len(loaded.comparison) == (test["century"] >= 14).sum() - 1 + (main["century"] >= 14).sum()
     caption = (tmp_path / "results" / "figures" / "difficulty_against_complexity.tex").read_text(encoding="utf-8")
-    assert "Left out: 1 page whose ground truth has no text line" in caption
+    # The figure shows the main run's pages only: the held-out run's page without a text line isn't counted.
+    assert "both on a log axis" in caption and f"(c) all {len(main)}." in caption and "Left out" not in caption
+    assert "Vermillion: the 0 pages" not in caption
 
 
 def report_runs(tmp_path: Path, misplaced: int = 0, outside: int = 0) -> tuple[dict[str, Path], Path]:
@@ -330,14 +333,35 @@ def test_the_figure_has_its_legend_and_the_score_label(tmp_path: Path) -> None:
     from layout_visual_complexity.plots.manuscripts import SCORE_LABEL
 
     data = analysis.prepared(synthetic(manuscripts=10, pages=6, held_out=3))
-    data["zone_f1"] = data["line_f1"] = data["cer_lines"] = data["cer_end_to_end"] = data["measure"].clip(0.001, 1)
-    every = pd.Series(True, index=data.index)
-    panels = [Panel(name, name, data, every, log=name.startswith("cer")) for name in
-              ("cer_lines", "cer_end_to_end", "line_f1", "zone_f1")]  # fmt: skip
+    data["line_f1"] = data["cer_lines"] = data["cer_end_to_end"] = data["measure"].clip(0.001, 1)
+    panels = [
+        Panel(name, name, data, log=name.startswith("cer")) for name in ("cer_lines", "cer_end_to_end", "line_f1")
+    ]
     figure, counts = draw(panels)
     labels = [text.get_text() for text in figure.legends[0].get_texts()]
-    assert labels == ["Seen", "Held out", "12th–13th century, not compared", "Trend, seen", "Trend, held out"]
-    axes = figure.get_axes()
-    assert axes[2].get_xlabel() == axes[3].get_xlabel() == "P" + SCORE_LABEL[1:]
-    assert axes[0].get_yscale() == "log" and axes[2].get_yscale() == "linear"
-    assert counts["line_f1"] == {"seen": 42, "held_out": 18}
+    assert labels == ["Seen in training", "Held out", "Trend over all pages"]
+    assert figure.get_supxlabel() == "P" + SCORE_LABEL[1:]
+    assert counts["line_f1"] == 60
+
+
+def test_the_difficulty_figure_has_three_panels_one_trend_over_all_pages_and_the_held_out_marked() -> None:
+    from matplotlib.colors import to_hex
+
+    from layout_visual_complexity.plots.difficulty import HELD_OUT, Panel, draw
+
+    pages = synthetic(manuscripts=10, pages=6, seed=4, held_out=2)
+    pages["held_out"] = (pages["split"] == "test").astype(int)
+    pages["cer"] = np.exp(pages["measure"] - 4)
+    pages["f1"] = 1 / (1 + np.exp(-pages["measure"]))
+    panels = [Panel("cer", "CER, ground-truth lines", pages, log=True), Panel("cer", "CER, end to end", pages, True),
+              Panel("f1", "Line F1", pages)]  # fmt: skip
+    figure, counts = draw(panels)
+    assert len(figure.axes) == 3 and counts == {"cer": 60, "f1": 60}
+    for axis in figure.axes:
+        assert len(axis.lines) == 1 and len(axis.lines[0].get_xdata()) == len(pages)
+        held = [
+            collection for collection in axis.collections if to_hex(collection.get_facecolor()[0]) == HELD_OUT.lower()
+        ]
+        assert len(held) == 1 and len(held[0].get_offsets()) == pages["held_out"].sum() == 12
+    assert [axis.get_yscale() for axis in figure.axes] == ["log", "log", "linear"]
+    assert [axis.get_title(loc="left") for axis in figure.axes] == ["(a)", "(b)", "(c)"]
