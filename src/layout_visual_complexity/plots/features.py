@@ -32,20 +32,10 @@ ZONE_COLOURS = ("#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9"
 # Each feature's correlation.
 
 
-def wrapped(name: str, width: int = 46) -> str:
-    """A column's formal name, broken after its feature when it's long."""
-    if len(name) <= width:
-        return name
-    family, feature, flavour = name.split("__")
-    return f"{family}__{feature}__\n    {flavour}"
-
-
 def plot_feature_correlations(rows: pd.DataFrame) -> Figure:
     """Each row's Spearman ρ (`rho`) as a dot with its interval (`low`, `high`), top to bottom in the rows' order,
-    labelled by its formal name (`column`). Full width."""
-    names = [wrapped(name) for name in rows["column"]]
-    lines = sum(name.count("\n") + 1 for name in names)
-    figure = style.new_figure("full", 1.6 + 0.36 * lines + 0.12 * len(rows))
+    labelled by its readable label (`label`). Full width."""
+    figure = style.new_figure("full", 1.6 + 0.48 * len(rows))
     axes = figure.subplots()
     y = np.arange(len(rows))[::-1]
     rho = rows["rho"].to_numpy(dtype=float)
@@ -58,9 +48,7 @@ def plot_feature_correlations(rows: pd.DataFrame) -> Figure:
     limit = max(0.2, float(np.nanmax(np.abs(np.concatenate([low, high]))))) + 0.05
     axes.set_xlim(-limit, limit)
     axes.set_ylim(-0.7, len(rows) - 0.3)
-    axes.set_yticks(y, names)
-    for label in axes.get_yticklabels():
-        label.set_fontproperties(style.monospace(6.5))
+    axes.set_yticks(y, list(rows["label"]))
     axes.tick_params(axis="y", length=0)
     axes.spines["left"].set_visible(False)
     axes.set_xlabel(r"Spearman's $\rho$ with the Elo score")
@@ -348,10 +336,9 @@ LAYOUT_DRAWINGS: dict[str, tuple[Callable[[Axes, Page, LayoutSettings], None], t
 
 
 def plot_features_on_pages(
-    panels: Sequence[tuple[str, Page, np.ndarray | None]], settings: GeometrySettings, columns: int = 3
+    panels: Sequence[tuple[str, Page, np.ndarray]], settings: GeometrySettings, columns: int = 3
 ) -> Figure:
-    """One panel per feature group (`Family__Feature`), each on its page: a real page's image, or a schematic page
-    when the image is None. Full width, the panels lettered."""
+    """One panel per feature group (`Family__Feature`), each on its page's image. Full width, the panels lettered."""
     rows = math.ceil(len(panels) / columns)
     aspect = max(page.folio_size[1] / page.folio_size[0] for _, page, _ in panels)
     panel_width = 15 / columns
@@ -368,8 +355,9 @@ def plot_features_on_pages(
 
 
 def plot_feature_families(page: Page, geometry_settings: GeometrySettings, layout_settings: LayoutSettings) -> Figure:
-    """The plate: the nine geometric groups and Layout's four measures, each on the same schematic page, with their
-    code names below. Full width: the geometric groups three to a row, Layout's four in the last row."""
+    """The plate: the nine geometric groups and the measures of Layout (Kyle–Davidson) in four panels, each on the same
+    schematic page, with their code names below. Full width: the geometric groups three to a row, the four panels of
+    Layout (Kyle–Davidson) in the last row."""
     from matplotlib.gridspec import GridSpec
 
     figure = style.new_figure("full", 23.5)

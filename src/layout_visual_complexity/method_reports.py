@@ -34,13 +34,22 @@ BACKBONES = {
 }
 ADJECTIVES = {
     "geometry": "geometric",
-    "layout": "Layout",
+    "layout": "Layout (Kyle--Davidson)",
     "trivial": "trivial",
     "generic": "generic image",
     "kyle_davidson": "Kyle--Davidson",
     "ink": "ink distribution",
     "line_texture": "line-texture",
-    "colour": "real colour",
+    "colour": "ink colour",
+}
+# The families as methods, by the names the figures and tables give them.
+NAMES = {
+    "geometry": "Layout (geometry)",
+    "layout": "Layout (Kyle--Davidson)",
+    "kyle_davidson": "Kyle--Davidson",
+    "ink": "Ink distribution",
+    "line_texture": "Line texture",
+    "colour": "Ink colour",
 }
 NUMBERS = ("no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten")
 # Families described by their measures rather than by their number of features.
@@ -121,6 +130,12 @@ class Evaluations:
     def label(self, key: str) -> str:
         return self.settings.labels.get(key, key)
 
+    def named(self, key: str) -> str:
+        """The evaluation as a sentence names it: its words in `in_text` (`the local ViT head`), else its label in
+        italics."""
+        given = getattr(self.settings, "in_text", None) or {}
+        return escape(given[key]) if key in given else f"\\emph{{{escape(self.label(key))}}}"
+
     def kind(self, key: str) -> str:
         return self.manifests[key]["summary"].get("method", "features")
 
@@ -134,13 +149,13 @@ class Evaluations:
         return next(iter(self.manifests.values()))["configuration"]
 
     def member_label(self, name: str, folder: str) -> str:
-        """An ensemble member's label: that of the evaluation in this table from the same folder, if any; else the
-        label given for its name, and the member is defined after the table's own evaluations."""
+        """An ensemble member as its definition names it: as the evaluation in this table from the same folder, if
+        any; else by the label given for its name, and the member is defined after the table's own evaluations."""
         for key, path in self.folders.items():
             if Path(folder) == path:
-                return self.label(key)
+                return self.named(key)
         self.members.setdefault(self.label(name), Path(folder))
-        return self.label(name)
+        return self.named(name)
 
     def definition(self, key: str) -> str:
         """What the evaluation's method is, in words, from its run's record."""
@@ -161,7 +176,7 @@ class Evaluations:
             )
         if kind == "ensemble":
             members = [self.member_label(name, folder) for name, folder in configuration["ensemble"].items()]
-            named = " and ".join(f"\\emph{{{escape(member)}}}" for member in members)
+            named = " and ".join(members)
             if configuration.get("fitted_weights"):
                 return f"{named} combined, their z-scored page scores weighted as each fold's training judgments fit"
             weights = configuration.get("weights") or {}
@@ -173,6 +188,12 @@ class Evaluations:
         alone = len(names) == 1 and set(names) & BY_MEASURE
         if summary.get("measures") and (configuration.get("columns") or alone):
             return f"the pairwise logistic model on {measures_described(summary, names)}"
+        counts = family_columns(summary, names) if len(names) > 1 else {}
+        if counts:
+            first, *others = names
+            parts = [f"the {counts[first]} {ADJECTIVES.get(first, first)} features"]
+            parts += [f"the {counts[name]} of {NAMES.get(name, escape(name))}" for name in others]
+            return f"the pairwise logistic model on {' and '.join(parts)} ({summary['columns']} columns)"
         families = [ADJECTIVES.get(name, name) for name in names]
         return f"the pairwise logistic model on the {summary.get('columns')} {' and '.join(families)} features"
 
@@ -195,6 +216,30 @@ class Evaluations:
 
     def resamples(self) -> str:
         return f"{self.configuration()['bootstrap']:,} resamples of the manuscripts"
+
+
+def family_columns(summary: dict[str, Any], names: list[str]) -> dict[str, int]:
+    """How many of an evaluation's columns each of its families gave, from the measures its run recorded; empty when
+    a family isn't known by its name or they don't add up to its columns."""
+    from layout_visual_complexity.features.contract import FeatureError, load_family
+
+    try:
+        family_of = {group.prefix: name for name in names for group in load_family(name).groups()}
+    except FeatureError:
+        return {}
+    counts = dict.fromkeys(names, 0)
+    for measure in summary.get("measures") or []:
+        if measure["prefix"] not in family_of:
+            return {}
+        counts[family_of[measure["prefix"]]] += int(measure["columns"])
+    return counts if sum(counts.values()) == int(summary.get("columns", -1)) else {}
+
+
+def in_sentence(name: str) -> str:
+    """A name or label within a sentence: its first letter in lower case, unless its first word is a name or an
+    acronym (a capital after its first letter: `Kyle–Davidson`, `MSSC`)."""
+    first = name.split(" ")[0]
+    return name if any(character.isupper() for character in first[1:]) else name[:1].lower() + name[1:]
 
 
 def measure_name(feature: str) -> str:
@@ -220,7 +265,8 @@ def measures_described(summary: dict[str, Any], families: list[str]) -> str:
     dropped = summary.get("dropped") or []
     left_out = f", {counted(len(dropped), 'column')} restating ink coverage left out" if dropped else ""
     if len(found) == 1:
-        alone = f"{names[0]} alone"
+        article = "the " if names[0].startswith("number of ") else ""
+        alone = f"{article}{names[0]} alone"
         return alone if columns == 1 else f"{alone} ({counted(columns, 'column')}{left_out})"
     kind = " and ".join(ADJECTIVES.get(name, name) for name in families)
     listed = ", ".join(names[:-1]) + f" and {names[-1]}"
@@ -325,8 +371,8 @@ def accuracy_by_elo_gap(settings: Any, run: Run, folder: Path, name: str = "accu
         r"Pairwise accuracy on the test judgments by the absolute difference ($\Delta$) between the two pages' final "
         f"Elo scores: {evaluations.definitions()}. Bars are the mean over the folds, whiskers 95\\% intervals from "
         f"{evaluations.resamples()}; diamonds the Reference, the consistency of the same test judgments with the "
-        "final Elo scores (the share that agree with them), which is the limit for accuracy as the ceiling for SROCC "
-        f"({decimal(evaluations.ceiling())}) is for $\\rho$; the dashed line chance. {evaluations.protocol()}"
+        "final Elo scores (the share that agree with them), the limit for accuracy; the dashed line chance. "
+        f"{evaluations.protocol()}"
     )
     paths = save_figure(figure, folder / "figures" / name, caption, f"fig:{name}")
     return Written(written.paths + paths, written.summary)

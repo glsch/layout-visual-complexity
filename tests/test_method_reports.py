@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import pytest
+from matplotlib.colors import to_hex
 
 from conftest import write_token_set
 from layout_visual_complexity.embed import EmbedSettings, run_embed
@@ -125,3 +126,23 @@ def test_the_local_complexity_maps(tmp_path: Path, tiny_vit: Path) -> None:
                               head=other.save(tmp_path / "other.npz"), map_pages=["ms_1r"])  # fmt: skip
     with pytest.raises(ValueError, match="long_edge"):
         run_report(settings)
+
+
+def test_the_accuracy_figure_draws_a_bar_per_method_and_gap() -> None:
+    from matplotlib.patches import Rectangle
+
+    from layout_visual_complexity.plots import style
+    from layout_visual_complexity.plots.methods import Shown, plot_accuracy_by_gap
+
+    gaps = ["<100", "100-200", ">=200", "overall"]
+    table = pd.DataFrame({"gap": gaps, "accuracy": 0.7, "low": 0.65, "high": 0.75})
+    methods = [Shown(label, style.METHODS[key], table) for key, label in
+               [("line_texture", "Line texture"), ("colour", "Ink colour"), ("geometry", "Layout (geometry)"),
+                ("vit", "ViT"), ("ensemble", "Ensemble")]]  # fmt: skip
+    figure = plot_accuracy_by_gap(methods, pd.DataFrame({"gap": gaps, "reference": 0.8}))
+    axes = figure.axes[0]
+    bars = [patch for patch in axes.patches if isinstance(patch, Rectangle)]
+    assert len(bars) == 5 * 3
+    colours = {to_hex(bar.get_facecolor()) for bar in bars}
+    assert style.METHODS["line_texture"].lower() in colours and style.METHODS["colour"].lower() in colours
+    assert [text.get_text() for text in axes.get_legend().get_texts()][:5] == [method.label for method in methods]

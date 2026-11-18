@@ -1,8 +1,8 @@
 """The tables and figures of the baselines, for `lvc report`.
 
-- `baselines_by_information`: what each level of information buys: each evaluation's accuracy with its interval and
-  its ρ, grouped by the information it needs; `baselines_by_information_each_measure`, the same with each measure
-  alone beside its group combined.
+- `baselines_by_information`: accuracy by the information a method needs: each evaluation's accuracy with its
+  interval and its ρ, grouped by the information it needs; `baselines_by_information_each_measure`, the same with each
+  measure alone beside its group combined.
 - `baseline_measures`: each measure defined: its name, what it measures, its parameters and its source.
 - `generic_measure_correlations`: the generic image measures' Spearman correlations with each other and with ink
   coverage, and the check of each against ink coverage.
@@ -15,7 +15,7 @@ import pandas as pd
 
 from layout_visual_complexity.features.extraction import read_feature_table
 from layout_visual_complexity.judgment_reports import Written, decimal
-from layout_visual_complexity.method_reports import Evaluations, needed, with_interval
+from layout_visual_complexity.method_reports import Evaluations, in_sentence, needed, with_interval
 from layout_visual_complexity.outputs import LatexTable, escape, save_figure, write_table
 from layout_visual_complexity.runs import Run
 
@@ -56,10 +56,15 @@ def baselines_by_information(settings: Any, run: Run, folder: Path, name: str) -
     chance = levels[evaluations.keys[0]]
     figure = plot_by_information(placed, consistency, chance, ceiling)
     combined = [key for key in evaluations.keys if key not in alone]
-    defined = "; ".join(
-        f"\\emph{{{escape(evaluations.label(key))}}}, {evaluations.definition(key)}" for key in combined
-    )
-    order = ", ".join(escape(level.lower()) for level in dict.fromkeys(table["level"]))
+    if settings.defined_in:
+        defined = (
+            f"The combined models and the methods are those of Figure~\\ref{{fig:{settings.defined_in}}}, under the "
+            "same names."
+        )
+    else:
+        defined = "; ".join(f"\\emph{{{escape(evaluations.label(key))}}}, {evaluations.definition(key)}"
+                            for key in combined) + "."  # fmt: skip
+    order = ", ".join(escape(in_sentence(level)) for level in dict.fromkeys(table["level"]))
     each = (
         " Filled dots: measures combined in one model; open dots: one measure alone, the pairwise logistic model on "
         "that measure's columns (the measures are defined in Table~\\ref{tab:baseline_measures})."
@@ -67,13 +72,14 @@ def baselines_by_information(settings: Any, run: Run, folder: Path, name: str) -
         else ""
     )
     caption = (
-        "What each level of information buys: pairwise accuracy on the test judgments (dots, the mean over the "
+        f"Accuracy by the information a method needs{', each measure alone' if alone else ''}: pairwise accuracy on "
+        "the test judgments (dots, the mean over the "
         f"folds, with 95\\% intervals from {evaluations.resamples()}) and Spearman's $\\rho$ between the out-of-fold "
         f"page scores and the Elo scores (right), the methods grouped by the information they need ({order}).{each} "
         f"The solid line is the Reference for accuracy ({decimal(consistency)}), the consistency of the same test "
         "judgments with the final Elo scores (the share that agree with them); the Reference for $\\rho$ is its "
         f"ceiling ({decimal(ceiling)}), the square root of the Elo scores' reliability: one limit, measured for "
-        f"accuracy and for $\\rho$. The dashed line is chance. {defined}. {evaluations.protocol()}"
+        f"accuracy and for $\\rho$. The dashed line is chance. {defined} {evaluations.protocol()}"
     )
     paths = save_figure(figure, folder / "figures" / name, caption, f"fig:{name}")
     latex_rows = [
@@ -85,7 +91,7 @@ def baselines_by_information(settings: Any, run: Run, folder: Path, name: str) -
         ["Information", "Method", "Measures", "Accuracy", r"$\rho$ (SROCC)"],
         latex_rows,
         f"The methods grouped by the information they need: accuracy (the mean over the folds) and SROCC, with 95\\% "
-        f"intervals from {evaluations.resamples()}. {defined}.",
+        f"intervals from {evaluations.resamples()}. {defined}",
         f"tab:{name}",
         align="lcccc",
     )
@@ -160,7 +166,7 @@ def generic_measure_correlations(settings: Any, run: Run, folder: Path) -> Writt
     (their `restating.tsv`), as a table."""
     from layout_visual_complexity.plots.baselines import plot_correlation_matrix
     from layout_visual_complexity.ranking.dataset import read_dataset
-    from layout_visual_complexity.reports import correlations
+    from layout_visual_complexity.reports import correlations, table_families
 
     name = "generic_measure_correlations"
     table = read_feature_table(run.read(Path(needed(settings, "features", name))))
@@ -172,8 +178,9 @@ def generic_measure_correlations(settings: Any, run: Run, folder: Path) -> Writt
         raise ValueError(f"{name}: the feature table has no column of {', '.join(settings.families)}")
     values = table.values[[reference, *columns]]
     matrix = values.corr(method="spearman")
-    labels = [column.split("__", 1)[1] for column in matrix.columns]
-    figure = plot_correlation_matrix(matrix, labels)
+    families = {family.name: family for family in table_families(table)}
+    labels = {column: families[table.columns[column]].label(column) for column in matrix.columns}
+    figure = plot_correlation_matrix(matrix, [labels[column] for column in matrix.columns])
     dataset = read_dataset(needed(settings, "dataset", name))
     manuscripts = dataset.images.set_index("image")["manuscript"]
     found = correlations(values[columns], values[reference], manuscripts, settings.bootstrap, settings.seed)
@@ -186,12 +193,13 @@ def generic_measure_correlations(settings: Any, run: Run, folder: Path) -> Writt
             checked = pd.concat([checked, restating.drop(columns=["rho"])])
     if len(checked):
         found = found.merge(checked, on="column", how="left")
-    found.insert(1, "reference", reference)
+    found.insert(1, "label", found["column"].map(labels))
+    found.insert(2, "reference", reference)
     long = matrix.stack().rename("rho").rename_axis(["first", "second"]).reset_index()
     caption = (
-        f"Spearman's correlations among the {len(columns)} columns of the generic image measures and with ink "
-        f"coverage (\\texttt{{{escape(reference)}}}, first), over the {len(values):,} pages; blue where negative, "
-        "vermillion where positive. Code names without their family's prefix (\\texttt{Generic\\_\\_})."
+        f"Spearman's correlations among the {len(columns)} columns of the generic image measures and with "
+        f"{escape(in_sentence(labels[reference]))} (first), over the {len(values):,} pages; blue where negative, "
+        "vermillion where positive."
     )
     paths = save_figure(figure, folder / "figures" / name, caption, f"fig:{name}")
     threshold = None
@@ -206,8 +214,8 @@ def generic_measure_correlations(settings: Any, run: Run, folder: Path) -> Writt
             else "--"
         )
         dropped = "yes" if values_row.get("dropped") is True else "no"
-        latex_rows.append([f"\\texttt{{{escape(row.column)}}}", with_interval(row.rho_reference, row.rho_low,
-                           row.rho_high), difference, dropped])  # fmt: skip
+        latex_rows.append([escape(labels[row.column]), with_interval(row.rho_reference, row.rho_low, row.rho_high),
+                           difference, dropped])  # fmt: skip
     if len(checked):
         threshold = "a column whose $|\\rho|$ reaches 0.9 is set against ink coverage alone in a paired comparison"
     latex = LatexTable(

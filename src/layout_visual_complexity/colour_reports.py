@@ -1,11 +1,11 @@
 """The tables and figures of the colour level, for `lvc report`.
 
-- `colour_by_elo_gap`: Appendix B's successor: line texture, real colour and geometry with real colour by Elo gap
+- `colour_by_elo_gap`: Appendix B's successor: line texture, ink colour and geometry with ink colour by Elo gap
   beside the Reference, with ρ, accuracy and ρ within manuscripts, and colour's value added to geometry.
 - `colour_differences`: what colour adds, as paired differences in accuracy and ρ, overall and within manuscripts
   (`method_reports.paired_differences`).
 - `line_texture_families`: Appendix B's table of the line-texture measures' families.
-- `colour_measures`: each real colour measure defined: its name, what it measures, its parameters and its source.
+- `colour_measures`: each ink colour measure defined: its name, what it measures, its parameters and its source.
 - `ink_colour_on_page`: pages whose ink is drawn by hue class, beside the classes' shares of the ink.
 """
 
@@ -33,7 +33,7 @@ from layout_visual_complexity.outputs import LatexTable, escape, gap_latex, save
 from layout_visual_complexity.runs import Run
 
 COLOUR_MEASURES = (
-    "The real colour measures: what each measures, its parameters and its source. They work on the ink layer of the "
+    "The ink colour measures: what each measures, its parameters and its source. They work on the ink layer of the "
     "baseline measures (the folio crop at a fixed long edge, its lightness flattened, Sauvola's threshold, specks "
     "removed), each linear RGB channel divided by the paper's so that the parchment is neutral, then in CIELAB: an "
     "ink pixel's chroma is the length of its $(a^*, b^*)$ and its hue the angle. Zones and lines are the "
@@ -159,7 +159,7 @@ def line_texture_families(folder: Path) -> Written:
 
 
 def colour_measures(settings: Any, run: Run, folder: Path) -> Written:
-    """Each real colour measure defined, as `baseline_measures` defines the baselines'."""
+    """Each ink colour measure defined, as `baseline_measures` defines the baselines'."""
     return baseline_measures(settings, run, folder, "colour_measures", COLOUR_MEASURES)
 
 
@@ -210,10 +210,10 @@ def ink_colour_on_page(settings: Any, run: Run, folder: Path) -> Written:
     figure = plot_ink_colour(panels)
     letters = "; ".join(f"({chr(ord('a') + number)}) {text}" for number, text in enumerate(described))
     names = [*HUE_CLASSES]
-    chromatic = escape(chroma_words(colour_settings.chroma, colour_settings.excluded_hues))
+    chromatic = escape(chroma_words(colour_settings.chroma, colour_settings.excluded_hues, " and "))
     caption = (
-        "Ink colour on three pages: each page's ink as the colour measures see it, the parchment made neutral "
-        f"(plain ink brown, chromatic ink, of {chromatic}, in the colour of its hue class: {', '.join(names[:-1])} "
+        "Ink colour on three pages: each page's ink as the ink colour measures see it, the parchment made neutral "
+        f"(plain ink brown; chromatic ink, of {chromatic}, in the colour of its hue class: {', '.join(names[:-1])} "
         f"or {names[-1]}), beside the classes' shares of the ink. {letters}. Ink within stamps, left out of the "
         "measures, is light grey."
     )

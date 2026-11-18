@@ -67,7 +67,7 @@ def plot_ink_colour(panels: list[ColourPanel]) -> Figure:
         bars.barh(y, values, height=0.65, color=[style.HUE_CLASS_COLOURS[name] for name in CLASSES])
         bars.set_yticks(y, [name.capitalize() for name in CLASSES])
         bars.set_xlim(0, limit)
-        bars.set_xlabel("Share of the ink (%)")
+        bars.set_xlabel("Ink (%)")
         bars.tick_params(axis="y", length=0)
         style.light_grid(bars, "x")
     style.panel_letters(letters, [panel.page for panel in panels])

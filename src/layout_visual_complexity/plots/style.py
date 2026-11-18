@@ -22,12 +22,13 @@ FULL_WIDTH = 15 * CENTIMETRE
 HALF_WIDTH = 7.2 * CENTIMETRE
 
 # One colour per method, in every figure; the Reference (consistency for accuracy, the ceiling for ρ) black, chance a
-# grey dashed line.
+# grey dashed line. Line texture takes the palette's yellow, whose marks get a darker edge (`edge`).
 METHODS = {
     "trivial": "#999999",
     "generic_image": "#56B4E9",
     "kyle_davidson": "#CC79A7",
     "ink": "#009E73",
+    "line_texture": "#F0E442",
     "geometry": "#E69F00",
     "colour": "#D55E00",
     "vit": "#0072B2",
@@ -119,6 +120,18 @@ def light_grid(axis: Axes, which: Literal["x", "y"] = "y") -> None:
 def lighter(colour: str, amount: float) -> str:
     """`colour` mixed with white: 0 keeps it, 1 gives white."""
     return to_hex([value + (1 - value) * amount for value in to_rgb(colour)])
+
+
+def darker(colour: str, amount: float) -> str:
+    """`colour` mixed with black: 0 keeps it, 1 gives black."""
+    return to_hex([value * (1 - amount) for value in to_rgb(colour)])
+
+
+def edge(colour: str) -> str:
+    """The edge of a mark filled with `colour`: the colour itself, or a darker one where the colour is too light to
+    stand out on white (the palette's yellow)."""
+    red, green, blue = to_rgb(colour)
+    return darker(colour, 0.4) if 0.2126 * red + 0.7152 * green + 0.0722 * blue > 0.8 else to_hex(colour)
 
 
 def correlation_colormap() -> Colormap:

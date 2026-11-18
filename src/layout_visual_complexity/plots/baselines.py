@@ -59,7 +59,7 @@ def plot_by_information(
             axes.plot([method.low, method.high], [position, position], color=style.TEXT, linewidth=0.6, zorder=2)
         face = "white" if method.alone else method.colour
         axes.plot([method.accuracy], [position], "o", markersize=4.5, markerfacecolor=face,
-                  markeredgecolor=method.colour, markeredgewidth=1.0, zorder=3)  # fmt: skip
+                  markeredgecolor=style.edge(method.colour), markeredgewidth=1.0, zorder=3)  # fmt: skip
         if np.isfinite(method.rho):
             axes.text(1.015, position, signed(f"{method.rho:.2f}"), transform=axes.get_yaxis_transform(),
                       va="center", ha="left", fontsize=8)  # fmt: skip
@@ -116,8 +116,7 @@ def plot_correlation_matrix(matrix: pd.DataFrame, labels: list[str]) -> Figure:
             axes.text(column, row, text, ha="center", va="center", fontsize=6, color=ink)
     axes.set_xticks(np.arange(count - 1), labels[:-1], rotation=90)
     axes.set_yticks(np.arange(1, count), labels[1:])
-    for label in [*axes.get_xticklabels(), *axes.get_yticklabels()]:
-        label.set_fontproperties(style.monospace(6.5))
+    axes.tick_params(labelsize=7)
     axes.set_xlim(-0.5, count - 1.5)
     axes.set_ylim(count - 0.5, 0.5)
     axes.tick_params(length=0)

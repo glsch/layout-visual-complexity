@@ -237,3 +237,8 @@ def test_tables_are_centred_but_their_first_column(ranked: tuple[Path, Path], tm
     # The split-half table and the graph's statistics are TSVs alone.
     assert not (tmp_path / "results" / "tables" / "split_half_ceiling.tex").exists()
     assert (tmp_path / "results" / "tables" / "comparison_graph.tsv").is_file()
+    # The comparison graph's caption: the possible pairs beside the density, the rings and connectedness before (a).
+    caption = (tmp_path / "results" / "figures" / "comparison_graph.tex").read_text()
+    images = len(read_dataset(ranked[0]).images)
+    assert f"of the {images * (images - 1) // 2:,} possible pairs" in caption and "in one layout" not in caption
+    assert caption.index("Ringed:") < caption.index("The graph is") < caption.index("(a)") < caption.index("(b)")
