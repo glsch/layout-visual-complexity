@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-15T16:26:49+00:00",
-  "ended": "2026-11-15T16:26:50+00:00",
+  "started": "2026-11-18T11:08:14+00:00",
+  "ended": "2026-11-18T11:08:15+00:00",
   "inputs": [
     {
       "path": "reproduce/difficulty_manuscripts.tsv",
@@ -10,13 +10,18 @@
     },
     {
       "path": "build/difficulty/cremma/difficulty.tsv",
-      "sha256": "b77ad9fdece3231e6ae7d9ec77e18c0810aa9643972af5d18c57062411ce82f8",
-      "bytes": 247568
+      "sha256": "66488f9a5e89cfb0a7b5d27f1a905be0ee6150295d41b0397bf8724276a77579",
+      "bytes": 257630
     },
     {
       "path": "build/difficulty/catmus_test/difficulty.tsv",
-      "sha256": "fd3b150e0536ec11055a74da0dd6d66213226aa9965263ca24278db78784d496",
-      "bytes": 36368
+      "sha256": "ef69313e178e4ed34a36d68b76a337facb26bc7b4ef892eefe9bde7960793a5c",
+      "bytes": 37087
+    },
+    {
+      "path": "build/difficulty/cremma/config.yaml",
+      "sha256": "6d7667fb387ba1178df9b60e4e0ffe743a7ce73fb3989f4886d64e3119b68914",
+      "bytes": 2245
     }
   ],
   "outputs": [
@@ -81,7 +86,9 @@
     },
     "difficulty_main": "cremma",
     "manuscript_table": "reproduce/difficulty_manuscripts.tsv",
-    "neighbours": 0.25
+    "neighbours": 0.25,
+    "outside_lines": 5,
+    "outside_share": 0.1
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -103,7 +110,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "ab37b5deb5b6955d4e0ac65c2af34abf0a389769-dirty",
+  "commit": "cb56bc35b770cb1af215ff8112d873f60bb14224-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "difficulty_main_text_and_margins": {
@@ -113,14 +120,14 @@
         0.963850706557147
       ],
       "main_cer_lines": [
-        0.024447341849088786,
-        0.01777967414917486,
-        0.03502584197108089
+        0.021213352753938753,
+        0.016259808211248786,
+        0.028820101582968147
       ],
       "main_cer_end_to_end": [
-        0.17019224170890232,
-        0.07765329288897292,
-        0.3027872825480286
+        0.16811085170825188,
+        0.07454364991874823,
+        0.30256796990636814
       ],
       "margin_line_f1": [
         0.6690223792697291,
@@ -139,7 +146,7 @@
       ]
     },
     "seconds": {
-      "difficulty_main_text_and_margins": 1.069
+      "difficulty_main_text_and_margins": 1.179
     }
   }
 }

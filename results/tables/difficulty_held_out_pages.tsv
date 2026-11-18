@@ -2,5 +2,5 @@ measure	held_out_pages	held_out_median	similar_seen_median	median_difference	pag
 zone_f1	23	0.666667	0.923077	-0.256410	4
 line_f1	23	0.979592	0.944162	0.043222	20
 baseline_distance	23	0.088489	0.122120	-0.032504	3
-cer_lines	23	0.030172	0.016000	0.015030	20
-cer_end_to_end	23	0.061238	0.064616	0.004392	12
+cer_lines	23	0.030172	0.015611	0.015030	21
+cer_end_to_end	23	0.061238	0.062736	0.006731	12

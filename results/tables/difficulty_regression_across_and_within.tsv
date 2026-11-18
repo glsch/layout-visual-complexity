@@ -2,70 +2,70 @@ model	term	measure	estimate	low	high	pages	manuscripts	r2	notes
 Across manuscripts	complexity	zone_f1	-0.018813	-0.059392	0.019908	418	35	0.095298	
 Across manuscripts	complexity	line_f1	-0.068537	-0.107722	-0.030326	418	35	0.359744	
 Across manuscripts	complexity	baseline_distance	0.001487	-0.005634	0.010780	418	35	0.477091	
-Across manuscripts	complexity	cer_lines	0.001270	-0.006049	0.005974	417	35	0.020691	
-Across manuscripts	complexity	cer_end_to_end	0.138459	0.041690	0.231078	417	35	0.268885	
-Across manuscripts	complexity	log_cer_lines	0.084706	-0.087114	0.244719	417	35	0.295607	
-Across manuscripts	complexity	log_cer_end_to_end	0.671982	0.321715	1.031047	417	35	0.311912	
+Across manuscripts	complexity	cer_lines	0.003132	-0.000156	0.006496	412	35	0.343975	5 pages whose ground-truth texts don't fit their lines left out
+Across manuscripts	complexity	cer_end_to_end	0.142936	0.045227	0.232299	412	35	0.283451	5 pages whose ground-truth texts don't fit their lines left out
+Across manuscripts	complexity	log_cer_lines	0.093170	-0.067826	0.248833	412	35	0.380830	5 pages whose ground-truth texts don't fit their lines left out
+Across manuscripts	complexity	log_cer_end_to_end	0.689713	0.340233	1.043131	412	35	0.330610	5 pages whose ground-truth texts don't fit their lines left out
 Across manuscripts	log_lines	zone_f1	-0.006920	-0.112495	0.078531	418	35	0.095298	
 Across manuscripts	log_lines	line_f1	0.060806	0.003433	0.112829	418	35	0.359744	
 Across manuscripts	log_lines	baseline_distance	0.004203	-0.012034	0.025486	418	35	0.477091	
-Across manuscripts	log_lines	cer_lines	-0.002795	-0.013453	0.010007	417	35	0.020691	
-Across manuscripts	log_lines	cer_end_to_end	-0.056267	-0.181240	0.064464	417	35	0.268885	
-Across manuscripts	log_lines	log_cer_lines	-0.033734	-0.331112	0.327763	417	35	0.295607	
-Across manuscripts	log_lines	log_cer_end_to_end	-0.170317	-0.632008	0.344699	417	35	0.311912	
+Across manuscripts	log_lines	cer_lines	0.001977	-0.003182	0.008407	412	35	0.343975	5 pages whose ground-truth texts don't fit their lines left out
+Across manuscripts	log_lines	cer_end_to_end	-0.053986	-0.181138	0.067501	412	35	0.283451	5 pages whose ground-truth texts don't fit their lines left out
+Across manuscripts	log_lines	log_cer_lines	-0.010676	-0.286797	0.308917	412	35	0.380830	5 pages whose ground-truth texts don't fit their lines left out
+Across manuscripts	log_lines	log_cer_end_to_end	-0.162571	-0.617360	0.357586	412	35	0.330610	5 pages whose ground-truth texts don't fit their lines left out
 Across manuscripts	century	zone_f1	0.009191	-0.051471	0.065511	418	35	0.095298	
 Across manuscripts	century	line_f1	0.020766	-0.008730	0.060380	418	35	0.359744	
 Across manuscripts	century	baseline_distance	-0.005803	-0.018027	0.008496	418	35	0.477091	
-Across manuscripts	century	cer_lines	-0.001293	-0.011343	0.006825	417	35	0.020691	
-Across manuscripts	century	cer_end_to_end	-0.025621	-0.119639	0.043056	417	35	0.268885	
-Across manuscripts	century	log_cer_lines	-0.251781	-0.563381	0.102464	417	35	0.295607	
-Across manuscripts	century	log_cer_end_to_end	-0.124022	-0.582987	0.240765	417	35	0.311912	
+Across manuscripts	century	cer_lines	-0.001987	-0.006629	0.002666	412	35	0.343975	5 pages whose ground-truth texts don't fit their lines left out
+Across manuscripts	century	cer_end_to_end	-0.026389	-0.119883	0.042014	412	35	0.283451	5 pages whose ground-truth texts don't fit their lines left out
+Across manuscripts	century	log_cer_lines	-0.257372	-0.534765	0.066767	412	35	0.380830	5 pages whose ground-truth texts don't fit their lines left out
+Across manuscripts	century	log_cer_end_to_end	-0.128171	-0.587550	0.239356	412	35	0.330610	5 pages whose ground-truth texts don't fit their lines left out
 Across manuscripts	latin	zone_f1	-0.106057	-0.276732	0.023662	418	35	0.095298	
 Across manuscripts	latin	line_f1	0.077460	0.019904	0.141717	418	35	0.359744	
 Across manuscripts	latin	baseline_distance	-0.058608	-0.085516	-0.024071	418	35	0.477091	
-Across manuscripts	latin	cer_lines	0.008620	-0.011618	0.030644	417	35	0.020691	
-Across manuscripts	latin	cer_end_to_end	-0.074308	-0.271505	0.025772	417	35	0.268885	
-Across manuscripts	latin	log_cer_lines	0.852798	0.376058	1.433122	417	35	0.295607	
-Across manuscripts	latin	log_cer_end_to_end	0.146547	-0.472530	0.760755	417	35	0.311912	
+Across manuscripts	latin	cer_lines	0.021240	0.012566	0.031256	412	35	0.343975	5 pages whose ground-truth texts don't fit their lines left out
+Across manuscripts	latin	cer_end_to_end	-0.065020	-0.270574	0.036543	412	35	0.283451	5 pages whose ground-truth texts don't fit their lines left out
+Across manuscripts	latin	log_cer_lines	0.934354	0.491513	1.443670	412	35	0.380830	5 pages whose ground-truth texts don't fit their lines left out
+Across manuscripts	latin	log_cer_end_to_end	0.192118	-0.430182	0.771887	412	35	0.330610	5 pages whose ground-truth texts don't fit their lines left out
 Across manuscripts	log_resolution	zone_f1	0.089722	-0.078675	0.238702	418	35	0.095298	
 Across manuscripts	log_resolution	line_f1	-0.020297	-0.125531	0.055409	418	35	0.359744	
 Across manuscripts	log_resolution	baseline_distance	-0.000583	-0.030829	0.030075	418	35	0.477091	
-Across manuscripts	log_resolution	cer_lines	-0.018421	-0.043720	0.004618	417	35	0.020691	
-Across manuscripts	log_resolution	cer_end_to_end	0.089126	-0.110957	0.329332	417	35	0.268885	
-Across manuscripts	log_resolution	log_cer_lines	-0.519726	-1.083492	0.069528	417	35	0.295607	
-Across manuscripts	log_resolution	log_cer_end_to_end	0.038543	-0.752986	1.011039	417	35	0.311912	
+Across manuscripts	log_resolution	cer_lines	-0.007702	-0.018536	0.003573	412	35	0.343975	5 pages whose ground-truth texts don't fit their lines left out
+Across manuscripts	log_resolution	cer_end_to_end	0.096340	-0.107422	0.336039	412	35	0.283451	5 pages whose ground-truth texts don't fit their lines left out
+Across manuscripts	log_resolution	log_cer_lines	-0.460391	-0.955247	0.066401	412	35	0.380830	5 pages whose ground-truth texts don't fit their lines left out
+Across manuscripts	log_resolution	log_cer_end_to_end	0.068796	-0.724912	1.024859	412	35	0.330610	5 pages whose ground-truth texts don't fit their lines left out
 Within manuscripts	complexity	zone_f1	-0.035116	-0.075054	0.000485	418	35	0.022055	
 Within manuscripts	complexity	line_f1	-0.062788	-0.087627	-0.033557	418	35	0.316911	
 Within manuscripts	complexity	baseline_distance	0.005171	0.001766	0.008446	418	35	0.063060	
-Within manuscripts	complexity	cer_lines	-0.000742	-0.008976	0.004644	417	35	0.018037	
-Within manuscripts	complexity	cer_end_to_end	0.096540	0.034205	0.163588	417	35	0.182596	
-Within manuscripts	complexity	log_cer_lines	0.032983	-0.103618	0.145093	417	35	0.025212	
-Within manuscripts	complexity	log_cer_end_to_end	0.662417	0.322965	1.135583	417	35	0.232246	
+Within manuscripts	complexity	cer_lines	0.002262	0.000150	0.005059	412	35	0.014101	5 pages whose ground-truth texts don't fit their lines left out
+Within manuscripts	complexity	cer_end_to_end	0.100061	0.039780	0.167170	412	35	0.215789	5 pages whose ground-truth texts don't fit their lines left out
+Within manuscripts	complexity	log_cer_lines	0.043382	-0.080115	0.150704	412	35	0.006743	5 pages whose ground-truth texts don't fit their lines left out
+Within manuscripts	complexity	log_cer_end_to_end	0.675226	0.334744	1.140115	412	35	0.264693	5 pages whose ground-truth texts don't fit their lines left out
 Within manuscripts	log_lines	zone_f1	-0.057780	-0.096281	-0.008520	418	35	0.022055	
 Within manuscripts	log_lines	line_f1	0.162636	-0.119128	0.253885	418	35	0.316911	
 Within manuscripts	log_lines	baseline_distance	0.010430	0.001999	0.035595	418	35	0.063060	
-Within manuscripts	log_lines	cer_lines	-0.001029	-0.012694	0.020113	417	35	0.018037	
-Within manuscripts	log_lines	cer_end_to_end	-0.203069	-0.473059	0.263755	417	35	0.182596	
-Within manuscripts	log_lines	log_cer_lines	-0.080917	-0.620675	0.200576	417	35	0.025212	
-Within manuscripts	log_lines	log_cer_end_to_end	-0.194330	-1.094474	1.395043	417	35	0.232246	
+Within manuscripts	log_lines	cer_lines	0.001408	-0.011596	0.006782	412	35	0.014101	5 pages whose ground-truth texts don't fit their lines left out
+Within manuscripts	log_lines	cer_end_to_end	-0.200457	-0.463525	0.253197	412	35	0.215789	5 pages whose ground-truth texts don't fit their lines left out
+Within manuscripts	log_lines	log_cer_lines	-0.056491	-0.664625	0.186642	412	35	0.006743	5 pages whose ground-truth texts don't fit their lines left out
+Within manuscripts	log_lines	log_cer_end_to_end	-0.181559	-1.064784	1.370557	412	35	0.264693	5 pages whose ground-truth texts don't fit their lines left out
 Within manuscripts	century	zone_f1				418	35	0.022055	
 Within manuscripts	century	line_f1				418	35	0.316911	
 Within manuscripts	century	baseline_distance				418	35	0.063060	
-Within manuscripts	century	cer_lines				417	35	0.018037	
-Within manuscripts	century	cer_end_to_end				417	35	0.182596	
-Within manuscripts	century	log_cer_lines				417	35	0.025212	
-Within manuscripts	century	log_cer_end_to_end				417	35	0.232246	
+Within manuscripts	century	cer_lines				412	35	0.014101	5 pages whose ground-truth texts don't fit their lines left out
+Within manuscripts	century	cer_end_to_end				412	35	0.215789	5 pages whose ground-truth texts don't fit their lines left out
+Within manuscripts	century	log_cer_lines				412	35	0.006743	5 pages whose ground-truth texts don't fit their lines left out
+Within manuscripts	century	log_cer_end_to_end				412	35	0.264693	5 pages whose ground-truth texts don't fit their lines left out
 Within manuscripts	latin	zone_f1				418	35	0.022055	
 Within manuscripts	latin	line_f1				418	35	0.316911	
 Within manuscripts	latin	baseline_distance				418	35	0.063060	
-Within manuscripts	latin	cer_lines				417	35	0.018037	
-Within manuscripts	latin	cer_end_to_end				417	35	0.182596	
-Within manuscripts	latin	log_cer_lines				417	35	0.025212	
-Within manuscripts	latin	log_cer_end_to_end				417	35	0.232246	
+Within manuscripts	latin	cer_lines				412	35	0.014101	5 pages whose ground-truth texts don't fit their lines left out
+Within manuscripts	latin	cer_end_to_end				412	35	0.215789	5 pages whose ground-truth texts don't fit their lines left out
+Within manuscripts	latin	log_cer_lines				412	35	0.006743	5 pages whose ground-truth texts don't fit their lines left out
+Within manuscripts	latin	log_cer_end_to_end				412	35	0.264693	5 pages whose ground-truth texts don't fit their lines left out
 Within manuscripts	log_resolution	zone_f1	0.075830	-0.510752	0.724431	418	35	0.022055	
 Within manuscripts	log_resolution	line_f1	-0.303828	-0.737957	0.203070	418	35	0.316911	
 Within manuscripts	log_resolution	baseline_distance	0.086056	-0.026805	0.207115	418	35	0.063060	
-Within manuscripts	log_resolution	cer_lines	-0.248841	-0.552080	-0.001376	417	35	0.018037	
-Within manuscripts	log_resolution	cer_end_to_end	0.726329	-0.308127	1.729900	417	35	0.182596	
-Within manuscripts	log_resolution	log_cer_lines	-2.908935	-6.684440	0.235214	417	35	0.025212	
-Within manuscripts	log_resolution	log_cer_end_to_end	1.953337	-1.523066	4.800835	417	35	0.232246	
+Within manuscripts	log_resolution	cer_lines	-0.021620	-0.089129	0.047793	412	35	0.014101	5 pages whose ground-truth texts don't fit their lines left out
+Within manuscripts	log_resolution	cer_end_to_end	0.981939	-0.021877	1.904788	412	35	0.215789	5 pages whose ground-truth texts don't fit their lines left out
+Within manuscripts	log_resolution	log_cer_lines	-0.994169	-3.877417	1.574654	412	35	0.006743	5 pages whose ground-truth texts don't fit their lines left out
+Within manuscripts	log_resolution	log_cer_end_to_end	3.077862	0.000166	5.694003	412	35	0.264693	5 pages whose ground-truth texts don't fit their lines left out

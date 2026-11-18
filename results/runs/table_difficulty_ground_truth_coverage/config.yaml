@@ -1,0 +1,55 @@
+output: results
+outputs:
+- difficulty_ground_truth_coverage
+name: table_difficulty_ground_truth_coverage
+dataset: null
+scores: null
+features: null
+layout: null
+evaluations: {}
+shown: []
+labels: {}
+colours: {}
+comparisons: []
+families:
+- geometry
+- layout
+pages: {}
+bootstrap: 1000
+seed: 20260629
+image_credit: ''
+tokens: null
+head: null
+map_pages: []
+map_long_edge: 900
+map_range:
+- 0.05
+- 0.95
+cache: null
+http:
+  contact: null
+  interval: 0.5
+  connections: 2
+  retries: 5
+  backoff: 1.0
+  timeout: 60.0
+levels: {}
+alone: []
+reference_column: ''
+colour_pages: []
+score_run: null
+catalogue: null
+profiles: []
+collection: manuscripts
+catalogue_credit: ''
+thumbnail_size: 400
+named: []
+min_lines: 0
+difficulty_runs:
+  cremma: build/difficulty/cremma
+  catmus_test: build/difficulty/catmus_test
+difficulty_main: cremma
+manuscript_table: reproduce/difficulty_manuscripts.tsv
+neighbours: 0.25
+outside_lines: 5
+outside_share: 0.1

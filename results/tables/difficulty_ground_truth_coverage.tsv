@@ -1,0 +1,8 @@
+measure	estimate	low	high	pages	without_estimate	without_low	without_high	without_pages	notes
+zone_f1	-0.031445	-0.053783	-0.009106	418	-0.030694	-0.056571	-0.004816	365	
+line_f1	-0.067555	-0.082119	-0.052991	418	-0.041124	-0.054329	-0.027919	365	The MLE may be on the boundary of the parameter space.
+baseline_distance	0.005166	0.002091	0.008242	418	0.003291	-0.000186	0.006768	365	The MLE may be on the boundary of the parameter space.
+cer_lines	0.002776	0.000932	0.004619	412	0.003114	0.000945	0.005283	360	The MLE may be on the boundary of the parameter space.
+cer_end_to_end	0.113034	0.083760	0.142308	412	0.081321	0.054088	0.108554	360	
+log_cer_lines	0.071222	-0.008161	0.150605	412	0.077098	-0.014456	0.168651	360	
+log_cer_end_to_end	0.669159	0.552007	0.786312	412	0.603614	0.473283	0.733945	360	

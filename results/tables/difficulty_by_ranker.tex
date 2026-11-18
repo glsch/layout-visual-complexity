@@ -1,0 +1,45 @@
+\begin{table}[htbp]
+  \centering
+  \caption{Each ranker alone, on CREMMA's 418 pages: Spearman's $\rho$ of each measure with each ranker's predicted complexity, over all pages and within manuscripts (both centred on each manuscript's mean, over the manuscripts with at least two pages), with 95\% intervals from 1,000 resamples of the manuscripts, and the mixed model's coefficient of complexity with its 95\% Wald interval (the controls and the manuscripts' random intercept as in the regression table). Each ranker's score is standardised over these pages. The geometry ranker's features are measured on the same lines of Kraken's and zones of the regions model's that line F1 and zone F1 judge, so a badly segmented page could look more complex and score worse for one reason; the ViT head sees only the image. The ensemble combines the two: its rows are the main analysis's. Zone F1 is the F1 score of the regions model's zones against the ground truth's, matched one to one within each class by the IoU of boxes (from 0.5); line F1 that of Kraken's lines against the ground truth's text lines (default, heading and interlinear), matched by the IoU of polygons, a found line matching a drop capital's or music's counting neither way; the baseline distance, the mean distance between matched baselines in line heights; the CER, the character error rate of Kraken with CATMuS Medieval's model, on the ground-truth lines and end to end (on Kraken's lines, missed lines' characters and invented lines' added), texts in NFC with whitespace runs as one space. The CERs leave out 5 pages whose ground-truth texts don't fit their lines: at least 3 text lines read, on Kraken's line matched to them, as the text of the line just before or after (a CER over 50\% against their own text, under 25\% against the neighbour's), or read as empty through their own polygon while Kraken's line reads text.}
+  \label{tab:difficulty_by_ranker}
+  \begin{tabular}{lccc}
+    \toprule
+     & $\rho$ & $\rho$ within & Complexity (per SD), mixed model \\
+    \midrule
+    \textit{Zone F1} &  &  &  \\
+    Geometry ranker & -0.013 [-0.173, 0.156] & -0.053 [-0.146, 0.064] & $-$0.017 [$-$0.038, +0.004] \\
+    ViT head & -0.182 [-0.384, 0.009] & -0.124 [-0.197, -0.016] & $-$0.039 [$-$0.061, $-$0.016] \\
+    Ensemble & -0.116 [-0.290, 0.057] & -0.111 [-0.207, 0.005] & $-$0.031 [$-$0.054, $-$0.009] \\
+    \midrule
+    \textit{Line F1} &  &  &  \\
+    Geometry ranker & -0.489 [-0.671, -0.248] & -0.364 [-0.540, -0.172] & $-$0.064 [$-$0.078, $-$0.051] \\
+    ViT head & -0.386 [-0.572, -0.145] & -0.181 [-0.322, -0.050] & $-$0.038 [$-$0.054, $-$0.022] \\
+    Ensemble & -0.531 [-0.693, -0.307] & -0.339 [-0.517, -0.172] & $-$0.068 [$-$0.082, $-$0.053] \\
+    \midrule
+    \textit{Baseline distance} &  &  &  \\
+    Geometry ranker & 0.171 [-0.070, 0.440] & 0.153 [0.008, 0.259] & +0.004 [+0.002, +0.007] \\
+    ViT head & 0.159 [-0.168, 0.443] & 0.132 [0.007, 0.262] & +0.003 [+0.000, +0.007] \\
+    Ensemble & 0.193 [-0.074, 0.467] & 0.167 [0.057, 0.270] & +0.005 [+0.002, +0.008] \\
+    \midrule
+    \textit{CER, ground-truth lines} &  &  &  \\
+    Geometry ranker & -0.068 [-0.254, 0.151] & 0.067 [-0.030, 0.167] & +0.002 [$-$0.000, +0.003] \\
+    ViT head & 0.231 [-0.010, 0.479] & 0.155 [0.041, 0.273] & +0.003 [+0.001, +0.005] \\
+    Ensemble & 0.085 [-0.128, 0.292] & 0.123 [0.034, 0.214] & +0.003 [+0.001, +0.005] \\
+    \midrule
+    \textit{CER, end to end} &  &  &  \\
+    Geometry ranker & 0.550 [0.345, 0.699] & 0.380 [0.191, 0.564] & +0.109 [+0.082, +0.136] \\
+    ViT head & 0.355 [0.149, 0.605] & 0.262 [0.091, 0.402] & +0.064 [+0.032, +0.095] \\
+    Ensemble & 0.556 [0.354, 0.730] & 0.387 [0.220, 0.554] & +0.113 [+0.084, +0.142] \\
+    \midrule
+    \textit{log CER, ground-truth lines} &  &  &  \\
+    Geometry ranker & -0.068 [-0.254, 0.151] & 0.066 [-0.040, 0.172] & +0.021 [$-$0.053, +0.095] \\
+    ViT head & 0.231 [-0.010, 0.479] & 0.154 [0.039, 0.268] & +0.116 [+0.036, +0.197] \\
+    Ensemble & 0.085 [-0.128, 0.292] & 0.120 [0.027, 0.207] & +0.071 [$-$0.008, +0.151] \\
+    \midrule
+    \textit{log CER, end to end} &  &  &  \\
+    Geometry ranker & 0.550 [0.345, 0.699] & 0.369 [0.182, 0.550] & +0.548 [+0.436, +0.660] \\
+    ViT head & 0.355 [0.149, 0.605] & 0.352 [0.139, 0.505] & +0.538 [+0.410, +0.666] \\
+    Ensemble & 0.556 [0.354, 0.730] & 0.426 [0.251, 0.598] & +0.669 [+0.552, +0.786] \\
+    \bottomrule
+  \end{tabular}
+\end{table}

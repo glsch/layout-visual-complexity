@@ -1,0 +1,16 @@
+\begin{table}[htbp]
+  \centering
+  \caption{CREMMA's 23 held-out pages, from the 4 manuscripts of CATMuS's test split, beside its seen pages of similar predicted complexity (within 0.25 SD): for each measure, the held-out pages' median, the median over them of their similar seen pages' medians, the median of each held-out page's difference from its similar seen pages' median, and how many held-out pages lie above it. Neither the regions model nor the recognition model trained on the held-out pages. Zone F1 is the F1 score of the regions model's zones against the ground truth's, matched one to one within each class by the IoU of boxes (from 0.5); line F1 that of Kraken's lines against the ground truth's text lines (default, heading and interlinear), matched by the IoU of polygons, a found line matching a drop capital's or music's counting neither way; the baseline distance, the mean distance between matched baselines in line heights; the CER, the character error rate of Kraken with CATMuS Medieval's model, on the ground-truth lines and end to end (on Kraken's lines, missed lines' characters and invented lines' added), texts in NFC with whitespace runs as one space. The CERs leave out 5 pages whose ground-truth texts don't fit their lines: at least 3 text lines read, on Kraken's line matched to them, as the text of the line just before or after (a CER over 50\% against their own text, under 25\% against the neighbour's), or read as empty through their own polygon while Kraken's line reads text.}
+  \label{tab:difficulty_held_out_pages}
+  \begin{tabular}{lccccc}
+    \toprule
+     & Held-out pages & Their median & Similar seen pages & Median difference & Pages above \\
+    \midrule
+    Zone F1 & 23 & 0.667 & 0.923 & −0.256 & 4 \\
+    Line F1 & 23 & 0.980 & 0.944 & +0.043 & 20 \\
+    Baseline distance & 23 & 0.088 & 0.122 & −0.033 & 3 \\
+    CER, ground-truth lines & 23 & 0.030 & 0.016 & +0.015 & 21 \\
+    CER, end to end & 23 & 0.061 & 0.063 & +0.007 & 12 \\
+    \bottomrule
+  \end{tabular}
+\end{table}

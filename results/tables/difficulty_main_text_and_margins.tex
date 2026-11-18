@@ -1,6 +1,6 @@
 \begin{table}[htbp]
   \centering
-  \caption{Main text against margins on CREMMA's pages: the ground-truth text lines in main text zones and in margin text zones apart, and Kraken's lines unmatched within those zones as the invented ones. Line F1 and the CERs pooled over the pages (all their matched, invented and missed lines; all their errors over all their reference characters), and Spearman's $\rho$ of each page's value with predicted complexity, with 95\% intervals from 1,000 resamples of the manuscripts. Zone F1 is the F1 score of the regions model's zones against the ground truth's, matched one to one within each class by the IoU of boxes (from 0.5); line F1 that of Kraken's lines against the ground truth's text lines (default, heading and interlinear), matched by the IoU of polygons, a found line matching a drop capital's or music's counting neither way; the baseline distance, the mean distance between matched baselines in line heights; the CER, the character error rate of Kraken with CATMuS Medieval's model, on the ground-truth lines and end to end (on Kraken's lines, missed lines' characters and invented lines' added), texts in NFC with whitespace runs as one space.}
+  \caption{Main text against margins on CREMMA's pages: the ground-truth text lines in main text zones and in margin text zones apart, and Kraken's lines unmatched within those zones as the invented ones. Line F1 and the CERs pooled over the pages (all their matched, invented and missed lines; all their errors over all their reference characters), and Spearman's $\rho$ of each page's value with predicted complexity, with 95\% intervals from 1,000 resamples of the manuscripts. Zone F1 is the F1 score of the regions model's zones against the ground truth's, matched one to one within each class by the IoU of boxes (from 0.5); line F1 that of Kraken's lines against the ground truth's text lines (default, heading and interlinear), matched by the IoU of polygons, a found line matching a drop capital's or music's counting neither way; the baseline distance, the mean distance between matched baselines in line heights; the CER, the character error rate of Kraken with CATMuS Medieval's model, on the ground-truth lines and end to end (on Kraken's lines, missed lines' characters and invented lines' added), texts in NFC with whitespace runs as one space. The CERs leave out 5 pages whose ground-truth texts don't fit their lines: at least 3 text lines read, on Kraken's line matched to them, as the text of the line just before or after (a CER over 50\% against their own text, under 25\% against the neighbour's), or read as empty through their own polygon while Kraken's line reads text.}
   \label{tab:difficulty_main_text_and_margins}
   \begin{tabular}{lcc}
     \toprule
@@ -10,12 +10,12 @@
     Ground-truth text lines & 28,522 & 473 \\
     \midrule
     Line F1 & 0.920 [0.863, 0.964] & 0.669 [0.496, 0.839] \\
-    CER, ground-truth lines & 0.024 [0.018, 0.035] & 0.129 [0.059, 0.194] \\
-    CER, end to end & 0.170 [0.078, 0.303] & 0.540 [0.215, 1.091] \\
+    CER, ground-truth lines & 0.021 [0.016, 0.029] & 0.129 [0.059, 0.194] \\
+    CER, end to end & 0.168 [0.075, 0.303] & 0.540 [0.215, 1.091] \\
     \midrule
     $\rho$: line F1 & -0.495 [-0.681, -0.267] & -0.115 [-0.373, 0.235] \\
-    $\rho$: CER, ground-truth lines & 0.063 [-0.152, 0.268] & -0.133 [-0.534, 0.207] \\
-    $\rho$: CER, end to end & 0.519 [0.306, 0.706] & 0.028 [-0.410, 0.377] \\
+    $\rho$: CER, ground-truth lines & 0.069 [-0.155, 0.278] & -0.133 [-0.534, 0.207] \\
+    $\rho$: CER, end to end & 0.532 [0.317, 0.717] & 0.028 [-0.410, 0.377] \\
     \bottomrule
   \end{tabular}
 \end{table}

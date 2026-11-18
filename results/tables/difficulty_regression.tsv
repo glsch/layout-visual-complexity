@@ -2,35 +2,35 @@ model	term	measure	estimate	low	high	pages	manuscripts	r2	notes
 Mixed model	complexity	zone_f1	-0.031445	-0.053783	-0.009106	418	35	0.161022	
 Mixed model	complexity	line_f1	-0.067555	-0.082119	-0.052991	418	35	0.379797	The MLE may be on the boundary of the parameter space.
 Mixed model	complexity	baseline_distance	0.005166	0.002091	0.008242	418	35	0.380222	The MLE may be on the boundary of the parameter space.
-Mixed model	complexity	cer_lines	0.000962	-0.005909	0.007833	417	35	0.016116	The MLE may be on the boundary of the parameter space.; fitted by Powell's method, the default optimisers having failed to converge
-Mixed model	complexity	cer_end_to_end	0.109159	0.078995	0.139324	417	35	0.254255	
-Mixed model	complexity	log_cer_lines	0.060594	-0.033034	0.154222	417	35	0.259197	
-Mixed model	complexity	log_cer_end_to_end	0.651096	0.530896	0.771296	417	35	0.340628	
+Mixed model	complexity	cer_lines	0.002776	0.000932	0.004619	412	35	0.305670	The MLE may be on the boundary of the parameter space.; 5 pages whose ground-truth texts don't fit their lines left out
+Mixed model	complexity	cer_end_to_end	0.113034	0.083760	0.142308	412	35	0.265429	5 pages whose ground-truth texts don't fit their lines left out
+Mixed model	complexity	log_cer_lines	0.071222	-0.008161	0.150605	412	35	0.314554	5 pages whose ground-truth texts don't fit their lines left out
+Mixed model	complexity	log_cer_end_to_end	0.669159	0.552007	0.786312	412	35	0.355938	5 pages whose ground-truth texts don't fit their lines left out
 Mixed model	log_lines	zone_f1	-0.055766	-0.101651	-0.009881	418	35	0.161022	
 Mixed model	log_lines	line_f1	0.116139	0.079433	0.152845	418	35	0.379797	The MLE may be on the boundary of the parameter space.
 Mixed model	log_lines	baseline_distance	0.008867	0.001482	0.016253	418	35	0.380222	The MLE may be on the boundary of the parameter space.
-Mixed model	log_lines	cer_lines	0.001566	-0.009919	0.013052	417	35	0.016116	The MLE may be on the boundary of the parameter space.; fitted by Powell's method, the default optimisers having failed to converge
-Mixed model	log_lines	cer_end_to_end	-0.131516	-0.200205	-0.062828	417	35	0.254255	
-Mixed model	log_lines	log_cer_lines	0.080131	-0.109407	0.269668	417	35	0.259197	
-Mixed model	log_lines	log_cer_end_to_end	-0.143879	-0.398413	0.110655	417	35	0.340628	
+Mixed model	log_lines	cer_lines	0.003624	-0.000234	0.007482	412	35	0.305670	The MLE may be on the boundary of the parameter space.; 5 pages whose ground-truth texts don't fit their lines left out
+Mixed model	log_lines	cer_end_to_end	-0.137313	-0.204739	-0.069886	412	35	0.265429	5 pages whose ground-truth texts don't fit their lines left out
+Mixed model	log_lines	log_cer_lines	0.064138	-0.103541	0.231816	412	35	0.314554	5 pages whose ground-truth texts don't fit their lines left out
+Mixed model	log_lines	log_cer_end_to_end	-0.149505	-0.398970	0.099961	412	35	0.355938	5 pages whose ground-truth texts don't fit their lines left out
 Mixed model	century	zone_f1	0.009827	-0.037441	0.057096	418	35	0.161022	
 Mixed model	century	line_f1	0.035933	-0.000780	0.072646	418	35	0.379797	The MLE may be on the boundary of the parameter space.
 Mixed model	century	baseline_distance	-0.004839	-0.018858	0.009179	418	35	0.380222	The MLE may be on the boundary of the parameter space.
-Mixed model	century	cer_lines	-0.002059	-0.010851	0.006732	417	35	0.016116	The MLE may be on the boundary of the parameter space.; fitted by Powell's method, the default optimisers having failed to converge
-Mixed model	century	cer_end_to_end	-0.053337	-0.124547	0.017873	417	35	0.254255	
-Mixed model	century	log_cer_lines	-0.218299	-0.407406	-0.029192	417	35	0.259197	
-Mixed model	century	log_cer_end_to_end	-0.241294	-0.518737	0.036149	417	35	0.340628	
+Mixed model	century	cer_lines	-0.002630	-0.006730	0.001471	412	35	0.305670	The MLE may be on the boundary of the parameter space.; 5 pages whose ground-truth texts don't fit their lines left out
+Mixed model	century	cer_end_to_end	-0.053438	-0.125526	0.018650	412	35	0.265429	5 pages whose ground-truth texts don't fit their lines left out
+Mixed model	century	log_cer_lines	-0.218274	-0.397772	-0.038775	412	35	0.314554	5 pages whose ground-truth texts don't fit their lines left out
+Mixed model	century	log_cer_end_to_end	-0.238691	-0.516708	0.039326	412	35	0.355938	5 pages whose ground-truth texts don't fit their lines left out
 Mixed model	latin	zone_f1	-0.171985	-0.262044	-0.081927	418	35	0.161022	
 Mixed model	latin	line_f1	0.097403	0.027236	0.167569	418	35	0.379797	The MLE may be on the boundary of the parameter space.
 Mixed model	latin	baseline_distance	-0.049553	-0.076508	-0.022598	418	35	0.380222	The MLE may be on the boundary of the parameter space.
-Mixed model	latin	cer_lines	0.013557	-0.002689	0.029803	417	35	0.016116	The MLE may be on the boundary of the parameter space.; fitted by Powell's method, the default optimisers having failed to converge
-Mixed model	latin	cer_end_to_end	-0.143195	-0.279209	-0.007181	417	35	0.254255	
-Mixed model	latin	log_cer_lines	0.909123	0.549088	1.269157	417	35	0.259197	
-Mixed model	latin	log_cer_end_to_end	0.076172	-0.453433	0.605777	417	35	0.340628	
+Mixed model	latin	cer_lines	0.022532	0.014711	0.030353	412	35	0.305670	The MLE may be on the boundary of the parameter space.; 5 pages whose ground-truth texts don't fit their lines left out
+Mixed model	latin	cer_end_to_end	-0.140009	-0.277884	-0.002133	412	35	0.265429	5 pages whose ground-truth texts don't fit their lines left out
+Mixed model	latin	log_cer_lines	0.936670	0.593553	1.279786	412	35	0.314554	5 pages whose ground-truth texts don't fit their lines left out
+Mixed model	latin	log_cer_end_to_end	0.096607	-0.434502	0.627717	412	35	0.355938	5 pages whose ground-truth texts don't fit their lines left out
 Mixed model	log_resolution	zone_f1	0.036282	-0.065308	0.137872	418	35	0.161022	
 Mixed model	log_resolution	line_f1	-0.019247	-0.098258	0.059764	418	35	0.379797	The MLE may be on the boundary of the parameter space.
 Mixed model	log_resolution	baseline_distance	0.029369	0.001170	0.057569	418	35	0.380222	The MLE may be on the boundary of the parameter space.
-Mixed model	log_resolution	cer_lines	-0.013035	-0.033007	0.006937	417	35	0.016116	The MLE may be on the boundary of the parameter space.; fitted by Powell's method, the default optimisers having failed to converge
-Mixed model	log_resolution	cer_end_to_end	0.049773	-0.103980	0.203526	417	35	0.254255	
-Mixed model	log_resolution	log_cer_lines	-0.322522	-0.731788	0.086743	417	35	0.259197	
-Mixed model	log_resolution	log_cer_end_to_end	0.084273	-0.512245	0.680791	417	35	0.340628	
+Mixed model	log_resolution	cer_lines	-0.003945	-0.012734	0.004845	412	35	0.305670	The MLE may be on the boundary of the parameter space.; 5 pages whose ground-truth texts don't fit their lines left out
+Mixed model	log_resolution	cer_end_to_end	0.069652	-0.087830	0.227135	412	35	0.265429	5 pages whose ground-truth texts don't fit their lines left out
+Mixed model	log_resolution	log_cer_lines	-0.230843	-0.615259	0.153573	412	35	0.314554	5 pages whose ground-truth texts don't fit their lines left out
+Mixed model	log_resolution	log_cer_end_to_end	0.158206	-0.444454	0.760867	412	35	0.355938	5 pages whose ground-truth texts don't fit their lines left out

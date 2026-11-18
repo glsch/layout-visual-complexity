@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-15T16:28:34+00:00",
-  "ended": "2026-11-15T16:28:36+00:00",
+  "started": "2026-11-18T11:08:11+00:00",
+  "ended": "2026-11-18T11:08:13+00:00",
   "inputs": [
     {
       "path": "reproduce/difficulty_manuscripts.tsv",
@@ -10,13 +10,18 @@
     },
     {
       "path": "build/difficulty/cremma/difficulty.tsv",
-      "sha256": "b77ad9fdece3231e6ae7d9ec77e18c0810aa9643972af5d18c57062411ce82f8",
-      "bytes": 247568
+      "sha256": "66488f9a5e89cfb0a7b5d27f1a905be0ee6150295d41b0397bf8724276a77579",
+      "bytes": 257630
     },
     {
       "path": "build/difficulty/catmus_test/difficulty.tsv",
-      "sha256": "fd3b150e0536ec11055a74da0dd6d66213226aa9965263ca24278db78784d496",
-      "bytes": 36368
+      "sha256": "ef69313e178e4ed34a36d68b76a337facb26bc7b4ef892eefe9bde7960793a5c",
+      "bytes": 37087
+    },
+    {
+      "path": "build/difficulty/cremma/config.yaml",
+      "sha256": "6d7667fb387ba1178df9b60e4e0ffe743a7ce73fb3989f4886d64e3119b68914",
+      "bytes": 2245
     }
   ],
   "outputs": [
@@ -81,7 +86,9 @@
     },
     "difficulty_main": "cremma",
     "manuscript_table": "reproduce/difficulty_manuscripts.tsv",
-    "neighbours": 0.25
+    "neighbours": 0.25,
+    "outside_lines": 5,
+    "outside_share": 0.1
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -103,7 +110,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "ab37b5deb5b6955d4e0ac65c2af34abf0a389769-dirty",
+  "commit": "cb56bc35b770cb1af215ff8112d873f60bb14224-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "difficulty_correlations": {
@@ -166,29 +173,29 @@
       },
       "cer_lines": {
         "measure": "cer_lines",
-        "rho": 0.07890393997160607,
-        "rho_low": -0.12902791418858625,
-        "rho_high": 0.28592950665743255,
-        "rho_within": 0.07570108800703272,
-        "rho_within_low": -0.015292151480465161,
-        "rho_within_high": 0.1919572094571038,
-        "pages": 417,
+        "rho": 0.08511529653686688,
+        "rho_low": -0.1277758365696468,
+        "rho_high": 0.2918855644151094,
+        "rho_within": 0.12343795122826746,
+        "rho_within_low": 0.0341186218800056,
+        "rho_within_high": 0.2136788351297121,
+        "pages": 412,
         "manuscripts": 35
       },
       "cer_end_to_end": {
         "measure": "cer_end_to_end",
-        "rho": 0.5433852627617609,
-        "rho_low": 0.3427449716610618,
-        "rho_high": 0.7193728914581254,
-        "rho_within": 0.3591407882159492,
-        "rho_within_low": 0.19827150410526592,
-        "rho_within_high": 0.5415673552280262,
-        "pages": 417,
+        "rho": 0.55613648806842,
+        "rho_low": 0.3539002951747052,
+        "rho_high": 0.7299298356380953,
+        "rho_within": 0.3865759595788699,
+        "rho_within_low": 0.22013869643901832,
+        "rho_within_high": 0.5538886261179364,
+        "pages": 412,
         "manuscripts": 35
       }
     },
     "seconds": {
-      "difficulty_correlations": 1.445
+      "difficulty_correlations": 1.601
     }
   }
 }
