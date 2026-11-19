@@ -9,7 +9,8 @@
 - `geometry_feature_families`: the plate of the geometric groups and the measures of Layout (Kyle–Davidson) on a
   made-up page, with their code names.
 - The methods' tables and figures (`method_reports.py`): `methods_by_elo_gap`, `ensembles_by_elo_gap`,
-  `accuracy_by_elo_gap`, `paired_differences`, `learning_curves_and_calibration`, `local_complexity_maps`.
+  `accuracy_by_elo_gap`, `paired_differences`, `vit_backbones`, `learning_curves_and_calibration`,
+  `local_complexity_maps`.
 - The baselines' (`method_reports.py`, `baseline_reports.py`): `baselines_by_elo_gap`, `baseline_differences`,
   `baseline_measures`, `baselines_by_information`, `baselines_by_information_each_measure`,
   `generic_measure_correlations`.
@@ -67,6 +68,7 @@ Output = Literal[
     "ensembles_by_elo_gap",
     "accuracy_by_elo_gap",
     "paired_differences",
+    "vit_backbones",
     "learning_curves_and_calibration",
     "local_complexity_maps",
     "baselines_by_elo_gap",
@@ -346,6 +348,7 @@ METHOD_OUTPUTS = {
     ),
     "accuracy_by_elo_gap": method_reports.accuracy_by_elo_gap,
     "paired_differences": method_reports.paired_differences,
+    "vit_backbones": method_reports.vit_backbones,
     "learning_curves_and_calibration": method_reports.learning_curves_and_calibration,
     "local_complexity_maps": method_reports.local_complexity_maps,
     "baselines_by_elo_gap": lambda settings, run, folder: method_reports.methods_by_elo_gap(
@@ -428,19 +431,19 @@ def by_elo_gap(settings: ReportSettings, run: Run, folder: Path) -> Written:
     configuration = json.loads((first_folder / "manifest.json").read_text(encoding="utf-8"))["configuration"]
     folds = configuration["folds"]
     latex = LatexTable(
-        headers=[r"Score $\Delta$", "Judgments per fold", "Reference", *[escape(label) for label in labels]],
+        headers=[r"Score $\Delta$", "Judgements per fold", "Reference", *[escape(label) for label in labels]],
         rows=latex_rows,
         caption=r"Accuracy of pairwise outcome prediction by the absolute difference ($\Delta$) between the two pages' "
         "final Elo scores, and Spearman's correlation ($\\rho$, SROCC) between the out-of-fold page scores and the "
         f"Elo scores. Each method is the pairwise logistic model fitted to a feature set, evaluated by "
         f"{folds['k']}-fold cross-validation repeated {folds['repeats']} times, each manuscript's pages in one fold; "
-        "a fold tests the judgments between two of its pages. Accuracy is the mean over the folds of the share of "
-        "test judgments whose chosen page the model scores higher. \\emph{Reference} is one limit, measured for "
-        "accuracy and for $\\rho$: for accuracy, the same share for the final Elo scores on the same test judgments "
+        "a fold tests the judgements between two of its pages. Accuracy is the mean over the folds of the share of "
+        "test judgements whose chosen page the model scores higher. \\emph{Reference} is one limit, measured for "
+        "accuracy and for $\\rho$: for accuracy, the same share for the final Elo scores on the same test judgements "
         "(their consistency); for $\\rho$, the ceiling for SROCC, the square root of the Elo scores' reliability "
         "(their split-half correlation with its Spearman--Brown correction), the most that scores free of the "
         "annotation's noise can reach against them. "
-        f"\\emph{{Judgments per fold}} counts the test judgments. In brackets, 95\\% intervals from "
+        f"\\emph{{Judgements per fold}} counts the test judgements. In brackets, 95\\% intervals from "
         f"{configuration['bootstrap']:,} resamples of the manuscripts.",
         label="tab:geometry_by_elo_gap",
         align="l" + "c" * (len(latex_rows[0]) - 1),

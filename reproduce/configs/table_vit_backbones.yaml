@@ -1,0 +1,11 @@
+# DINOv3 ViT-S/16 against DINOv2 ViT-S/14: the local ViT head on each backbone's tokens, on the same folds, by Elo gap
+# and in SROCC, and DINOv3's minus DINOv2's. Needs DINOv3's evaluation (evaluate_vit_dinov3.yaml), whose tokens need
+# access to the gated model.
+name: table_vit_backbones
+outputs: [vit_backbones]
+evaluations:
+  dinov2: build/evaluate/vit
+  dinov3: build/evaluate/vit_dinov3
+labels:
+  dinov2: DINOv2 ViT-S/14
+  dinov3: DINOv3 ViT-S/16

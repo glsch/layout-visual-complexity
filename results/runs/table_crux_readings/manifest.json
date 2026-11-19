@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-18T12:47:36+00:00",
-  "ended": "2026-11-18T12:47:37+00:00",
+  "started": "2026-11-19T17:19:35+00:00",
+  "ended": "2026-11-19T17:19:36+00:00",
   "inputs": [
     {
       "path": "build/score/crux/scores.tsv",
@@ -20,8 +20,8 @@
     },
     {
       "path": "reproduce/crux_manuscripts.tsv",
-      "sha256": "32e3bd6d371228f7a9eca343077a4f14e20a1d2cf6956c8350552178df3761e4",
-      "bytes": 4459
+      "sha256": "07a6e0ca6e74d8d09387b416e4dcf3aa3e8d005915ce22d4fd801455448139aa",
+      "bytes": 4485
     }
   ],
   "outputs": [
@@ -114,7 +114,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "4421c8db3cbdfb8b36af1be4223667f9aa97a5f1-dirty",
+  "commit": "d814dd17a260189a5227d2f7014acc28dd40b515-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "manuscript_readings": {
@@ -170,7 +170,7 @@
       ]
     },
     "seconds": {
-      "manuscript_readings": 0.575
+      "manuscript_readings": 0.606
     }
   }
 }

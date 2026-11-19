@@ -7,6 +7,7 @@ by side, each defined in the captions from what its run recorded.
 - `accuracy_by_elo_gap`: the same as a figure, and as a table with every row's interval.
 - `paired_differences`: the differences between pairs of methods, in accuracy and SROCC, overall and within
   manuscripts, on the same resamples.
+- `vit_backbones`: the local ViT head on two backbones, by Elo gap and in SROCC, and their difference.
 - `within_and_across_manuscripts`: every method's accuracy on the test judgments within one manuscript and across
   manuscripts, and its ρ overall and within manuscripts.
 - `learning_curves_and_calibration`: accuracy as the training judgments and images grow, and calibration.
@@ -178,7 +179,7 @@ class Evaluations:
             members = [self.member_label(name, folder) for name, folder in configuration["ensemble"].items()]
             named = " and ".join(members)
             if configuration.get("fitted_weights"):
-                return f"{named} combined, their z-scored page scores weighted as each fold's training judgments fit"
+                return f"{named} combined, their z-scored page scores weighted as each fold's training judgements fit"
             weights = configuration.get("weights") or {}
             if not weights or len(set(weights.values())) == 1:
                 return f"the mean of the z-scored page scores of {named}"
@@ -211,7 +212,7 @@ class Evaluations:
         folds = configuration["folds"]
         return (
             f"Each method is evaluated by {folds['k']}-fold cross-validation repeated {folds['repeats']} times, each "
-            "manuscript's pages in one fold; a fold tests the judgments between two of its pages."
+            "manuscript's pages in one fold; a fold tests the judgements between two of its pages."
         )
 
     def resamples(self) -> str:
@@ -283,7 +284,7 @@ def with_interval(value: float, low: float, high: float) -> str:
 
 REFERENCE = (
     r"\emph{Reference} is one limit, measured for accuracy and for $\rho$: for accuracy, the consistency of the same "
-    r"test judgments with the final Elo scores (the share that agree with them); for $\rho$, its ceiling, the square "
+    r"test judgements with the final Elo scores (the share that agree with them); for $\rho$, its ceiling, the square "
     "root of the Elo scores' reliability (their split-half correlation with its Spearman--Brown correction), the most "
     "that scores free of the annotation's noise can reach against them."
 )
@@ -337,7 +338,7 @@ def methods_by_elo_gap(settings: Any, run: Run, folder: Path, name: str, every_r
         r"Accuracy of pairwise outcome prediction by the absolute difference ($\Delta$) between the two pages' final "
         r"Elo scores, and Spearman's correlation ($\rho$, SROCC) between the out-of-fold page scores and the Elo "
         f"scores. {evaluations.definitions()}. {REFERENCE} {evaluations.protocol()} "
-        r"\emph{Overall} is the mean over the folds of the share of test judgments whose chosen page the method "
+        r"\emph{Overall} is the mean over the folds of the share of test judgements whose chosen page the method "
         f"scores higher. In brackets{where}, 95\\% intervals from {evaluations.resamples()}."
     )
     latex = LatexTable(
@@ -368,9 +369,9 @@ def accuracy_by_elo_gap(settings: Any, run: Run, folder: Path, name: str = "accu
     reference = first[["gap", "consistency"]].rename(columns={"consistency": "reference"})
     figure = plot_accuracy_by_gap(shown, reference)
     caption = (
-        r"Pairwise accuracy on the test judgments by the absolute difference ($\Delta$) between the two pages' final "
+        r"Pairwise accuracy on the test judgements by the absolute difference ($\Delta$) between the two pages' final "
         f"Elo scores: {evaluations.definitions()}. Bars are the mean over the folds, whiskers 95\\% intervals from "
-        f"{evaluations.resamples()}; diamonds the Reference, the consistency of the same test judgments with the "
+        f"{evaluations.resamples()}; diamonds the Reference, the consistency of the same test judgements with the "
         "final Elo scores (the share that agree with them), the limit for accuracy; the dashed line chance. "
         f"{evaluations.protocol()}"
     )
@@ -406,7 +407,7 @@ def paired_differences(
         for row in table.to_dict("records")
     ]  # fmt: skip
     where = (
-        " overall and within manuscripts (on the test judgments between two pages of one manuscript, and Spearman's "
+        " overall and within manuscripts (on the test judgements between two pages of one manuscript, and Spearman's "
         "$\\rho$ with each manuscript's mean removed from both scores)"
         if within
         else ""
@@ -427,6 +428,58 @@ def paired_differences(
 
 def signed_interval(value: float, low: float, high: float) -> str:
     return f"{value:+.3f} [{low:+.3f}, {high:+.3f}]"
+
+
+def vit_backbones(settings: Any, run: Run, folder: Path) -> Written:
+    """Two evaluations of the local ViT head on different backbones, on the same folds: each one's accuracy by Elo gap
+    and overall and its SROCC, every row with its interval (`by_gap_table`), and the second's minus the first's in
+    accuracy and SROCC on the same resamples (`paired_difference`), as one table. Without the Reference, which the
+    methods' tables give."""
+    name = "vit_backbones"
+    evaluations = Evaluations(settings, run, name)
+    if len(evaluations.keys) != 2:
+        raise ValueError(f"{name} sets two evaluations side by side, not {len(evaluations.keys)}")
+    first, second = evaluations.keys
+    judgments, elo, manuscripts, protocol = evaluations.judged()
+    try:
+        found = paired_difference(evaluations.evaluation(second), evaluations.evaluation(first), judgments,
+                                  manuscripts, protocol, elo)  # fmt: skip
+    except ValueError as error:
+        raise ValueError(f"{second} and {first}: {error}") from None
+    table = by_gap_table(evaluations).drop(columns=["reference", "reference_low", "reference_high"])
+    for end in ("", "_low", "_high"):
+        table[f"difference{end}"] = math.nan
+    for gap, measure in (("overall", "accuracy"), ("srocc", "srocc")):
+        values = [found[f"{measure}_difference"], found[f"{measure}_low"], found[f"{measure}_high"]]
+        table.loc[table["gap"] == gap, ["difference", "difference_low", "difference_high"]] = values
+    latex_rows = []
+    for row in table.to_dict("records"):
+        cells = [r"$\rho$ (SROCC)" if row["gap"] == "srocc" else gap_latex(row["gap"])]
+        cells += [with_interval(row[key], row[f"{key}_low"], row[f"{key}_high"]) for key in (first, second)]
+        difference = math.isfinite(row["difference"])
+        cells.append(signed_interval(row["difference"], row["difference_low"], row["difference_high"]) if difference
+                     else "")  # fmt: skip
+        latex_rows.append(cells)
+    labels = [escape(evaluations.label(key)) for key in (first, second)]
+    caption = (
+        r"The local ViT head on two backbones: accuracy of pairwise outcome prediction by the absolute difference "
+        r"($\Delta$) between the two pages' final Elo scores, and Spearman's correlation ($\rho$, SROCC) between the "
+        f"out-of-fold page scores and the Elo scores. {evaluations.definitions()}. \\emph{{Difference}}: "
+        f"{labels[1]}'s accuracy and SROCC minus {labels[0]}'s, on the same folds and resamples; an interval that "
+        f"excludes zero marks a difference beyond chance. {evaluations.protocol()} \\emph{{Overall}} is the mean over "
+        "the folds of the share of test judgements whose chosen page the method scores higher. In brackets, 95\\% "
+        f"intervals from {evaluations.resamples()}."
+    )
+    latex = LatexTable(
+        headers=[r"Score $\Delta$", *labels, "Difference"],
+        rows=latex_rows,
+        caption=caption,
+        label=f"tab:{name}",
+        align="lccc",
+        rules_before=[len(latex_rows) - 2, len(latex_rows) - 1],
+    )
+    paths = write_table(table, folder / "tables" / name, latex)
+    return Written(paths, {"by_elo_gap": table.to_dict("records"), "difference": found})
 
 
 def within_and_across_manuscripts(settings: Any, run: Run, folder: Path) -> Written:
@@ -469,7 +522,7 @@ def within_and_across_manuscripts(settings: Any, run: Run, folder: Path) -> Writ
     ]  # fmt: skip
     across, within = (first[f"judgments_{kind}_per_fold"] for kind in ("across", "within"))
     caption = (
-        "Each method across and within manuscripts: accuracy (the mean over the folds) on the test judgments between "
+        "Each method across and within manuscripts: accuracy (the mean over the folds) on the test judgements between "
         f"pages of two manuscripts ({across:.1f} a fold on average) and between two pages of one manuscript "
         f"({within:.1f}); Spearman's $\\rho$ between the out-of-fold page scores and the Elo scores over all pages, "
         "and within manuscripts, with each manuscript's mean removed from both, over the manuscripts with at least "
@@ -490,7 +543,7 @@ def within_and_across_manuscripts(settings: Any, run: Run, folder: Path) -> Writ
 
 def learning_curves_and_calibration(settings: Any, run: Run, folder: Path) -> Written:
     """The evaluations' learning curves by judgments and by images, and their calibration."""
-    from layout_visual_complexity.plots.methods import Shown, plot_learning_curves_and_calibration
+    from layout_visual_complexity.plots.methods import SHARED_OUT, Shown, plot_learning_curves_and_calibration
 
     name = "learning_curves_and_calibration"
     evaluations = Evaluations(settings, run, name)
@@ -511,14 +564,14 @@ def learning_curves_and_calibration(settings: Any, run: Run, folder: Path) -> Wr
     folds = evaluations.configuration()["folds"]
     tested = int(calibrations[0].table["judgments"].sum())
     caption = (
-        "Learning curves and calibration. (a) Accuracy on each fold's test judgments when the methods are trained on "
-        f"a share of the fold's training judgments (all of them, {judgments:,.0f} on average) between all its "
-        f"training images; (b) on a share of its training images ({pages:,.0f} on average), with the judgments "
+        "Learning curves and calibration. (a) Accuracy on each fold's test judgements when the methods are trained on "
+        f"a share of the fold's training judgements (all of them, {judgments:,.0f} on average) between all its "
+        f"training images; (b) on a share of its training images ({pages:,.0f} on average), with the judgements "
         f"between them; each share is drawn at random within each fold. The curves are drawn on "
         f"{curve_folds(evaluations)}, each point the mean over them, with its 95\\% interval from "
         f"{evaluations.resamples()} as whiskers. (c) Calibration of the predicted win probabilities, on the test "
-        f"judgments of all {folds['k'] * folds['repeats']:,} folds ({tested:,} tests): per tenth of the predicted "
-        "probability that the left page is chosen, the share of the test judgments that chose it; the dashed diagonal "
+        f"judgements of all {folds['k'] * folds['repeats']:,} folds ({tested:,} tests): per tenth of the predicted "
+        "probability that the left page is chosen, the share of the test judgements that chose it; the dashed diagonal "
         f"is perfect calibration. {evaluations.definitions()}. {evaluations.protocol()}"
     )
     paths = save_figure(figure, folder / "figures" / name, caption, f"fig:{name}")
@@ -527,15 +580,15 @@ def learning_curves_and_calibration(settings: Any, run: Run, folder: Path) -> Wr
                "high", "srocc"]  # fmt: skip
     table = table[columns]
     latex_rows = [
-        [escape(evaluations.label(row.method)), row.by, f"{row.share:.0%}".replace("%", r"\%"),
+        [escape(evaluations.label(row.method)), SHARED_OUT.get(row.by, row.by), f"{row.share:.0%}".replace("%", r"\%"),
          f"{row.train_per_fold:,.0f}", with_interval(row.accuracy, row.low, row.high), decimal(row.srocc)]
         for row in table.itertuples(index=False)
     ]  # fmt: skip
     latex = LatexTable(
-        ["Method", "Shared out", "Share", "Training judgments", "Accuracy", r"$\rho$"],
+        ["Method", "Shared out", "Share", "Training judgements", "Accuracy", r"$\rho$"],
         latex_rows,
         "Learning curves: accuracy (the mean over the folds, with its 95\\% interval) and SROCC when each method is "
-        "trained on a share of each fold's training judgments or images.",
+        "trained on a share of each fold's training judgements or images.",
         "tab:learning_curves",
         align="lccccc",
     )
@@ -609,7 +662,7 @@ def local_complexity_maps(settings: Any, run: Run, folder: Path) -> Written:
         "Local complexity maps: where the ViT head finds complexity on pages of low, middle and high predicted "
         f"complexity, {letters}, scored above {above} of the dataset's pages. Each "
         f"{tokens_described['patch_size']}-pixel patch of the folio crop, resized to {tokens_described['long_edge']} "
-        "pixels on its long edge, is drawn with its score under the head trained on every judgment (on the patch "
+        "pixels on its long edge, is drawn with its score under the head trained on every judgement (on the patch "
         f"tokens of {escape(backbone)}, block {tokens_described['block']}), in vermillion over the greyed page, on "
         f"one colour scale for every page, {scale}; the page's score is the mean of its patches'. $z$: the "
         "page's score, z-scored over the dataset's pages."

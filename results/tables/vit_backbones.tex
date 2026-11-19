@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+  \centering
+  \caption{The local ViT head on two backbones: accuracy of pairwise outcome prediction by the absolute difference ($\Delta$) between the two pages' final Elo scores, and Spearman's correlation ($\rho$, SROCC) between the out-of-fold page scores and the Elo scores. \emph{DINOv2 ViT-S/14}, the local scoring head on the patch tokens of DINOv2 ViT-S/14 (block 12, 518 pixels on the long edge, the folio crop): an MLP (384--128--1, ReLU, softplus) scoring each patch, the page's score the mean of its patches', trained with RankNet's logistic loss (180 epochs of Adam); \emph{DINOv3 ViT-S/16}, the local scoring head on the patch tokens of DINOv3 ViT-S/16 (block 12, 592 pixels on the long edge, the folio crop): an MLP (384--128--1, ReLU, softplus) scoring each patch, the page's score the mean of its patches', trained with RankNet's logistic loss (180 epochs of Adam). \emph{Difference}: DINOv3 ViT-S/16's accuracy and SROCC minus DINOv2 ViT-S/14's, on the same folds and resamples; an interval that excludes zero marks a difference beyond chance. Each method is evaluated by 10-fold cross-validation repeated 10 times, each manuscript's pages in one fold; a fold tests the judgements between two of its pages. \emph{Overall} is the mean over the folds of the share of test judgements whose chosen page the method scores higher. In brackets, 95\% intervals from 1,000 resamples of the manuscripts.}
+  \label{tab:vit_backbones}
+  \begin{tabular}{lccc}
+    \toprule
+    Score $\Delta$ & DINOv2 ViT-S/14 & DINOv3 ViT-S/16 & Difference \\
+    \midrule
+    $<$100 & 0.537 [0.488, 0.596] & 0.522 [0.468, 0.582] &  \\
+    100--200 & 0.632 [0.574, 0.693] & 0.661 [0.598, 0.726] &  \\
+    200--300 & 0.809 [0.727, 0.865] & 0.832 [0.773, 0.874] &  \\
+    300--400 & 0.879 [0.828, 0.935] & 0.892 [0.836, 0.944] &  \\
+    $\geq 400$ & 0.946 [0.922, 0.976] & 0.955 [0.940, 0.982] &  \\
+    \midrule
+    Overall & 0.730 [0.690, 0.761] & 0.741 [0.699, 0.769] & +0.011 [-0.016, +0.035] \\
+    \midrule
+    $\rho$ (SROCC) & 0.784 [0.725, 0.828] & 0.802 [0.740, 0.845] & +0.018 [-0.016, +0.051] \\
+    \bottomrule
+  \end{tabular}
+\end{table}

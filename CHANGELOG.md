@@ -13,10 +13,10 @@
   code names; the feature correlation figure's caption defines each flavour shown.
 - `lvc report`: the accuracy figure takes Line texture as a bar of its own, in a colour of its own (the palette's
   yellow, its marks edged darker); the comparison graph's caption gives the number of possible pairs and says the
-  rings and connectedness first; the information figure opens "Accuracy by the information a method needs", and its
-  form with each measure alone refers to the main figure's definitions (`--defined_in`); an ensemble's definition can
-  name a member in words (`--in_text`); two families in one model are defined by their columns each; the ink colour
-  figure's bars read "Ink (%)".
+  rings and connectedness first; the information figure opens "Accuracy and Spearman's ρ by kind of information", and
+  its form with each measure alone refers to the main figure's definitions (`--defined_in`); an ensemble's definition
+  can name a member in words (`--in_text`); two families in one model are defined by their columns each; the ink
+  colour figure's bars read "Ink (%)".
 - `lvc report`'s manuscript outputs: the profiles' captions open with the manuscript as catalogued (`--repository`,
   then shelfmark, material, leaves, the date in words, and the title, with `--title_credit`), from the `material` and
   `title` columns of the catalogue table; the overview names its axes' ends (plainer and more complex, more uniform
@@ -27,8 +27,20 @@
   the four-panel figure with the held-out comparison's pages, its zone F1 panel and its linear twin
   (`difficulty_against_complexity_log_cer`) are gone, the comparison staying in the tables.
 - The reproduction: the local complexity maps are drawn on three other pages, photographed without a neighbouring
-  leaf (`iiih6_11v`, `xive29_66v`, `ve4b_50v`); `reproduce/crux_manuscripts.tsv` gains the manuscripts' material
-  and titles; the features on a made-up page (`geometry_features_on_schematic_page`) are no longer drawn.
+  leaf (`xvie11_14r`, `xive29_66v`, `if49_10r`); `reproduce/crux_manuscripts.tsv` gains the manuscripts' material
+  (the library's record's where the case study's metadata disagrees: VI F 21, paper and parchment) and titles; the
+  features on a made-up page (`geometry_features_on_schematic_page`) are no longer drawn.
+- `lvc judgments report`: `elo_score_bands_trios`, the score bands with three overlapping pages at each place, each
+  labelled with its id (`--thumbnail_trios`: per place, the page in front and the two behind it; `--trio_choice`: how
+  they were chosen, for the caption). It isn't among the default outputs, since its pages are chosen by hand.
+- The captions of the comparison graph, the position-bias funnel, the score figures and the information figure are
+  reworded; the funnel's gives the overall share and one half as values.
+- The figures' and tables' prose spells "judgement": captions, table headings and axis labels. Names keep
+  "judgment": `judgments.tsv` and its columns, the `lvc judgments` commands, options, configuration keys and ids.
+- `lvc report`: `vit_backbones`, the local ViT head on two backbones side by side, by Elo gap and in SROCC with their
+  intervals, and the second's minus the first's on the same resamples. `make -C reproduce table-vit-backbones` makes
+  it for DINOv3 ViT-S/16 against DINOv2 ViT-S/14; it isn't part of `all`, and needs access to DINOv3's gated
+  repository on Hugging Face and a token (`HF_TOKEN` in `.env`).
 
 - `lvc difficulty`: how hard pages with ground truth (ALTO files, or a CATMuS-style `metadata.jsonl`) are for the
   automatic tools, beside their predicted complexity. Each page goes through `lvc score`'s stream, double-page spreads
@@ -66,7 +78,7 @@
   ranker, with scales fitted on out-of-fold scores; symmetric.
 - `lvc models` lists the models a scoring run uses, where each is, and whether it is there and the one expected;
   `lvc cache` lists the user cache's parts with their sizes and clears them by kind.
-- The package comes with its rankers beside the ViT head: the geometry ranker trained on every judgment
+- The package comes with its rankers beside the ViT head: the geometry ranker trained on every judgement
   (`heads/geometry.json`) and their ensemble (`heads/ensemble.json`), with the scales of win probabilities fitted on
   the evaluations' out-of-fold scores and the Elo scale of its scores. The head itself is unchanged.
 - The pairwise logistic model clips each feature to its training pages' 1st and 99th percentiles, in training and
@@ -74,7 +86,7 @@
   an extreme score: on Crux of Telč's 14,138 pages the geometry ranker's z-scores reached −53 and +79, and now stay
   within ±4. Every evaluation of a model on features changes a little (the geometry ranker: accuracy 0.724 → 0.720,
   ρ 0.751 → 0.760). Models saved without the bounds load and score as before.
-- `lvc train` leaves manuscripts out (`--leave_out`: their pages and every judgment touching them), writes its
+- `lvc train` leaves manuscripts out (`--leave_out`: their pages and every judgement touching them), writes its
   training pages' z-scores (`scores.tsv`), and builds an ensemble of trained rankers (`--ensemble`) with calibrated
   scales (`--calibration`) and a table of their calibration.
 - `lvc report` draws a scored collection: the manuscripts' profiles in two designs, the strips of all of them, the
@@ -110,7 +122,7 @@
   `excluded_hues`); the hue classes are red, green and blue, and `Ink__HueClasses__gold` is gone. The ink family's
   chromatic share and hue classes change on the pages with such ink; its version is 2, so earlier feature tables are
   measured again.
-- Every evaluation now gives its accuracy on the test judgments within one manuscript and across manuscripts, apart,
+- Every evaluation now gives its accuracy on the test judgements within one manuscript and across manuscripts, apart,
   and its SROCC within manuscripts, each with its interval (`metrics.tsv`); `lvc report` computes them from the hits
   and scores of any evaluation, an older one too, and paired differences give them on the same resamples.
 - The methods' tables and figures name the consistency reference and the ceiling for SROCC as one "Reference"; their
@@ -127,11 +139,11 @@
   the colour level.
 - The command is `lvc`. Settings come from YAML files and options; every run writes its configuration and a manifest
   of its inputs, their checksums and the versions it used.
-- `lvc judgments import` reads a dataset of judgments in its published structure (judgments, pages and manuscripts as
+- `lvc judgments import` reads a dataset of judgements in its published structure (judgements, pages and manuscripts as
   TSV, with a README), from a folder or from its Zenodo record by DOI, each file checked against the record's MD5,
-  and checks the dataset before copying it: every column, every judgment's pages, every page's manuscript, canvas and
+  and checks the dataset before copying it: every column, every judgement's pages, every page's manuscript, canvas and
   image link, dates in EDTF and languages in ISO 639-3.
-- `lvc judgments rank` computes Elo scores over seeded permutations of the judgments' order, in parallel, and
+- `lvc judgments rank` computes Elo scores over seeded permutations of the judgements' order, in parallel, and
   Bradley-Terry scores beside them.
 - `lvc judgments report` writes reliability tables (consistency and agreement by Elo gap, position bias, the
   consistency reference per fold, the split-half ceiling), the comparison graph and the score distributions.
@@ -158,8 +170,8 @@
   adapting Kyle-Davidson's clutter, order and entropy to the page, with its blank space.
 - `lvc evaluate` runs the evaluation protocol on a feature table: accuracy by Elo gap beside the consistency reference,
   SROCC beside the split-half ceiling, log-loss and calibration, with intervals from resamples of the manuscripts (a
-  judgment between two pages of one manuscript counts as often as that manuscript is drawn); and keeps the model
-  trained on every judgment, which refuses features computed with other settings.
+  judgement between two pages of one manuscript counts as often as that manuscript is drawn); and keeps the model
+  trained on every judgement, which refuses features computed with other settings.
 - `lvc report` writes the features' tables and figures: accuracy by Elo gap, the features' table, each feature's
   correlation with the Elo scores, and the features drawn on pages.
 - Every figure has one style: a colour per method, text and mathematics in DejaVu Sans (file and code names in DejaVu
@@ -174,7 +186,7 @@
   or fitted weights; it now writes each fold's hits and z-scores, so that two methods compare on the same resamples,
   and learning curves on request. Feature tables are given with `--features`, which the shared configuration no
   longer has to name.
-- `lvc train` trains the pairwise model or the ViT head on every judgment. The package comes with a ViT head trained
+- `lvc train` trains the pairwise model or the ViT head on every judgement. The package comes with a ViT head trained
   on the dataset's 397 pages.
 - `lvc report` writes the methods' tables and figures: accuracy by Elo gap (Table 4's successor, as a table and a
   figure), differences between methods, learning curves and calibration, the ensembles for the appendix, and the ViT

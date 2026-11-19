@@ -71,16 +71,27 @@ def baselines_by_information(settings: Any, run: Run, folder: Path, name: str) -
         if alone
         else ""
     )
-    caption = (
-        f"Accuracy by the information a method needs{', each measure alone' if alone else ''}: pairwise accuracy on "
-        "the test judgments (dots, the mean over the "
-        f"folds, with 95\\% intervals from {evaluations.resamples()}) and Spearman's $\\rho$ between the out-of-fold "
-        f"page scores and the Elo scores (right), the methods grouped by the information they need ({order}).{each} "
-        f"The solid line is the Reference for accuracy ({decimal(consistency)}), the consistency of the same test "
-        "judgments with the final Elo scores (the share that agree with them); the Reference for $\\rho$ is its "
-        f"ceiling ({decimal(ceiling)}), the square root of the Elo scores' reliability: one limit, measured for "
-        f"accuracy and for $\\rho$. The dashed line is chance. {defined} {evaluations.protocol()}"
+    measured = (
+        f"pairwise accuracy on the test judgements (dots, the mean over the folds, with 95\\% intervals from "
+        f"{evaluations.resamples()}) and Spearman's $\\rho$ between the out-of-fold page scores and the Elo scores"
     )
+    if alone:
+        caption = (
+            f"Accuracy and Spearman's $\\rho$ by kind of information, each measure alone: {measured} (right), the "
+            f"methods grouped by the information they need ({order}).{each} The solid line is the Reference for "
+            f"accuracy ({decimal(consistency)}), the consistency of the same test judgements with the final Elo scores "
+            f"(the share that agree with them); the Reference for $\\rho$ is its ceiling ({decimal(ceiling)}), the "
+            "square root of the Elo scores' reliability: one limit, measured for accuracy and for $\\rho$. The dashed "
+            f"line is chance. {defined} {evaluations.protocol()}"
+        )
+    else:
+        caption = (
+            f"Accuracy and Spearman's $\\rho$ by kind of information. {measured[:1].upper()}{measured[1:]}. The "
+            "methods are grouped by kind of information they use. The solid line is the reference for accuracy "
+            f"({decimal(consistency)}), the consistency of the same test judgements with the final Elo scores (the "
+            f"share that agree with them); the reference for $\\rho$ is its ceiling ({decimal(ceiling)}), the square "
+            f"root of the Elo scores' reliability. The dashed line is chance. {defined} {evaluations.protocol()}"
+        )
     paths = save_figure(figure, folder / "figures" / name, caption, f"fig:{name}")
     latex_rows = [
         [escape(row.level), escape(row.label), "alone" if row.alone else "combined",

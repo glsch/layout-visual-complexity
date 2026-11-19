@@ -33,7 +33,7 @@ def plot_position_bias_funnel(annotators: pd.DataFrame, overall: float):
     axes.set_xticks(ticks, [f"{tick:,}" for tick in ticks])
     axes.minorticks_off()
     axes.set_ylim(-0.03, 1.03)
-    axes.set_xlabel("Judgments by the annotator")
+    axes.set_xlabel("Judgements by the annotator")
     axes.set_ylabel("Share choosing the left image")
     style.light_grid(axes)
     axes.legend(loc="upper center", bbox_to_anchor=(0.45, -0.18), ncol=2, handlelength=1.2, columnspacing=0.8)

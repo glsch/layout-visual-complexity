@@ -30,9 +30,12 @@ Output = Literal[
     "comparison_graph",
     "elo_score_distributions",
     "elo_score_bands",
+    "elo_score_bands_trios",
 ]
 ALL_OUTPUTS: list[Output] = list(get_args(Output))
-SCORE_FIGURES = ("elo_score_distributions", "elo_score_bands")
+SCORE_FIGURES = ("elo_score_distributions", "elo_score_bands", "elo_score_bands_trios")
+# What a report makes by default: everything but the trios, whose pages are chosen by hand.
+DEFAULT_OUTPUTS: list[Output] = [output for output in ALL_OUTPUTS if output != "elo_score_bands_trios"]
 
 
 @dataclass(frozen=True)
@@ -86,7 +89,8 @@ class ReportSettings:
         dataset: The dataset folder.
         ranking: The ranking run's folder.
         output: Where `tables/`, `figures/` and the run's record (`runs/<name>/`) go.
-        outputs: Which tables and figures to make.
+        outputs: Which tables and figures to make; by default all but `elo_score_bands_trios`, which needs
+            `thumbnail_trios`.
         name: The run's name, for its record.
         gap_edges: The edges of the bins of the final Elo gap.
         folds: The folds of the consistency reference.
@@ -101,6 +105,9 @@ class ReportSettings:
             judgments (an ISO date): an image is in the last batch begun by the day it was first judged.
         thumbnails: How many page thumbnails the score distributions show, at evenly spaced ranks.
         thumbnail_pages: The pages the score distributions show instead, by id.
+        thumbnail_trios: The pages the score bands with trios show (`elo_score_bands_trios`), by id: per place, the
+            page in front and the two behind it, left then right.
+        trio_choice: How the trios' pages were chosen, in words, for that figure's caption.
         thumbnail_size: The thumbnails' longer edge, in pixels, as fetched from the IIIF image service.
         image_credit: A line crediting the page images, added to the captions of figures that show them.
         cache: The download cache; thumbnails are kept in its `thumbnails` folder.
@@ -111,7 +118,7 @@ class ReportSettings:
     dataset: Path
     ranking: Path
     output: Path
-    outputs: list[Output] = field(default_factory=lambda: list(ALL_OUTPUTS))
+    outputs: list[Output] = field(default_factory=lambda: list(DEFAULT_OUTPUTS))
     name: str = "report"
     gap_edges: list[float] = field(default_factory=lambda: list(DEFAULT_GAP_EDGES))
     folds: FoldSettings = field(default_factory=FoldSettings)
@@ -124,6 +131,8 @@ class ReportSettings:
     graph_batches: dict[str, str] = field(default_factory=dict)
     thumbnails: int = 10
     thumbnail_pages: list[str] = field(default_factory=list)
+    thumbnail_trios: list[list[str]] = field(default_factory=list)
+    trio_choice: str = ""
     thumbnail_size: int = 500
     image_credit: str = ""
     cache: Path = DEFAULT_CACHE
@@ -270,6 +279,8 @@ def run_report(settings: ReportSettings, transport: httpx2.BaseTransport | None 
                         client,
                         cache,
                         folder,
+                        [list(trio) for trio in settings.thumbnail_trios],
+                        settings.trio_choice,
                     )
                 written = score_figures[output]
             else:

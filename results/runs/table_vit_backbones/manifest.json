@@ -1,0 +1,271 @@
+{
+  "command": "report",
+  "started": "2026-11-19T17:19:37+00:00",
+  "ended": "2026-11-19T17:19:38+00:00",
+  "inputs": [
+    {
+      "path": "build/evaluate/vit/by_elo_gap.tsv",
+      "sha256": "3ac1c2b8094ba26ed9a0703d2844b743479941a0a0d0c7e9a62601778793165d",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/vit/metrics.tsv",
+      "sha256": "9f2cb0e58c18136bfa99e85ebf8b2e68b4e00e020255cb5fc6912db48e2241aa",
+      "bytes": 218
+    },
+    {
+      "path": "build/evaluate/vit/manifest.json",
+      "sha256": "72bf2e7d3014604ef1606182bc1f30de0ed9dea69a9dede931322448bfef1bd4",
+      "bytes": 11241
+    },
+    {
+      "path": "build/evaluate/vit_dinov3/by_elo_gap.tsv",
+      "sha256": "effeefa9580848e46d19a4255cf396a3ddcc249dcbbc18fa39c57de7de1dd84b",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/vit_dinov3/metrics.tsv",
+      "sha256": "7e2c9c27a5b11ceb27cda8f3d676ae1911ac6bcac3f770a795eaf06e687136b6",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/vit_dinov3/manifest.json",
+      "sha256": "e38674af2ac5f0a2875608c43bd2ab5e0bd2642731a47ef0d488b92e816c40d9",
+      "bytes": 8953
+    },
+    {
+      "path": "build/ranking/scores.tsv",
+      "sha256": "f27050a5b0039c31a3c2bce6766501b6320f14e735602fc02419f40cce9ce684",
+      "bytes": 43825
+    },
+    {
+      "path": "build/evaluate/vit_dinov3/hits.tsv",
+      "sha256": "53859b60913cbc309f55a5d9478c56bcaef3fd085d0778b2285669394a182ab3",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/vit_dinov3/scores.tsv",
+      "sha256": "d0df15cc0c5adcea3cfa55df92764f98c1eebb4c5dc56aaef36d9983dfc09268",
+      "bytes": 19043
+    },
+    {
+      "path": "build/evaluate/vit/hits.tsv",
+      "sha256": "d317cf3ad5b5205082e7e0338a76d10e5aa5ff67d8e0f694c182df09a13f5d70",
+      "bytes": 403018
+    },
+    {
+      "path": "build/evaluate/vit/scores.tsv",
+      "sha256": "a79f6fd6e37f786fd690c937d0f4f2c6131f5dfa19e0912e5e693581086ddec0",
+      "bytes": 19053
+    }
+  ],
+  "outputs": [
+    "results/tables/vit_backbones.tsv",
+    "results/tables/vit_backbones.tex"
+  ],
+  "configuration": {
+    "output": "results",
+    "outputs": [
+      "vit_backbones"
+    ],
+    "name": "table_vit_backbones",
+    "dataset": "build/dataset",
+    "scores": "build/ranking/scores.tsv",
+    "features": "build/features/dataset/features.parquet",
+    "layout": "build/segment/dataset",
+    "evaluations": {
+      "dinov2": "build/evaluate/vit",
+      "dinov3": "build/evaluate/vit_dinov3"
+    },
+    "shown": [],
+    "labels": {
+      "dinov2": "DINOv2 ViT-S/14",
+      "dinov3": "DINOv3 ViT-S/16"
+    },
+    "in_text": {},
+    "colours": {},
+    "comparisons": [],
+    "families": [
+      "geometry",
+      "layout"
+    ],
+    "pages": {},
+    "bootstrap": 1000,
+    "seed": 20260629,
+    "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
+    "tokens": null,
+    "head": null,
+    "map_pages": [],
+    "map_long_edge": 900,
+    "map_range": [
+      0.05,
+      0.95
+    ],
+    "cache": null,
+    "http": {
+      "contact": null,
+      "interval": 0.5,
+      "connections": 2,
+      "retries": 5,
+      "backoff": 1.0,
+      "timeout": 60.0
+    },
+    "levels": {},
+    "alone": [],
+    "defined_in": "",
+    "reference_column": "",
+    "colour_pages": [],
+    "score_run": null,
+    "catalogue": null,
+    "profiles": [],
+    "collection": "manuscripts",
+    "catalogue_credit": "",
+    "title_credit": "",
+    "repository": "",
+    "thumbnail_size": 400,
+    "named": [],
+    "min_lines": 0,
+    "difficulty_runs": {},
+    "difficulty_main": "cremma",
+    "manuscript_table": null,
+    "neighbours": 0.25,
+    "outside_lines": 5,
+    "outside_share": 0.1
+  },
+  "versions": {
+    "layout-visual-complexity": "0.1.0",
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.11.2",
+    "jsonargparse": "4.53.0",
+    "PyYAML": "6.0.3",
+    "httpx2": "2.16.0",
+    "opencv-python-headless": "5.0.0.93",
+    "Pillow": "13.0.0",
+    "pyarrow": "26.0.1",
+    "shapely": "2.1.2",
+    "torch": "2.14.0",
+    "transformers": "5.22.2",
+    "kraken": "7.1.1",
+    "ultralytics": "8.4.211"
+  },
+  "commit": "d814dd17a260189a5227d2f7014acc28dd40b515-dirty",
+  "platform": "macOS-26.5.1",
+  "summary": {
+    "vit_backbones": {
+      "by_elo_gap": [
+        {
+          "gap": "<100",
+          "judgments_per_fold": 15.82,
+          "dinov2": 0.537361,
+          "dinov2_low": 0.487572,
+          "dinov2_high": 0.596288,
+          "dinov3": 0.521838,
+          "dinov3_low": 0.467614,
+          "dinov3_high": 0.582186,
+          "difference": NaN,
+          "difference_low": NaN,
+          "difference_high": NaN
+        },
+        {
+          "gap": "100-200",
+          "judgments_per_fold": 15.29,
+          "dinov2": 0.632048,
+          "dinov2_low": 0.573733,
+          "dinov2_high": 0.693336,
+          "dinov3": 0.660779,
+          "dinov3_low": 0.598287,
+          "dinov3_high": 0.726052,
+          "difference": NaN,
+          "difference_low": NaN,
+          "difference_high": NaN
+        },
+        {
+          "gap": "200-300",
+          "judgments_per_fold": 12.58,
+          "dinov2": 0.808951,
+          "dinov2_low": 0.726968,
+          "dinov2_high": 0.864547,
+          "dinov3": 0.832206,
+          "dinov3_low": 0.772562,
+          "dinov3_high": 0.874128,
+          "difference": NaN,
+          "difference_low": NaN,
+          "difference_high": NaN
+        },
+        {
+          "gap": "300-400",
+          "judgments_per_fold": 9.36,
+          "dinov2": 0.878851,
+          "dinov2_low": 0.828114,
+          "dinov2_high": 0.935432,
+          "dinov3": 0.891838,
+          "dinov3_low": 0.835595,
+          "dinov3_high": 0.944222,
+          "difference": NaN,
+          "difference_low": NaN,
+          "difference_high": NaN
+        },
+        {
+          "gap": ">=400",
+          "judgments_per_fold": 12.84,
+          "dinov2": 0.945944,
+          "dinov2_low": 0.92157,
+          "dinov2_high": 0.975616,
+          "dinov3": 0.955462,
+          "dinov3_low": 0.940287,
+          "dinov3_high": 0.982276,
+          "difference": NaN,
+          "difference_low": NaN,
+          "difference_high": NaN
+        },
+        {
+          "gap": "overall",
+          "judgments_per_fold": 65.89,
+          "dinov2": 0.730137,
+          "dinov2_low": 0.689683,
+          "dinov2_high": 0.76136,
+          "dinov3": 0.740739,
+          "dinov3_low": 0.699096,
+          "dinov3_high": 0.768534,
+          "difference": 0.010602159999999996,
+          "difference_low": -0.015727778722377506,
+          "difference_high": 0.035396692521784255
+        },
+        {
+          "gap": "srocc",
+          "judgments_per_fold": NaN,
+          "dinov2": 0.784495,
+          "dinov2_low": 0.725238,
+          "dinov2_high": 0.827712,
+          "dinov3": 0.802412,
+          "dinov3_low": 0.740055,
+          "dinov3_high": 0.844594,
+          "difference": 0.017916849340972485,
+          "difference_low": -0.015833482039080676,
+          "difference_high": 0.05083026084441789
+        }
+      ],
+      "difference": {
+        "accuracy_difference": 0.010602159999999996,
+        "accuracy_low": -0.015727778722377506,
+        "accuracy_high": 0.035396692521784255,
+        "srocc_difference": 0.017916849340972485,
+        "srocc_low": -0.015833482039080676,
+        "srocc_high": 0.05083026084441789,
+        "accuracy_within_difference": -0.004354344994844845,
+        "accuracy_within_low": -0.05780127874766665,
+        "accuracy_within_high": 0.07349712849793058,
+        "srocc_within_difference": 0.0008352228609097567,
+        "srocc_within_low": -0.06812899489326076,
+        "srocc_within_high": 0.06528358032035969
+      }
+    },
+    "seconds": {
+      "vit_backbones": 0.636
+    }
+  }
+}

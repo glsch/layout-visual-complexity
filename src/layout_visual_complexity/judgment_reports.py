@@ -18,7 +18,12 @@ from layout_visual_complexity.logs import logger
 from layout_visual_complexity.outputs import LatexTable, escape, gap_latex, save_figure, write_table
 from layout_visual_complexity.plots.comparison_graph import BRIDGE, plot_comparison_graph
 from layout_visual_complexity.plots.position_bias import plot_position_bias_funnel
-from layout_visual_complexity.plots.score_distributions import Thumbnail, plot_score_distributions, thumbnail_ranks
+from layout_visual_complexity.plots.score_distributions import (
+    Thumbnail,
+    Trio,
+    plot_score_distributions,
+    thumbnail_ranks,
+)
 from layout_visual_complexity.ranking import graph, reliability, split_half
 from layout_visual_complexity.ranking.dataset import Dataset
 from layout_visual_complexity.ranking.scores import Scores
@@ -158,21 +163,21 @@ def reliability_by_elo_gap(
                        rf"{ceiling_text}}}"]
     )  # fmt: skip
     balanced = (
-        "about as many judgments each" if settings.balance == "judgments" else "the same number of annotators each"
+        "about as many judgements each" if settings.balance == "judgments" else "the same number of annotators each"
     )
     latex = LatexTable(
-        headers=[r"Score $\Delta$", "Possible pairs", "Pairs judged", "Judgments", "Consistency", "Pairs rejudged",
+        headers=[r"Score $\Delta$", "Possible pairs", "Pairs judged", "Judgements", "Consistency", "Pairs rejudged",
                  "Agreement"],
         rows=latex_rows,
-        caption=r"Reliability of the judgments by the difference ($\Delta$) between the two images' final Elo "
+        caption=r"Reliability of the judgements by the difference ($\Delta$) between the two images' final Elo "
         r"scores (means over the permutations). \emph{Possible pairs} are all theoretically possible pairs of the "
         f"{len(elo):,} images whose scores differ by $\\Delta$; \\emph{{pairs judged}}, those actually judged, once "
-        r"or more; \emph{judgments}, how often they were judged, a pair judged twice counting twice. "
-        r"\emph{Consistency} is the share of judgments that chose the image with the higher final score. "
+        r"or more; \emph{judgements}, how often they were judged, a pair judged twice counting twice. "
+        r"\emph{Consistency} is the share of judgements that chose the image with the higher final score. "
         r"\emph{Pairs rejudged} are the pairs judged by at least two different annotators; \emph{agreement}, how "
-        "often two of their judgments by different annotators chose the same image. \\emph{Split-half}: the "
+        "often two of their judgements by different annotators chose the same image. \\emph{Split-half}: the "
         f"annotators split at random into two halves with {balanced}, {settings.repeats} times; Elo scores from each "
-        f"half's judgments ({settings.permutations} permutations), and Spearman's correlation between the two halves' "
+        f"half's judgements ({settings.permutations} permutations), and Spearman's correlation between the two halves' "
         r"scores over the images judged in both, raised by the Spearman--Brown correction, $2\rho/(1+\rho)$, to the "
         r"full set of annotators. This is the reliability $r$ of the scores: the correlation expected between two "
         "independent runs of the whole annotation (the median over the splits, and their 5th to 95th percentiles in "
@@ -198,12 +203,12 @@ def reliability_by_elo_gap(
     ]
     leaning = leaning_annotators(bias)
     bias_latex = LatexTable(
-        headers=["Annotator", "Judgments", "Left chosen", r"95\% interval"],
+        headers=["Annotator", "Judgements", "Left chosen", r"95\% interval"],
         rows=bias_rows,
-        caption="Position bias: the share of judgments that chose the image shown on the left, with its 95\\% "
-        f"(Wilson) interval, overall and for the annotators with at least {min_judgments:,} judgments; the TSV lists "
+        caption="Position bias: the share of judgements that chose the image shown on the left, with its 95\\% "
+        f"(Wilson) interval, overall and for the annotators with at least {min_judgments:,} judgements; the TSV lists "
         f"all {len(bias) - 1:,}. With no preference for either side, a share scatters around one half by chance "
-        "alone, the less the more judgments it counts; an interval that leaves out one half marks a lean larger than "
+        "alone, the less the more judgements it counts; an interval that leaves out one half marks a lean larger than "
         f"chance would give. {position_bias_findings(bias, leaning)}",
         label="tab:position_bias",
         align="lccc",
@@ -228,27 +233,38 @@ def leaning_annotators(bias: pd.DataFrame) -> pd.DataFrame:
     return annotators
 
 
-def position_bias_findings(bias: pd.DataFrame, leaning: pd.DataFrame) -> str:
+def position_bias_findings(bias: pd.DataFrame, leaning: pd.DataFrame, overall_share: bool = True) -> str:
     """The overall share, whether it is within chance, how many annotators lean beyond it against how many would by
-    chance alone, and the two most prolific annotators' shares, in plain words."""
+    chance alone, and the two most prolific annotators' shares, in plain words; without the overall share's sentence
+    unless `overall_share`."""
     overall = bias[bias["annotator"] == reliability.OVERALL].iloc[0]
     within = "within" if overall["low"] <= 0.5 <= overall["high"] else "outside"
-    expected = reliability.expected_outside(leaning["judgments"].to_numpy())
+    expected = in_words(round(reliability.expected_outside(leaning["judgments"].to_numpy())))
     outside = in_words(int(leaning["outside"].sum()))
-    text = (
-        f"The overall share, {decimal(overall['left'])} [{decimal(overall['low'])}, {decimal(overall['high'])}], is "
-        f"{within} chance. {outside.capitalize()} of the {len(leaning):,} annotators lean beyond chance, where about "
-        f"{in_words(round(expected))} would by chance alone"
-    )
+    if overall_share:
+        text = (
+            f"The overall share, {overall_share_text(overall)}, is {within} chance. {outside.capitalize()} of the "
+            f"{len(leaning):,} annotators lean beyond chance, where about {expected} would by chance alone"
+        )
+    else:
+        text = (
+            f"{outside.capitalize()} of the {len(leaning):,} annotators lean beyond chance, whereas chance would "
+            f"expect about {expected}"
+        )
     prolific = leaning.sort_values("judgments", ascending=False, kind="stable").head(2)
     if len(prolific) == 2 and (prolific["left"] - 0.5).prod() < 0:
         first, second = (row for row in prolific.itertuples(index=False))
         text += (
             "; the two most prolific lean in opposite directions: one chose the left image in "
-            f"{100 * first.left:.1f}\\% of {first.judgments:,} judgments, the other in {100 * second.left:.1f}\\% of "
+            f"{100 * first.left:.1f}\\% of {first.judgments:,} judgements, the other in {100 * second.left:.1f}\\% of "
             f"{second.judgments:,}"
         )
     return text + "."
+
+
+def overall_share_text(overall: pd.Series) -> str:
+    """The overall share of left choices with its interval: `0.488 [0.475, 0.501]`."""
+    return f"{decimal(overall['left'])} [{decimal(overall['low'])}, {decimal(overall['high'])}]"
 
 
 def position_bias_funnel(dataset: Dataset, folder: Path) -> Written:
@@ -258,12 +274,14 @@ def position_bias_funnel(dataset: Dataset, folder: Path) -> Written:
     overall = float(bias.iloc[0]["left"])
     figure = plot_position_bias_funnel(leaning, overall)
     caption = (
-        "Position bias by annotator: each annotator's share of judgments that chose the image shown on the left, "
-        "against their number of judgments (on a logarithmic scale). With no preference for either side, a share "
-        "falls within the grey bounds by chance alone 95\\% of the time: one half $\\pm\\ 1.96\\sqrt{1/4n}$ for $n$ "
-        "judgments, narrower as the judgments grow. An annotator outside them (in vermillion) leans to one side more "
-        "than chance would give, which is when the 95\\% (Wilson) interval of their share leaves out one half. The "
-        f"solid line is the overall share, the dashed one one half. {position_bias_findings(bias, leaning)}"
+        "Image position bias. How does the position of an image influence the judgements? The chart demonstrates "
+        "each annotator's share of judgements, in which the image on the left is chosen, against their total number "
+        "of judgements (on a logarithmic scale). By chance alone, i.e.\\ with no preference for either side, the "
+        "share falls within the bounds of the grey funnel 95\\% of the time: one half $\\pm\\ 1.96\\sqrt{1/4n}$ "
+        "for $n$ judgements. Consequently, the funnel narrows as the number of judgements increases. An annotator "
+        "outside the funnel (in vermillion) leans to one side more than chance alone would explain. The solid line is "
+        f"the overall share ({overall_share_text(bias.iloc[0])}), the dashed one---one half ({decimal(0.5, 1)}). "
+        f"{position_bias_findings(bias, leaning, overall_share=False)}"
     )
     paths = save_figure(figure, folder / "figures" / "position_bias_funnel", caption, "fig:position_bias_funnel")
     summary = {
@@ -314,13 +332,13 @@ def consistency_reference_by_fold(
         for row in table.itertuples(index=False)
     ]
     latex = LatexTable(
-        headers=[r"Score $\Delta$", "Judgments per fold", "Consistency", "Pooled"],
+        headers=[r"Score $\Delta$", "Judgements per fold", "Consistency", "Pooled"],
         rows=latex_rows,
         caption=f"The consistency reference: over {k}-fold cross-validation repeated {repeats} times, with each "
-        "manuscript's pages in one fold, the share of each fold's test judgments (both images in the fold) that "
+        "manuscript's pages in one fold, the share of each fold's test judgements (both images in the fold) that "
         "agree with the final Elo scores. \\emph{Consistency} is the mean over the folds, with its 95\\% interval "
         f"from {resamples:,} resamples of the manuscripts, and \\emph{{Pooled}} the share over all folds' test "
-        "judgments together.",
+        "judgements together.",
         label="tab:consistency_reference_by_fold",
         align="lccc",
         rules_before=[len(latex_rows) - 1],
@@ -374,25 +392,26 @@ def comparison_graph(
     batch = graph.batches_by_first_judgment(dataset.judgments, images, batches)
     figure = plot_comparison_graph(dataset.judgments, images, elo, described.anchors, batch, seed)
     connected = (
-        "The graph is connected."
+        "The graph is fully connected."
         if described.components == 1
         else f"The graph has {described.components:,} connected components."
     )
     bridged = dataset.judgments["campaign"].eq(BRIDGE).sum() if "campaign" in dataset.judgments else 0
-    batch_text = "by batch, each image in the one in which it was first judged, with" if len(batches) else "with"
-    batch_text += (
-        f" the pairs judged in the bridge sessions ({bridged:,} judgments, in which both batches were judged) in "
-        "vermillion"
+    coloured = (
+        "(a) Each image is coloured by batch, in which it was first judged. The pairs"
+        if len(batches)
+        else "(a) The pairs"
     )
     possible = described.images * (described.images - 1) // 2
     caption = (
-        f"The comparison graph: each node is one of the {described.images:,} images, sized by its number of "
-        f"comparisons ({described.comparisons_min:,} to {described.comparisons_max:,}, median "
-        f"{described.comparisons_median:g}), and each edge joins two images judged against each other: "
-        f"{described.pairs:,} pairs in {described.judgments:,} judgments, {100 * described.density:.1f}\\% of the "
-        f"{possible:,} possible pairs. Ringed: the {len(described.anchors)} anchor images, compared more than "
-        f"{in_words(anchor_factor)} times the median number of comparisons. {connected} (a) Coloured {batch_text}; "
-        "(b) coloured by final Elo score."
+        f"The comparison graph. Each node represents one of the {described.images:,} images. Node size reflects the "
+        f"number of comparisons: from {described.comparisons_min:,} to {described.comparisons_max:,} with median "
+        f"{described.comparisons_median:g}. Edges join images judged against each other: {described.pairs:,} "
+        f"distinct pairs in {described.judgments:,} judgements, which amounts to {100 * described.density:.1f}\\% of "
+        f"the {possible:,} possible pairs. Ringed nodes highlight the {len(described.anchors)} anchor images, compared "
+        f"more than {in_words(anchor_factor)} times the median number of comparisons. {connected} {coloured} judged "
+        "in the bridging sessions, in which images across batches were evaluated "
+        f"({bridged:,} judgements in total), are in vermillion; (b) Nodes are coloured by final Elo score."
     )
     paths = save_figure(figure, folder / "figures" / "comparison_graph", caption, "fig:comparison_graph")
     rows = [
@@ -469,38 +488,111 @@ def score_figures(
     client: HttpClient,
     cache: Cache,
     folder: Path,
+    trios: list[list[str]] | None = None,
+    trio_choice: str = "",
 ) -> dict[str, Written]:
     """Figure 3 of the article, each page's Elo scores over the permutations as violins (`elo_score_distributions`)
     or as bands (`elo_score_bands`), with the same thumbnails: `pages` if given, else `count` pages at evenly spaced
-    ranks."""
+    ranks; or as bands with a trio of pages at each place (`elo_score_bands_trios`): `trios`, each its page in front
+    and the two behind it, left then right, whose choice `trio_choice` describes in the caption."""
     means = scores.distributions.mean(axis=0)
     ranked = [scores.table["image"].iloc[page] for page in np.argsort(means, kind="stable")]
-    ranks = thumbnail_choice(dataset.images, ranked, count, pages) if (count or pages) else []
+    single = [kind for kind in kinds if kind != "elo_score_bands_trios"]
+    ranks = thumbnail_choice(dataset.images, ranked, count, pages) if single and (count or pages) else []
     thumbnails = fetch_thumbnails(dataset.images, ranked, ranks, size, client, cache)
     logger.info("score distributions: %d thumbnails", len(thumbnails))
     permutations = scores.distributions.shape[0]
-    placed = "chosen near evenly spaced ranks" if pages else "at evenly spaced ranks"
-    shown = (
-        f" The {in_words(len(thumbnails))} pages shown, {placed}, are marked in vermillion and labelled with their ids."
-        if thumbnails
-        else ""
+    bands = (
+        f"Computed as Elo scores over {permutations:,} random judgement order permutations. Images ordered by mean "
+        "score from the lowest to the highest. Solid line shows the median. Dark and light blue bands indicate the "
+        "middle half (25th to 75th percentiles) and the middle 90\\% (5th to 95th percentiles), respectively."
     )
-    drawn = {
-        "elo_score_distributions": f"one violin for each of the {len(ranked):,} pages, ordered by mean score from the "
-        "lowest to the highest.",
-        "elo_score_bands": f"for each of the {len(ranked):,} pages, ordered by mean score from the lowest to the "
-        "highest, the median (line), the middle half (25th to 75th percentiles, dark band) and the middle 90\\% (5th "
-        "to 95th percentiles, light band).",
+    placed = "chosen near evenly spaced ranks" if pages else "taken at evenly spaced ranks"
+    captions = {
+        "elo_score_distributions": f"Elo scores over {permutations:,} random permutations of the judgements' order: "
+        f"one violin for each of the {len(ranked):,} pages, ordered by mean score from the lowest to the highest."
+        + (
+            f" The {in_words(len(thumbnails))} pages shown, {placed}, are marked in vermillion and labelled with "
+            "their ids."
+            if thumbnails
+            else ""
+        ),
+        "elo_score_bands": f"Visual complexity scores. {bands}"
+        + (
+            f" The {in_words(len(thumbnails))} pages highlighted in vermillion and {placed} represent possible layout "
+            "kinds around the given complexity value."
+            if thumbnails
+            else ""
+        ),
     }
     written = {}
     for name in kinds:
+        if name == "elo_score_bands_trios":
+            written[name] = score_trios(dataset, scores, ranked, trios or [], trio_choice, bands, size, credit,
+                                        client, cache, folder)  # fmt: skip
+            continue
         figure = plot_score_distributions(
             scores.distributions, thumbnails, "violins" if name == "elo_score_distributions" else "bands"
         )
-        caption = f"Elo scores over {permutations:,} random permutations of the judgments' order: {drawn[name]}{shown}"
+        caption = captions[name]
         if credit:
             caption += f" {escape(credit)}"
         paths = save_figure(figure, folder / "figures" / name, caption, f"fig:{name}")
         listed = [{"rank": thumbnail.rank + 1, "image": thumbnail.label} for thumbnail in thumbnails]
         written[name] = Written(paths, {"permutations": permutations, "thumbnails": listed})
     return written
+
+
+TRIO_POSITIONS = ("front", "left", "right")
+
+
+def score_trios(
+    dataset: Dataset,
+    scores: Scores,
+    ranked: list[str],
+    trios: list[list[str]],
+    choice: str,
+    bands: str,
+    size: int,
+    credit: str,
+    client: HttpClient,
+    cache: Cache,
+    folder: Path,
+) -> Written:
+    """Figure 3's second version, `elo_score_bands_trios`: the bands with three pages at each place, the trios given
+    as their pages in front, left and right. Every page must be in the dataset, with an image service."""
+    name = "elo_score_bands_trios"
+    if not trios:
+        raise ValueError(f"{name} needs --thumbnail_trios")
+    wrong = [trio for trio in trios if len(trio) != 3 or len(set(trio)) != 3]
+    if wrong:
+        raise ValueError(f"{name}: each trio is three different pages, front, left and right, not {wrong[0]}")
+    thumbnail_choice(dataset.images, ranked, 0, [page for trio in trios for page in trio])
+    rank_of = {page: rank for rank, page in enumerate(ranked)}
+    found = [
+        Trio(*fetch_thumbnails(dataset.images, ranked, [rank_of[page] for page in trio], size, client, cache))
+        for trio in trios
+    ]
+    figure = plot_score_distributions(scores.distributions, kind="bands", trios=found)
+    means = pd.Series(scores.distributions.mean(axis=0), index=scores.table["image"].tolist())
+    span = max(float(means[trio].max() - means[trio].min()) for trio in trios)
+    caption = (
+        f"Visual complexity scores, three pages at each place. {bands} At each of the {in_words(len(trios))} places, "
+        f"chosen near evenly spaced ranks, three pages whose mean scores lie within {span:.0f} points of each other "
+        "are highlighted in vermillion and labelled with their ids."
+    )
+    if choice:
+        caption += f" {escape(choice)}"
+    caption += " Similar scores can belong to quite different layouts."
+    if credit:
+        caption += f" {escape(credit)}"
+    paths = save_figure(figure, folder / "figures" / name, caption, f"fig:{name}")
+    order = sorted(range(len(trios)), key=lambda index: rank_of[trios[index][0]])
+    listed = [
+        {position: {"rank": rank_of[page] + 1, "image": page, "elo": float(means[page])}
+         for position, page in zip(TRIO_POSITIONS, trios[index], strict=True)}
+        | {"span": float(means[trios[index]].max() - means[trios[index]].min())}
+        for index in order
+    ]  # fmt: skip
+    summary = {"permutations": scores.distributions.shape[0], "trios": listed, "span": span}
+    return Written(paths, summary)

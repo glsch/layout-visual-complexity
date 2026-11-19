@@ -1,7 +1,7 @@
 {
   "command": "judgments report",
-  "started": "2026-11-14T06:21:08+00:00",
-  "ended": "2026-11-14T06:21:10+00:00",
+  "started": "2026-11-19T17:17:38+00:00",
+  "ended": "2026-11-19T17:17:40+00:00",
   "inputs": [
     {
       "path": "build/dataset/judgments.tsv",
@@ -78,6 +78,8 @@
     "graph_batches": {},
     "thumbnails": 10,
     "thumbnail_pages": [],
+    "thumbnail_trios": [],
+    "trio_choice": "",
     "thumbnail_size": 500,
     "image_credit": "",
     "cache": "~/.cache/layout-visual-complexity",
@@ -111,7 +113,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
+  "commit": "d814dd17a260189a5227d2f7014acc28dd40b515-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "reliability_by_elo_gap": {
@@ -308,8 +310,8 @@
       "images_median": 397.0
     },
     "seconds": {
-      "reliability_by_elo_gap": 1.909,
-      "consistency_reference_by_fold": 0.184,
+      "reliability_by_elo_gap": 1.926,
+      "consistency_reference_by_fold": 0.17,
       "split_half_ceiling": 0.002
     }
   }

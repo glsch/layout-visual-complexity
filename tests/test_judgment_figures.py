@@ -28,7 +28,7 @@ from layout_visual_complexity.judgments import (
 )
 from layout_visual_complexity.outputs import LatexTable
 from layout_visual_complexity.plots.comparison_graph import graph_layout, plot_comparison_graph
-from layout_visual_complexity.plots.score_distributions import Thumbnail, plot_score_distributions, score_bands
+from layout_visual_complexity.plots.score_distributions import Thumbnail, Trio, plot_score_distributions, score_bands
 from layout_visual_complexity.plots.style import HIGHLIGHT
 from layout_visual_complexity.ranking import graph
 from layout_visual_complexity.ranking.dataset import read_dataset
@@ -125,6 +125,114 @@ def test_the_score_figures_draw_and_mark_the_configured_pages(ranked: tuple[Path
         assert all(text.get_fontsize() >= 6 for text in figure.texts if text.get_text() in pages)
 
 
+def test_the_trios_draw_three_pages_at_each_place_the_one_in_front_over_the_two_behind() -> None:
+    rng = np.random.default_rng(2)
+    distributions = rng.normal(np.linspace(1000, 2000, 12), 40, size=(60, 12))
+    ids = [f"page_{rank}" for rank in range(12)]
+    pages = [[0, 1, 2], [5, 4, 6], [9, 8, 11]]  # ranks: front, left, right
+    trios = [Trio(*(Thumbnail(rank, np.ones((45, 30, 3)), ids[rank]) for rank in trio)) for trio in pages]
+    figure = plot_score_distributions(distributions, kind="bands", trios=trios)
+    insets = figure.axes[1:]
+    assert len(insets) == 3 * len(trios)
+    for number, trio in enumerate(insets[i : i + 3] for i in range(0, len(insets), 3)):
+        left, right, front = trio
+        boxes = [axes.get_position() for axes in trio]
+        assert front.get_zorder() > max(left.get_zorder(), right.get_zorder())
+        assert boxes[0].x0 < boxes[2].x0 < boxes[1].x0 and boxes[2].y0 < min(boxes[0].y0, boxes[1].y0)
+        assert all(boxes[2].overlaps(box) for box in boxes[:2])
+        assert all(spine.get_edgecolor()[:3] == (1.0, 1.0, 1.0) for spine in front.spines.values())
+        assert [axes.images[0].get_array().shape for axes in trio] == [(45, 30, 3)] * 3, number
+    labels = {text.get_text(): text for text in figure.texts}
+    assert {ids[rank] for trio in pages for rank in trio} <= set(labels)
+    assert {labels[ids[rank]].get_fontsize() for trio in pages for rank in trio} == {4.5}
+    marked = [
+        collection
+        for collection in figure.axes[0].collections
+        if np.allclose(collection.get_facecolor()[0][:3], [int(HIGHLIGHT[i : i + 2], 16) / 255 for i in (1, 3, 5)])
+    ]
+    assert len(marked) == 9
+    with pytest.raises(ValueError, match="not both"):
+        plot_score_distributions(distributions, [trios[0].front], kind="bands", trios=trios)
+
+
+def test_the_single_version_draws_as_before() -> None:
+    """One thumbnail at each place, laid out by the single version's constants, whatever the trios' settings."""
+    from matplotlib.backends.backend_agg import FigureCanvasAgg
+
+    from layout_visual_complexity.plots import score_distributions as drawn
+    from layout_visual_complexity.plots.style import CENTIMETRE, FULL_WIDTH
+
+    rng = np.random.default_rng(3)
+    distributions = rng.normal(np.linspace(1000, 2000, 12), 40, size=(60, 12))
+    thumbnails = [Thumbnail(rank, np.ones((45, 30, 3)), f"page_{rank}") for rank in (0, 4, 8, 11)]
+    figure = plot_score_distributions(distributions, thumbnails, "bands")
+    again = plot_score_distributions(distributions, thumbnails, "bands", trios=[])
+    rendered = []
+    for each in (figure, again):
+        canvas = FigureCanvasAgg(each)
+        canvas.draw()
+        rendered.append(np.asarray(canvas.buffer_rgba()).copy())
+    assert np.array_equal(*rendered)
+    width_cm = FULL_WIDTH / CENTIMETRE
+    expected_width = min(drawn.THUMBNAIL_WIDTH, (width_cm - 0.1) / 2 - drawn.THUMBNAIL_GAP)
+    expected_height = expected_width / (30 / 45)
+    band = expected_height + drawn.LABEL + drawn.JOIN
+    height_cm = 0.1 + band + drawn.PLOT + band + 0.55
+    assert figure.get_size_inches() * 2.54 == pytest.approx([width_cm, height_cm])
+    insets = figure.axes[1:]
+    assert len(insets) == len(thumbnails)
+    for axes in insets:
+        box = axes.get_position()
+        assert box.width * width_cm == pytest.approx(expected_height * 30 / 45)
+        assert box.height * height_cm == pytest.approx(expected_height)
+        assert not axes.axison
+    assert {text.get_fontsize() for text in figure.texts if text.get_text().startswith("page_")} == {6}
+
+
+def test_the_trios_caption_computes_its_span_and_credits_the_images(ranked: tuple[Path, Path], tmp_path: Path) -> None:
+    server = Thumbnails()
+    trios = [["msa_1r", "msb_1v", "msc_2r"], ["msd_2r", "msa_2r", "msb_1r"]]
+    choice = "In front, the page typical of its score; behind it, two others."
+    settings = ReportSettings(
+        dataset=ranked[0], ranking=ranked[1], output=tmp_path / "results", outputs=["elo_score_bands_trios"],
+        thumbnail_trios=trios, trio_choice=choice, image_credit="Page images by a library.",
+        cache=tmp_path / "cache", jobs=1,
+    )  # fmt: skip
+    summary = run_report(settings, httpx2.MockTransport(server))
+    scores = read_scores(ranked[1])
+    means = pd.Series(scores.distributions.mean(axis=0), index=scores.table["image"])
+    span = max(means[trio].max() - means[trio].min() for trio in trios)
+    caption = (tmp_path / "results" / "figures" / "elo_score_bands_trios.tex").read_text()
+    assert (
+        "At each of the two places, chosen near evenly spaced ranks, three pages whose mean scores lie within "
+        f"{span:.0f} points of each other are highlighted in vermillion and labelled with their ids." in caption
+    )
+    assert caption.count(choice) == 1 and caption.rstrip().endswith("\\end{figure}")
+    assert "Similar scores can belong to quite different layouts. Page images by a library." in caption
+    found = summary["elo_score_bands_trios"]
+    assert found["span"] == pytest.approx(span)
+    assert [[trio[position]["image"] for position in ("front", "left", "right")] for trio in found["trios"]] == sorted(
+        trios, key=lambda trio: means[trio[0]]
+    )
+    assert len(server.requests) == 6
+    assert "elo_score_bands_trios" not in ReportSettings(ranked[0], ranked[1], tmp_path).outputs
+
+
+def test_a_trio_naming_a_page_not_in_the_dataset_is_refused(ranked: tuple[Path, Path], tmp_path: Path) -> None:
+    wrong = [
+        ([["msa_1r", "msb_1v", "msz_9r"]], "not in the dataset"),
+        ([["msa_1r", "msb_1v"]], "three different pages"),
+        ([], "needs --thumbnail_trios"),
+    ]
+    for trios, message in wrong:
+        settings = ReportSettings(
+            dataset=ranked[0], ranking=ranked[1], output=tmp_path / "results", outputs=["elo_score_bands_trios"],
+            thumbnail_trios=trios, cache=tmp_path / "cache", jobs=1,
+        )  # fmt: skip
+        with pytest.raises(ValueError, match=message):
+            run_report(settings, httpx2.MockTransport(Thumbnails()))
+
+
 def test_unknown_thumbnail_pages_are_refused() -> None:
     images = pd.DataFrame({"image": ["a", "b"], "image_service": ["https://x/a", ""]})
     assert judgment_reports.thumbnail_choice(images, ["b", "a"], 2, ["a"]) == [1]
@@ -167,9 +275,14 @@ def test_the_funnel_and_the_tables_say_what_outside_chance_means(ranked: tuple[P
         split_half=SplitHalfSettings(repeats=3, permutations=5),
     )  # fmt: skip
     run_report(settings)
-    for path in ("figures/position_bias_funnel.tex", "tables/position_bias.tex"):
-        text = (tmp_path / "results" / path).read_text()
-        assert "within chance" in text and "by chance alone" in text and "leaves out one half" in text
+    text = (tmp_path / "results" / "tables" / "position_bias.tex").read_text()
+    assert "within chance" in text and "by chance alone" in text and "leaves out one half" in text
+    # The funnel's caption as its author words it: the overall share and one half given as values.
+    overall = position_bias(read_dataset(ranked[0]).judgments).iloc[0]
+    caption = (tmp_path / "results" / "figures" / "position_bias_funnel.tex").read_text()
+    share = f"{overall['left']:.3f} [{overall['low']:.3f}, {overall['high']:.3f}]"
+    assert f"The solid line is the overall share ({share}), the dashed one---one half (0.5)." in caption
+    assert "By chance alone, i.e.\\ with no preference" in caption and "whereas chance would expect about" in caption
     assert (tmp_path / "results" / "figures" / "position_bias_funnel.svg").is_file()
 
 
@@ -241,4 +354,4 @@ def test_tables_are_centred_but_their_first_column(ranked: tuple[Path, Path], tm
     caption = (tmp_path / "results" / "figures" / "comparison_graph.tex").read_text()
     images = len(read_dataset(ranked[0]).images)
     assert f"of the {images * (images - 1) // 2:,} possible pairs" in caption and "in one layout" not in caption
-    assert caption.index("Ringed:") < caption.index("The graph is") < caption.index("(a)") < caption.index("(b)")
+    assert caption.index("Ringed nodes") < caption.index("The graph is") < caption.index("(a)") < caption.index("(b)")

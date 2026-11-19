@@ -32,6 +32,8 @@ graph_seed: 20260629
 graph_batches: {}
 thumbnails: 10
 thumbnail_pages: []
+thumbnail_trios: []
+trio_choice: ''
 thumbnail_size: 500
 image_credit: ''
 cache: ~/.cache/layout-visual-complexity

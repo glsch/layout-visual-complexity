@@ -33,7 +33,7 @@ python3 -m venv .venv
 
 ## Use
 
-The command is `lvc`. A study of pairwise judgments ("which of these two pages is more visually complex?") goes
+The command is `lvc`. A study of pairwise judgements ("which of these two pages is more visually complex?") goes
 through three steps:
 
 ```
@@ -42,9 +42,9 @@ lvc judgments rank --config ranking.yaml
 lvc judgments report --config report.yaml
 ```
 
-`import` reads a dataset of judgments in its published structure, from a folder or from its Zenodo record by DOI,
+`import` reads a dataset of judgements in its published structure, from a folder or from its Zenodo record by DOI,
 checks it, and copies it into the working folder; `rank` computes Elo scores over seeded permutations of the
-judgments' order, and Bradley-Terry scores; `report` writes the reliability tables, position bias by annotator, the
+judgements' order, and Bradley-Terry scores; `report` writes the reliability tables, position bias by annotator, the
 comparison graph and the score distributions as bands, with thumbnails of chosen pages.
 
 Settings come from YAML files, and any of them can be given as an option instead: `--config` can be repeated, later
@@ -77,7 +77,7 @@ more families beside the ranker's, which don't enter the scores (`colour`, to de
 resumes; the scores don't depend on the number of workers.
 
 The package comes with its rankers (`--models` takes others, made by `lvc train --ensemble`): the geometry ranker
-and the ViT head, each trained on the dataset's 397 pages and all their judgments, and their ensemble with equal
+and the ViT head, each trained on the dataset's 397 pages and all their judgements, and their ensemble with equal
 weights. A page's expected Elo score is the regression of the dataset's Elo scores on the ensemble's out-of-fold
 scores, so that it reads on the Elo scale with the spread a prediction has.
 
@@ -212,7 +212,7 @@ then one column per feature, named `Family__Feature__Flavour` (`AreaFeature__Lin
   share, the largest empty rectangle, the margins). The order measures run on the written mass (`_mass`, from the
   segmentation) and on the ink (`_ink`, Otsu's dark pixels of the folio, from the image alone).
 - **`trivial`**: ink coverage (the ink layer's share of the folio) and the number of text lines.
-- **`generic`**: six generic image measures, needing neither segmentation nor judgments, on the folio crop at 1,400
+- **`generic`**: six generic image measures, needing neither segmentation nor judgements, on the folio crop at 1,400
   pixels on its long edge with its illumination flattened: edge-orientation entropy, MSSC at each of seven scales,
   lossless compressibility (the quantised lightness's raw size over its PNG's), feature congestion (colour, contrast
   and orientation), colourfulness, and patch-codebook variety (how many kinds of patch a page has, and the entropy of
@@ -254,7 +254,7 @@ of each family, the pages per second, how busy the cores were, and the memory us
 lvc codebook --layout build/segment/name --output build/codebook/name [--codewords 32] [--jobs N]
 ```
 
-learns the generic family's patch codebook from a segmentation run's pages, without any judgment: k-means, seeded,
+learns the generic family's patch codebook from a segmentation run's pages, without any judgement: k-means, seeded,
 over the colour histograms of patches drawn from every page. The codebook doesn't depend on the number of workers.
 
 ### Patch tokens of a vision transformer
@@ -267,10 +267,10 @@ gives each page's patch tokens from a vision transformer (ViT), for the ViT rank
 patch tokens, from its publisher's repository at a pinned revision (`--tokens.revision`); DINOv2 ViT-S/14 by default.
 The page's folio crop (or the whole image) is resized to a long edge of 518 pixels (`--tokens.long_edge`), each side
 rounded to whole patches, so 37 patches of 14 pixels along it; the tokens are the last block's (`--tokens.layer`)
-after the model's final layer norm, without the class token. They are kept as float16 arrays, one file per page, in
-the user cache (`~/.cache/layout-visual-complexity/tokens/`, under a key of the backbone, revision, block, input
-size and crop); the run's folder holds the token set (`tokens.json`, `pages.tsv`). The model runs on Apple's GPU or
-CUDA where there is one. A rerun keeps the pages already embedded from the same image and crop.
+after the model's final layer norm, without the class token and any registers. They are kept as float16 arrays, one
+file per page, in the user cache (`~/.cache/layout-visual-complexity/tokens/`, under a key of the backbone, revision,
+block, input size and crop); the run's folder holds the token set (`tokens.json`, `pages.tsv`). The model runs on
+Apple's GPU or CUDA where there is one. A rerun keeps the pages already embedded from the same image and crop.
 
 ### Evaluating a method, and the trained model
 
@@ -290,21 +290,21 @@ evaluates a method, cross-validated on folds by manuscript (10 × 10 by default)
   value, and which adds nothing to it on the same folds, is left out (`restating.tsv` says which);
 - **the local ViT head** on a token set: a small network (the tokens' width, 128, 1, with a ReLU) gives each patch a
   value, softplus makes it a non-negative score, and the page's score is the mean of its patches'; it is trained with
-  RankNet's logistic loss on each fold's training judgments (180 epochs of Adam, learning rate 0.002, weight decay
+  RankNet's logistic loss on each fold's training judgements (180 epochs of Adam, learning rate 0.002, weight decay
   0.001, `--head.*`), the ViT frozen. Folds train in worker processes on the CPU, each from a seeded start, so the
   results don't depend on `--jobs`;
 - **an ensemble** of earlier evaluations on the same folds: their z-scored page scores combined fold by fold, with
-  equal weights, the weights given (`--weights`), or weights fitted on each fold's training judgments
+  equal weights, the weights given (`--weights`), or weights fitted on each fold's training judgements
   (`--fitted_weights`).
 
 It writes the out-of-fold page scores (`scores.tsv`); accuracy by Elo gap and overall beside the consistency of the
-same test judgments with the Elo scores (`by_elo_gap.tsv`); SROCC beside its ceiling, the square root of the Elo
+same test judgements with the Elo scores (`by_elo_gap.tsv`); SROCC beside its ceiling, the square root of the Elo
 scores' split-half reliability (`--ceiling`), log-loss, and within and across manuscripts the accuracy on the test
-judgments between two pages of one manuscript and on those between two manuscripts, apart, and SROCC with each
+judgements between two pages of one manuscript and on those between two manuscripts, apart, and SROCC with each
 manuscript's mean removed from both scores (`metrics.tsv`); calibration (`calibration.tsv`); each fold's results (`folds.tsv`), hits (`hits.tsv`) and
 z-scores (`fold_scores.tsv`), so that evaluations can be compared on the same resamples and combined; with 95%
 intervals from resamples of the manuscripts. With `--learning_curves.shares`, it also trains the method on shares of
-each fold's training judgments and images (`learning_curve.tsv`). It then trains the method on every judgment and
+each fold's training judgements and images (`learning_curve.tsv`). It then trains the method on every judgement and
 keeps it, with what its inputs must be: `model.json` refuses features computed with other settings, `head.npz`
 tokens made with another backbone, revision, block, input size or crop; `ensemble.json` names its members and
 weights.
@@ -313,8 +313,8 @@ weights.
 lvc train --tokens build/embed/name --dataset build/dataset --output build/train/name
 ```
 
-trains the pairwise model (`--features`) or the head (`--tokens`) on every judgment, without the evaluation, and writes
-its training pages' z-scores (`scores.tsv`); `--leave_out` leaves manuscripts out, their pages and every judgment
+trains the pairwise model (`--features`) or the head (`--tokens`) on every judgement, without the evaluation, and writes
+its training pages' z-scores (`scores.tsv`); `--leave_out` leaves manuscripts out, their pages and every judgement
 touching them, so that their pages can be scored out of sample.
 
 ```
@@ -323,7 +323,7 @@ lvc train --ensemble "{geometry: build/train/geometry, vit: build/train/vit_head
 
 makes the rankers `lvc score` and `lvc compare` use: the members' files beside `ensemble.json`, which holds their
 weights (equal by default), the spread of their weighted sum over the training pages, the scales of win
-probabilities fitted on the evaluations' out-of-fold scores (`--calibration`; on the training judgments without it),
+probabilities fitted on the evaluations' out-of-fold scores (`--calibration`; on the training judgements without it),
 with a table comparing their calibration to the training fit's, and the Elo scale. A page whose out-of-fold z-score
 lies beyond 5 in absolute value (`--fit_bound`) is left out of those fits, so one page far from the others can't bend
 them. The
@@ -337,7 +337,7 @@ drawn on pages; the baselines' (by Elo gap, by the information they need, the me
 measures' correlations with ink coverage); the colour level's (by Elo gap with what colour adds to geometry, the
 measures defined, ink colour drawn on pages); and every method within and across manuscripts, from the hits and
 scores each evaluation keeps. In the methods' tables and figures, the Reference is one limit measured for accuracy
-and for ρ: the consistency of the same test judgments with the final Elo scores, and the ceiling for SROCC. From a
+and for ρ: the consistency of the same test judgements with the final Elo scores, and the ceiling for SROCC. From a
 `lvc score` run and a table of the collection's catalogue facts, it also draws the manuscripts' profiles, each
 caption opening with the manuscript as catalogued (`--repository`, then shelfmark, material, leaves, date in words
 and title), the strips of all of them, the overview with its axes' ends named, the collection's table and the
@@ -354,14 +354,14 @@ A dataset is a folder of four files, which `import` checks before anything else 
 
 | File | One row per | Columns |
 |---|---|---|
-| `judgments.tsv` | judgment | `judgment`, `session`, `annotator`, `campaign`, `date`, `left`, `right`, `chosen`, `response_ms` |
+| `judgments.tsv` | judgement | `judgment`, `session`, `annotator`, `campaign`, `date`, `left`, `right`, `chosen`, `response_ms` |
 | `images.tsv` | page | `image`, `manuscript`, `folio`, `canvas`, `image_url`, `image_service`, `width`, `height`, `work`, `text`, `text_language` |
 | `manuscripts.tsv` | manuscript | `manuscript`, `shelfmark`, `library`, `city`, `country`, `title`, `date`, `date_not_before`, `date_not_after`, `date_edtf`, `place_of_origin`, `material`, `height_mm`, `width_mm`, `languages`, `texts`, `category`, `secondary_categories`, `pages`, `canvases`, `iiif_manifest`, `catalogue_record`, `mirabile_id`, `biblissima_id`, `hscensus_id`, `licence` |
 | `README.md` | | what the dataset is, and each column |
 
-Every judgment names two pages of `images.tsv`, every page a manuscript of `manuscripts.tsv`; every page has its IIIF
+Every judgement names two pages of `images.tsv`, every page a manuscript of `manuscripts.tsv`; every page has its IIIF
 canvas and a link to its image; dates are in EDTF (ISO 8601-2), languages in ISO 639-3. A new study writes its
-judgments in this structure.
+judgements in this structure.
 
 ## Reproducing the article
 
@@ -386,6 +386,7 @@ learning curves (on the folds of the first two repeats), takes about 25 minutes 
 | `figure-position-bias-funnel` | Position bias by annotator, within the bounds of chance |
 | `figure-comparison-graph` | Figure 2: the comparison graph, coloured by batch and by Elo score |
 | `figure-elo-score-bands` | Figure 3: the distributions of the Elo scores, as bands |
+| `figure-elo-score-bands-trios` | Figure 3's second version: the same bands with three pages at each place, of similar scores and different layouts |
 | `segment-dataset` | `build/segment/dataset/`: the dataset's pages segmented (not part of `all`: it needs the `segment` extra, the models in `models/` and the page images from their servers) |
 | `features-dataset` | `build/features/dataset/`: the features of Layout (geometry) and Layout (Kyle–Davidson) of the dataset's pages, from their segmentation, the baselines' and the colour level's |
 | `evaluate-geometry`, `evaluate-geometry-layout` | `build/evaluate/`: the geometry ranker, Layout (geometry), without and with Layout (Kyle–Davidson) |
@@ -396,20 +397,21 @@ learning curves (on the folds of the first two repeats), takes about 25 minutes 
 | `figure-geometry-feature-families` | The plate of the features, with their code names |
 | `embed-dataset` | `build/embed/dataset/`: the dataset's pages' patch tokens from DINOv2 ViT-S/14, the folio crop |
 | `evaluate-vit`, `evaluate-ensembles` | `build/evaluate/`: the ViT ranker; its ensembles with the geometry ranker (without and with Layout (Kyle–Davidson), with equal and fitted weights) |
-| `head-dataset`, `package-head` | `build/train/vit_head/`: the ViT head trained on every judgment; copied into the package |
-| `train-geometry`, `models-dataset`, `package-models` | `build/train/geometry/`, `build/train/models/`: the geometry ranker trained on every judgment, and the rankers that come with the package (the two and their ensemble, with calibrated scales and the Elo scale); copied into the package |
+| `head-dataset`, `package-head` | `build/train/vit_head/`: the ViT head trained on every judgement; copied into the package |
+| `train-geometry`, `models-dataset`, `package-models` | `build/train/geometry/`, `build/train/models/`: the geometry ranker trained on every judgement, and the rankers that come with the package (the two and their ensemble, with calibrated scales and the Elo scale); copied into the package |
 | `table-methods-by-elo-gap` | Table 4: the generic image baseline, Ink colour, Layout (geometry), the ViT ranker and their ensemble by Elo gap, beside the Reference |
 | `figure-accuracy-by-elo-gap` | Line texture, Ink colour, Layout (geometry), the ViT ranker and their ensemble by Elo gap as a figure, with each method's interval, and as a table |
 | `table-paired-differences` | The methods' differences in accuracy and SROCC, on the same resamples |
+| `table-vit-backbones` | The ViT ranker on DINOv3 ViT-S/16 against DINOv2 ViT-S/14: the same head on the same folds, by Elo gap and in SROCC, and their difference (not part of `all`: it needs access to DINOv3's gated repository and a token, below) |
 | `table-ensembles-by-elo-gap` | For the appendix: the ensembles, without and with Layout (Kyle–Davidson), with equal and fitted weights, and with Ink colour |
-| `figure-learning-curves-and-calibration` | Accuracy as the training judgments and images grow, and calibration |
+| `figure-learning-curves-and-calibration` | Accuracy as the training judgements and images grow, and calibration |
 | `figure-local-complexity-maps` | The ViT head's local complexity maps on three pages photographed without a neighbouring leaf |
 | `codebook-dataset`, `package-codebook` | `build/codebook/dataset/`: the generic measures' patch codebook, learned on the dataset's pages; copied into the package |
 | `evaluate-baselines`, `evaluate-measures` | `build/evaluate/`: the baselines (the trivial measures, the generic image measures, Kyle–Davidson, ink distribution, the mean token), each family together and each measure alone |
 | `table-baselines-by-elo-gap` | Table 3's successor: the baselines by Elo gap, beside the Reference |
 | `table-baseline-measures` | The baseline measures defined, with their parameters and sources |
 | `table-baseline-differences` | The baselines' differences from the geometry ranker and the ensemble |
-| `figure-baselines-by-information`, `figure-baselines-by-information-each-measure` | Accuracy by the information a method needs: the methods by the information they need, combined, and with each measure alone |
+| `figure-baselines-by-information`, `figure-baselines-by-information-each-measure` | Accuracy and Spearman's ρ by kind of information: the methods grouped by the kind of information they use, combined, and with each measure alone |
 | `figure-generic-measure-correlations` | The generic image measures' correlations with each other and with ink coverage (for the repository, not the article) |
 | `evaluate-colour`, `evaluate-colour-measures` | `build/evaluate/`: line texture and ink colour alone, each with the geometric features in one model, the ensemble with ink colour, and each ink colour measure alone |
 | `table-colour-by-elo-gap` | Appendix B's successor: Line texture, Ink colour and Layout (geometry) with ink colour by Elo gap, within manuscripts, and what ink colour adds to geometry |
@@ -432,8 +434,16 @@ learning curves (on the folds of the first two repeats), takes about 25 minutes 
 | `table-difficulty-by-ranker`, `table-difficulty-by-quarter` | Each ranker alone (Layout (geometry), the ViT head, their ensemble): rank correlations and the mixed model; the medians of each measure in four quarters of predicted complexity |
 | `table-difficulty-material`, `difficulty-pages` | The experiment's manuscripts (`reproduce/difficulty_manuscripts.tsv`); each run's per-page rows in `results/difficulty/` |
 
+One table needs more than `all` does. `table-vit-backbones` sets DINOv3 ViT-S/16 beside DINOv2, and DINOv3's
+repository on Hugging Face, `facebook/dinov3-vits16-pretrain-lvd1689m`, is gated by Meta under a licence of its own.
+To make the table, request access on that repository's page while signed in to Hugging Face, create a Read token in
+the account's settings once access is granted, and give it as `HF_TOKEN` in `.env` (see `.env.example`); only the
+recipe that makes DINOv3's tokens sees it, and it is needed until the model is in the Hugging Face cache. DINOv3's
+tokens and evaluation take about 15 minutes on an Apple M4 Pro. `make -C reproduce all` needs neither the access nor
+the token.
+
 The dataset leaves out the sessions of a public exhibition, whose annotators were mostly not experts, and the
-calibration judgments; so its numbers differ from the article's, which kept them. Crux of Telč's catalogue facts
+calibration judgements; so its numbers differ from the article's, which kept them. Crux of Telč's catalogue facts
 (`reproduce/crux_manuscripts.tsv`) come from M. Dragoun, A. Ebersonová and L. Doležalová, *Středověké knihovny
 augustiniánských kanonií v Třeboni a Borovanech* (Praha: Scriptorium, 2021); its material and titles from the National
 Library's records in Manuscriptorium.

@@ -1,7 +1,7 @@
 {
   "command": "judgments report",
-  "started": "2026-11-18T12:46:23+00:00",
-  "ended": "2026-11-18T12:46:24+00:00",
+  "started": "2026-11-19T17:17:47+00:00",
+  "ended": "2026-11-19T17:17:47+00:00",
   "inputs": [
     {
       "path": "build/dataset/judgments.tsv",
@@ -83,6 +83,8 @@
       "vh14_55r",
       "ive19_14r"
     ],
+    "thumbnail_trios": [],
+    "trio_choice": "",
     "thumbnail_size": 500,
     "image_credit": "Page images provided by Manuscriptorium (CC BY-NC 4.0).",
     "cache": "~/.cache/layout-visual-complexity",
@@ -116,7 +118,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "4421c8db3cbdfb8b36af1be4223667f9aa97a5f1-dirty",
+  "commit": "d814dd17a260189a5227d2f7014acc28dd40b515-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "elo_score_bands": {
@@ -165,7 +167,7 @@
       ]
     },
     "seconds": {
-      "elo_score_bands": 0.322
+      "elo_score_bands": 0.36
     }
   }
 }

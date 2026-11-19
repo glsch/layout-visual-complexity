@@ -1,41 +1,41 @@
 \begin{table}[htbp]
   \centering
-  \caption{Learning curves: accuracy (the mean over the folds, with its 95\% interval) and SROCC when each method is trained on a share of each fold's training judgments or images.}
+  \caption{Learning curves: accuracy (the mean over the folds, with its 95\% interval) and SROCC when each method is trained on a share of each fold's training judgements or images.}
   \label{tab:learning_curves}
   \begin{tabular}{lccccc}
     \toprule
-    Method & Shared out & Share & Training judgments & Accuracy & $\rho$ \\
+    Method & Shared out & Share & Training judgements & Accuracy & $\rho$ \\
     \midrule
     Layout (geometry) & images & 10\% & 41 & 0.626 [0.565, 0.677] & 0.572 \\
     Layout (geometry) & images & 25\% & 279 & 0.648 [0.585, 0.705] & 0.628 \\
     Layout (geometry) & images & 50\% & 1,148 & 0.688 [0.623, 0.741] & 0.723 \\
     Layout (geometry) & images & 75\% & 2,563 & 0.698 [0.632, 0.754] & 0.732 \\
     Layout (geometry) & images & 100\% & 4,515 & 0.720 [0.652, 0.767] & 0.764 \\
-    Layout (geometry) & judgments & 10\% & 452 & 0.678 [0.611, 0.721] & 0.724 \\
-    Layout (geometry) & judgments & 25\% & 1,129 & 0.726 [0.664, 0.776] & 0.753 \\
-    Layout (geometry) & judgments & 50\% & 2,258 & 0.725 [0.664, 0.774] & 0.760 \\
-    Layout (geometry) & judgments & 75\% & 3,386 & 0.724 [0.656, 0.774] & 0.761 \\
-    Layout (geometry) & judgments & 100\% & 4,515 & 0.720 [0.652, 0.767] & 0.764 \\
+    Layout (geometry) & judgements & 10\% & 452 & 0.678 [0.611, 0.721] & 0.724 \\
+    Layout (geometry) & judgements & 25\% & 1,129 & 0.726 [0.664, 0.776] & 0.753 \\
+    Layout (geometry) & judgements & 50\% & 2,258 & 0.725 [0.664, 0.774] & 0.760 \\
+    Layout (geometry) & judgements & 75\% & 3,386 & 0.724 [0.656, 0.774] & 0.761 \\
+    Layout (geometry) & judgements & 100\% & 4,515 & 0.720 [0.652, 0.767] & 0.764 \\
     ViT & images & 10\% & 41 & 0.625 [0.553, 0.676] & 0.595 \\
     ViT & images & 25\% & 279 & 0.678 [0.619, 0.730] & 0.715 \\
     ViT & images & 50\% & 1,148 & 0.705 [0.643, 0.752] & 0.761 \\
     ViT & images & 75\% & 2,563 & 0.721 [0.654, 0.768] & 0.780 \\
     ViT & images & 100\% & 4,515 & 0.723 [0.659, 0.770] & 0.787 \\
-    ViT & judgments & 10\% & 452 & 0.707 [0.641, 0.756] & 0.755 \\
-    ViT & judgments & 25\% & 1,129 & 0.703 [0.638, 0.750] & 0.782 \\
-    ViT & judgments & 50\% & 2,258 & 0.714 [0.645, 0.765] & 0.786 \\
-    ViT & judgments & 75\% & 3,386 & 0.723 [0.658, 0.770] & 0.786 \\
-    ViT & judgments & 100\% & 4,515 & 0.723 [0.659, 0.770] & 0.787 \\
+    ViT & judgements & 10\% & 452 & 0.707 [0.641, 0.756] & 0.755 \\
+    ViT & judgements & 25\% & 1,129 & 0.703 [0.638, 0.750] & 0.782 \\
+    ViT & judgements & 50\% & 2,258 & 0.714 [0.645, 0.765] & 0.786 \\
+    ViT & judgements & 75\% & 3,386 & 0.723 [0.658, 0.770] & 0.786 \\
+    ViT & judgements & 100\% & 4,515 & 0.723 [0.659, 0.770] & 0.787 \\
     Ensemble & images & 10\% & 41 & 0.654 [0.594, 0.702] & 0.670 \\
     Ensemble & images & 25\% & 279 & 0.683 [0.623, 0.735] & 0.745 \\
     Ensemble & images & 50\% & 1,148 & 0.719 [0.657, 0.767] & 0.791 \\
     Ensemble & images & 75\% & 2,563 & 0.734 [0.668, 0.785] & 0.808 \\
     Ensemble & images & 100\% & 4,515 & 0.740 [0.676, 0.784] & 0.821 \\
-    Ensemble & judgments & 10\% & 452 & 0.712 [0.638, 0.752] & 0.805 \\
-    Ensemble & judgments & 25\% & 1,129 & 0.735 [0.665, 0.784] & 0.814 \\
-    Ensemble & judgments & 50\% & 2,258 & 0.745 [0.682, 0.789] & 0.822 \\
-    Ensemble & judgments & 75\% & 3,386 & 0.738 [0.673, 0.784] & 0.819 \\
-    Ensemble & judgments & 100\% & 4,515 & 0.740 [0.676, 0.784] & 0.821 \\
+    Ensemble & judgements & 10\% & 452 & 0.712 [0.638, 0.752] & 0.805 \\
+    Ensemble & judgements & 25\% & 1,129 & 0.735 [0.665, 0.784] & 0.814 \\
+    Ensemble & judgements & 50\% & 2,258 & 0.745 [0.682, 0.789] & 0.822 \\
+    Ensemble & judgements & 75\% & 3,386 & 0.738 [0.673, 0.784] & 0.819 \\
+    Ensemble & judgements & 100\% & 4,515 & 0.740 [0.676, 0.784] & 0.821 \\
     \bottomrule
   \end{tabular}
 \end{table}

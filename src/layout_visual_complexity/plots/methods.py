@@ -72,6 +72,10 @@ def plot_accuracy_by_gap(methods: list[Shown], reference: pd.DataFrame, overall:
     return figure
 
 
+# What a learning curve shares out (its `by`), in words.
+SHARED_OUT = {"judgments": "judgements", "images": "images"}
+
+
 def plot_learning_curves_and_calibration(curves: list[Shown], calibrations: list[Shown]) -> Figure:
     """(a) Accuracy as the training judgments grow and (b) as the training images grow, each method's mean over the
     folds with its 95% interval as whiskers, set a little apart (its learning curve: `by`, `share`, `accuracy`,
@@ -87,7 +91,7 @@ def plot_learning_curves_and_calibration(curves: list[Shown], calibrations: list
             axes.plot(share, table["accuracy"], "o-", color=method.colour, markersize=2.5, label=method.label)
         axes.set_xlim(0, 106)
         axes.set_xticks([10, 25, 50, 75, 100], ["10", "25", "50", "75", "100"])
-        axes.set_xlabel(f"Training {by} (%)")
+        axes.set_xlabel(f"Training {SHARED_OUT[by]} (%)")
         style.light_grid(axes)
     low = min(float(method.table["low"].min()) for method in curves) if curves else 0.5
     for axes in panels[:2]:

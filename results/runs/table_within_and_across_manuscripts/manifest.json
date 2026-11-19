@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-18T12:47:20+00:00",
-  "ended": "2026-11-18T12:47:24+00:00",
+  "started": "2026-11-19T17:19:16+00:00",
+  "ended": "2026-11-19T17:19:21+00:00",
   "inputs": [
     {
       "path": "build/evaluate/measures/ink_coverage/by_elo_gap.tsv",
@@ -611,7 +611,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "4421c8db3cbdfb8b36af1be4223667f9aa97a5f1-dirty",
+  "commit": "d814dd17a260189a5227d2f7014acc28dd40b515-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "within_and_across_manuscripts": {
@@ -943,7 +943,7 @@
       ]
     },
     "seconds": {
-      "within_and_across_manuscripts": 4.722
+      "within_and_across_manuscripts": 5.225
     }
   }
 }

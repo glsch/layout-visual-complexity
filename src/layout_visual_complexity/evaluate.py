@@ -367,7 +367,7 @@ class EnsembleMethod(Method):
         members = ", ".join(f"{name} (`{shown_path(folder)}`)" for name, folder in self.members.items())
         weights = self.weights()
         how = (
-            "fitted on each fold's training judgments"
+            "fitted on each fold's training judgements"
             if weights is None
             else ", ".join(f"{name} {value:g}" for name, value in weights.items())
         )
@@ -749,7 +749,7 @@ def report_text(
             lines.append(f"| {metric} | {row['value']:.3f} |{interval(row['low'], row['high'])} |")
     lines += [
         "",
-        "| Elo gap | Judgments per fold | Accuracy | 95% interval | Consistency | 95% interval |",
+        "| Elo gap | Judgements per fold | Accuracy | 95% interval | Consistency | 95% interval |",
         "|---|---:|---:|---|---:|---|",
     ]
     for row in by_gap.itertuples(index=False):
@@ -761,7 +761,7 @@ def report_text(
     if curve is not None:
         lines += [
             "",
-            "| Learning curve | Share | Training judgments per fold | Accuracy | 95% interval | SROCC |",
+            "| Learning curve | Share | Training judgements per fold | Accuracy | 95% interval | SROCC |",
             "|---|---:|---:|---:|---|---:|",
         ]
         for row in curve.itertuples(index=False):

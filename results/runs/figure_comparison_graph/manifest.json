@@ -1,7 +1,7 @@
 {
   "command": "judgments report",
-  "started": "2026-11-18T12:46:21+00:00",
-  "ended": "2026-11-18T12:46:22+00:00",
+  "started": "2026-11-19T17:17:44+00:00",
+  "ended": "2026-11-19T17:17:45+00:00",
   "inputs": [
     {
       "path": "build/dataset/judgments.tsv",
@@ -77,6 +77,8 @@
     },
     "thumbnails": 10,
     "thumbnail_pages": [],
+    "thumbnail_trios": [],
+    "trio_choice": "",
     "thumbnail_size": 500,
     "image_credit": "",
     "cache": "~/.cache/layout-visual-complexity",
@@ -110,7 +112,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "4421c8db3cbdfb8b36af1be4223667f9aa97a5f1-dirty",
+  "commit": "d814dd17a260189a5227d2f7014acc28dd40b515-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "comparison_graph": {
@@ -132,7 +134,7 @@
       }
     },
     "seconds": {
-      "comparison_graph": 1.306
+      "comparison_graph": 1.316
     }
   }
 }

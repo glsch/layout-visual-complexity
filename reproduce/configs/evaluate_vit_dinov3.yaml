@@ -1,0 +1,11 @@
+# The ViT ranker on DINOv3 ViT-S/16's patch tokens of the folio crops (embed_dataset_dinov3.yaml): the head, settings,
+# seed and folds of DINOv2's (evaluate_vit.yaml), without learning curves, for the comparison of backbones.
+tokens: build/embed/dataset_dinov3
+head:
+  hidden: 128
+  epochs: 180
+  learning_rate: 0.002
+  weight_decay: 0.001
+  unit_length: true
+  seed: 20260629
+output: build/evaluate/vit_dinov3

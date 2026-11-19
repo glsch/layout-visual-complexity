@@ -5,5 +5,5 @@ name: figure_local_complexity_maps
 outputs: [local_complexity_maps]
 tokens: build/embed/dataset
 head: build/train/vit_head/head.npz
-map_pages: [iiih6_11v, xive29_66v, ve4b_50v]
+map_pages: [xvie11_14r, xive29_66v, if49_10r]
 map_range: [0.05, 0.95]

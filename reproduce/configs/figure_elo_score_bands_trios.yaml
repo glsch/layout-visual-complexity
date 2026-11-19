@@ -1,0 +1,28 @@
+# Figure 3's second version: the Elo scores' distributions over the permutations as bands, with three pages at each
+# of the ten places, fetched through their IIIF image services. In front, the page of figure_elo_score_bands.yaml;
+# behind it, left then right, two pages from other manuscripts and in no other trio, with an image on
+# Manuscriptorium's host and not from msi140, whose mean scores lie within 20 points of it (widened 5 points at a
+# time where too few qualify), of common layouts, and as different from it and from each other as such pages get: of
+# all such pairs, the one whose smallest distance among the three is the largest, the distance Euclidean over seven
+# descriptors (text lines, main zones, marginal text zones, drop capitals, the written share of the folio, the
+# graphic zones' share and the median gap between lines), each in interquartile ranges from its median, clipped at
+# three. A common layout has each descriptor within its 5th to 95th percentile over the dataset's pages.
+name: figure_elo_score_bands_trios
+outputs: [elo_score_bands_trios]
+thumbnail_trios:
+  - [vig4a_12v, ig28_18v, vib21_16r]
+  - [iiih6_47r, xvif23_82v, vd14_300r]
+  - [ih4_4r, vd14_301r, vic27_1r]
+  - [via2_38v, iiih6_11v, vib21_99v]
+  - [teplamsd19_81r, ivd23_68r, vif10_102v]
+  - [vf8_15r, teplamse9_308v, iiie33_88v]
+  - [iiig2_191v, vig6_259v, via9_233v]
+  - [ivf9_10r, vh1_103v, xiid3_109r]
+  - [vh14_55r, xie5_144r, xvic15_171v]
+  - [ive19_14r, xvie21_85r, xviie13_234r]
+trio_choice: >-
+  In front, the page typical of its score; behind it, two pages of common layouts from other manuscripts, as different
+  from it and from each other as such pages get. A common layout has its text lines, columns, marginal zones, drop
+  capitals, written and graphic shares and line spacing each within the 5th to 95th percentiles of the dataset's pages.
+thumbnail_size: 500
+image_credit: "Page images provided by Manuscriptorium (CC BY-NC 4.0)."
