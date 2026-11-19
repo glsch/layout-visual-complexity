@@ -1,5 +1,5 @@
 """The distributions of each page's Elo score over the permutations, ordered by mean, as violins or as bands, with
-thumbnails of some pages above and below."""
+thumbnails of some pages above and below, one page at each place or a trio of overlapping pages."""
 
 from dataclasses import dataclass
 from typing import Literal
@@ -15,6 +15,13 @@ JOIN = 0.45
 PLOT = 5.2
 LEFT = 1.6
 LABEL_SIZE = 6  # points: the page ids under the thumbnails
+# A trio's layout: how far its two pages behind lie left and right of its centre, in shares of a thumbnail's width,
+# and how far the page in front lies below them, in shares of its height; its ids' size (points) and the room for a
+# row of them (centimetres).
+SIDEWAYS = 0.36
+DOWN = 0.55
+TRIO_LABEL_SIZE = 4.5
+TRIO_LABEL = 0.22
 
 
 @dataclass(frozen=True)
@@ -24,6 +31,21 @@ class Thumbnail:
     rank: int
     image: np.ndarray
     label: str
+
+
+@dataclass(frozen=True)
+class Trio:
+    """Three pages shown at one place, overlapping: the page in front, below and over the two behind it, left and
+    right."""
+
+    front: Thumbnail
+    left: Thumbnail
+    right: Thumbnail
+
+    @property
+    def thumbnails(self) -> list[Thumbnail]:
+        """The three, in the order they are drawn: the two behind, then the one in front."""
+        return [self.left, self.right, self.front]
 
 
 def thumbnail_ranks(pages: int, count: int) -> list[int]:
@@ -56,37 +78,53 @@ def plot_score_distributions(
     distributions: np.ndarray,
     thumbnails: list[Thumbnail] | None = None,
     kind: Literal["violins", "bands"] = "violins",
+    trios: list[Trio] | None = None,
 ):
     """Each page's scores (columns of `distributions`), ordered by mean from low to high: one violin each, or their
     median with the bands holding the middle half and the middle 90%. The pages of `thumbnails` are marked by their
     own violins in a second colour, joined to their thumbnails, which alternate above and below the plot, labelled
-    with their page ids. Full width."""
+    with their page ids. With `trios` instead, three pages at each place, the trios placed by their pages in front:
+    each page's violin marked, each page labelled, the two behind above them at their outer edges, the one in front
+    below it, and one join to the trio's mean rank. Full width."""
     from matplotlib.lines import Line2D
     from matplotlib.patches import Patch
 
     from layout_visual_complexity.plots import style
 
+    if thumbnails and trios:
+        raise ValueError("thumbnails or trios, not both")
     thumbnails = sorted(thumbnails or [], key=lambda thumbnail: thumbnail.rank)
+    trios = sorted(trios or [], key=lambda trio: trio.front.rank)
     means = distributions.mean(axis=0)
     order = np.argsort(means, kind="stable")
     ordered = distributions[:, order]
     pages = len(order)
     rows = [thumbnails[0::2], thumbnails[1::2]]
+    trio_rows = [trios[0::2], trios[1::2]]
     per_row = max((len(row) for row in rows), default=0)
     width_cm = style.FULL_WIDTH / style.CENTIMETRE
     usable = width_cm - 0.1
-    thumb_width = min(THUMBNAIL_WIDTH, usable / per_row - THUMBNAIL_GAP) if per_row else 0.0
-    aspects = [thumbnail.image.shape[1] / thumbnail.image.shape[0] for thumbnail in thumbnails]
-    thumb_height = thumb_width / min(aspects) if aspects else 0.0
-    band = thumb_height + LABEL + JOIN if thumbnails else 0.0
-    below = band if len(rows[1]) else 0.0
+    if trios:
+        per_row = max(len(row) for row in trio_rows)
+        slot = usable / per_row - THUMBNAIL_GAP
+        thumb_width = slot / (1 + 2 * SIDEWAYS)
+        shown_images = [thumbnail.image for trio in trios for thumbnail in trio.thumbnails]
+        thumb_height = thumb_width / min(image.shape[1] / image.shape[0] for image in shown_images)
+        band = TRIO_LABEL + thumb_height * (1 + DOWN) + TRIO_LABEL + JOIN
+        below = band if len(trio_rows[1]) else 0.0
+    else:
+        thumb_width = min(THUMBNAIL_WIDTH, usable / per_row - THUMBNAIL_GAP) if per_row else 0.0
+        aspects = [thumbnail.image.shape[1] / thumbnail.image.shape[0] for thumbnail in thumbnails]
+        thumb_height = thumb_width / min(aspects) if aspects else 0.0
+        band = thumb_height + LABEL + JOIN if thumbnails else 0.0
+        below = band if len(rows[1]) else 0.0
     axis_label = 0.55
     height_cm = 0.1 + band + PLOT + below + axis_label
     figure = style.new_figure("full", height_cm, constrained=False)
     bottom = axis_label + below
     axes = figure.add_axes((LEFT / width_cm, bottom / height_cm, (width_cm - LEFT - 0.1) / width_cm, PLOT / height_cm))
 
-    shown = {thumbnail.rank for thumbnail in thumbnails}
+    shown = {thumbnail.rank for thumbnail in thumbnails} | {t.rank for trio in trios for t in trio.thumbnails}
     positions = np.arange(1, pages + 1)
     if kind == "violins":
         parts = axes.violinplot(list(ordered.T), positions=positions, widths=2.0, showextrema=False)
@@ -140,6 +178,28 @@ def plot_score_distributions(
         start, stop = axes.get_xlim()
         return LEFT + (rank + 1 - start) / (stop - start) * (width_cm - LEFT - 0.1)
 
+    for above, trio_row in zip((True, False), trio_rows, strict=True):
+        if not trio_row:
+            continue
+        centres = spread_in_row([x_cm(trio.front.rank) for trio in trio_row], slot + THUMBNAIL_GAP, 0.05,
+                                width_cm - 0.05)  # fmt: skip
+        for trio, centre in zip(trio_row, centres, strict=True):
+            top = (height_cm - 0.1 if above else bottom - JOIN) - TRIO_LABEL
+            draw_trio(figure, trio, centre, top, (thumb_width, thumb_height), (width_cm, height_cm))
+            ranks = [thumbnail.rank for thumbnail in trio.thumbnails]
+            if above:
+                join_from = top - thumb_height * (1 + DOWN) - TRIO_LABEL
+                end = max(np.quantile(ordered[:, rank], 0.99) for rank in ranks)
+            else:
+                join_from = top + TRIO_LABEL
+                end = min(np.quantile(ordered[:, rank], 0.01) for rank in ranks)
+            axes.annotate(
+                "", xy=(np.mean(ranks) + 1, end), xycoords="data",
+                xytext=(centre / width_cm, join_from / height_cm), textcoords="figure fraction",
+                arrowprops={"arrowstyle": "-", "color": style.SECONDARY, "lw": 0.5, "shrinkA": 1, "shrinkB": 1},
+                annotation_clip=False,
+            )  # fmt: skip
+
     for above, row in zip((True, False), rows, strict=True):
         centres = spread_in_row([x_cm(t.rank) for t in row], thumb_width + THUMBNAIL_GAP, 0.05, width_cm - 0.05)
         for thumbnail, centre in zip(row, centres, strict=True):
@@ -169,3 +229,38 @@ def plot_score_distributions(
                 annotation_clip=False,
             )  # fmt: skip
     return figure
+
+
+def draw_trio(figure, trio: Trio, centre: float, top: float, box: tuple[float, float], size: tuple[float, float]):
+    """A trio's three thumbnails, each fitted in a `box` (width and height, in centimetres) with a white edge: the two
+    behind side by side below `top`, the one in front lower and over them, at `centre`; each labelled with its id.
+    `size` is the figure's, in centimetres."""
+    from layout_visual_complexity.plots import style
+
+    box_width, box_height = box
+    width_cm, height_cm = size
+    offsets = [(-SIDEWAYS * box_width, 0.0), (SIDEWAYS * box_width, 0.0), (0.0, DOWN * box_height)]
+    for index, (thumbnail, (sideways, down)) in enumerate(zip(trio.thumbnails, offsets, strict=True)):
+        aspect = thumbnail.image.shape[1] / thumbnail.image.shape[0]
+        image_height = min(box_height, box_width / aspect)
+        image_width = image_height * aspect
+        image_top = top - down - (box_height - image_height) / 2
+        left = centre + sideways - image_width / 2
+        inset = figure.add_axes(
+            (left / width_cm, (image_top - image_height) / height_cm, image_width / width_cm, image_height / height_cm)
+        )
+        inset.set_zorder(4 + index)
+        inset.imshow(thumbnail.image, aspect="auto")
+        inset.set_xticks([])
+        inset.set_yticks([])
+        for spine in inset.spines.values():
+            spine.set_visible(True)
+            spine.set_color("white")
+            spine.set_linewidth(1.0)
+        x, y, ha, va = [
+            (left, image_top + 0.04, "left", "bottom"),
+            (left + image_width, image_top + 0.04, "right", "bottom"),
+            (centre, image_top - image_height - 0.04, "center", "top"),
+        ][index]
+        figure.text(x / width_cm, y / height_cm, thumbnail.label, ha=ha, va=va,
+                    fontproperties=style.monospace(TRIO_LABEL_SIZE))  # fmt: skip
