@@ -51,7 +51,8 @@ RANKING := $(TOP)/build/ranking/scores.tsv
 REPORT := $(RUN) judgments report --config $(CONFIGS)/report.yaml --config $(CONFIGS)
 
 .PHONY: all dataset ranking segment-dataset table-dataset-categories table-reliability figure-position-bias-funnel \
-	figure-comparison-graph figure-elo-score-bands features-dataset evaluate-geometry evaluate-geometry-layout \
+	figure-comparison-graph figure-elo-score-bands figure-elo-score-bands-trios features-dataset evaluate-geometry \
+	evaluate-geometry-layout table-vit-backbones \
 	table-geometry-by-elo-gap table-geometry-feature-hierarchy figure-geometry-feature-correlations \
 	figure-geometry-features-on-page figure-geometry-feature-families \
 	embed-dataset evaluate-vit evaluate-ensembles head-dataset package-head train-geometry models-dataset \
@@ -69,8 +70,8 @@ REPORT := $(RUN) judgments report --config $(CONFIGS)/report.yaml --config $(CON
 	table-difficulty-by-quarter table-difficulty-material difficulty-pages clean
 
 all: table-dataset-categories table-reliability figure-position-bias-funnel figure-comparison-graph figure-elo-score-bands \
-	table-geometry-by-elo-gap table-geometry-feature-hierarchy figure-geometry-feature-correlations \
-	figure-geometry-features-on-page figure-geometry-feature-families \
+	figure-elo-score-bands-trios table-geometry-by-elo-gap table-geometry-feature-hierarchy \
+	figure-geometry-feature-correlations figure-geometry-features-on-page figure-geometry-feature-families \
 	table-methods-by-elo-gap figure-accuracy-by-elo-gap table-paired-differences table-ensembles-by-elo-gap \
 	figure-learning-curves-and-calibration figure-local-complexity-maps table-baselines-by-elo-gap \
 	table-baseline-measures table-baseline-differences figure-baselines-by-information \
@@ -115,6 +116,12 @@ $(TOP)/results/figures/comparison_graph.svg: $(RANKING) configs/report.yaml conf
 figure-elo-score-bands: $(TOP)/results/figures/elo_score_bands.svg
 $(TOP)/results/figures/elo_score_bands.svg: $(RANKING) configs/report.yaml configs/figure_elo_score_bands.yaml
 	$(REPORT)/figure_elo_score_bands.yaml
+
+# The same bands with three pages at each place: similar scores can belong to quite different layouts.
+figure-elo-score-bands-trios: $(TOP)/results/figures/elo_score_bands_trios.svg
+$(TOP)/results/figures/elo_score_bands_trios.svg: $(RANKING) configs/report.yaml \
+		configs/figure_elo_score_bands_trios.yaml
+	$(REPORT)/figure_elo_score_bands_trios.yaml
 
 # The features of the dataset's pages, the geometry ranker with and without Layout (Kyle–Davidson), and their tables
 # and figures.
@@ -359,6 +366,23 @@ table-paired-differences: $(TOP)/results/tables/paired_differences.tsv
 $(TOP)/results/tables/paired_differences.tsv: $(METHODS) configs/report_features.yaml \
 		configs/table_paired_differences.yaml
 	$(FEATURE_REPORT)/table_paired_differences.yaml
+
+# DINOv3 ViT-S/16 against DINOv2 ViT-S/14: the same head on the same folds, their accuracy and SROCC, and the
+# difference (table-vit-backbones). Not part of `all`: DINOv3's repository on Hugging Face is gated, so its tokens
+# need access granted to an account and that account's token, HF_TOKEN in ../.env, which only the tokens' recipe sees
+# (and the segmentation's, if it has to be made first). Its evaluation takes about 15 minutes on an Apple M4 Pro.
+TOKENS_DINOV3 := $(TOP)/build/embed/dataset_dinov3/tokens.json
+VIT_DINOV3 := $(TOP)/build/evaluate/vit_dinov3/head.npz
+$(TOKENS_DINOV3): export HF_TOKEN := $(HF_TOKEN)
+$(TOKENS_DINOV3): $(SEGMENT) configs/embed_dataset_dinov3.yaml
+	$(RUN) embed --config $(CONFIGS)/embed_dataset_dinov3.yaml
+$(VIT_DINOV3): $(TOKENS_DINOV3) $(RANKING) $(RELIABILITY) configs/evaluate.yaml configs/evaluate_vit_dinov3.yaml
+	$(EVALUATE)/evaluate_vit_dinov3.yaml
+
+table-vit-backbones: $(TOP)/results/tables/vit_backbones.tsv
+$(TOP)/results/tables/vit_backbones.tsv: $(VIT) $(VIT_DINOV3) configs/report_features.yaml \
+		configs/table_vit_backbones.yaml
+	$(FEATURE_REPORT)/table_vit_backbones.yaml
 
 table-ensembles-by-elo-gap: $(TOP)/results/tables/ensembles_by_elo_gap.tsv
 $(TOP)/results/tables/ensembles_by_elo_gap.tsv: $(ENSEMBLE) $(ENSEMBLE_LAYOUT) $(ENSEMBLE_FITTED) \

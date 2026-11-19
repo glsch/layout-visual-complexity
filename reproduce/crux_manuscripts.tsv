@@ -4,8 +4,8 @@
 # catalogued, folios, hands, texts counted coarsely and finely, languages (ISO 639-3), whether it is homogeneous
 # (1 yes, 0 no, ? undecided) and the number of colours besides plain ink. Then two facts from elsewhere: the
 # material of its leaves, from the case study's metadata (whether parchment is included) checked against the National
-# Library's record in Manuscriptorium (the physical description of its IIIF manifest), empty where they disagree; and
-# its title, the label of that manifest, square brackets included (a title the cataloguer supplied).
+# Library's record in Manuscriptorium (the physical description of its IIIF manifest), the record's where they
+# disagree; and its title, the label of that manifest, square brackets included (a title the cataloguer supplied).
 manuscript	shelfmark	catalogue_number	date	folios	hands	texts_coarse	texts_fine	languages	homogeneous	colours	material	title
 ie32	I E 32	K14	1463	276	2	2	3	lat	1	1	paper	[Johannis de Příbram Tractatus contra factionem extremam Thaboriensium, Thomae de Chobham Summa confessorum]
 ig40	I G 40	K30	1383	164	5	10	10	lat|ces	1	3	paper	Boethius: De consolatione philosophiae; Pseudo-Boethius: De disciplina scholarium; Iohannes de Sacrobosco: Algorismus
@@ -13,7 +13,7 @@ xiiie5	XIII E 5	K37	1427–1428	300	3	43	51	lat	1	1	paper	[Varii tractatus]
 xiiig10	XIII G 10	K38	1428–1429	150	4	14	27	lat	1	1	paper	[Hildegardis prophetia et tractatus Simonis de Tissnow]
 xic1	XI C 1	K34	1502 + XV med. (a part dated 1436) + XV ex. (parts dated 1477, 1478, 1479, 1484) + XV in.	444	16	72	101	lat|ces	0	1	paper	Textus varii
 ie42	I E 42	K18	XIV/XV	140	4	51	53	lat|ces	1	0	paper	Textus medici
-vif21	VI F 21	K33	XV in.	276	5	3	4	lat|ces	1	2		Sermones
+vif21	VI F 21	K33	XV in.	276	5	3	4	lat|ces	1	2	paper and parchment	Sermones
 xivd24	XIV D 24	K40	XV1 + XV (part dated 1468)	278	21	54	97	lat|ces|deu	0	1	paper	Textus varii
 ig11a	I G 11a	K27	XV + XV2 (parts dated 1461, 1491)	210	29	62	72	lat|ces	0	1	paper	[Allexandri de Villa Dei Biblia pauperum, Figura contemplativae vitae, Artes memorativae, Notae variae, Carmina, Epistolae, Excerpta, Tractatus et quaestiones, Salustii Crispi Catilina cum commentario, Iohannis Hus De sex erroribus capitulum de simonia, Iohannis de Rokyczana Tractatus contra sex propositiones frivolas cum notis marginalibus polemicis Crucis de Telcz, Mauritii de Praga Tractatus contra hussitas de sumptione eucharistiae sub utraque specie, Responsiones contra interrogationes Wyclefistarum, Iohannis de Przibram Replica in concilio Basiliensi contra auditorem Palomar]
 xive31	XIV E 31	K41	XIII + XV2 (parts dated 1460, 1474) + XIV1 + XIV ex.	403	20	127	185	lat|ces	0	1	paper and parchment	Textus varii
