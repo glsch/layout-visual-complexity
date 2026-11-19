@@ -108,10 +108,10 @@ def colour_by_elo_gap(settings: Any, run: Run, folder: Path) -> Written:
     caption = (
         r"Accuracy of pairwise outcome prediction by the absolute difference ($\Delta$) between the two pages' final "
         r"Elo scores, Spearman's correlation ($\rho$) between the out-of-fold page scores and the Elo scores, and "
-        "both within manuscripts: the accuracy on the test judgments between two pages of one manuscript, and $\\rho$ "
+        "both within manuscripts: the accuracy on the test judgements between two pages of one manuscript, and $\\rho$ "
         "with each manuscript's mean removed from both scores, over the manuscripts with at least two pages. "
         f"{evaluations.definitions([*evaluations.keys, *bases])}. {REFERENCE} Within manuscripts the Reference for "
-        r"accuracy is the consistency of those judgments; $\rho$ has none. \emph{Added}: what colour adds, "
+        r"accuracy is the consistency of those judgements; $\rho$ has none. \emph{Added}: what colour adds, "
         f"{comparisons}, on the same folds, with 95\\% intervals from the same resamples for both. "
         f"{evaluations.protocol()} In brackets, 95\\% intervals from {evaluations.resamples()}."
     )

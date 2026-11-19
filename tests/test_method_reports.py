@@ -88,7 +88,7 @@ def test_the_methods_tables_and_figures(tmp_path: Path, dataset_folder: Path) ->
     assert {"accuracy_within_difference", "accuracy_within_low"} <= set(differences.columns)
     drawn = (output / "figures" / "learning_curves_and_calibration.tex").read_text()
     assert "drawn on the folds of the first of the two repeats (2 folds)" in drawn
-    assert "on the test judgments of all 4 folds" in drawn and "as whiskers" in drawn
+    assert "on the test judgements of all 4 folds" in drawn and "as whiskers" in drawn
     curves = pd.read_csv(output / "tables" / "learning_curves.tsv", sep="\t")
     assert len(curves) == 3 * 4 and set(curves["method"]) == {"geometry", "vit", "ensemble"}
     assert "learning_curves_and_calibration" in summary
@@ -97,8 +97,47 @@ def test_the_methods_tables_and_figures(tmp_path: Path, dataset_folder: Path) ->
                               ("ensemble", "ensemble_fitted")}, labels=labels)  # fmt: skip
     run_report(appendix)
     caption = (output / "tables" / "ensembles_by_elo_gap.tex").read_text()
-    assert "weighted as each fold's training judgments fit" in caption
+    assert "weighted as each fold's training judgements fit" in caption
     assert "\\emph{Geometry}, the pairwise logistic model on the 2 signal features" in caption
+
+
+def test_two_backbones_side_by_side_with_their_difference(tmp_path: Path, dataset_folder: Path) -> None:
+    pytest.importorskip("torch")
+    _, scores = setup(tmp_path / "inputs", dataset_folder)
+    pages = read_dataset(dataset_folder).images["image"].tolist()
+    common = {"folds": FOLDS, "bootstrap": 50, "jobs": 1}
+    found = {}
+    for name, seed in (("small", 0), ("other", 1)):
+        strength = dict(zip(pages, np.linspace(-2, 2, len(pages)), strict=True))
+        tokens = write_token_set(tmp_path / "inputs" / f"tokens_{name}", strength, seed=seed)
+        found[name] = tmp_path / "inputs" / name
+        head = HeadSettings(hidden=4, epochs=30, learning_rate=0.01)
+        run_evaluate(EvaluateSettings(dataset_folder, scores, found[name], tokens=tokens, head=head, **common))  # type: ignore[arg-type]
+    output = tmp_path / "results"
+    labels = {"small": "Small ViT", "other": "Other ViT"}
+    settings = ReportSettings(output, ["vit_backbones"], dataset=dataset_folder, scores=scores, evaluations=found,
+                              labels=labels)  # fmt: skip
+    summary = run_report(settings)
+    table = pd.read_csv(output / "tables" / "vit_backbones.tsv", sep="\t")
+    assert table["gap"].tolist()[-2:] == ["overall", "srocc"]
+    assert {"small", "small_low", "other_high", "difference", "difference_low"} <= set(table.columns)
+    assert not {"reference", "consistency"} & set(table.columns)
+    differences = table.set_index("gap")[["difference", "difference_low", "difference_high"]]
+    assert differences.iloc[:-2].isna().all().all() and differences.iloc[-2:].notna().all().all()
+    overall = summary["vit_backbones"]["difference"]
+    assert differences.at["overall", "difference"] == pytest.approx(overall["accuracy_difference"], abs=1e-6)
+    assert differences.at["srocc", "difference"] == pytest.approx(overall["srocc_difference"], abs=1e-6)
+    by_gap = table.set_index("gap")
+    assert differences.at["srocc", "difference"] == pytest.approx(
+        by_gap.at["srocc", "other"] - by_gap.at["srocc", "small"]
+    )
+    latex = (output / "tables" / "vit_backbones.tex").read_text()
+    assert "Score $\\Delta$ & Small ViT & Other ViT & Difference" in latex
+    assert "\\emph{Difference}: Other ViT's accuracy and SROCC minus Small ViT's" in latex
+    assert latex.count("the local scoring head on the patch tokens of tiny") == 2
+    with pytest.raises(ValueError, match="two evaluations"):
+        run_report(ReportSettings(output, ["vit_backbones"], dataset=dataset_folder, scores=scores,
+                                  evaluations={"small": found["small"]}))  # fmt: skip
 
 
 def test_the_local_complexity_maps(tmp_path: Path, tiny_vit: Path) -> None:

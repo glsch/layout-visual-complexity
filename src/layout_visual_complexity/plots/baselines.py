@@ -76,7 +76,7 @@ def plot_by_information(
     axes.set_ylim(-0.7, len(rows) - 0.3)
     low = min([0.45, *(method.low - 0.01 for method in methods if np.isfinite(method.low))])
     axes.set_xlim(np.floor(low * 40) / 40, max(0.85, np.ceil((reference + 0.02) * 20) / 20))
-    axes.set_xlabel("Pairwise accuracy on the test judgments")
+    axes.set_xlabel("Pairwise accuracy on the test judgements")
     style.light_grid(axes, "x")
     handles = [
         Line2D([], [], color=style.METHODS["reference"], linewidth=1.0, label="Reference"),
