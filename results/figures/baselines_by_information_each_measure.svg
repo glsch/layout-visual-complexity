@@ -118,7 +118,7 @@ L 313.040078 21.400865
      </g>
     </g>
     <g id="text_6">
-     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1f2328" x="246.559289" y="548.44395" transform="rotate(-0 246.559289 548.44395)">Pairwise accuracy on the test judgments</text>
+     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1f2328" x="246.559289" y="548.44395" transform="rotate(-0 246.559289 548.44395)">Pairwise accuracy on the test judgements</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">

@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-18T12:46:54+00:00",
-  "ended": "2026-11-18T12:46:56+00:00",
+  "started": "2026-11-19T17:18:43+00:00",
+  "ended": "2026-11-19T17:18:45+00:00",
   "inputs": [
     {
       "path": "build/embed/dataset/tokens.json",
@@ -51,9 +51,9 @@
     "tokens": "build/embed/dataset",
     "head": "build/train/vit_head/head.npz",
     "map_pages": [
-      "iiih6_11v",
+      "xvie11_14r",
       "xive29_66v",
-      "ve4b_50v"
+      "if49_10r"
     ],
     "map_long_edge": 900,
     "map_range": [
@@ -111,14 +111,14 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "4421c8db3cbdfb8b36af1be4223667f9aa97a5f1-dirty",
+  "commit": "d814dd17a260189a5227d2f7014acc28dd40b515-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "local_complexity_maps": {
       "pages": {
-        "iiih6_11v": -0.9720463242575806,
+        "xvie11_14r": -0.9285051374505462,
         "xive29_66v": -0.10108183755343016,
-        "ve4b_50v": 0.9687594058845749
+        "if49_10r": 1.314591660536038
       },
       "scale": [
         1.6628398716449737,
@@ -126,7 +126,7 @@
       ]
     },
     "seconds": {
-      "local_complexity_maps": 1.295
+      "local_complexity_maps": 1.803
     }
   }
 }

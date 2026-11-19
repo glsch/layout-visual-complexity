@@ -29,6 +29,8 @@ graph_batches:
   Second batch, 2026: '2026-05-28'
 thumbnails: 10
 thumbnail_pages: []
+thumbnail_trios: []
+trio_choice: ''
 thumbnail_size: 500
 image_credit: ''
 cache: ~/.cache/layout-visual-complexity

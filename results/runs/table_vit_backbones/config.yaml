@@ -1,0 +1,61 @@
+output: results
+outputs:
+- vit_backbones
+name: table_vit_backbones
+dataset: build/dataset
+scores: build/ranking/scores.tsv
+features: build/features/dataset/features.parquet
+layout: build/segment/dataset
+evaluations:
+  dinov2: build/evaluate/vit
+  dinov3: build/evaluate/vit_dinov3
+shown: []
+labels:
+  dinov2: DINOv2 ViT-S/14
+  dinov3: DINOv3 ViT-S/16
+in_text: {}
+colours: {}
+comparisons: []
+families:
+- geometry
+- layout
+pages: {}
+bootstrap: 1000
+seed: 20260629
+image_credit: Page images provided by Manuscriptorium (CC BY-NC 4.0).
+tokens: null
+head: null
+map_pages: []
+map_long_edge: 900
+map_range:
+- 0.05
+- 0.95
+cache: null
+http:
+  contact: null
+  interval: 0.5
+  connections: 2
+  retries: 5
+  backoff: 1.0
+  timeout: 60.0
+levels: {}
+alone: []
+defined_in: ''
+reference_column: ''
+colour_pages: []
+score_run: null
+catalogue: null
+profiles: []
+collection: manuscripts
+catalogue_credit: ''
+title_credit: ''
+repository: ''
+thumbnail_size: 400
+named: []
+min_lines: 0
+difficulty_runs: {}
+difficulty_main: cremma
+manuscript_table: null
+neighbours: 0.25
+outside_lines: 5
+outside_share: 0.1

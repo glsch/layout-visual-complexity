@@ -22,9 +22,9 @@ image_credit: Page images provided by Manuscriptorium (CC BY-NC 4.0).
 tokens: build/embed/dataset
 head: build/train/vit_head/head.npz
 map_pages:
-- iiih6_11v
+- xvie11_14r
 - xive29_66v
-- ve4b_50v
+- if49_10r
 map_long_edge: 900
 map_range:
 - 0.05

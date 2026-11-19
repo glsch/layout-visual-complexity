@@ -36,6 +36,8 @@ thumbnail_pages:
 - ivf9_10r
 - vh14_55r
 - ive19_14r
+thumbnail_trios: []
+trio_choice: ''
 thumbnail_size: 500
 image_credit: Page images provided by Manuscriptorium (CC BY-NC 4.0).
 cache: ~/.cache/layout-visual-complexity

@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-18T12:46:48+00:00",
-  "ended": "2026-11-18T12:46:50+00:00",
+  "started": "2026-11-19T17:18:35+00:00",
+  "ended": "2026-11-19T17:18:37+00:00",
   "inputs": [
     {
       "path": "build/evaluate/geometry/by_elo_gap.tsv",
@@ -192,7 +192,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "4421c8db3cbdfb8b36af1be4223667f9aa97a5f1-dirty",
+  "commit": "d814dd17a260189a5227d2f7014acc28dd40b515-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "paired_differences": {
@@ -248,7 +248,7 @@
       ]
     },
     "seconds": {
-      "paired_differences": 1.661
+      "paired_differences": 2.193
     }
   }
 }

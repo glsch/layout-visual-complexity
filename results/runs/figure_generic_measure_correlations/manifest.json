@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-18T12:47:09+00:00",
-  "ended": "2026-11-18T12:47:11+00:00",
+  "started": "2026-11-19T17:19:02+00:00",
+  "ended": "2026-11-19T17:19:05+00:00",
   "inputs": [
     {
       "path": "build/features/dataset/features.parquet",
@@ -106,7 +106,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "4421c8db3cbdfb8b36af1be4223667f9aa97a5f1-dirty",
+  "commit": "d814dd17a260189a5227d2f7014acc28dd40b515-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "generic_measure_correlations": {
@@ -174,7 +174,7 @@
       ]
     },
     "seconds": {
-      "generic_measure_correlations": 2.114
+      "generic_measure_correlations": 2.067
     }
   }
 }
