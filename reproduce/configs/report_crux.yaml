@@ -1,7 +1,8 @@
 # Shared by Crux of Telč's case study's tables and figures: the score run of its 23 manuscripts (score_crux.yaml), its
-# catalogue facts (reproduce/crux_manuscripts.tsv), where the outputs go, the resamples and the credits. Each table or
-# figure adds its own configuration. Leaves on which Kraken finds fewer than five text lines, blank or nearly blank,
-# are left out (they stay in the run's scores.tsv); the captions say how many.
+# catalogue facts (reproduce/crux_manuscripts.tsv), where the outputs go, the resamples, the credits, and the library
+# that holds the manuscripts, which the profiles' captions name before the shelfmark. Each table or figure adds its own
+# configuration. Leaves on which Kraken finds fewer than five text lines, blank or nearly blank, are left out (they
+# stay in the run's scores.tsv); the captions say how many.
 score_run: build/score/crux
 min_lines: 5
 catalogue: reproduce/crux_manuscripts.tsv
@@ -12,3 +13,5 @@ seed: 20260629
 thumbnail_size: 400
 image_credit: "Page images provided by Manuscriptorium (CC BY-NC 4.0)."
 catalogue_credit: "Catalogue facts from Dragoun, Ebersonová and Doležalová (2021)."
+title_credit: "the title from the library's record in Manuscriptorium"
+repository: "Prague, National Library of the Czech Republic"

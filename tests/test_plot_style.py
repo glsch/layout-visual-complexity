@@ -38,3 +38,10 @@ def test_every_method_has_its_colour_and_panels_their_letters() -> None:
     axes = figure.subplots(1, 2)
     style.panel_letters(axes, ["Accuracy", ""])
     assert axes[0].get_title(loc="left").endswith("Accuracy") and axes[1].get_title(loc="left") == "(b)"
+
+
+def test_line_texture_has_a_colour_of_its_own_with_a_darker_edge() -> None:
+    others = {colour for name, colour in style.METHODS.items() if name != "line_texture"}
+    assert style.METHODS["line_texture"] not in others
+    assert style.edge(style.METHODS["line_texture"]) != style.METHODS["line_texture"].lower()
+    assert style.edge(style.METHODS["colour"]) == style.METHODS["colour"].lower()

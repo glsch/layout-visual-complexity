@@ -231,7 +231,7 @@ then one column per feature, named `Family__Feature__Flavour` (`AreaFeature__Lin
   (`LineTextureFeature__LineSuperpixels__…`): for each text line, the vertical Sobel responses of the gamma-corrected
   red, green and blue channels, partitioned into SLIC superpixels, and their number, areas, positions, channel
   statistics and position–response correlations, averaged over the folio's lines. They describe texture, not hue.
-- **`colour`**: real colour, on the ink layer with the parchment made neutral: the chromatic share of the ink (hues
+- **`colour`**: ink colour, on the ink layer with the parchment made neutral: the chromatic share of the ink (hues
   60°–110° left out, as in `ink`), the shares of red, green and blue ink and the number of classes present, the
   entropy of the chromatic ink's hues, its median chroma and spread, its chromatic share within each kind of zone
   (main text, margins, numbering and running titles, decoration, heading lines, the rest), the share of rubric lines
@@ -338,11 +338,15 @@ measures' correlations with ink coverage); the colour level's (by Elo gap with w
 measures defined, ink colour drawn on pages); and every method within and across manuscripts, from the hits and
 scores each evaluation keeps. In the methods' tables and figures, the Reference is one limit measured for accuracy
 and for ρ: the consistency of the same test judgments with the final Elo scores, and the ceiling for SROCC. From a
-`lvc score` run and a table of the collection's catalogue facts, it also draws the manuscripts' profiles (in two
-designs), the strips of all of them, the overview (in two designs), the collection's table and the readings of the
-overview checked against the catalogue (`manuscript_profiles`, `manuscript_profile_strips`, `manuscript_strips`,
-`manuscript_overview`, `manuscript_overview_quadrants`, `manuscripts_table`, `manuscript_readings`); `--min_lines`
-leaves out blank or nearly blank pages.
+`lvc score` run and a table of the collection's catalogue facts, it also draws the manuscripts' profiles, each
+caption opening with the manuscript as catalogued (`--repository`, then shelfmark, material, leaves, date in words
+and title), the strips of all of them, the overview with its axes' ends named, the collection's table and the
+readings of the overview checked against the catalogue (`manuscript_profiles`, `manuscript_strips`,
+`manuscript_overview`, `manuscripts_table`, `manuscript_readings`); `--min_lines` leaves out blank or nearly blank
+pages. The figures and tables name the methods Layout (geometry) for the geometric features, Layout (Kyle–Davidson)
+for the layout adaptation of Kyle–Davidson, Kyle–Davidson for the image measures as published, Line texture and Ink
+colour, and name features by readable labels (`Line length, variation`), which each family gives
+(`Family.label`).
 
 ## The dataset
 
@@ -383,55 +387,56 @@ learning curves (on the folds of the first two repeats), takes about 25 minutes 
 | `figure-comparison-graph` | Figure 2: the comparison graph, coloured by batch and by Elo score |
 | `figure-elo-score-bands` | Figure 3: the distributions of the Elo scores, as bands |
 | `segment-dataset` | `build/segment/dataset/`: the dataset's pages segmented (not part of `all`: it needs the `segment` extra, the models in `models/` and the page images from their servers) |
-| `features-dataset` | `build/features/dataset/`: the geometric and Layout features of the dataset's pages, from their segmentation, the baselines' and the colour level's |
-| `evaluate-geometry`, `evaluate-geometry-layout` | `build/evaluate/`: the geometry ranker, without and with the Layout features |
-| `table-geometry-by-elo-gap` | Table 4's geometry column: accuracy by Elo gap and SROCC, with and without Layout, beside the Reference |
+| `features-dataset` | `build/features/dataset/`: the features of Layout (geometry) and Layout (Kyle–Davidson) of the dataset's pages, from their segmentation, the baselines' and the colour level's |
+| `evaluate-geometry`, `evaluate-geometry-layout` | `build/evaluate/`: the geometry ranker, Layout (geometry), without and with Layout (Kyle–Davidson) |
+| `table-geometry-by-elo-gap` | Table 4's geometry column: accuracy by Elo gap and SROCC, with and without Layout (Kyle–Davidson), beside the Reference |
 | `table-geometry-feature-hierarchy` | Appendix A's table: the features, with their code names |
-| `figure-geometry-feature-correlations` | Figure 9: each feature's correlation with the Elo scores |
-| `figure-geometry-features-on-page`, `figure-geometry-features-on-schematic-page` | The geometric features drawn on pages of the dataset, and on a made-up page |
+| `figure-geometry-feature-correlations` | Figure 7: each feature's correlation with the Elo scores, by readable labels |
+| `figure-geometry-features-on-page` | The geometric features drawn on pages of the dataset |
 | `figure-geometry-feature-families` | The plate of the features, with their code names |
 | `embed-dataset` | `build/embed/dataset/`: the dataset's pages' patch tokens from DINOv2 ViT-S/14, the folio crop |
-| `evaluate-vit`, `evaluate-ensembles` | `build/evaluate/`: the ViT ranker; its ensembles with the geometry ranker (without and with Layout, with equal and fitted weights) |
+| `evaluate-vit`, `evaluate-ensembles` | `build/evaluate/`: the ViT ranker; its ensembles with the geometry ranker (without and with Layout (Kyle–Davidson), with equal and fitted weights) |
 | `head-dataset`, `package-head` | `build/train/vit_head/`: the ViT head trained on every judgment; copied into the package |
 | `train-geometry`, `models-dataset`, `package-models` | `build/train/geometry/`, `build/train/models/`: the geometry ranker trained on every judgment, and the rankers that come with the package (the two and their ensemble, with calibrated scales and the Elo scale); copied into the package |
-| `table-methods-by-elo-gap` | Table 4: the generic image baseline, real colour, the geometry ranker, the ViT ranker and their ensemble by Elo gap, beside the Reference |
-| `figure-accuracy-by-elo-gap` | The same as a figure, with each method's interval, and as a table |
+| `table-methods-by-elo-gap` | Table 4: the generic image baseline, Ink colour, Layout (geometry), the ViT ranker and their ensemble by Elo gap, beside the Reference |
+| `figure-accuracy-by-elo-gap` | Line texture, Ink colour, Layout (geometry), the ViT ranker and their ensemble by Elo gap as a figure, with each method's interval, and as a table |
 | `table-paired-differences` | The methods' differences in accuracy and SROCC, on the same resamples |
-| `table-ensembles-by-elo-gap` | For the appendix: the ensembles, without and with Layout, with equal and fitted weights, and with real colour |
+| `table-ensembles-by-elo-gap` | For the appendix: the ensembles, without and with Layout (Kyle–Davidson), with equal and fitted weights, and with Ink colour |
 | `figure-learning-curves-and-calibration` | Accuracy as the training judgments and images grow, and calibration |
-| `figure-local-complexity-maps` | The ViT head's local complexity maps on three pages |
+| `figure-local-complexity-maps` | The ViT head's local complexity maps on three pages photographed without a neighbouring leaf |
 | `codebook-dataset`, `package-codebook` | `build/codebook/dataset/`: the generic measures' patch codebook, learned on the dataset's pages; copied into the package |
 | `evaluate-baselines`, `evaluate-measures` | `build/evaluate/`: the baselines (the trivial measures, the generic image measures, Kyle–Davidson, ink distribution, the mean token), each family together and each measure alone |
 | `table-baselines-by-elo-gap` | Table 3's successor: the baselines by Elo gap, beside the Reference |
 | `table-baseline-measures` | The baseline measures defined, with their parameters and sources |
 | `table-baseline-differences` | The baselines' differences from the geometry ranker and the ensemble |
-| `figure-baselines-by-information`, `figure-baselines-by-information-each-measure` | What each level of information buys: the methods by the information they need, combined, and with each measure alone |
-| `figure-generic-measure-correlations` | The generic image measures' correlations with each other and with ink coverage |
-| `evaluate-colour`, `evaluate-colour-measures` | `build/evaluate/`: line texture and real colour alone, each with the geometric features in one model, the ensemble with colour, and each colour measure alone |
-| `table-colour-by-elo-gap` | Appendix B's successor: line texture, real colour and geometry with real colour by Elo gap, within manuscripts, and what colour adds to geometry |
+| `figure-baselines-by-information`, `figure-baselines-by-information-each-measure` | Accuracy by the information a method needs: the methods by the information they need, combined, and with each measure alone |
+| `figure-generic-measure-correlations` | The generic image measures' correlations with each other and with ink coverage (for the repository, not the article) |
+| `evaluate-colour`, `evaluate-colour-measures` | `build/evaluate/`: line texture and ink colour alone, each with the geometric features in one model, the ensemble with ink colour, and each ink colour measure alone |
+| `table-colour-by-elo-gap` | Appendix B's successor: Line texture, Ink colour and Layout (geometry) with ink colour by Elo gap, within manuscripts, and what ink colour adds to geometry |
 | `table-colour-differences` | What colour adds to geometry and to the ensemble, overall and within manuscripts |
-| `table-line-texture-families`, `table-colour-measures` | Appendix B's table of the line-texture measures; the real colour measures defined |
+| `table-line-texture-families`, `table-colour-measures` | Appendix B's table of the line-texture measures; the ink colour measures defined |
 | `table-within-and-across-manuscripts` | Every method's accuracy across and within manuscripts, and its SROCC overall and within |
 | `figure-ink-colour-on-page` | Ink colour on three pages, drawn by hue class beside the classes' shares |
 | `models-without-crux` | `build/train/models_without_crux/`: the rankers trained without the four of Crux of Telč's manuscripts that gave the dataset pages, for the case study |
 | `score-crux` | `build/score/crux/`: Crux's 23 manuscripts' 14,138 leaf pages scored out of sample (not part of `all`: it needs both extras, the models in `models/`, the network, and three to four hours on an Apple M4 Pro) |
-| `figure-manuscript-profiles` | Figures 4 and 5: the profiles of I D 18 and XI C 1, in the package's design and in the article's |
+| `figure-manuscript-profiles` | Figures 4 and 5: the profiles of I D 18 and XI C 1, each caption opening with the manuscript as catalogued |
 | `figure-manuscript-strips` | For the appendix: the strips of all 23 manuscripts |
-| `figure-crux-overview` | Figure 6: the overview of the 23 manuscripts, in the package's design and in the article's |
+| `figure-crux-overview` | Figure 6: the overview of the 23 manuscripts, its axes' ends named |
 | `table-crux-manuscripts`, `table-crux-readings` | The 23 manuscripts' table, the catalogue's facts beside the scores; the article's readings of the overview, checked |
 | `sources` | `build/sources/`: CREMMA Medieval and CREMMA Medii Aevi at their commits, and the files of CATMuS Medieval Segmentation's test split the difficulty experiment uses at a fixed revision, each checked against its SHA-256 (`reproduce/catmus_segmentation_files.tsv`) |
 | `difficulty-cremma`, `difficulty-catmus-test` | `build/difficulty/`: CREMMA's 400 pages and the held-out pages of CATMuS's test split (its handwritten manuscripts of the 14th to 16th century) measured against their ground truth (not part of `all`: they need both extras, the models in `models/` and the sources) |
-| `figure-difficulty-against-complexity` | The CER on the ground-truth lines and end to end, line F1 and zone F1 against predicted complexity, a dot per page, with a robust LOWESS trend for the seen and the held-out pages |
+| `figure-difficulty-against-complexity` | The CER on the ground-truth lines and end to end (on a log axis) and line F1 against predicted complexity on CREMMA's pages, three panels in a row, a dot per page, the held-out pages marked, with one robust LOWESS trend over all of them |
 | `table-difficulty-regression`, `table-difficulty-regression-across-and-within` | Each measure regressed on complexity and the controls: a mixed model with a random intercept per manuscript; least squares across and within manuscripts |
 | `table-difficulty-held-out`, `table-difficulty-correlations`, `table-difficulty-main-text-and-margins` | The held-out comparison of the segmentation measures, and CREMMA's held-out pages beside its seen pages of similar complexity; each measure's rank correlation with complexity; main text against margins |
 | `table-difficulty-ground-truth-coverage` | The mixed model with every page and without the pages whose ground truth may leave text out, with each run's pages flagged and line and zone precision with and without them |
-| `table-difficulty-by-ranker`, `table-difficulty-by-quarter` | Each ranker alone (the geometry ranker, the ViT head, their ensemble): rank correlations and the mixed model; the medians of each measure in four quarters of predicted complexity |
+| `table-difficulty-by-ranker`, `table-difficulty-by-quarter` | Each ranker alone (Layout (geometry), the ViT head, their ensemble): rank correlations and the mixed model; the medians of each measure in four quarters of predicted complexity |
 | `table-difficulty-material`, `difficulty-pages` | The experiment's manuscripts (`reproduce/difficulty_manuscripts.tsv`); each run's per-page rows in `results/difficulty/` |
 
 The dataset leaves out the sessions of a public exhibition, whose annotators were mostly not experts, and the
 calibration judgments; so its numbers differ from the article's, which kept them. Crux of Telč's catalogue facts
 (`reproduce/crux_manuscripts.tsv`) come from M. Dragoun, A. Ebersonová and L. Doležalová, *Středověké knihovny
-augustiniánských kanonií v Třeboni a Borovanech* (Praha: Scriptorium, 2021).
+augustiniánských kanonií v Třeboni a Borovanech* (Praha: Scriptorium, 2021); its material and titles from the National
+Library's records in Manuscriptorium.
 
 The difficulty experiment's ground truth is CREMMA Medieval and CREMMA Medii Aevi (HTR-United, CC BY 4.0), and
 CATMuS Medieval Segmentation (CC BY 4.0); `make -C reproduce sources` fetches them. None of their files are in this

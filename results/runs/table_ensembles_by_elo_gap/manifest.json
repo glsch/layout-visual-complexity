@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-15T09:20:03+00:00",
-  "ended": "2026-11-15T09:20:03+00:00",
+  "started": "2026-11-18T12:46:51+00:00",
+  "ended": "2026-11-18T12:46:51+00:00",
   "inputs": [
     {
       "path": "build/evaluate/ensemble/by_elo_gap.tsv",
@@ -122,16 +122,17 @@
     },
     "shown": [],
     "labels": {
-      "ensemble": "Geometry and ViT",
-      "ensemble_layout": "Geometry, Layout and ViT",
-      "ensemble_fitted": "Geometry and ViT, fitted",
-      "ensemble_layout_fitted": "Geometry, Layout and ViT, fitted",
-      "ensemble_colour": "Geometry, ViT and colour",
-      "geometry": "Geometry",
-      "geometry_layout": "Geometry + Layout",
+      "ensemble": "Layout (geometry) and ViT",
+      "ensemble_layout": "Layout (geometry with Kyle–Davidson) and ViT",
+      "ensemble_fitted": "Layout (geometry) and ViT, fitted",
+      "ensemble_layout_fitted": "Layout (geometry with Kyle–Davidson) and ViT, fitted",
+      "ensemble_colour": "Layout (geometry), ViT and ink colour",
+      "geometry": "Layout (geometry)",
+      "geometry_layout": "Layout (geometry with Kyle–Davidson)",
       "vit": "ViT",
-      "colour": "Real colour"
+      "colour": "Ink colour"
     },
+    "in_text": {},
     "colours": {},
     "comparisons": [],
     "families": [
@@ -161,6 +162,7 @@
     },
     "levels": {},
     "alone": [],
+    "defined_in": "",
     "reference_column": "",
     "colour_pages": [],
     "score_run": null,
@@ -168,9 +170,17 @@
     "profiles": [],
     "collection": "manuscripts",
     "catalogue_credit": "",
+    "title_credit": "",
+    "repository": "",
     "thumbnail_size": 400,
     "named": [],
-    "min_lines": 0
+    "min_lines": 0,
+    "difficulty_runs": {},
+    "difficulty_main": "cremma",
+    "manuscript_table": null,
+    "neighbours": 0.25,
+    "outside_lines": 5,
+    "outside_share": 0.1
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -192,7 +202,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "01298e25c9fb0281e54e9a0ed7ac14beab07268e-dirty",
+  "commit": "4421c8db3cbdfb8b36af1be4223667f9aa97a5f1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "ensembles_by_elo_gap": {
@@ -354,7 +364,7 @@
       ]
     },
     "seconds": {
-      "ensembles_by_elo_gap": 0.014
+      "ensembles_by_elo_gap": 0.013
     }
   }
 }

@@ -107,6 +107,16 @@ class Family:
                 return group.definition
         raise FeatureError(f"{self.name} has no column {column!r}")
 
+    def label(self, column: str) -> str:
+        """A column's readable label in figures and tables: its feature's name, then its flavour in words when the
+        feature has several (`Feature congestion, colour`)."""
+        for group in self.groups():
+            if column in group.columns:
+                if len(group.flavours) == 1:
+                    return group.feature
+                return f"{group.feature}, {column.removeprefix(group.prefix + '__').replace('_', ' ')}"
+        raise FeatureError(f"{self.name} has no column {column!r}")
+
     def measure(self, page: Any) -> list[dict[str, float]]:
         raise NotImplementedError
 

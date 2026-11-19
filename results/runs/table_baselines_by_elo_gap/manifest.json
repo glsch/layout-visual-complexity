@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-15T09:18:45+00:00",
-  "ended": "2026-11-15T09:18:45+00:00",
+  "started": "2026-11-18T12:46:57+00:00",
+  "ended": "2026-11-18T12:46:57+00:00",
   "inputs": [
     {
       "path": "build/evaluate/measures/ink_coverage/by_elo_gap.tsv",
@@ -108,6 +108,7 @@
       "kyle_davidson": "Kyle–Davidson",
       "ink_distribution": "Ink distribution"
     },
+    "in_text": {},
     "colours": {},
     "comparisons": [],
     "families": [
@@ -137,6 +138,7 @@
     },
     "levels": {},
     "alone": [],
+    "defined_in": "",
     "reference_column": "",
     "colour_pages": [],
     "score_run": null,
@@ -144,9 +146,17 @@
     "profiles": [],
     "collection": "manuscripts",
     "catalogue_credit": "",
+    "title_credit": "",
+    "repository": "",
     "thumbnail_size": 400,
     "named": [],
-    "min_lines": 0
+    "min_lines": 0,
+    "difficulty_runs": {},
+    "difficulty_main": "cremma",
+    "manuscript_table": null,
+    "neighbours": 0.25,
+    "outside_lines": 5,
+    "outside_share": 0.1
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -168,7 +178,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "01298e25c9fb0281e54e9a0ed7ac14beab07268e-dirty",
+  "commit": "4421c8db3cbdfb8b36af1be4223667f9aa97a5f1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "baselines_by_elo_gap": {
@@ -330,7 +340,7 @@
       ]
     },
     "seconds": {
-      "baselines_by_elo_gap": 0.013
+      "baselines_by_elo_gap": 0.012
     }
   }
 }

@@ -86,8 +86,7 @@ def test_the_geometry_tables_and_figures(tmp_path: Path, dataset_folder: Path) -
     summary = run_report(settings)
     for stem in ("geometry_by_elo_gap", "geometry_feature_hierarchy", "geometry_feature_correlations"):
         assert (output / "tables" / f"{stem}.tsv").is_file() and (output / "tables" / f"{stem}.tex").is_file()
-    for stem in ("geometry_feature_correlations", "geometry_features_on_page", "geometry_features_on_schematic_page",
-                 "geometry_feature_families"):  # fmt: skip
+    for stem in ("geometry_feature_correlations", "geometry_features_on_page", "geometry_feature_families"):
         for suffix in (".svg", ".png", ".tex"):
             assert (output / "figures" / f"{stem}{suffix}").is_file()
 
@@ -103,9 +102,23 @@ def test_the_geometry_tables_and_figures(tmp_path: Path, dataset_folder: Path) -
     best = found.set_index("column").loc["AreaFeature__LineSimilarity__dice_median"]
     assert best["rho"] == -1 and best["best"]
     caption = (output / "figures" / "geometry_feature_correlations.tex").read_text()
-    assert "the median Dice similarity of two line polygons centred on each other" in caption
+    assert (
+        "line similarity, median Dice: the median Dice similarity of two line polygons centred on each other" in caption
+    )
+    for row in found[found["best"]].itertuples():
+        assert f"{row.label[0].lower()}{row.label[1:]}: {row.words}" in caption
+        assert "__" not in row.label
+    assert (
+        "\\texttt" not in caption
+        and "are measures of Layout (Kyle--Davidson), the others of Layout (geometry)." in caption
+    )
+    assert "Line similarity, median Dice" in (output / "figures" / "geometry_feature_correlations.svg").read_text()
     on_page = (output / "figures" / "geometry_features_on_page.tex").read_text()
     assert "msa\\_1r" in on_page and "Synthetic pages." in on_page
+    assert "(written space's convexity, " in on_page and "\\texttt" not in on_page
+    plate = (output / "figures" / "geometry_feature_families.tex").read_text()
+    assert "the six measures of Layout (Kyle--Davidson), in four panels" in plate
+    assert "(k) Symmetry, Regularity and Balance:" in plate and "(m) BlankSpace:" in plate
     assert summary["geometry_features_on_page"]["pages"]["LineFeature__ZigzagScore"] == "msa_1r"
 
 

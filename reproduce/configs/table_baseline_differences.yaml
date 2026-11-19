@@ -16,7 +16,7 @@ labels:
   kyle_davidson: Kyle–Davidson
   ink_distribution: Ink distribution
   mean_token: Mean token
-  geometry: Geometry
+  geometry: Layout (geometry)
   ensemble: Ensemble
 comparisons:
   - [trivial, geometry]

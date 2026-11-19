@@ -42,27 +42,27 @@ evaluations:
   ensemble: build/evaluate/ensemble
 shown: []
 labels:
-  trivial: Trivial measures, combined
+  trivial: Both together
   ink_coverage: Ink coverage
   text_lines: Number of text lines
-  generic: Generic image measures, combined
+  generic: Generic image measures
   edge_orientation_entropy: Edge-orientation entropy
   mssc: MSSC per scale
   compressibility: Lossless compressibility
   feature_congestion: Feature congestion
   colourfulness: Colourfulness
   codebook_variety: Patch-codebook variety
-  kyle_davidson: Kyle–Davidson as published, combined
+  kyle_davidson: Kyle–Davidson
   clutter: Clutter (normalised cut)
   symmetry: Patch symmetry
   entropy: HSV entropy
-  ink_distribution: Ink distribution, combined
+  ink_distribution: Ink distribution
   lacunarity: Lacunarity
   fragmentation: Fragmentation
   chromatic_share: Chromatic share
   hue_classes: Hue classes
-  line_texture: Line texture as published
-  colour: Real colour, combined
+  line_texture: Line texture
+  colour: Ink colour
   colour_chromatic_share: Chromatic share
   colour_hue_classes: Hue classes
   colour_hue_entropy: Hue entropy
@@ -70,11 +70,12 @@ labels:
   colour_zones: Colour by zone
   colour_lines: Colour across lines
   colour_coloured_initials: Coloured initials
-  geometry: Geometry
-  geometry_layout: Geometry with Layout
+  geometry: Layout (geometry)
+  geometry_layout: Layout (geometry with Kyle–Davidson)
   mean_token: Linear model on the mean ViT token
   vit: Local ViT head
-  ensemble: Ensemble (geometry and ViT)
+  ensemble: 'Ensemble: Layout (geometry) and ViT'
+in_text: {}
 colours:
   trivial: trivial
   ink_coverage: trivial
@@ -94,7 +95,6 @@ colours:
   fragmentation: ink
   chromatic_share: ink
   hue_classes: ink
-  line_texture: colour
   colour_chromatic_share: colour
   colour_hue_classes: colour
   colour_hue_entropy: colour
@@ -184,6 +184,7 @@ alone:
 - colour_zones
 - colour_lines
 - colour_coloured_initials
+defined_in: baselines_by_information
 reference_column: ''
 colour_pages: []
 score_run: null
@@ -191,6 +192,14 @@ catalogue: null
 profiles: []
 collection: manuscripts
 catalogue_credit: ''
+title_credit: ''
+repository: ''
 thumbnail_size: 400
 named: []
 min_lines: 0
+difficulty_runs: {}
+difficulty_main: cremma
+manuscript_table: null
+neighbours: 0.25
+outside_lines: 5
+outside_share: 0.1

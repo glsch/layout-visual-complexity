@@ -7,16 +7,19 @@ scores: build/ranking/scores.tsv
 features: build/features/dataset/features.parquet
 layout: build/segment/dataset
 evaluations:
+  line_texture: build/evaluate/line_texture
   colour: build/evaluate/colour
   geometry: build/evaluate/geometry
   vit: build/evaluate/vit
   ensemble: build/evaluate/ensemble
 shown: []
 labels:
-  colour: Colour
-  geometry: Geometry
+  line_texture: Line texture
+  colour: Ink colour
+  geometry: Layout (geometry)
   vit: ViT
   ensemble: Ensemble
+in_text: {}
 colours: {}
 comparisons: []
 families:
@@ -43,6 +46,7 @@ http:
   timeout: 60.0
 levels: {}
 alone: []
+defined_in: ''
 reference_column: ''
 colour_pages: []
 score_run: null
@@ -50,6 +54,14 @@ catalogue: null
 profiles: []
 collection: manuscripts
 catalogue_credit: ''
+title_credit: ''
+repository: ''
 thumbnail_size: 400
 named: []
 min_lines: 0
+difficulty_runs: {}
+difficulty_main: cremma
+manuscript_table: null
+neighbours: 0.25
+outside_lines: 5
+outside_share: 0.1

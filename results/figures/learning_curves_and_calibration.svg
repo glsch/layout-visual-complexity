@@ -361,40 +361,40 @@ L 147.832283 139.077797
    </g>
    <g id="legend_1">
     <g id="line2d_23">
-     <path d="M 78.341033 103.154672 
-L 86.341033 103.154672 
-L 94.341033 103.154672 
+     <path d="M 43.479783 103.154672 
+L 51.479783 103.154672 
+L 59.479783 103.154672 
 " style="fill: none; stroke: #e69f00; stroke-linecap: square"/>
      <g>
-      <use xlink:href="#mda18d4e50c" x="86.341033" y="103.154672" style="fill: #e69f00; stroke: #e69f00"/>
+      <use xlink:href="#mda18d4e50c" x="51.479783" y="103.154672" style="fill: #e69f00; stroke: #e69f00"/>
      </g>
     </g>
     <g id="text_16">
-     <text style="font-size: 8px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1f2328" x="100.741033" y="105.954672" transform="rotate(-0 100.741033 105.954672)">Geometry</text>
+     <text style="font-size: 8px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1f2328" x="65.879783" y="105.954672" transform="rotate(-0 65.879783 105.954672)">Layout (geometry)</text>
     </g>
     <g id="line2d_24">
-     <path d="M 78.341033 115.155297 
-L 86.341033 115.155297 
-L 94.341033 115.155297 
+     <path d="M 43.479783 115.155297 
+L 51.479783 115.155297 
+L 59.479783 115.155297 
 " style="fill: none; stroke: #0072b2; stroke-linecap: square"/>
      <g>
-      <use xlink:href="#m1de27c2cc3" x="86.341033" y="115.155297" style="fill: #0072b2; stroke: #0072b2"/>
+      <use xlink:href="#m1de27c2cc3" x="51.479783" y="115.155297" style="fill: #0072b2; stroke: #0072b2"/>
      </g>
     </g>
     <g id="text_17">
-     <text style="font-size: 8px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1f2328" x="100.741033" y="117.955297" transform="rotate(-0 100.741033 117.955297)">ViT</text>
+     <text style="font-size: 8px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1f2328" x="65.879783" y="117.955297" transform="rotate(-0 65.879783 117.955297)">ViT</text>
     </g>
     <g id="line2d_25">
-     <path d="M 78.341033 127.155922 
-L 86.341033 127.155922 
-L 94.341033 127.155922 
+     <path d="M 43.479783 127.155922 
+L 51.479783 127.155922 
+L 59.479783 127.155922 
 " style="fill: none; stroke: #1b2a49; stroke-linecap: square"/>
      <g>
-      <use xlink:href="#mbcca151c59" x="86.341033" y="127.155922" style="fill: #1b2a49; stroke: #1b2a49"/>
+      <use xlink:href="#mbcca151c59" x="51.479783" y="127.155922" style="fill: #1b2a49; stroke: #1b2a49"/>
      </g>
     </g>
     <g id="text_18">
-     <text style="font-size: 8px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1f2328" x="100.741033" y="129.955922" transform="rotate(-0 100.741033 129.955922)">Ensemble</text>
+     <text style="font-size: 8px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1f2328" x="65.879783" y="129.955922" transform="rotate(-0 65.879783 129.955922)">Ensemble</text>
     </g>
    </g>
   </g>

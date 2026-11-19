@@ -19,7 +19,7 @@ FOLDS = FoldSettings(k=2, repeats=2, seed=5)
 
 
 def evaluations(folder: Path, dataset_folder: Path) -> tuple[dict[str, Path], Path]:
-    """Three feature methods standing for geometry, real colour, and geometry with real colour."""
+    """Three feature methods standing for geometry, ink colour, and geometry with ink colour."""
     features, scores = setup(folder, dataset_folder)
     methods = {"geometry": "signal", "colour": "other", "geometry_colour": "signal,other"}
     found = {}
@@ -40,7 +40,11 @@ def test_the_colour_table_and_the_differences(tmp_path: Path, dataset_folder: Pa
         scores=scores,
         evaluations=found,
         shown=["colour", "geometry_colour"],
-        labels={"geometry": "Geometry", "colour": "Real colour", "geometry_colour": "Geometry with real colour"},
+        labels={
+            "geometry": "Layout (geometry)",
+            "colour": "Ink colour",
+            "geometry_colour": "Layout (geometry) with ink colour",
+        },
         comparisons=[["geometry_colour", "geometry"]],
     )
     run_report(settings)
@@ -55,8 +59,8 @@ def test_the_colour_table_and_the_differences(tmp_path: Path, dataset_folder: Pa
     assert table.at["accuracy_within", "reference"] == pytest.approx(combined["consistency_within"], abs=1e-5)
     assert np.isnan(table.at["added_accuracy", "colour"])
     latex = (output / "tables" / "colour_by_elo_gap.tex").read_text()
-    assert "Score $\\Delta$ & Reference & Real colour & Geometry with real colour" in latex
-    assert "\\emph{Geometry}, the pairwise logistic model" in latex and "Added: accuracy within" in latex
+    assert "Score $\\Delta$ & Reference & Ink colour & Layout (geometry) with ink colour" in latex
+    assert "\\emph{Layout (geometry)}, the pairwise logistic model" in latex and "Added: accuracy within" in latex
     differences = pd.read_csv(output / "tables" / "colour_differences.tsv", sep="\t")
     assert differences[["first", "second"]].values.tolist() == [["geometry_colour", "geometry"]]
     assert differences.at[0, "srocc_within_difference"] == pytest.approx(table.at["added_srocc_within",

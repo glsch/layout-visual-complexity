@@ -46,7 +46,8 @@ def plot_accuracy_by_gap(methods: list[Shown], reference: pd.DataFrame, overall:
         table = method.table.set_index("gap").reindex(gaps)
         place = x - 0.4 + width * (number + 0.5)
         values = table["accuracy"].to_numpy(dtype=float)
-        axes.bar(place, values - bottom, width * 0.9, bottom=bottom, color=method.colour, label=method.label)
+        axes.bar(place, values - bottom, width * 0.9, bottom=bottom, color=method.colour, label=method.label,
+                 edgecolor=style.edge(method.colour), linewidth=0.5)  # fmt: skip
         low, high = table["low"].to_numpy(dtype=float), table["high"].to_numpy(dtype=float)
         axes.vlines(place, low, high, color=style.TEXT, linewidth=0.6)
     limit = reference.set_index("gap").reindex(gaps)["reference"].to_numpy(dtype=float)
@@ -59,13 +60,15 @@ def plot_accuracy_by_gap(methods: list[Shown], reference: pd.DataFrame, overall:
     axes.set_xlabel(r"Score $\Delta$ (difference between the two pages' final Elo scores)")
     axes.set_ylabel("Pairwise accuracy")
     style.light_grid(axes)
-    handles = [Patch(facecolor=method.colour, label=method.label) for method in methods]
+    handles = [Patch(facecolor=method.colour, edgecolor=style.edge(method.colour), linewidth=0.5, label=method.label)
+               for method in methods]  # fmt: skip
     handles += [
         Line2D([], [], marker="D", markersize=4.5, markerfacecolor="white", markeredgecolor="black", linestyle="none",
                label="Reference"),
         Line2D([], [], color=style.METHODS["chance"], linestyle="--", linewidth=0.8, label="Chance"),
     ]  # fmt: skip
-    axes.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 1.0), ncols=min(6, len(handles)))
+    columns = len(handles) if len(handles) <= 6 else -(-len(handles) // 2)  # one row, else two
+    axes.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 1.0), ncols=columns)
     return figure
 
 

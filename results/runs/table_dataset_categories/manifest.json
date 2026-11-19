@@ -1,7 +1,7 @@
 {
   "command": "judgments report",
-  "started": "2026-11-14T06:21:07+00:00",
-  "ended": "2026-11-14T06:21:07+00:00",
+  "started": "2026-11-18T12:46:19+00:00",
+  "ended": "2026-11-18T12:46:19+00:00",
   "inputs": [
     {
       "path": "build/dataset/judgments.tsv",
@@ -111,7 +111,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "07d5ce4c65927d64182d3d70e2111cf241d98de1-dirty",
+  "commit": "4421c8db3cbdfb8b36af1be4223667f9aa97a5f1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "dataset_categories": {
@@ -196,7 +196,7 @@
       ]
     },
     "seconds": {
-      "dataset_categories": 0.008
+      "dataset_categories": 0.006
     }
   }
 }

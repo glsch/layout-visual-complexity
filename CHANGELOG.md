@@ -2,6 +2,34 @@
 
 ## Unreleased
 
+- The figures and tables name the methods as the article will: Layout (geometry) for the geometric features (was
+  Geometry), Layout (Kyle–Davidson) for the layout adaptation of Kyle–Davidson (was Layout), Layout (geometry with
+  Kyle–Davidson) for the two together, Kyle–Davidson and Line texture (without "as published"), and Ink colour for
+  the colour of the ink (was real colour). Only what a reader sees changes: the families' ids, configuration keys,
+  file names and columns keep their values; the `layout` and `colour` families' groups now read
+  "Layout (Kyle–Davidson)" and "Ink colour" in the tables that list them.
+- Every family gives each column a readable label (`Family.label`: `Line length, variation`), which the feature
+  correlation figure and table, the generic measures' correlations and the features drawn on pages use instead of
+  code names; the feature correlation figure's caption defines each flavour shown.
+- `lvc report`: the accuracy figure takes Line texture as a bar of its own, in a colour of its own (the palette's
+  yellow, its marks edged darker); the comparison graph's caption gives the number of possible pairs and says the
+  rings and connectedness first; the information figure opens "Accuracy by the information a method needs", and its
+  form with each measure alone refers to the main figure's definitions (`--defined_in`); an ensemble's definition can
+  name a member in words (`--in_text`); two families in one model are defined by their columns each; the ink colour
+  figure's bars read "Ink (%)".
+- `lvc report`'s manuscript outputs: the profiles' captions open with the manuscript as catalogued (`--repository`,
+  then shelfmark, material, leaves, the date in words, and the title, with `--title_credit`), from the `material` and
+  `title` columns of the catalogue table; the overview names its axes' ends (plainer and more complex, more uniform
+  and more varied). The article's own designs (`manuscript_profile_strips`, `manuscript_overview_quadrants`) are no
+  longer made.
+- The difficulty figure is three panels in a row on the main run's pages: the CER on the ground-truth lines and end
+  to end, on a log axis, and line F1, with one robust LOWESS trend over all the pages and the held-out pages marked;
+  the four-panel figure with the held-out comparison's pages, its zone F1 panel and its linear twin
+  (`difficulty_against_complexity_log_cer`) are gone, the comparison staying in the tables.
+- The reproduction: the local complexity maps are drawn on three other pages, photographed without a neighbouring
+  leaf (`iiih6_11v`, `xive29_66v`, `ve4b_50v`); `reproduce/crux_manuscripts.tsv` gains the manuscripts' material
+  and titles; the features on a made-up page (`geometry_features_on_schematic_page`) are no longer drawn.
+
 - `lvc difficulty`: how hard pages with ground truth (ALTO files, or a CATMuS-style `metadata.jsonl`) are for the
   automatic tools, beside their predicted complexity. Each page goes through `lvc score`'s stream, double-page spreads
   split into their pages first, and through Kraken's text recognition; one row per page gives zone F1 of the regions

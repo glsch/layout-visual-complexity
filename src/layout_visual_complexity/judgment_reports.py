@@ -384,14 +384,15 @@ def comparison_graph(
         f" the pairs judged in the bridge sessions ({bridged:,} judgments, in which both batches were judged) in "
         "vermillion"
     )
+    possible = described.images * (described.images - 1) // 2
     caption = (
-        f"The comparison graph, in one layout: each node is one of the {described.images:,} images, sized by its "
-        f"number of comparisons ({described.comparisons_min:,} to {described.comparisons_max:,}, median "
+        f"The comparison graph: each node is one of the {described.images:,} images, sized by its number of "
+        f"comparisons ({described.comparisons_min:,} to {described.comparisons_max:,}, median "
         f"{described.comparisons_median:g}), and each edge joins two images judged against each other: "
-        f"{described.pairs:,} pairs in {described.judgments:,} judgments, a density of "
-        f"{100 * described.density:.1f}\\% of all possible pairs. (a) Coloured {batch_text}; (b) coloured by final "
-        f"Elo score. Ringed: the {len(described.anchors)} anchor images, compared more than {in_words(anchor_factor)} "
-        f"times the median number of comparisons. {connected}"
+        f"{described.pairs:,} pairs in {described.judgments:,} judgments, {100 * described.density:.1f}\\% of the "
+        f"{possible:,} possible pairs. Ringed: the {len(described.anchors)} anchor images, compared more than "
+        f"{in_words(anchor_factor)} times the median number of comparisons. {connected} (a) Coloured {batch_text}; "
+        "(b) coloured by final Elo score."
     )
     paths = save_figure(figure, folder / "figures" / "comparison_graph", caption, "fig:comparison_graph")
     rows = [

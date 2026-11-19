@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-15T09:19:39+00:00",
-  "ended": "2026-11-15T09:19:39+00:00",
+  "started": "2026-11-18T12:47:07+00:00",
+  "ended": "2026-11-18T12:47:07+00:00",
   "inputs": [
     {
       "path": "build/evaluate/trivial/by_elo_gap.tsv",
@@ -553,27 +553,27 @@
     },
     "shown": [],
     "labels": {
-      "trivial": "Trivial measures, combined",
+      "trivial": "Both together",
       "ink_coverage": "Ink coverage",
       "text_lines": "Number of text lines",
-      "generic": "Generic image measures, combined",
+      "generic": "Generic image measures",
       "edge_orientation_entropy": "Edge-orientation entropy",
       "mssc": "MSSC per scale",
       "compressibility": "Lossless compressibility",
       "feature_congestion": "Feature congestion",
       "colourfulness": "Colourfulness",
       "codebook_variety": "Patch-codebook variety",
-      "kyle_davidson": "Kyle–Davidson as published, combined",
+      "kyle_davidson": "Kyle–Davidson",
       "clutter": "Clutter (normalised cut)",
       "symmetry": "Patch symmetry",
       "entropy": "HSV entropy",
-      "ink_distribution": "Ink distribution, combined",
+      "ink_distribution": "Ink distribution",
       "lacunarity": "Lacunarity",
       "fragmentation": "Fragmentation",
       "chromatic_share": "Chromatic share",
       "hue_classes": "Hue classes",
-      "line_texture": "Line texture as published",
-      "colour": "Real colour, combined",
+      "line_texture": "Line texture",
+      "colour": "Ink colour",
       "colour_chromatic_share": "Chromatic share",
       "colour_hue_classes": "Hue classes",
       "colour_hue_entropy": "Hue entropy",
@@ -581,12 +581,13 @@
       "colour_zones": "Colour by zone",
       "colour_lines": "Colour across lines",
       "colour_coloured_initials": "Coloured initials",
-      "geometry": "Geometry",
-      "geometry_layout": "Geometry with Layout",
+      "geometry": "Layout (geometry)",
+      "geometry_layout": "Layout (geometry with Kyle–Davidson)",
       "mean_token": "Linear model on the mean ViT token",
       "vit": "Local ViT head",
-      "ensemble": "Ensemble (geometry and ViT)"
+      "ensemble": "Ensemble: Layout (geometry) and ViT"
     },
+    "in_text": {},
     "colours": {
       "trivial": "trivial",
       "ink_coverage": "trivial",
@@ -606,7 +607,6 @@
       "fragmentation": "ink",
       "chromatic_share": "ink",
       "hue_classes": "ink",
-      "line_texture": "colour",
       "colour_chromatic_share": "colour",
       "colour_hue_classes": "colour",
       "colour_hue_entropy": "colour",
@@ -702,6 +702,7 @@
       "colour_lines",
       "colour_coloured_initials"
     ],
+    "defined_in": "baselines_by_information",
     "reference_column": "",
     "colour_pages": [],
     "score_run": null,
@@ -709,9 +710,17 @@
     "profiles": [],
     "collection": "manuscripts",
     "catalogue_credit": "",
+    "title_credit": "",
+    "repository": "",
     "thumbnail_size": 400,
     "named": [],
-    "min_lines": 0
+    "min_lines": 0,
+    "difficulty_runs": {},
+    "difficulty_main": "cremma",
+    "manuscript_table": null,
+    "neighbours": 0.25,
+    "outside_lines": 5,
+    "outside_share": 0.1
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -733,7 +742,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "01298e25c9fb0281e54e9a0ed7ac14beab07268e-dirty",
+  "commit": "4421c8db3cbdfb8b36af1be4223667f9aa97a5f1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "baselines_by_information_each_measure": {
@@ -741,7 +750,7 @@
         {
           "level": "Trivial",
           "evaluation": "trivial",
-          "label": "Trivial measures, combined",
+          "label": "Both together",
           "alone": false,
           "accuracy": 0.585198,
           "low": 0.534401,
@@ -777,7 +786,7 @@
         {
           "level": "Image only",
           "evaluation": "generic",
-          "label": "Generic image measures, combined",
+          "label": "Generic image measures",
           "alone": false,
           "accuracy": 0.600118,
           "low": 0.555736,
@@ -861,7 +870,7 @@
         {
           "level": "Kyle–Davidson",
           "evaluation": "kyle_davidson",
-          "label": "Kyle–Davidson as published, combined",
+          "label": "Kyle–Davidson",
           "alone": false,
           "accuracy": 0.596131,
           "low": 0.547668,
@@ -909,7 +918,7 @@
         {
           "level": "Ink",
           "evaluation": "ink_distribution",
-          "label": "Ink distribution, combined",
+          "label": "Ink distribution",
           "alone": false,
           "accuracy": 0.644215,
           "low": 0.599514,
@@ -969,7 +978,7 @@
         {
           "level": "Colour",
           "evaluation": "line_texture",
-          "label": "Line texture as published",
+          "label": "Line texture",
           "alone": false,
           "accuracy": 0.648115,
           "low": 0.599415,
@@ -981,7 +990,7 @@
         {
           "level": "Colour",
           "evaluation": "colour",
-          "label": "Real colour, combined",
+          "label": "Ink colour",
           "alone": false,
           "accuracy": 0.503338,
           "low": 0.458956,
@@ -1077,7 +1086,7 @@
         {
           "level": "Layout",
           "evaluation": "geometry",
-          "label": "Geometry",
+          "label": "Layout (geometry)",
           "alone": false,
           "accuracy": 0.720414,
           "low": 0.674894,
@@ -1089,7 +1098,7 @@
         {
           "level": "Layout",
           "evaluation": "geometry_layout",
-          "label": "Geometry with Layout",
+          "label": "Layout (geometry with Kyle–Davidson)",
           "alone": false,
           "accuracy": 0.712552,
           "low": 0.6724,
@@ -1125,7 +1134,7 @@
         {
           "level": "Learned",
           "evaluation": "ensemble",
-          "label": "Ensemble (geometry and ViT)",
+          "label": "Ensemble: Layout (geometry) and ViT",
           "alone": false,
           "accuracy": 0.743054,
           "low": 0.700565,
@@ -1139,7 +1148,7 @@
       "ceiling": 0.890535
     },
     "seconds": {
-      "baselines_by_information_each_measure": 0.42
+      "baselines_by_information_each_measure": 0.385
     }
   }
 }

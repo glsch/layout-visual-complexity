@@ -15,7 +15,13 @@ from layout_visual_complexity.compare import CompareSettings, run_compare
 from layout_visual_complexity.evaluation.model import PairwiseModel, TrainedModel
 from layout_visual_complexity.evaluation.vit_head import HeadSettings, HeadWeights, TrainedHead
 from layout_visual_complexity.features.contract import load_families
-from layout_visual_complexity.manuscript_reports import CollectionSettings, load_collection, make, scale_sentence
+from layout_visual_complexity.manuscript_reports import (
+    CollectionSettings,
+    load_collection,
+    make,
+    pages_sentence,
+    scale_sentence,
+)
 from layout_visual_complexity.score import ScoreSettings, read_scores, run_score
 from layout_visual_complexity.score_steps import FeaturesStep, FeatureStepSettings, TokensStep, TokenStepSettings
 from layout_visual_complexity.scoring import ScoringModels
@@ -171,9 +177,36 @@ def test_profiles_and_the_overview_are_drawn_from_a_score_run(
     ]  # fmt: skip
     collection = load_collection(tmp_path / "run", None, 50, 1)
     settings = CollectionSettings(tmp_path / "run", bootstrap=50, cache=tmp_path / "cache")
-    for output in ("manuscript_profile_strips", "manuscript_strips", "manuscript_overview_quadrants",
-                   "manuscripts_table"):  # fmt: skip
+    for output in ("manuscript_strips", "manuscript_overview", "manuscripts_table"):
         assert make(output, settings, collection, tmp_path / "report").paths
+
+
+def test_the_profiles_captions_open_with_the_manuscript_as_catalogued(
+    tmp_path: Path, scoring: tuple[ScoringModels, list[str]]
+) -> None:
+    models, sources = scoring
+    score(tmp_path, "run", sources, models, 1)
+    catalogue = tmp_path / "catalogue.tsv"
+    catalogue.write_text(
+        "# Two manuscripts as catalogued.\nmanuscript\tshelfmark\tcatalogue_number\tdate\tfolios\tmaterial\ttitle\n"
+        "msa\tMS A\tK1\tXV in. + XV2\t12\tpaper\t[Textus varii]\nmsb\tMS B\tK2\t1463\t8\tparchment\t\n",
+        encoding="utf-8",
+    )
+    collection = load_collection(tmp_path / "run", catalogue, 50, 1)
+    settings = CollectionSettings(tmp_path / "run", catalogue=catalogue, bootstrap=50, cache=tmp_path / "cache",
+                                  catalogue_credit="Catalogue facts from a catalogue.",
+                                  title_credit="the title from the record", repository="Here, A Library")  # fmt: skip
+    make("manuscript_profiles", settings, collection, tmp_path / "report")
+    figures = tmp_path / "report" / "figures"
+    first = (figures / "manuscript_profile_msa.tex").read_text(encoding="utf-8")
+    assert (
+        "\\caption{Here, A Library, MS A, paper, 12 leaves, early 15th century and second half of the 15th century: "
+        "[Textus varii]. Its " in first
+    )
+    assert "Catalogue facts from a catalogue, no. K1; the title from the record." in first
+    second = (figures / "manuscript_profile_msb.tex").read_text(encoding="utf-8")
+    assert "\\caption{Here, A Library, MS B, parchment, 8 leaves, 1463. Its " in second
+    assert "Catalogue facts from a catalogue, no. K2." in second and "title from" not in second
 
 
 def test_pages_with_too_few_lines_are_left_out_and_counted_in_the_captions(
@@ -188,10 +221,11 @@ def test_pages_with_too_few_lines_are_left_out_and_counted_in_the_captions(
     kept = load_collection(tmp_path / "run", None, 50, 1, min_lines=5)
     assert len(kept.scores) == 5 and not kept.scores["page"].isin(["msa_2r", "msb_1r"]).any()
     assert sum(kept.blank.values()) == 2 and set(kept.blank.values()) == {1}
-    assert "The 2 leaves on which Kraken finds fewer than 5 text lines" in scale_sentence(kept)
+    assert "The 2 leaves on which Kraken finds fewer than 5 text lines" in pages_sentence(kept)
     document = kept.scores.loc[kept.scores["page"].str.startswith("msa"), "document"].iloc[0]
-    assert "Its 1 leaf on which Kraken finds fewer than 5" in scale_sentence(kept, document)
-    assert "left out" not in scale_sentence(load_collection(tmp_path / "run", None, 50, 1, min_lines=2))
+    assert "Its 1 leaf on which Kraken finds fewer than 5" in pages_sentence(kept, document)
+    assert "left out" not in pages_sentence(load_collection(tmp_path / "run", None, 50, 1, min_lines=2))
+    assert "Layout (geometry) and ViT rankers" in scale_sentence(kept)
 
 
 def test_compare_gives_complementary_probabilities_in_either_order(

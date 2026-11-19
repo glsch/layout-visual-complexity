@@ -30,15 +30,15 @@ labels:
   kyle_davidson: Kyle–Davidson
   ink_distribution: Ink distribution
   line_texture: Line texture
-  colour: Real colour
-  geometry: Geometry
-  geometry_layout: Geometry with Layout
-  geometry_line_texture: Geometry with line texture
-  geometry_colour: Geometry with real colour
+  colour: Ink colour
+  geometry: Layout (geometry)
+  geometry_layout: Layout (geometry with Kyle–Davidson)
+  geometry_line_texture: Layout (geometry) with line texture
+  geometry_colour: Layout (geometry) with ink colour
   mean_token: Mean ViT token
   vit: ViT
   ensemble: Ensemble
-  ensemble_layout: Ensemble with Layout
+  ensemble_layout: Ensemble with Layout (Kyle–Davidson)
   ensemble_fitted: Ensemble, fitted
-  ensemble_layout_fitted: Ensemble with Layout, fitted
-  ensemble_colour: Ensemble with colour
+  ensemble_layout_fitted: Ensemble with Layout (Kyle–Davidson), fitted
+  ensemble_colour: Ensemble with ink colour

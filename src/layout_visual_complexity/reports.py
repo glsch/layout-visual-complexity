@@ -5,10 +5,9 @@
 - `geometry_feature_hierarchy`: the families' features: family, feature, code name, number of flavours, definition.
 - `geometry_feature_correlations`: each feature's best flavour's Spearman correlation with the Elo scores, with its
   95% interval over manuscripts; the table holds every column's.
-- `geometry_features_on_page`: the geometric features drawn on real pages, one group a panel; and
-  `geometry_features_on_schematic_page`, the same on a made-up page.
-- `geometry_feature_families`: the plate of the geometric groups and Layout's measures on a made-up page, with their
-  code names.
+- `geometry_features_on_page`: the geometric features drawn on real pages, one group a panel.
+- `geometry_feature_families`: the plate of the geometric groups and the measures of Layout (Kyle–Davidson) on a
+  made-up page, with their code names.
 - The methods' tables and figures (`method_reports.py`): `methods_by_elo_gap`, `ensembles_by_elo_gap`,
   `accuracy_by_elo_gap`, `paired_differences`, `learning_curves_and_calibration`, `local_complexity_maps`.
 - The baselines' (`method_reports.py`, `baseline_reports.py`): `baselines_by_elo_gap`, `baseline_differences`,
@@ -18,8 +17,7 @@
 - The colour level's (`colour_reports.py`): `colour_by_elo_gap`, `colour_differences`, `line_texture_families`,
   `colour_measures`, `ink_colour_on_page`.
 - A collection of manuscripts scored by `lvc score` (`manuscript_reports.py`): `manuscript_profiles`,
-  `manuscript_profile_strips`, `manuscript_strips`, `manuscript_overview`, `manuscript_overview_quadrants`,
-  `manuscripts_table`, `manuscript_readings`.
+  `manuscript_strips`, `manuscript_overview`, `manuscripts_table`, `manuscript_readings`.
 - The difficulty experiment, from `lvc difficulty` runs (`difficulty_reports.py`): `difficulty_against_complexity`,
   `difficulty_regression`, `difficulty_regression_across_and_within`, `difficulty_held_out`,
   `difficulty_correlations`, `difficulty_main_text_and_margins`, `difficulty_ground_truth_coverage`,
@@ -64,7 +62,6 @@ Output = Literal[
     "geometry_feature_hierarchy",
     "geometry_feature_correlations",
     "geometry_features_on_page",
-    "geometry_features_on_schematic_page",
     "geometry_feature_families",
     "methods_by_elo_gap",
     "ensembles_by_elo_gap",
@@ -85,10 +82,8 @@ Output = Literal[
     "colour_measures",
     "ink_colour_on_page",
     "manuscript_profiles",
-    "manuscript_profile_strips",
     "manuscript_strips",
     "manuscript_overview",
-    "manuscript_overview_quadrants",
     "manuscripts_table",
     "manuscript_readings",
     "difficulty_against_complexity",
@@ -105,17 +100,17 @@ Output = Literal[
 ]
 ALL_OUTPUTS: list[Output] = list(get_args(Output))
 
-# The flavour a drawing of each geometric group reports.
+# The flavour a drawing of each geometric group reports, and its name in the caption.
 HEADLINES = {
-    "AreaFeature__WrittenSpaceRatio": "convexity",
-    "AreaFeature__WrittenSpaceRectangularity": "outside_ratio",
-    "AreaFeature__LineSimilarity": "dice_median",
-    "AreaFeature__GraphicZoneArea": "graphic_total_area_ratio",
-    "AreaFeature__DropCapitalArea": "drop_capital_num_isolated_instances",
-    "LineFeature__LineLength": "var_coef",
-    "LineFeature__InterlinearDistance": "max_gap_std",
-    "LineFeature__ZigzagScore": "std_right",
-    "LineFeature__LineParallelism": "pairwise_angle_diff_mean",
+    "AreaFeature__WrittenSpaceRatio": ("convexity", "written space's convexity"),
+    "AreaFeature__WrittenSpaceRectangularity": ("outside_ratio", "share outside the rectangle"),
+    "AreaFeature__LineSimilarity": ("dice_median", "median Dice similarity"),
+    "AreaFeature__GraphicZoneArea": ("graphic_total_area_ratio", "graphic zones' share of the folio"),
+    "AreaFeature__DropCapitalArea": ("drop_capital_num_isolated_instances", "separate drop capitals"),
+    "LineFeature__LineLength": ("var_coef", "variation of the lines' lengths"),
+    "LineFeature__InterlinearDistance": ("max_gap_std", "variation of the longest interlinear distance"),
+    "LineFeature__ZigzagScore": ("std_right", "variation of the right ends"),
+    "LineFeature__LineParallelism": ("pairwise_angle_diff_mean", "mean difference between two baselines' angles"),
 }
 DRAWN = {
     "AreaFeature__WrittenSpaceRatio": "the union of the line polygons (blue) and its convex hull (dashed)",
@@ -135,7 +130,7 @@ LAYOUT_DRAWN = {
     "Order": "the written mass's text block with its axes of symmetry, the mass's centre (dot) and the folio's (cross)",
     "Entropy": "the zones, filled by type",
     "Blank space": "the largest empty rectangle and the margins around the text block",
-}
+}  # by the plate's panels (`plots.features.LAYOUT_DRAWINGS`)
 
 
 @dataclass(frozen=True)
@@ -155,6 +150,8 @@ class ReportSettings:
         shown: The evaluations a table shows as its columns, by short name; all by default. The others serve its
             comparisons.
         labels: Each evaluation's name in the tables.
+        in_text: Each evaluation's name within a sentence, where it isn't its label, as an ensemble's definition names
+            its members (`the local ViT head`).
         colours: Each evaluation's colour in the figures: a method's (`geometry`, `vit`, `ensemble`, …) or a hex
             code; by default its short name's, if it is a method's, else its kind's.
         comparisons: Pairs of evaluations (by short name) whose differences `paired_differences` gives, the first
@@ -177,14 +174,21 @@ class ReportSettings:
         levels: Each evaluation's level of information (its group in the figures of the baselines), by short name;
             the levels in the order they first come.
         alone: The evaluations of one measure alone, drawn as open dots.
+        defined_in: A figure (its name) whose caption defines the evaluations; a caption refers to it instead of
+            defining them again.
         reference_column: The column the generic measures are set against (ink coverage).
         colour_pages: The pages whose ink colour is drawn.
         score_run: A `lvc score` folder, for a collection's profiles, strips, overview, table and readings.
         catalogue: The collection's catalogue facts (a TSV by manuscript id: shelfmark, catalogue number, date,
-            folios, hands, texts, languages, homogeneity, colours).
+            folios, hands, texts, languages, homogeneity, colours; material and title).
         profiles: The manuscripts whose profiles are drawn, by id; all by default.
         collection: The collection's name, which its overview, table and readings are named by.
-        catalogue_credit: A line crediting the catalogue, added to the captions that use its facts.
+        catalogue_credit: A line crediting the catalogue, added to the captions that use its facts; a profile's
+            names the manuscript's entry (`no. K12`).
+        title_credit: Where the catalogue's titles come from, added to a profile's caption when it gives one (`the
+            title from the library's record`).
+        repository: The library holding the collection, before the shelfmark in a profile's caption (`Prague,
+            National Library of the Czech Republic`).
         thumbnail_size: The profiles' thumbnails' longer edge, in pixels, as fetched from the IIIF image service.
         named: The manuscripts whose places by interquartile range the readings give, by id.
         min_lines: A collection's pages with fewer of Kraken's text lines than this are left out of its outputs
@@ -211,6 +215,7 @@ class ReportSettings:
     evaluations: dict[str, Path] = field(default_factory=dict)
     shown: list[str] = field(default_factory=list)
     labels: dict[str, str] = field(default_factory=dict)
+    in_text: dict[str, str] = field(default_factory=dict)
     colours: dict[str, str] = field(default_factory=dict)
     comparisons: list[list[str]] = field(default_factory=list)
     families: list[str] = field(default_factory=lambda: ["geometry", "layout"])
@@ -227,6 +232,7 @@ class ReportSettings:
     http: HttpSettings = field(default_factory=HttpSettings)
     levels: dict[str, str] = field(default_factory=dict)
     alone: list[str] = field(default_factory=list)
+    defined_in: str = ""
     reference_column: str = ""
     colour_pages: list[str] = field(default_factory=list)
     score_run: Path | None = None
@@ -234,6 +240,8 @@ class ReportSettings:
     profiles: list[str] = field(default_factory=list)
     collection: str = "manuscripts"
     catalogue_credit: str = ""
+    title_credit: str = ""
+    repository: str = ""
     thumbnail_size: int = 400
     named: list[str] = field(default_factory=list)
     min_lines: int = 0
@@ -270,8 +278,6 @@ def run_report(settings: ReportSettings) -> dict[str, object]:
             written = feature_correlations(settings, run, folder)
         elif output == "geometry_features_on_page":
             written = features_on_page(settings, run, folder)
-        elif output == "geometry_features_on_schematic_page":
-            written = features_on_schematic_page(folder)
         elif output == "geometry_feature_families":
             written = feature_families(folder)
         elif output in METHOD_OUTPUTS:
@@ -319,6 +325,8 @@ def collection_settings(settings: ReportSettings, output: str) -> "manuscript_re
         collection=settings.collection,
         image_credit=settings.image_credit,
         catalogue_credit=settings.catalogue_credit,
+        title_credit=settings.title_credit,
+        repository=settings.repository,
         thumbnail_size=settings.thumbnail_size,
         named=list(settings.named),
         min_lines=settings.min_lines,
@@ -478,8 +486,9 @@ def feature_hierarchy(families: list[Family], folder: Path) -> Written:
         caption="The features: each feature's family, its code name (columns are named "
         r"\texttt{Family\_\_Feature\_\_Flavour}), its number of flavours $n$, and their definitions. ``Range'' "
         "(\\texttt{max\\_dev}) is the maximum minus the minimum. Lengths and offsets are relative to the zone's width, "
-        "interlinear distances to the folio's diagonal, areas to the folio's area. The Layout family adapts "
-        "Kyle--Davidson's dimensions of scene complexity to the page.",
+        "interlinear distances to the folio's diagonal, areas to the folio's area. Area and Line are the geometric "
+        f"features, {method_reports.NAMES['geometry']}; {method_reports.NAMES['layout']} adapts Kyle--Davidson's "
+        "dimensions of scene complexity to the page.",
         label="tab:geometry_feature_hierarchy",
         align=r"lcccp{0.38\linewidth}",
         rules_before=[*breaks, len(latex_rows) - 1],
@@ -536,38 +545,60 @@ def feature_correlations(settings: ReportSettings, run: Run, folder: Path) -> Wr
     found = correlations(table.values, elo, manuscripts, settings.bootstrap, settings.seed)
     found["family"] = found["column"].map(table.columns)
     found["feature"] = found["column"].str.rsplit("__", n=1).str[0]
-    found["words"] = [families[family].words(column) for column, family in zip(found["column"], found["family"],
-                                                                                strict=True)]  # fmt: skip
+    pairs = list(zip(found["column"], found["family"], strict=True))
+    found["words"] = [families[family].words(column) for column, family in pairs]
+    found["label"] = [families[family].label(column) for column, family in pairs]
     strength = found["rho"].abs().fillna(-1)
     found["best"] = strength == strength.groupby(found["feature"]).transform("max")
     found.loc[found.duplicated(["feature", "best"]) & found["best"], "best"] = False
     best = found[found["best"]].sort_values("rho", key=lambda values: -values.abs()).reset_index(drop=True)
     figure = plot_feature_correlations(best)
     pages = int(found["pages"].max())
-    described = "; ".join(f"\\texttt{{{escape(row.column)}}}, {row.words}" for row in best.itertuples(index=False))
+    described = "; ".join(
+        f"{escape(method_reports.in_sentence(row.label))}: {row.words}" for row in best.itertuples(index=False)
+    )
     caption = (
-        "Spearman's correlation ($\\rho$) between each feature's best flavour (the one whose correlation is "
-        f"strongest) and the pages' Elo scores, over the {pages:,} pages, with 95\\% intervals from "
-        f"{settings.bootstrap:,} resamples of the manuscripts; blue where negative, vermillion where positive. From "
-        f"top to bottom: {described}."
+        "Spearman's correlation ($\\rho$) between each feature and the pages' Elo scores, over the "
+        f"{pages:,} pages, with 95\\% intervals from {settings.bootstrap:,} resamples of the manuscripts; blue where "
+        "negative, vermillion where positive. Each feature is shown by its flavour whose correlation is strongest, "
+        f"named after the feature: from top to bottom, {described}.{families_sentence(best, settings.families)}"
     )
     paths = save_figure(figure, folder / "figures" / "geometry_feature_correlations", caption,
                         "fig:geometry_feature_correlations")  # fmt: skip
     ordered = found.sort_values(["family", "feature", "column"], kind="stable")
-    columns = ["column", "family", "feature", "rho", "low", "high", "pages", "best", "words"]
+    columns = ["column", "family", "feature", "rho", "low", "high", "pages", "best", "label", "words"]
     latex = LatexTable(
         headers=["Feature", r"$\rho$", r"95\% interval"],
         rows=[
-            [code(row.column), decimal(row.rho), f"[{decimal(row.low)}, {decimal(row.high)}]"]
+            [escape(row.label), decimal(row.rho), f"[{decimal(row.low)}, {decimal(row.high)}]"]
             for row in best.itertuples(index=False)
         ],  # fmt: skip
-        caption="Spearman's correlation between each feature's best flavour and the pages' Elo scores, with 95\\% "
-        f"intervals from {settings.bootstrap:,} resamples of the manuscripts. The TSV gives every flavour's.",
+        caption="Spearman's correlation between each feature's flavour whose correlation is strongest and the pages' "
+        f"Elo scores, with 95\\% intervals from {settings.bootstrap:,} resamples of the manuscripts; the flavours as "
+        "Figure~\\ref{fig:geometry_feature_correlations} defines them. The TSV gives every flavour's.",
         label="tab:geometry_feature_correlations",
         align="lcc",
     )
     paths += write_table(ordered[columns], folder / "tables" / "geometry_feature_correlations", latex)
     return Written(paths, {"best": best[["column", "rho", "low", "high"]].to_dict("records")})
+
+
+def families_sentence(best: pd.DataFrame, families: list[str]) -> str:
+    """Which family each feature shown belongs to, when they come from several: the features of each family but the
+    first, then the first's as the others."""
+    present = [name for name in dict.fromkeys(best["family"]) if name in families]
+    if len(present) < 2:
+        return ""
+    present.sort(key=families.index)
+    first, *others = present
+    parts = []
+    for name in others:
+        features = [
+            method_reports.in_sentence(label.split(",")[0]) for label in best.loc[best["family"] == name, "label"]
+        ]
+        listed = ", ".join(features[:-1]) + f" and {features[-1]}" if len(features) > 1 else features[0]
+        parts.append(f"{listed[0].upper() + listed[1:]} are measures of {method_reports.NAMES.get(name, escape(name))}")
+    return " " + "; ".join(parts) + f", the others of {method_reports.NAMES.get(first, escape(first))}."
 
 
 # The features drawn on pages.
@@ -597,9 +628,10 @@ def page_image(images: SegmentationImages, page: str, long_edge: int = 900) -> n
 
 
 def headline(group: str, value: float) -> str:
-    flavour = HEADLINES[group]
+    """The value a drawing reports, named in words: `written space's convexity, 0.651`."""
+    flavour, named = HEADLINES[group]
     shown = f"{value:.0f}" if flavour.endswith("instances") else f"{value:.3f}"
-    return f"\\texttt{{{escape(flavour)}}} {shown}"
+    return f"{named}, {shown}"
 
 
 def features_on_page(settings: ReportSettings, run: Run, folder: Path) -> Written:
@@ -620,11 +652,13 @@ def features_on_page(settings: ReportSettings, run: Run, folder: Path) -> Writte
             page = read_page(layout, chosen[group])  # type: ignore[index]
             values = aggregate(family, family.measure(page))
             panels.append((group, page, page_image(images, page.page)))
-            value = values[f"{group}__{HEADLINES[group]}"]
+            value = values[f"{group}__{HEADLINES[group][0]}"]
             described.append(f"{DRAWN[group]}, on {escape(page.page)} ({headline(group, value)})")
     figure = plot_features_on_pages(panels, family.settings)
     letters = [f"({chr(ord('a') + number)}) {text}" for number, text in enumerate(described)]
-    caption = "The geometric features drawn on pages of the dataset: " + "; ".join(letters) + "."
+    caption = (
+        "The geometric features drawn on pages of the dataset, each with the page's value: " + "; ".join(letters) + "."
+    )
     if settings.image_credit:
         caption += f" {escape(settings.image_credit)}"
     stem = folder / "figures" / "geometry_features_on_page"
@@ -632,36 +666,30 @@ def features_on_page(settings: ReportSettings, run: Run, folder: Path) -> Writte
     return Written(paths, {"pages": dict(chosen)})  # type: ignore[arg-type]
 
 
-def features_on_schematic_page(folder: Path) -> Written:
-    """The geometric groups drawn on a made-up page, with its values."""
-    from layout_visual_complexity.plots.features import GROUP_DRAWINGS, plot_features_on_pages, schematic_page
-
-    page = schematic_page()
-    family = Geometry()
-    values = aggregate(family, family.measure(page))
-    figure = plot_features_on_pages([(group, page, None) for group in GROUP_DRAWINGS], family.settings)
-    described = []
-    for number, group in enumerate(GROUP_DRAWINGS):
-        shown = headline(group, values[f"{group}__{HEADLINES[group]}"])
-        described.append(f"({chr(ord('a') + number)}) {DRAWN[group]} ({shown})")
-    caption = "The geometric features drawn on a made-up page: " + "; ".join(described) + "."
-    paths = save_figure(figure, folder / "figures" / "geometry_features_on_schematic_page", caption,
-                        "fig:geometry_features_on_schematic_page")  # fmt: skip
-    return Written(paths, {"values": {group: values[f"{group}__{HEADLINES[group]}"] for group in GROUP_DRAWINGS}})
-
-
 def feature_families(folder: Path) -> Written:
-    """The plate: the nine geometric groups and Layout's four measures on a made-up page, with their code names."""
-    from layout_visual_complexity.plots.features import GROUP_DRAWINGS, plot_feature_families, schematic_page
+    """The plate: the nine geometric groups and the measures of Layout (Kyle–Davidson) on a made-up page, with their
+    code names."""
+    from layout_visual_complexity.plots.features import (
+        GROUP_DRAWINGS,
+        LAYOUT_DRAWINGS,
+        plot_feature_families,
+        schematic_page,
+    )
 
     figure = plot_feature_families(schematic_page(), GeometrySettings(), LayoutSettings())
-    drawn = [DRAWN[group] for group in GROUP_DRAWINGS] + list(LAYOUT_DRAWN.values())
-    names = [group.split("__")[1] for group in GROUP_DRAWINGS] + list(LAYOUT_DRAWN)
+    drawn = [DRAWN[group] for group in GROUP_DRAWINGS] + [LAYOUT_DRAWN[panel] for panel in LAYOUT_DRAWINGS]
+    measures = [[prefix.split("__")[1] for prefix in prefixes] for _, prefixes in LAYOUT_DRAWINGS.values()]
+    names = [group.split("__")[1] for group in GROUP_DRAWINGS]
+    names += [", ".join(named[:-1]) + f" and {named[-1]}" if len(named) > 1 else named[0] for named in measures]
     described = [f"({chr(ord('a') + number)}) {escape(name)}: {text}" for number, (name, text) in
                  enumerate(zip(names, drawn, strict=True))]  # fmt: skip
+    count = sum(len(named) for named in measures)
     caption = (
         "The features, each drawn on the same made-up page, with its code name below: the nine groups of geometric "
-        "features, then the four measures of the Layout family. " + "; ".join(described) + "."
+        f"features of {method_reports.NAMES['geometry']}, then the {method_reports.number_word(count)} measures of "
+        f"{method_reports.NAMES['layout']}, in {method_reports.number_word(len(measures))} panels. "
+        + "; ".join(described)
+        + "."
     )
     paths = save_figure(figure, folder / "figures" / "geometry_feature_families", caption,
                         "fig:geometry_feature_families")  # fmt: skip

@@ -24,6 +24,8 @@ from layout_visual_complexity.features.contract import Family, FeatureError, Gro
 from layout_visual_complexity.features.page import Page, polygon_coverage, raster_shape, shape
 
 FLAVOURS = ("mass", "ink")
+# The measures that take each layer (`FLAVOURS`) as a flavour of their own.
+LAYERED = ("Symmetry", "Regularity", "Balance")
 BLANK_SPACE = ("share", "largest_empty", "margin_top", "margin_bottom", "margin_left", "margin_right")
 
 
@@ -82,7 +84,7 @@ class Layout(Family):
         if mass:
             groups.append(
                 Group(
-                    "Layout",
+                    "Layout (Kyle–Davidson)",
                     "Clutter",
                     "Layout__Clutter",
                     ("zones", "zone_types", "line_types"),
@@ -91,7 +93,7 @@ class Layout(Family):
             )
         groups += [
             Group(
-                "Layout",
+                "Layout (Kyle–Davidson)",
                 "Symmetry",
                 "Layout__Symmetry",
                 tuple(f"{axis}_{flavour}" for flavour in flavours for axis in ("left_right", "top_bottom")),
@@ -99,14 +101,14 @@ class Layout(Family):
                 "horizontal axes.",
             ),
             Group(
-                "Layout",
+                "Layout (Kyle–Davidson)",
                 "Regularity",
                 "Layout__Regularity",
                 tuple(f"{axis}_{flavour}" for flavour in flavours for axis in ("vertical", "horizontal")),
                 "Highest autocorrelation peak of the mass beyond the central lobe, vertically and horizontally.",
             ),
             Group(
-                "Layout",
+                "Layout (Kyle–Davidson)",
                 "Balance",
                 "Layout__Balance",
                 tuple(f"{centre}_{flavour}" for flavour in flavours for centre in ("text_block", "folio")),
@@ -117,14 +119,14 @@ class Layout(Family):
         if mass:
             groups += [
                 Group(
-                    "Layout",
+                    "Layout (Kyle–Davidson)",
                     "Entropy",
                     "Layout__Entropy",
                     ("zone_types",),
                     "Shannon entropy of the zone types' shares of the zones' area.",
                 ),
                 Group(
-                    "Layout",
+                    "Layout (Kyle–Davidson)",
                     "Blank space",
                     "Layout__BlankSpace",
                     BLANK_SPACE,
@@ -132,6 +134,25 @@ class Layout(Family):
                 ),
             ]
         return groups
+
+    def label(self, column: str) -> str:
+        """`Symmetry, top and bottom`: the written mass's and the ink's flavours share their labels, as captions say
+        which is shown."""
+        _, feature, flavour = column.split("__")
+        group = next(group for group in self.groups() if group.prefix == f"Layout__{feature}")
+        flavour = flavour.removesuffix("_mass").removesuffix("_ink") if feature in LAYERED else flavour
+        named = {
+            "left_right": "left and right",
+            "top_bottom": "top and bottom",
+            "text_block": "text block",
+            "zone_types": "zone types",
+            "line_types": "line types",
+            "share": "unwritten share",
+            "largest_empty": "largest",
+        }.get(flavour)
+        if named is None and flavour.startswith("margin_"):
+            named = f"{flavour.removeprefix('margin_')} margin"
+        return f"{group.feature}, {named or flavour}"
 
     def words(self, column: str) -> str:
         _, feature, flavour = column.split("__")

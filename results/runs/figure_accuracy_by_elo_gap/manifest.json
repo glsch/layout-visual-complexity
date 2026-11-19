@@ -1,8 +1,23 @@
 {
   "command": "report",
-  "started": "2026-11-15T09:19:46+00:00",
-  "ended": "2026-11-15T09:19:47+00:00",
+  "started": "2026-11-18T12:48:00+00:00",
+  "ended": "2026-11-18T12:48:00+00:00",
   "inputs": [
+    {
+      "path": "build/evaluate/line_texture/by_elo_gap.tsv",
+      "sha256": "f2fbd36d8373e07116254bc386e7c2d7f86e2ba93d71111eee3082ca83ea1df6",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/line_texture/metrics.tsv",
+      "sha256": "1fe8fa7660413c2780bbe9c951d28697636805307b45ef5b4488fc5bc14addcb",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/line_texture/manifest.json",
+      "sha256": "681941215935dce87bed971fc1a042411129b2e8666324e82588a39137b77695",
+      "bytes": 8539
+    },
     {
       "path": "build/evaluate/colour/by_elo_gap.tsv",
       "sha256": "34211a96e28c9ae627c9ca24824c5548a040432d61e834af59b124e3f5da63ae",
@@ -62,6 +77,21 @@
       "path": "build/evaluate/ensemble/manifest.json",
       "sha256": "12b7b6667bc19196b4962ade939080f291d37aab4c3111facd8a056c7966b67e",
       "bytes": 12962
+    },
+    {
+      "path": "build/evaluate/line_texture/by_elo_gap.tsv",
+      "sha256": "f2fbd36d8373e07116254bc386e7c2d7f86e2ba93d71111eee3082ca83ea1df6",
+      "bytes": 735
+    },
+    {
+      "path": "build/evaluate/line_texture/metrics.tsv",
+      "sha256": "1fe8fa7660413c2780bbe9c951d28697636805307b45ef5b4488fc5bc14addcb",
+      "bytes": 539
+    },
+    {
+      "path": "build/evaluate/line_texture/manifest.json",
+      "sha256": "681941215935dce87bed971fc1a042411129b2e8666324e82588a39137b77695",
+      "bytes": 8539
     },
     {
       "path": "build/evaluate/colour/by_elo_gap.tsv",
@@ -142,6 +172,7 @@
     "features": "build/features/dataset/features.parquet",
     "layout": "build/segment/dataset",
     "evaluations": {
+      "line_texture": "build/evaluate/line_texture",
       "colour": "build/evaluate/colour",
       "geometry": "build/evaluate/geometry",
       "vit": "build/evaluate/vit",
@@ -149,11 +180,13 @@
     },
     "shown": [],
     "labels": {
-      "colour": "Colour",
-      "geometry": "Geometry",
+      "line_texture": "Line texture",
+      "colour": "Ink colour",
+      "geometry": "Layout (geometry)",
       "vit": "ViT",
       "ensemble": "Ensemble"
     },
+    "in_text": {},
     "colours": {},
     "comparisons": [],
     "families": [
@@ -183,6 +216,7 @@
     },
     "levels": {},
     "alone": [],
+    "defined_in": "",
     "reference_column": "",
     "colour_pages": [],
     "score_run": null,
@@ -190,9 +224,17 @@
     "profiles": [],
     "collection": "manuscripts",
     "catalogue_credit": "",
+    "title_credit": "",
+    "repository": "",
     "thumbnail_size": 400,
     "named": [],
-    "min_lines": 0
+    "min_lines": 0,
+    "difficulty_runs": {},
+    "difficulty_main": "cremma",
+    "manuscript_table": null,
+    "neighbours": 0.25,
+    "outside_lines": 5,
+    "outside_share": 0.1
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -214,7 +256,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "01298e25c9fb0281e54e9a0ed7ac14beab07268e-dirty",
+  "commit": "4421c8db3cbdfb8b36af1be4223667f9aa97a5f1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "accuracy_by_elo_gap": {
@@ -225,6 +267,9 @@
           "reference": 0.61133,
           "reference_low": 0.553414,
           "reference_high": 0.674677,
+          "line_texture": 0.527828,
+          "line_texture_low": 0.477102,
+          "line_texture_high": 0.593113,
           "colour": 0.488642,
           "colour_low": 0.42328,
           "colour_high": 0.529619,
@@ -244,6 +289,9 @@
           "reference": 0.796688,
           "reference_low": 0.759575,
           "reference_high": 0.85075,
+          "line_texture": 0.573176,
+          "line_texture_low": 0.49384,
+          "line_texture_high": 0.611093,
           "colour": 0.461843,
           "colour_low": 0.403248,
           "colour_high": 0.527878,
@@ -263,6 +311,9 @@
           "reference": 0.915344,
           "reference_low": 0.893005,
           "reference_high": 0.953155,
+          "line_texture": 0.723334,
+          "line_texture_low": 0.655613,
+          "line_texture_high": 0.786173,
           "colour": 0.476891,
           "colour_low": 0.402083,
           "colour_high": 0.547347,
@@ -282,6 +333,9 @@
           "reference": 0.908824,
           "reference_low": 0.837633,
           "reference_high": 0.948723,
+          "line_texture": 0.737978,
+          "line_texture_low": 0.62107,
+          "line_texture_high": 0.7953,
           "colour": 0.497585,
           "colour_low": 0.412538,
           "colour_high": 0.597738,
@@ -301,6 +355,9 @@
           "reference": 0.953114,
           "reference_low": 0.934285,
           "reference_high": 0.979258,
+          "line_texture": 0.825538,
+          "line_texture_low": 0.761477,
+          "line_texture_high": 0.919652,
           "colour": 0.590765,
           "colour_low": 0.488661,
           "colour_high": 0.674822,
@@ -320,6 +377,9 @@
           "reference": 0.812007,
           "reference_low": 0.782028,
           "reference_high": 0.836214,
+          "line_texture": 0.648115,
+          "line_texture_low": 0.599415,
+          "line_texture_high": 0.68535,
           "colour": 0.503338,
           "colour_low": 0.458956,
           "colour_high": 0.542606,
@@ -339,6 +399,9 @@
           "reference": 0.890535,
           "reference_low": NaN,
           "reference_high": NaN,
+          "line_texture": 0.57224,
+          "line_texture_low": 0.480537,
+          "line_texture_high": 0.65067,
           "colour": 0.146245,
           "colour_low": 0.035195,
           "colour_high": 0.247939,
@@ -355,7 +418,7 @@
       ]
     },
     "seconds": {
-      "accuracy_by_elo_gap": 0.208
+      "accuracy_by_elo_gap": 0.204
     }
   }
 }

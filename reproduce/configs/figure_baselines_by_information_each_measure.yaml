@@ -1,5 +1,6 @@
-# What each level of information buys, measure by measure: each group's measures combined (filled dots) and each
-# measure alone (open dots), beside the learned methods, chance and the Reference.
+# Accuracy by the information a method needs, measure by measure: each group's measures combined (filled dots) and
+# each measure alone (open dots), beside the learned methods, chance and the Reference. The combined models and the
+# methods are named as in the main figure (baselines_by_information), whose caption defines them.
 name: figure_baselines_by_information_each_measure
 outputs: [baselines_by_information_each_measure]
 evaluations:
@@ -36,32 +37,33 @@ evaluations:
   mean_token: build/evaluate/mean_token
   vit: build/evaluate/vit
   ensemble: build/evaluate/ensemble
+defined_in: baselines_by_information
 alone: [ink_coverage, text_lines, edge_orientation_entropy, mssc, compressibility, feature_congestion, colourfulness,
   codebook_variety, clutter, symmetry, entropy, lacunarity, fragmentation, chromatic_share, hue_classes,
   colour_chromatic_share, colour_hue_classes, colour_hue_entropy, colour_saturation,
   colour_zones, colour_lines, colour_coloured_initials]
 labels:
-  trivial: Trivial measures, combined
+  trivial: Both together
   ink_coverage: Ink coverage
   text_lines: Number of text lines
-  generic: Generic image measures, combined
+  generic: Generic image measures
   edge_orientation_entropy: Edge-orientation entropy
   mssc: MSSC per scale
   compressibility: Lossless compressibility
   feature_congestion: Feature congestion
   colourfulness: Colourfulness
   codebook_variety: Patch-codebook variety
-  kyle_davidson: Kyle–Davidson as published, combined
+  kyle_davidson: Kyle–Davidson
   clutter: Clutter (normalised cut)
   symmetry: Patch symmetry
   entropy: HSV entropy
-  ink_distribution: Ink distribution, combined
+  ink_distribution: Ink distribution
   lacunarity: Lacunarity
   fragmentation: Fragmentation
   chromatic_share: Chromatic share
   hue_classes: Hue classes
-  line_texture: Line texture as published
-  colour: Real colour, combined
+  line_texture: Line texture
+  colour: Ink colour
   colour_chromatic_share: Chromatic share
   colour_hue_classes: Hue classes
   colour_hue_entropy: Hue entropy
@@ -69,11 +71,11 @@ labels:
   colour_zones: Colour by zone
   colour_lines: Colour across lines
   colour_coloured_initials: Coloured initials
-  geometry: Geometry
-  geometry_layout: Geometry with Layout
+  geometry: Layout (geometry)
+  geometry_layout: Layout (geometry with Kyle–Davidson)
   mean_token: Linear model on the mean ViT token
   vit: Local ViT head
-  ensemble: Ensemble (geometry and ViT)
+  ensemble: "Ensemble: Layout (geometry) and ViT"
 levels:
   trivial: Trivial
   ink_coverage: Trivial
@@ -127,7 +129,6 @@ colours:
   fragmentation: ink
   chromatic_share: ink
   hue_classes: ink
-  line_texture: colour
   colour_chromatic_share: colour
   colour_hue_classes: colour
   colour_hue_entropy: colour

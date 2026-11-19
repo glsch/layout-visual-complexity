@@ -1,8 +1,7 @@
 """The difficulty experiment's tables and figures, for `lvc report`, from `lvc difficulty` runs:
 
-- `difficulty_against_complexity`: the four measures against predicted complexity, a dot per page
-  (`figures/difficulty_against_complexity`), and the same with the CER on a log axis when the CER is skewed
-  (`figures/difficulty_against_complexity_log_cer`);
+- `difficulty_against_complexity`: the CERs, on a log axis, and line F1 against predicted complexity on the main
+  run's pages, a dot per page, the held-out pages marked (`figures/difficulty_against_complexity`);
 - `difficulty_regression`: the mixed model on the main run's pages, a column per measure;
 - `difficulty_regression_across_and_within`: least squares across manuscripts and within them;
 - `difficulty_held_out`: the held-out comparison of the segmentation measures, and the held-out pages of the main run
@@ -56,7 +55,7 @@ OUTPUTS = (
     "difficulty_pages",
 )
 # The rankers whose scores the runs keep, with their names in tables.
-RANKERS = {"geometry": "Geometry ranker", "vit": "ViT head", "ensemble": "Ensemble"}
+RANKERS = {"geometry": "Layout (geometry)", "vit": "ViT head", "ensemble": "Ensemble"}
 TERM_LABELS = {
     "complexity": "Complexity (per SD)",
     "held_out": "Held out",
@@ -677,7 +676,7 @@ def by_ranker(settings: DifficultySettings, material: Material, folder: Path) ->
         f"mean, over the manuscripts with at least two pages), with 95\\% intervals from {settings.resamples:,} "
         "resamples of the manuscripts, and the mixed model's coefficient of complexity with its 95\\% Wald interval "
         "(the controls and the manuscripts' random intercept as in the regression table). Each ranker's score is "
-        "standardised over these pages. The geometry ranker's features are measured on the same lines of Kraken's "
+        "standardised over these pages. The features of Layout (geometry) are measured on the same lines of Kraken's "
         "and zones of the regions model's that line F1 and zone F1 judge, so a badly segmented page could look more "
         "complex and score worse for one reason; the ViT head sees only the image. The ensemble combines the two: "
         f"its rows are the main analysis's. {DEFINITIONS}{misplaced_note(material)}"
@@ -786,62 +785,57 @@ def pages_tables(settings: DifficultySettings, material: Material, folder: Path)
     return Written(paths, {name: len(rows) for name, rows in material.by_run.items()})
 
 
+FIGURE_DEFINITIONS = (
+    "Line F1 is the F1 score of Kraken's lines against the ground truth's text lines (default, heading and "
+    "interlinear), matched one to one by the IoU of polygons (from 0.5), a found line matching a drop capital's or "
+    "music's counting neither way. The end-to-end CER adds the missed lines' characters and the invented lines'; texts "
+    "in NFC, with whitespace runs as one space."
+)
+SHARES = {1 / 2: "half", 1 / 3: "a third", 2 / 3: "two thirds", 1 / 4: "a quarter"}
+
+
+def share_words(share: float) -> str:
+    return next((words for value, words in SHARES.items() if math.isclose(share, value)), f"{share:.0%}")
+
+
 def figure(settings: DifficultySettings, material: Material, folder: Path) -> Written:
+    """The CERs (on a log axis) and line F1 against predicted complexity on the main run's pages, three panels in a
+    row, the held-out pages marked, one trend over all of them."""
     from layout_visual_complexity.plots.difficulty import FRAC, Panel, draw
 
     main = material.main
-    measured = material.rows[(material.rows["status"] == "done") & material.rows["line_f1"].notna()]
-    others = analysis.prepared(analysed(measured[measured["run"] != settings.main]))
-    without = len(measured) - len(main) - len(others)
+    measured = material.rows[(material.rows["run"] == settings.main) & (material.rows["status"] == "done")]
+    without = int(measured["line_f1"].notna().sum()) - len(main)
     without_note = (
         f" Left out: {without} {'page' if without == 1 else 'pages'} whose ground truth has no text line (every line "
         "a drop capital's or music's)."
         if without
         else ""
     )
-    both = pd.concat([main, others[others["comparison"].astype(str) == "yes"]], ignore_index=True)
-    in_comparison = both["comparison"].astype(str) == "yes"
-    everything = pd.Series(True, index=main.index)
-    paths, summary = [], {}
-    for log in [False, True] if material.log_cer else [False]:
-        panels = [
-            Panel("cer_lines", "CER, ground-truth lines", main, everything, log),
-            Panel("cer_end_to_end", "CER, end to end", main, everything, log),
-            Panel("line_f1", "Line F1", both, in_comparison),
-            Panel("zone_f1", "Zone F1", both, in_comparison),
-        ]
-        drawn, trends = draw(panels)
-        held = main[main["held_out"] == 1]
-        compared = both[in_comparison]
-        log_note = (
-            " The CER is drawn on a log axis, pages read without error at 0.001, and its trend lines are fitted to the "
-            "log of the CER."
-            if log
-            else ""
-        )
-        caption = (
-            "Automatic difficulty against predicted complexity, each dot a page: (a) the character error rate (CER) of "
-            "Kraken with CATMuS Medieval's model on the ground-truth lines and (b) end to end, on Kraken's own lines; "
-            "(c) line F1 of Kraken's lines and (d) zone F1 of the regions model's zones, against the ground truth. "
-            f"(a) and (b) show CREMMA's {main['cer_end_to_end'].notna().sum():,} pages with a CER, (c) and (d) "
-            f"CREMMA's {len(main):,} and the {len(compared[compared['run'] != settings.main]):,} "
-            f"pages of CATMuS's test split from its handwritten manuscripts of the 14th to 16th century.{without_note}"
-            f"{misplaced_note(material)} Grey: pages CATMuS's models trained on; vermillion: held out, in CATMuS's "
-            f"test split ({len(held)} of CREMMA's, from {held['document'].nunique()} manuscripts). The lines are "
-            f"robust LOWESS trends of each group, each local fit over {FRAC * 100:.0f}\\% of the group's pages with "
-            "three robustifying iterations; in (c) and (d) over the pages of the 14th to 16th century, both sides, "
-            "CREMMA's 12th- and 13th-century pages lighter and outside them. Predicted complexity is the expected Elo "
-            "score of the shipped ensemble: a prediction, for nobody judged these pages. The regions model and the "
-            "recognition "
-            f"model trained on {(main['held_out'] == 0).sum():,} of CREMMA's {len(main):,} pages.{log_note} "
-            f"{DEFINITIONS}"
-        )
-        stem = (
-            folder / "figures" / ("difficulty_against_complexity_log_cer" if log else "difficulty_against_complexity")
-        )
-        paths += save_figure(drawn, stem, caption, f"fig:{stem.name}")
-        summary[stem.name] = trends
-    summary["skewness"] = material.skew
+    panels = [
+        Panel("cer_lines", "CER, ground-truth lines", main, log=True),
+        Panel("cer_end_to_end", "CER, end to end", main, log=True),
+        Panel("line_f1", "Line F1", main),
+    ]
+    drawn, counts = draw(panels)
+    held = main[main["held_out"] == 1]
+    with_cer = int(main["cer_end_to_end"].notna().sum())
+    name = run_label(material, settings.main)
+    caption = (
+        f"Automatic difficulty against predicted complexity on {name}'s pages, each dot a page: (a) the character "
+        "error rate (CER) of Kraken with CATMuS Medieval's model on the ground-truth lines and (b) end to end, on "
+        "Kraken's own lines, both on a log axis; (c) line F1 of Kraken's lines against the ground truth's text lines. "
+        f"(a) and (b) show the {with_cer:,} pages with a CER, (c) all {len(main):,}.{without_note}"
+        f"{misplaced_note(material)} Each panel's line is a robust LOWESS trend over all its pages, each local fit "
+        f"over {share_words(FRAC)} of them with three robustifying iterations; in (a) and (b) it is fitted to the log "
+        "of the CER, pages read without error drawn at 0.001. Vermillion: the "
+        f"{len(held)} pages, from {held['document'].nunique()} manuscripts, in CATMuS's test split, which CATMuS "
+        f"Medieval's model didn't train on; it trained on the other {(main['held_out'] == 0).sum():,}. "
+        f"{COMPLEXITY_SCORE} {FIGURE_DEFINITIONS}"
+    )
+    paths = save_figure(drawn, folder / "figures" / "difficulty_against_complexity", caption,
+                        "fig:difficulty_against_complexity")  # fmt: skip
+    summary = {"pages": counts, "skewness": material.skew}
     summary["texts_misplaced"] = material.misplaced["page"].tolist() if len(material.misplaced) else []
     return Written(paths, summary)
 

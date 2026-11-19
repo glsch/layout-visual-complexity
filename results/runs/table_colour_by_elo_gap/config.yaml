@@ -17,9 +17,10 @@ shown:
 - geometry_colour
 labels:
   line_texture: Line texture
-  colour: Real colour
-  geometry_colour: Geometry with real colour
-  geometry: Geometry
+  colour: Ink colour
+  geometry_colour: Layout (geometry) with ink colour
+  geometry: Layout (geometry)
+in_text: {}
 colours: {}
 comparisons:
 - - geometry_colour
@@ -48,6 +49,7 @@ http:
   timeout: 60.0
 levels: {}
 alone: []
+defined_in: ''
 reference_column: ''
 colour_pages: []
 score_run: null
@@ -55,6 +57,14 @@ catalogue: null
 profiles: []
 collection: manuscripts
 catalogue_credit: ''
+title_credit: ''
+repository: ''
 thumbnail_size: 400
 named: []
 min_lines: 0
+difficulty_runs: {}
+difficulty_main: cremma
+manuscript_table: null
+neighbours: 0.25
+outside_lines: 5
+outside_share: 0.1

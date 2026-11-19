@@ -209,6 +209,10 @@ class Generic(Family):
             "Generic__CodebookVariety__entropy": "the entropy of the patch codewords' use",
         }.get(column) or super().words(column)
 
+    def label(self, column: str) -> str:
+        _, feature, flavour = column.split("__")
+        return f"MSSC, scale {flavour[5:]}" if feature == "Mssc" else super().label(column)
+
     def measure(self, page: Page) -> list[dict[str, float]]:
         settings: GenericSettings = self.settings  # type: ignore[assignment]
         folio = normalised_folio(page, settings.long_edge)

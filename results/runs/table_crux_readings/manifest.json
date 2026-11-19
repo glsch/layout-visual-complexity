@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-15T09:23:17+00:00",
-  "ended": "2026-11-15T09:23:18+00:00",
+  "started": "2026-11-18T12:47:36+00:00",
+  "ended": "2026-11-18T12:47:37+00:00",
   "inputs": [
     {
       "path": "build/score/crux/scores.tsv",
@@ -20,8 +20,8 @@
     },
     {
       "path": "reproduce/crux_manuscripts.tsv",
-      "sha256": "81d84ee7301cc6151488e9d141f92231b7c96fba4c206519b49f28ab42969945",
-      "bytes": 2277
+      "sha256": "32e3bd6d371228f7a9eca343077a4f14e20a1d2cf6956c8350552178df3761e4",
+      "bytes": 4459
     }
   ],
   "outputs": [
@@ -41,6 +41,7 @@
     "evaluations": {},
     "shown": [],
     "labels": {},
+    "in_text": {},
     "colours": {},
     "comparisons": [],
     "families": [
@@ -70,6 +71,7 @@
     },
     "levels": {},
     "alone": [],
+    "defined_in": "",
     "reference_column": "",
     "colour_pages": [],
     "score_run": "build/score/crux",
@@ -77,12 +79,20 @@
     "profiles": [],
     "collection": "crux",
     "catalogue_credit": "Catalogue facts from Dragoun, Ebersonová and Doležalová (2021).",
+    "title_credit": "the title from the library's record in Manuscriptorium",
+    "repository": "Prague, National Library of the Czech Republic",
     "thumbnail_size": 400,
     "named": [
       "id18",
       "xic1"
     ],
-    "min_lines": 5
+    "min_lines": 5,
+    "difficulty_runs": {},
+    "difficulty_main": "cremma",
+    "manuscript_table": null,
+    "neighbours": 0.25,
+    "outside_lines": 5,
+    "outside_share": 0.1
   },
   "versions": {
     "layout-visual-complexity": "0.1.0",
@@ -104,7 +114,7 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "01298e25c9fb0281e54e9a0ed7ac14beab07268e-dirty",
+  "commit": "4421c8db3cbdfb8b36af1be4223667f9aa97a5f1-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "manuscript_readings": {
@@ -160,7 +170,7 @@
       ]
     },
     "seconds": {
-      "manuscript_readings": 0.606
+      "manuscript_readings": 0.575
     }
   }
 }

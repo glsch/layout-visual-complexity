@@ -9,6 +9,7 @@ layout: build/segment/dataset
 evaluations: {}
 shown: []
 labels: {}
+in_text: {}
 colours: {}
 comparisons: []
 families:
@@ -21,9 +22,9 @@ image_credit: Page images provided by Manuscriptorium (CC BY-NC 4.0).
 tokens: build/embed/dataset
 head: build/train/vit_head/head.npz
 map_pages:
-- vif12b_96r
-- vc7_35r
-- vh1_48r
+- iiih6_11v
+- xive29_66v
+- ve4b_50v
 map_long_edge: 900
 map_range:
 - 0.05
@@ -38,5 +39,22 @@ http:
   timeout: 60.0
 levels: {}
 alone: []
+defined_in: ''
 reference_column: ''
 colour_pages: []
+score_run: null
+catalogue: null
+profiles: []
+collection: manuscripts
+catalogue_credit: ''
+title_credit: ''
+repository: ''
+thumbnail_size: 400
+named: []
+min_lines: 0
+difficulty_runs: {}
+difficulty_main: cremma
+manuscript_table: null
+neighbours: 0.25
+outside_lines: 5
+outside_share: 0.1
