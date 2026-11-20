@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- `lvc report`: the difficulty figure (`difficulty_against_complexity`) shows two panels, the end-to-end CER
+  and line F1; the CER on the ground-truth lines is left to the tables.
 - The figures and tables name the methods as the article will: Layout (geometry) for the geometric features (was
   Geometry), Layout (Kyle–Davidson) for the layout adaptation of Kyle–Davidson (was Layout), Layout (geometry with
   Kyle–Davidson) for the two together, Kyle–Davidson and Line texture (without "as published"), and Ink colour for

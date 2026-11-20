@@ -1,7 +1,7 @@
 """The difficulty experiment's tables and figures, for `lvc report`, from `lvc difficulty` runs:
 
-- `difficulty_against_complexity`: the CERs, on a log axis, and line F1 against predicted complexity on the main
-  run's pages, a dot per page, the held-out pages marked (`figures/difficulty_against_complexity`);
+- `difficulty_against_complexity`: the end-to-end CER, on a log axis, and line F1 against predicted complexity on
+  the main run's pages, a dot per page, the held-out pages marked (`figures/difficulty_against_complexity`);
 - `difficulty_regression`: the mixed model on the main run's pages, a column per measure;
 - `difficulty_regression_across_and_within`: least squares across manuscripts and within them;
 - `difficulty_held_out`: the held-out comparison of the segmentation measures, and the held-out pages of the main run
@@ -205,14 +205,15 @@ def pages(count: int) -> str:
     return f"{count:,} {'page' if count == 1 else 'pages'}"
 
 
-def misplaced_note(material: Material) -> str:
-    """A caption's sentence counting the pages the CERs leave out; empty when there are none."""
+def misplaced_note(material: Material, subject: str = "The CERs leave") -> str:
+    """A caption's sentence counting the pages the CERs leave out, `subject` its first words; empty when there are
+    none."""
     count = len(material.misplaced)
     if not count:
         return ""
     checks = material.checks
     return (
-        f" The CERs leave out {pages(count)} whose ground-truth texts don't fit their lines: at least {checks.lines} "
+        f" {subject} out {pages(count)} whose ground-truth texts don't fit their lines: at least {checks.lines} "
         "text lines read, on Kraken's line matched to them, as the text of the line just before or after (a CER "
         f"over {checks.shifted_own:.0%} against their own text, under {checks.shifted_neighbour:.0%} against the "
         "neighbour's), or read as empty through their own polygon while Kraken's line reads text."
@@ -799,8 +800,8 @@ def share_words(share: float) -> str:
 
 
 def figure(settings: DifficultySettings, material: Material, folder: Path) -> Written:
-    """The CERs (on a log axis) and line F1 against predicted complexity on the main run's pages, three panels in a
-    row, the held-out pages marked, one trend over all of them."""
+    """The end-to-end CER (on a log axis) and line F1 against predicted complexity on the main run's pages, two
+    panels in a row, the held-out pages marked, one trend over all of them."""
     from layout_visual_complexity.plots.difficulty import FRAC, Panel, draw
 
     main = material.main
@@ -813,7 +814,6 @@ def figure(settings: DifficultySettings, material: Material, folder: Path) -> Wr
         else ""
     )
     panels = [
-        Panel("cer_lines", "CER, ground-truth lines", main, log=True),
         Panel("cer_end_to_end", "CER, end to end", main, log=True),
         Panel("line_f1", "Line F1", main),
     ]
@@ -823,12 +823,12 @@ def figure(settings: DifficultySettings, material: Material, folder: Path) -> Wr
     name = run_label(material, settings.main)
     caption = (
         f"Automatic difficulty against predicted complexity on {name}'s pages, each dot a page: (a) the character "
-        "error rate (CER) of Kraken with CATMuS Medieval's model on the ground-truth lines and (b) end to end, on "
-        "Kraken's own lines, both on a log axis; (c) line F1 of Kraken's lines against the ground truth's text lines. "
-        f"(a) and (b) show the {with_cer:,} pages with a CER, (c) all {len(main):,}.{without_note}"
-        f"{misplaced_note(material)} Each panel's line is a robust LOWESS trend over all its pages, each local fit "
-        f"over {share_words(FRAC)} of them with three robustifying iterations; in (a) and (b) it is fitted to the log "
-        "of the CER, pages read without error drawn at 0.001. Vermillion: the "
+        "error rate (CER) of Kraken with CATMuS Medieval's model end to end, on Kraken's own lines, on a log axis; "
+        "(b) line F1 of Kraken's lines against the ground truth's text lines. "
+        f"(a) shows the {with_cer:,} pages with a CER, (b) all {len(main):,}.{without_note}"
+        f"{misplaced_note(material, 'The CER leaves')} Each panel's line is a robust LOWESS trend over all its "
+        f"pages, each local fit over {share_words(FRAC)} of them with three robustifying iterations; in (a) it is "
+        "fitted to the log of the CER, pages read without error drawn at 0.001. Vermillion: the "
         f"{len(held)} pages, from {held['document'].nunique()} manuscripts, in CATMuS's test split, which CATMuS "
         f"Medieval's model didn't train on; it trained on the other {(main['held_out'] == 0).sum():,}. "
         f"{COMPLEXITY_SCORE} {FIGURE_DEFINITIONS}"

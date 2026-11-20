@@ -180,7 +180,8 @@ def test_the_report_writes_the_figures_and_tables(tmp_path: Path) -> None:
     assert len(loaded.comparison) == (test["century"] >= 14).sum() - 1 + (main["century"] >= 14).sum()
     caption = (tmp_path / "results" / "figures" / "difficulty_against_complexity.tex").read_text(encoding="utf-8")
     # The figure shows the main run's pages only: the held-out run's page without a text line isn't counted.
-    assert "both on a log axis" in caption and f"(c) all {len(main)}." in caption and "Left out" not in caption
+    assert "on a log axis" in caption and f"(b) all {len(main)}." in caption and "Left out" not in caption
+    assert "on the ground-truth lines" not in caption
     assert "Vermillion: the 0 pages" not in caption
 
 
@@ -232,11 +233,12 @@ def test_pages_whose_texts_dont_fit_are_left_out_of_every_cer_and_counted(tmp_pa
     assert pages["line_f1"] == pages["zone_f1"] == 96 and pages["cer_lines"] == pages["cer_end_to_end"] == 93
     notes = regression[regression["term"] == "complexity"].set_index("measure")["notes"].fillna("")
     assert "3 pages whose ground-truth texts don't fit" in notes["cer_lines"] and "3 pages" not in notes["line_f1"]
-    for name in ("tables/difficulty_regression.tex", "figures/difficulty_against_complexity.tex",
-                 "tables/difficulty_main_text_and_margins.tex"):  # fmt: skip
+    for name in ("tables/difficulty_regression.tex", "tables/difficulty_main_text_and_margins.tex"):
         assert "The CERs leave out 3 pages whose ground-truth texts don't fit their lines" in (folder / name).read_text(
             encoding="utf-8"
         )
+    caption = (folder / "figures" / "difficulty_against_complexity.tex").read_text(encoding="utf-8")
+    assert "The CER leaves out 3 pages whose ground-truth texts don't fit their lines" in caption
     # Without them, the fits on every page are the same as on the remaining pages.
     kept = analysis.prepared(material.main[~flagged].drop(columns=["texts_misplaced"]))
     assert analysis.mixed_model(material.main, "cer_lines").coefficients["complexity"][0] == pytest.approx(
@@ -344,7 +346,7 @@ def test_the_figure_has_its_legend_and_the_score_label(tmp_path: Path) -> None:
     assert counts["line_f1"] == 60
 
 
-def test_the_difficulty_figure_has_three_panels_one_trend_over_all_pages_and_the_held_out_marked() -> None:
+def test_the_difficulty_figure_has_two_panels_one_trend_over_all_pages_and_the_held_out_marked() -> None:
     from matplotlib.colors import to_hex
 
     from layout_visual_complexity.plots.difficulty import HELD_OUT, Panel, draw
@@ -353,15 +355,14 @@ def test_the_difficulty_figure_has_three_panels_one_trend_over_all_pages_and_the
     pages["held_out"] = (pages["split"] == "test").astype(int)
     pages["cer"] = np.exp(pages["measure"] - 4)
     pages["f1"] = 1 / (1 + np.exp(-pages["measure"]))
-    panels = [Panel("cer", "CER, ground-truth lines", pages, log=True), Panel("cer", "CER, end to end", pages, True),
-              Panel("f1", "Line F1", pages)]  # fmt: skip
+    panels = [Panel("cer", "CER, end to end", pages, log=True), Panel("f1", "Line F1", pages)]
     figure, counts = draw(panels)
-    assert len(figure.axes) == 3 and counts == {"cer": 60, "f1": 60}
+    assert len(figure.axes) == 2 and counts == {"cer": 60, "f1": 60}
     for axis in figure.axes:
         assert len(axis.lines) == 1 and len(axis.lines[0].get_xdata()) == len(pages)
         held = [
             collection for collection in axis.collections if to_hex(collection.get_facecolor()[0]) == HELD_OUT.lower()
         ]
         assert len(held) == 1 and len(held[0].get_offsets()) == pages["held_out"].sum() == 12
-    assert [axis.get_yscale() for axis in figure.axes] == ["log", "log", "linear"]
-    assert [axis.get_title(loc="left") for axis in figure.axes] == ["(a)", "(b)", "(c)"]
+    assert [axis.get_yscale() for axis in figure.axes] == ["log", "linear"]
+    assert [axis.get_title(loc="left") for axis in figure.axes] == ["(a)", "(b)"]
