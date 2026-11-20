@@ -1,7 +1,7 @@
 {
   "command": "report",
-  "started": "2026-11-18T12:49:05+00:00",
-  "ended": "2026-11-18T12:49:05+00:00",
+  "started": "2026-11-20T10:19:36+00:00",
+  "ended": "2026-11-20T10:19:37+00:00",
   "inputs": [
     {
       "path": "reproduce/difficulty_manuscripts.tsv",
@@ -115,12 +115,11 @@
     "kraken": "7.1.1",
     "ultralytics": "8.4.211"
   },
-  "commit": "4421c8db3cbdfb8b36af1be4223667f9aa97a5f1-dirty",
+  "commit": "eeda65dd68a6e5155e0b3a97f08867f8f907b24f-dirty",
   "platform": "macOS-26.5.1",
   "summary": {
     "difficulty_against_complexity": {
       "pages": {
-        "cer_lines": 412,
         "cer_end_to_end": 412,
         "line_f1": 418
       },
@@ -137,7 +136,7 @@
       ]
     },
     "seconds": {
-      "difficulty_against_complexity": 0.616
+      "difficulty_against_complexity": 0.495
     }
   }
 }
